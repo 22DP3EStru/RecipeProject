@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptes Platforma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        header {
+            background-color: #ff6f61;
+            color: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1rem;
+        }
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .intro {
+            text-align: center;
+            padding: 2rem 1rem;
+            background-color: #fff;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .intro h2 {
+            margin-bottom: 0.5rem;
+        }
+        .add-recipe {
+            background-color: #fff;
+            padding: 2rem 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        form input, form textarea, form button {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        form button {
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        form button:hover {
+            background-color: #e65b50;
+        }
+        .recipe-list {
+            padding: 2rem 1rem;
+        }
+        .recipe-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .recipe-cards .recipe-card {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .recipe-cards .recipe-card h3 {
+            margin-top: 0;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #343a40;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Receptes Platforma</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Sākums</a></li>
+                    <li><a href="#add-recipe">Pievienot recepti</a></li>
+                    <li><a href="#recipes">Apskatīt receptes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="intro">
+            <div class="container">
+                <h2>Laipni lūdzam mūsu recepšu mājaslapā!</h2>
+                <p>Pievieno savas iecienītākās receptes un dalies ar citiem! Apskati un komentē uz citu lietotāju receptēm.</p>
+            </div>
+        </section>
+
+        <section id="add-recipe" class="add-recipe">
+            <div class="container">
+                <h2>Pievieno savu recepti</h2>
+                <form id="recipe-form">
+                    <label for="recipe-title">Receptes nosaukums:</label>
+                    <input type="text" id="recipe-title" name="recipe-title" required>
+
+                    <label for="recipe-description">Apraksts:</label>
+                    <textarea id="recipe-description" name="recipe-description" required></textarea>
+
+                    <label for="recipe-ingredients">Sastāvdaļas (atsevišķi ar komatiem):</label>
+                    <input type="text" id="recipe-ingredients" name="recipe-ingredients" required>
+
+                    <label for="recipe-steps">Pagatavošanas soļi:</label>
+                    <textarea id="recipe-steps" name="recipe-steps" required></textarea>
+
+                    <button type="submit">Pievienot recepti</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="recipes" class="recipe-list">
+            <div class="container">
+                <h2>Apskati citas receptes</h2>
+                <div class="recipe-cards">
+                    <!-- Šeit dinamiski tiks pievienotas receptes -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Receptes Platforma. Visas tiesības aizsargātas.</p>
+        </div>
+    </footer>
+</body>
+</html>
