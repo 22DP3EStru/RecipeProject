@@ -1,20 +1,19 @@
-/* Pamatstils */
+/* styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f8f8f8;
-    text-align: center;
+    color: #333;
 }
 
-/* Galvene */
 header {
-    background-color: #ff6b6b;
-    padding: 20px;
+    background: #ff6b6b;
     color: white;
+    text-align: center;
+    padding: 20px;
 }
 
-/* Navigācija */
 nav ul {
     list-style: none;
     padding: 0;
@@ -31,70 +30,102 @@ nav ul li a {
     font-weight: bold;
 }
 
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-/* Galvenais saturs */
 main {
+    text-align: center;
     padding: 20px;
 }
 
-/* Receptes */
-.recipe {
-    background: white;
-    padding: 15px;
-    margin: 10px auto;
-    width: 50%;
+.hero {
+    background: #ffa69e;
+    padding: 50px;
+    color: white;
+    font-size: 1.5em;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-/* Forma */
+.recipes {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ff6b6b;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #e63946;
+}
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Pievienot recepti forma */
 form {
     background: white;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 50%;
     margin: 20px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: left;
 }
 
 form label {
     display: block;
-    font-weight: bold;
     margin: 10px 0 5px;
 }
 
-form input, form textarea {
+form input, form textarea, form button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    margin-top: 5px;
+    border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 form button {
-    background-color: #ff6b6b;
+    background: #ff6b6b;
     color: white;
     border: none;
-    padding: 10px 15px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+    transition: background 0.3s;
 }
 
 form button:hover {
-    background-color: #e63946;
-}
-
-/* Kājene */
-footer {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    background: #e63946;
 }
