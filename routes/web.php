@@ -9,12 +9,12 @@ Route::get("/", function () {
     return view("home");
 })->name('homepage');
 
-Route::get("/MYlogin", function () {
-    return view("MYlogin");
-})->name('MYlogin');
+Route::get("/Mylogin", function () {
+    return view("Mylogin");
+})->name('Mylogin');
 
-Route::get("/MYregister", function () {
-    return view("MYregister");
-})->name('MYregister');
+Route::get("/Myregister", function () {
+    return view("Myregister");
+})->name('Myregister');
 
 require DIR.'/auth.php';

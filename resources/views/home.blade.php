@@ -8,9 +8,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to GymBro</h1>
-        <a href="{{ route('MYlogin') }}">Login</a>
-        <a href="{{ route('MYregister') }}">Register</a>
+        <h1>Welcome to Reciepe Page</h1>
+        <a href="{{ route('Mylogin') }}">Login</a>
+        <a href="{{ route('Myregister') }}">Register</a>
     </div>
 </body>
 </html>
