@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ingredient extends Model
+class Instruction extends Model
 {
-    protected $fillable = ['recipe_id', 'name', 'quantity', 'unit'];
+    protected $fillable = ['recipe_id', 'step_number', 'description'];
 
     public function recipe()
     {
