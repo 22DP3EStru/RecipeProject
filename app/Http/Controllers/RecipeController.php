@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
         $query = Recipe::with(['category', 'user']);
 
@@ -42,16 +42,9 @@ class RecipeController extends Controller
         $sortOrder = $request->get('order', 'desc');
         
         $recipes = $query->orderBy($sortBy, $sortOrder)->paginate(12);
+        $categories = Category::all();
 
-        return response()->json([
-            'recipes' => $recipes->items(),
-            'pagination' => [
-                'current_page' => $recipes->currentPage(),
-                'last_page' => $recipes->lastPage(),
-                'total' => $recipes->total(),
-                'per_page' => $recipes->perPage(),
-            ]
-        ]);
+        return view('recipes.index', compact('recipes', 'categories'));
     }
 
     public function show(Recipe $recipe): JsonResponse
