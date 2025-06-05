@@ -3,169 +3,104 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
-use App\Models\Category;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class RecipeController extends Controller
 {
-    public function index(Request $request)
+    use AuthorizesRequests;
+
+    public function index()
     {
-        $query = Recipe::with(['category', 'user']);
-
-        // Search functionality
-        if ($request->has('search') && $request->search) {
-            $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('title', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
-            });
-        }
-
-        // Category filter
-        if ($request->has('category') && $request->category) {
-            $query->whereHas('category', function($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
-        }
-
-        // Difficulty filter
-        if ($request->has('difficulty') && $request->difficulty) {
-            $query->where('difficulty', $request->difficulty);
-        }
-
-        // Sorting
-        $sortBy = $request->get('sort', 'created_at');
-        $sortOrder = $request->get('order', 'desc');
-        
-        $recipes = $query->orderBy($sortBy, $sortOrder)->paginate(12);
-        $categories = Category::all();
-
-        return view('recipes.index', compact('recipes', 'categories'));
+        $recipes = Recipe::with('ratings')->latest()->paginate(12);
+        return view('recipes.index', compact('recipes'));
     }
 
-    public function show(Recipe $recipe): JsonResponse
+    public function create()
     {
-        $recipe->load(['category', 'ingredients', 'instructions', 'user']);
-        
-        // Get related recipes
-        $relatedRecipes = Recipe::where('category_id', $recipe->category_id)
-                               ->where('id', '!=', $recipe->id)
-                               ->with(['category', 'user'])
-                               ->limit(4)
-                               ->get();
+        return view('recipes.create');
+    }
 
-        // Check if current user has favorited this recipe
-        $isFavorited = false;
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user instanceof User) {
-                $isFavorited = $user->hasFavorited($recipe->id);
-            }
-        }
-
-        return response()->json([
-            'recipe' => $recipe,
-            'related_recipes' => $relatedRecipes,
-            'is_favorited' => $isFavorited
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
         ]);
-    }
 
-    public function categories(): JsonResponse
-    {
-        $categories = Category::withCount('recipes')->get();
-        
-        return response()->json([
-            'categories' => $categories
-        ]);
-    }
-
-    public function featured(): JsonResponse
-    {
-        $featuredRecipes = Recipe::where('is_featured', true)
-                                ->with(['category', 'user'])
-                                ->limit(6)
-                                ->get();
-
-        return response()->json([
-            'featured_recipes' => $featuredRecipes
-        ]);
-    }
-
-    public function toggleFavorite(Recipe $recipe): JsonResponse
-    {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Authentication required'], 401);
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('recipe_images', 'public');
         }
 
-        $user = Auth::user();
-        if (!($user instanceof User)) {
-            return response()->json(['error' => 'User model not found'], 500);
-        }
-        
-        // Check if already favorited using the pivot table
-        $existingFavorite = $user->favorites()->where('recipe_id', $recipe->id)->first();
-        
-        if ($existingFavorite) {
-            // Remove from favorites
-            $user->favorites()->detach($recipe->id);
-            $favorited = false;
-            $message = 'Recipe removed from favorites';
-        } else {
-            // Add to favorites
-            $user->favorites()->attach($recipe->id);
-            $favorited = true;
-            $message = 'Recipe added to favorites';
-        }
 
-        return response()->json([
-            'favorited' => $favorited,
-            'message' => $message
-        ]);
+        /** @var \App\Models\User $user */
+        $recipe = $user->recipes()->create($data);
+
+
+        return redirect()
+            ->route('recipes.show', $recipe)
+            ->with('success', 'Recipe created successfully!');
     }
 
-    public function userFavorites(): JsonResponse
+    public function show(Recipe $recipe)
     {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Authentication required'], 401);
-        }
-
-        $user = Auth::user();
-        if (!($user instanceof User)) {
-            return response()->json(['error' => 'User model not found'], 500);
-        }
-
-        $favorites = $user->favorites()
-                          ->with(['category', 'user'])
-                          ->paginate(12);
-
-        return response()->json([
-            'favorites' => $favorites->items(),
-            'pagination' => [
-                'current_page' => $favorites->currentPage(),
-                'last_page' => $favorites->lastPage(),
-                'total' => $favorites->total(),
-                'per_page' => $favorites->perPage(),
-            ]
-        ]);
+        $recipe->load(['ingredients', 'steps', 'ratings.user']);
+        return view('recipes.show', compact('recipe'));
     }
-        public function edit(Recipe $recipe)
+
+    public function edit(Recipe $recipe)
     {
+        $this->authorize('update', $recipe);
+        $recipe->load(['ingredients', 'steps']);
         return view('recipes.edit', compact('recipe'));
+    }
+
+    public function update(Request $request, Recipe $recipe)
+    {
+        $this->authorize('update', $recipe);
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($recipe->image_path) {
+                Storage::disk('public')->delete($recipe->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('recipe_images', 'public');
+        }
+
+        $recipe->update($data);
+
+        return redirect()
+            ->route('recipes.show', $recipe)
+            ->with('success', 'Recipe updated successfully!');
     }
 
     public function destroy(Recipe $recipe)
     {
+        $this->authorize('delete', $recipe);
+
+        if ($recipe->image_path) {
+            Storage::disk('public')->delete($recipe->image_path);
+        }
+
         $recipe->delete();
-        return redirect()->route('admin.dashboard')->with('success', 'Recipe deleted successfully.');
-    }
 
-
-    public function home()
-    {
-        return view('welcome');
+        return redirect()
+            ->route('recipes.index')
+            ->with('success', 'Recipe deleted!');
     }
 }

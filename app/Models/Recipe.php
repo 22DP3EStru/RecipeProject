@@ -4,26 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
-use App\Models\Instruction;
+use Illuminate\Support\Str;
 
 class Recipe extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'image', 'video', 'cook_time', 
-        'prep_time', 'difficulty', 'servings', 'calories', 
-        'category_id', 'user_id', 'is_featured'
+        'user_id',
+        'title',
+        'description',
+        'image_path',
+        'prep_time',
+        'cook_time',
+        'servings',
     ];
 
-    protected $casts = [
-        'is_featured' => 'boolean',
-    ];
-
-    public function category()
+    protected static function booted(): void
     {
-        return $this->belongsTo(Category::class);
+        static::saving(function (self $recipe): void {
+            $recipe->slug = Str::slug($recipe->title);
+        });
     }
 
     public function user()
@@ -33,12 +34,12 @@ class Recipe extends Model
 
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->hasMany(Ingredient::class)->orderBy('order');
     }
 
-    public function instructions()
+    public function steps()
     {
-        return $this->hasMany(Instruction::class)->orderBy('step_number');
+        return $this->hasMany(Step::class)->orderBy('order');
     }
 
     public function favorites()
@@ -46,21 +47,13 @@ class Recipe extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function favoritedBy()
+    public function ratings()
     {
-        return $this->belongsToMany(User::class, 'favorites');
+        return $this->hasMany(Rating::class);
     }
 
-    public function toSearchableArray()
+    public function averageRating(): float
     {
-        return [
-            'title' => $this->title,
-            'description' => $this->description,
-        ];
-    }
-
-    public function getAverageRatingAttribute()
-    {
-        return $this->ratings()->avg('rating') ?? 0;
+        return round($this->ratings()->avg('rating') ?? 0, 1);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 
 // Public routes
 Route::get('/', [RecipeController::class, 'home'])->name('home');
@@ -48,3 +49,9 @@ Route::resource('recipes', RecipeController::class);
 
 // Users (tikai delete darbībai)
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+Route::get('/', fn () => redirect()->route('recipes.index'));
+
+Auth::routes();
+
+Route::resource('recipes', RecipeController::class);

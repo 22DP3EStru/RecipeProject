@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ingredient extends Model
 {
-    protected $fillable = ['recipe_id', 'name', 'quantity', 'unit'];
+    use HasFactory;
+
+    protected $fillable = ['recipe_id', 'name', 'quantity', 'order'];
 
     public function recipe()
     {

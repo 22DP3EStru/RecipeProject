@@ -6,27 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->text('description');
-            $table->string('image');
-            $table->string('video')->nullable();
-            $table->integer('cook_time'); // in minutes
-            $table->integer('prep_time'); // in minutes
-            $table->enum('difficulty', ['Easy', 'Medium', 'Hard']);
-            $table->integer('servings');
-            $table->integer('calories')->nullable();
-            $table->boolean('is_featured')->default(false);
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('image_path')->nullable();
+            $table->unsignedSmallInteger('prep_time')->nullable(); // minutes
+            $table->unsignedSmallInteger('cook_time')->nullable(); // minutes
+            $table->unsignedSmallInteger('servings')->nullable();
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('recipes');
     }
