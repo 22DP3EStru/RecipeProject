@@ -1,26 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="text-2xl font-semibold mb-6">Latest Recipes</h1>
+    <h1 class="text-3xl font-bold mb-6 text-indigo-700">All Recipes</h1>
 
-<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-@foreach ($recipes as $recipe)
-    <a href="{{ route('recipes.show', $recipe) }}" class="block bg-white rounded-xl shadow hover:shadow-md transition">
-        @if ($recipe->image_path)
-            <img src="{{ Storage::url($recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-48 object-cover rounded-t-xl">
-        @endif
-        <div class="p-4">
-            <h2 class="text-lg font-semibold">{{ $recipe->title }}</h2>
-            <p class="text-sm text-gray-600">{{ Str::limit($recipe->description, 80) }}</p>
-            <div class="mt-2 text-yellow-500">
-                ★ {{ $recipe->averageRating() }}/5
-            </div>
+    @if ($recipes->isEmpty())
+        <p class="text-gray-600">No recipes found. <a href="{{ route('recipes.create') }}" class="text-indigo-600 hover:underline">Add one</a>!</p>
+    @else
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($recipes as $recipe)
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                    <div class="p-5">
+                        <h2 class="text-xl font-semibold text-indigo-800 mb-2">{{ $recipe->title }}</h2>
+                        <p class="text-gray-600 mb-4 line-clamp-3">{{ Str::limit($recipe->description, 100) }}</p>
+                        <a href="{{ route('recipes.show', $recipe) }}" class="inline-block mt-auto text-sm font-medium text-indigo-600 hover:underline">View Recipe</a>
+                    </div>
+                </div>
+            @endforeach
         </div>
-    </a>
-@endforeach
-</div>
-
-<div class="mt-8">
-    {{ $recipes->links() }}
-</div>
+    @endif
 @endsection

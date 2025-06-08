@@ -1,27 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<article class="max-w-3xl mx-auto bg-white rounded-xl shadow">
-    @if ($recipe->image_path)
-        <img src="{{ Storage::url($recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-64 object-cover rounded-t-xl">
-    @endif
-    <div class="p-8">
-        <h1 class="text-3xl font-bold mb-4">{{ $recipe->title }}</h1>
-        <p class="mb-6 text-gray-700">{{ $recipe->description }}</p>
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl font-bold text-indigo-800 mb-4">{{ $recipe->title }}</h1>
 
-        <h2 class="text-xl font-semibold mb-2">Ingredients</h2>
-        <ul class="list-disc list-inside mb-6">
-            @foreach ($recipe->ingredients as $ingredient)
-                <li>{{ $ingredient->quantity }} {{ $ingredient->name }}</li>
-            @endforeach
-        </ul>
+        <div class="mb-6 text-gray-700 whitespace-pre-line">
+            {{ $recipe->description }}
+        </div>
 
-        <h2 class="text-xl font-semibold mb-2">Steps</h2>
-        <ol class="list-decimal list-inside space-y-2">
-            @foreach ($recipe->steps as $step)
-                <li>{{ $step->body }}</li>
-            @endforeach
-        </ol>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Ingredients</h2>
+        @if ($recipe->ingredients->isEmpty())
+            <p class="text-gray-500">No ingredients listed.</p>
+        @else
+            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                @foreach ($recipe->ingredients as $ingredient)
+                    <li>{{ $ingredient->quantity ? $ingredient->quantity . ' - ' : '' }}{{ $ingredient->name }}</li>
+                @endforeach
+            </ul>
+        @endif
+
+        <div class="mt-8 flex space-x-4">
+            <a href="{{ route('recipes.edit', $recipe) }}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">Edit</a>
+            <form action="{{ route('recipes.destroy', $recipe) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Delete</button>
+            </form>
+        </div>
     </div>
-</article>
 @endsection

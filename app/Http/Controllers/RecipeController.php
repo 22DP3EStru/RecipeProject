@@ -3,104 +3,70 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class RecipeController extends Controller
 {
-    use AuthorizesRequests;
-
-    public function index()
+    /**
+     * Parāda recepšu sarakstu ar meklēšanas un kategoriju filtriem.
+     */
+    public function index(Request $request)
     {
-        $recipes = Recipe::with('ratings')->latest()->paginate(12);
-        return view('recipes.index', compact('recipes'));
-    }
+        $query = Recipe::with('ratings', 'categories');
 
-    public function create()
-    {
-        return view('recipes.create');
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-            'prep_time' => 'nullable|integer|min:0',
-            'cook_time' => 'nullable|integer|min:0',
-            'servings' => 'nullable|integer|min:1',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('recipe_images', 'public');
+        // filtrs – kategorija
+        if ($cat = $request->query('category')) {
+            $query->whereHas('categories', fn ($q) => $q->where('slug', $cat));
         }
 
+        // filtrs – meklēšana
+        if ($s = $request->query('q')) {
+            $query->where('title', 'like', "%$s%");
+        }
 
-        /** @var \App\Models\User $user */
-        $recipe = $user->recipes()->create($data);
+        $recipes = $query->latest()->paginate(12)->withQueryString();
+        $categories = Category::orderBy('name')->get();
 
-
-        return redirect()
-            ->route('recipes.show', $recipe)
-            ->with('success', 'Recipe created successfully!');
+        return view('recipes.index', compact('recipes', 'categories'));
     }
 
-    public function show(Recipe $recipe)
+    /**
+     * Parāda kategoriju sarakstu.
+     */
+    public function categories()
     {
-        $recipe->load(['ingredients', 'steps', 'ratings.user']);
+        $categories = Category::withCount('recipes')->orderBy('name')->get();
+        return view('recipes.categories', compact('categories'));
+    }
+
+    /**
+     * Pārslēdz (pievieno/noņem) recepti lietotāja favorītos.
+     */
+    public function toggleFavorite(Recipe $recipe)
+    {
+        $recipe->favorites()->toggle(Auth::id());
+        return back()->with('status', 'Favorīts tika atjaunināts!');
+    }
+
+    /**
+     * Parāda autentificētā lietotāja favorītās receptes.
+     */
+    public function userFavorites()
+    {
+        /** @var \App\Models\User $user */ 
+        $recipes = Auth::user()->favorites()->with('ratings', 'categories')->paginate(12);
+        return view('recipes.favorites', compact('recipes'));
+    }
+
+    /**
+     * Parāda konkrētas receptes detaļas pēc slug.
+     */
+    public function show($slug)
+    {
+        $recipe = Recipe::with('ratings', 'categories')->where('slug', $slug)->firstOrFail();
         return view('recipes.show', compact('recipe'));
-    }
-
-    public function edit(Recipe $recipe)
-    {
-        $this->authorize('update', $recipe);
-        $recipe->load(['ingredients', 'steps']);
-        return view('recipes.edit', compact('recipe'));
-    }
-
-    public function update(Request $request, Recipe $recipe)
-    {
-        $this->authorize('update', $recipe);
-
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-            'prep_time' => 'nullable|integer|min:0',
-            'cook_time' => 'nullable|integer|min:0',
-            'servings' => 'nullable|integer|min:1',
-        ]);
-
-        if ($request->hasFile('image')) {
-            if ($recipe->image_path) {
-                Storage::disk('public')->delete($recipe->image_path);
-            }
-            $data['image_path'] = $request->file('image')->store('recipe_images', 'public');
-        }
-
-        $recipe->update($data);
-
-        return redirect()
-            ->route('recipes.show', $recipe)
-            ->with('success', 'Recipe updated successfully!');
-    }
-
-    public function destroy(Recipe $recipe)
-    {
-        $this->authorize('delete', $recipe);
-
-        if ($recipe->image_path) {
-            Storage::disk('public')->delete($recipe->image_path);
-        }
-
-        $recipe->delete();
-
-        return redirect()
-            ->route('recipes.index')
-            ->with('success', 'Recipe deleted!');
     }
 }

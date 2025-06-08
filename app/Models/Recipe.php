@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Category;
 
 class Recipe extends Model
 {
@@ -55,5 +56,10 @@ class Recipe extends Model
     public function averageRating(): float
     {
         return round($this->ratings()->avg('rating') ?? 0, 1);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

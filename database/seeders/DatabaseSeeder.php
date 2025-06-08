@@ -8,11 +8,11 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+    // database/seeders/DatabaseSeeder.php
     public function run(): void
     {
+        $this->call([CategorySeeder::class, RecipeSeeder::class]);
+
         // User::factory(10)->create();
 
         User::factory()->create([
