@@ -2,20 +2,21 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use App\Models\Category;
 
-// database/seeders/CategorySeeder.php
 class CategorySeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        collect(['Brokastis','Pusdienas','Vakariņas','Deserti'])
-            ->each(fn($c)=>\App\Models\Category::create([
-               'name'=>$c,
-               'slug'=>Str::slug($c),
-            ]));
+        $categories = ['Brokastis', 'Pusdienas', 'Vakariņas', 'Uzkodas', 'Deserti', 'Vegan', 'Bezglutēna'];
+
+        foreach ($categories as $c) {
+            Category::create([
+                'name' => $c,
+                'slug' => Str::slug($c),
+            ]);
+        }
     }
 }
-

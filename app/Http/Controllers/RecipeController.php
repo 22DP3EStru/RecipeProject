@@ -56,7 +56,6 @@ class RecipeController extends Controller
      */
     public function userFavorites()
     {
-        /** @var \App\Models\User $user */ 
         $recipes = Auth::user()->favorites()->with('ratings', 'categories')->paginate(12);
         return view('recipes.favorites', compact('recipes'));
     }

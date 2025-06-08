@@ -9,15 +9,8 @@ class Favorite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['recipe_id', 'user_id'];
+    protected $fillable = ['user_id', 'recipe_id'];
 
-    public function recipe()
-    {
-        return $this->belongsTo(Recipe::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    public function recipe() { return $this->belongsTo(Recipe::class); }
+    public function user()   { return $this->belongsTo(User::class);   }
 }
