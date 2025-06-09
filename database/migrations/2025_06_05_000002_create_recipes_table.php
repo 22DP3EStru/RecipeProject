@@ -9,11 +9,11 @@ return new class extends Migration {
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->json('title')->nullable();
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->text('ingredients');
-            $table->text('steps');
+            $table->json('ingredients')->nullable();
+            $table->json('steps')->nullable();
             $table->string('image')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

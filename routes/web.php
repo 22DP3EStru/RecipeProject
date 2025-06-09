@@ -2,7 +2,11 @@
 use App\Http\Controllers\{RecipeController, ProfileController, AdminController};
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [RecipeController::class,'index'])->name('home');
+Route::get('/', function () {
+    $latest = \App\Models\Recipe::latest()->take(6)->get();
+    return view('news', compact('latest'));
+})->name('home');
+
 
 // publiskās
 Route::get('/recipes',        [RecipeController::class,'index'])->name('recipes.index');

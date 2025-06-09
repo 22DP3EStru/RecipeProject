@@ -1,20 +1,17 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\{Recipe, Category};
+use App\Models\Recipe;
 
 class RecipeSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        Recipe::factory(25)
-            ->create()
-            ->each(function ($recipe) {
-                // piesaisti 1-3 nejaušas kategorijas
-                $recipe->categories()
-                       ->attach(Category::inRandomOrder()->take(rand(1, 3))->pluck('id'));
-            });
+        Recipe::create([
+            'title' => json_encode(['lv' => 'Ābolu pīrāgs', 'en' => 'Apple Pie']),
+            'ingredients' => json_encode(['lv' => ['1 kg ābolu', '200 g cukura'], 'en' => ['1 kg apples', '200 g sugar']]),
+            'steps' => json_encode(['lv' => ['Nomazgā ābolus', 'Cep 40 min'], 'en' => ['Wash apples', 'Bake 40 min']]),
+        ]);
     }
 }

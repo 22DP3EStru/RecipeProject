@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<article class="max-w-3xl mx-auto">
+<article class="max-w-3xl mx-auto prose prose-indigo">
     <img src="{{ $recipe->image ?? 'https://placehold.co/800x500?text=No+Image' }}"
          class="rounded-lg mb-6 w-full aspect-[3/2] object-cover" alt="{{ $recipe->title }}">
 

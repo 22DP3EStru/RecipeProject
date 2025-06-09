@@ -1,30 +1,31 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Recipe extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'title', 'slug', 'description', 'ingredients', 'steps', 'image', 'user_id',
+    // Nosaku, ka šie lauki ir jākasē kā JSON masīvi
+    protected $casts = [
+        'title'       => 'array',
+        'ingredients' => 'array',
+        'steps'       => 'array',
     ];
 
-    /* ---------- Relācijas ---------- */
-    public function categories()  { return $this->belongsToMany(Category::class); }
-    public function favorites()   { return $this->hasMany(Favorite::class); }
-    public function ratings()     { return $this->hasMany(Rating::class); }   // ja vēlāk pievienosi vērtējumus
-    public function author()      { return $this->belongsTo(User::class, 'user_id'); }
-
-    /* ---------- Mutatori ---------- */
-    protected static function booted()
+    // Piektais valodas teksts
+    public function getTitleAttribute($value)
     {
-        static::creating(function ($recipe) {
-            $recipe->slug = Str::slug($recipe->title) . '-' . Str::random(6);
-        });
+        $arr = json_decode($value, true);
+        return $arr[app()->getLocale()] ?? $arr['lv'] ?? '';
+    }
+    public function getIngredientsAttribute($value)
+    {
+        $arr = json_decode($value, true);
+        return $arr[app()->getLocale()] ?? $arr['lv'] ?? [];
+    }
+    public function getStepsAttribute($value)
+    {
+        $arr = json_decode($value, true);
+        return $arr[app()->getLocale()] ?? $arr['lv'] ?? [];
     }
 }
