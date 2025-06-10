@@ -5,23 +5,19 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->json('title')->nullable();
-            $table->string('slug')->unique();
+            $table->string('title');
             $table->text('description')->nullable();
-            $table->json('ingredients')->nullable();
-            $table->json('steps')->nullable();
             $table->string('image')->nullable();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('recipes');
     }
 };

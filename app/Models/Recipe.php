@@ -1,31 +1,29 @@
 <?php
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model
 {
-    // Nosaku, ka šie lauki ir jākasē kā JSON masīvi
-    protected $casts = [
-        'title'       => 'array',
-        'ingredients' => 'array',
-        'steps'       => 'array',
-    ];
+    use HasFactory;
 
-    // Piektais valodas teksts
-    public function getTitleAttribute($value)
-    {
-        $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['lv'] ?? '';
+    protected $fillable = ['title', 'description', 'image', 'user_id', 'category_id'];
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
-    public function getIngredientsAttribute($value)
-    {
-        $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['lv'] ?? [];
+
+    public function category() {
+        return $this->belongsTo(Category::class);
     }
-    public function getStepsAttribute($value)
-    {
-        $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['lv'] ?? [];
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function ratings() {
+        return $this->hasMany(Rating::class);
     }
 }

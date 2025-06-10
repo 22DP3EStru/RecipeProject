@@ -9,10 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'description', 'image'];
+    protected $fillable = ['name'];
 
-    public function recipes()
-    {
-        return $this->belongsToMany(Recipe::class);
+    public function recipes() {
+        return $this->hasMany(Recipe::class);
     }
 }

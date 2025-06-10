@@ -1,138 +1,61 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <h1 class="mb-4">Admin Dashboard</h1>
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold mb-6">Administrācijas panelis</h2>
 
-    {{-- Tab navigācija --}}
-    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab">Overview</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="recipes-tab" data-bs-toggle="tab" href="#recipes" role="tab">Recipes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="users-tab" data-bs-toggle="tab" href="#users" role="tab">Users</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="analytics-tab" data-bs-toggle="tab" href="#analytics" role="tab">Analytics</a>
-        </li>
-    </ul>
-
-    {{-- Tab saturs --}}
-    <div class="tab-content mt-3" id="dashboardTabsContent">
-        {{-- OVERVIEW --}}
-        <div class="tab-pane fade show active" id="overview" role="tabpanel">
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5>Total Recipes</h5>
-                            <p class="display-6">{{ $totalRecipes }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-3 mt-md-0">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5>Total Users</h5>
-                            <p class="display-6">{{ $totalUsers }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-3 mt-md-0">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5>Site Visits</h5>
-                            <p class="display-6">{{ $siteVisits }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="bg-blue-100 border border-blue-300 shadow rounded-lg p-6">
+            <h3 class="text-md font-medium text-blue-900">Receptes kopā</h3>
+            <p class="text-3xl font-bold text-blue-800">{{ $recipeCount }}</p>
         </div>
-
-        {{-- RECIPES --}}
-    <div class="tab-pane fade" id="recipes" role="tabpanel">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5>Recipe List</h5>
-            <input type="text" class="form-control w-25" placeholder="Search recipes..." id="recipeSearch">
+        <div class="bg-green-100 border border-green-300 shadow rounded-lg p-6">
+            <h3 class="text-md font-medium text-green-900">Lietotāju skaits</h3>
+            <p class="text-3xl font-bold text-green-800">{{ $userCount }}</p>
         </div>
-
-        <div class="list-group" id="recipeList">
-            @foreach ($recipes as $recipe)
-                <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <div>
-                        <strong>{{ $recipe->title }}</strong>
-                        <p class="mb-0">{{ Str::limit($recipe->description, 80) }}</p>
-                    </div>
-                    <div class="btn-group">
-                        <a href="{{ route('recipes.show', $recipe->id) }}" class="btn btn-outline-primary btn-sm">View</a>
-                        <a href="{{ route('recipes.edit', $recipe->id) }}" class="btn btn-outline-warning btn-sm">Edit</a>
-                        <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this recipe?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            @endforeach
+        <div class="bg-yellow-100 border border-yellow-300 shadow rounded-lg p-6">
+            <h3 class="text-md font-medium text-yellow-900">Komentāri</h3>
+            <p class="text-3xl font-bold text-yellow-800">{{ $commentCount }}</p>
+        </div>
+        <div class="bg-purple-100 border border-purple-300 shadow rounded-lg p-6">
+            <h3 class="text-md font-medium text-purple-900">Kategorijas</h3>
+            <p class="text-3xl font-bold text-purple-800">{{ $categoryCount }}</p>
         </div>
     </div>
 
-        {{-- USERS --}}
-        <div class="tab-pane fade" id="users" role="tabpanel">
-            <h5 class="mb-3">User List</h5>
-            <table class="table table-bordered">
-                <thead class="table-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Registered At</th>
-                        <th>Actions</th>
+    <div class="mt-10">
+        <h3 class="text-2xl font-semibold mb-4">Pēdējās pievienotās receptes</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white shadow rounded-lg">
+                <thead>
+                    <tr class="bg-gray-100 text-left text-sm uppercase tracking-wider">
+                        <th class="px-4 py-3">Nosaukums</th>
+                        <th class="px-4 py-3">Kategorija</th>
+                        <th class="px-4 py-3">Autors</th>
+                        <th class="px-4 py-3">Datums</th>
+                        <th class="px-4 py-3">Darbības</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
-                        <tr>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                            <td>
-                                {{-- Aizliegts dzēst sevi vai adminus (piemērs) --}}
-                                @if (auth()->id() !== $user->id)
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Delete this user?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    @foreach ($latestRecipes as $recipe)
+                        <tr class="border-t">
+                            <td class="px-4 py-3">{{ $recipe->title }}</td>
+                            <td class="px-4 py-3">{{ $recipe->category->name ?? 'Bez kategorijas' }}</td>
+                            <td class="px-4 py-3">{{ $recipe->user->name ?? 'Nezināms' }}</td>
+                            <td class="px-4 py-3">{{ $recipe->created_at->format('d.m.Y') }}</td>
+                            <td class="px-4 py-3 space-x-2">
+                                <a href="{{ route('recipes.edit', $recipe->id) }}" class="text-blue-600 hover:underline">Rediģēt</a>
+                                <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:underline">Dzēst</button>
                                 </form>
-                                @else
-                                    <em class="text-muted">—</em>
-                                @endif
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        {{-- ANALYTICS --}}
-        <div class="tab-pane fade" id="analytics" role="tabpanel">
-            <h5 class="mb-3">Analytics Overview</h5>
-            {{-- Placeholder --}}
-            <div class="alert alert-info">Analytics charts coming soon!</div>
-        </div>
     </div>
 </div>
-
-<script>
-    // Vienkārša receptes meklēšana (klienta pusē)
-    document.getElementById('recipeSearch').addEventListener('input', function () {
-        let searchValue = this.value.toLowerCase();
-        document.querySelectorAll('#recipeList .list-group-item').forEach(item => {
-            let title = item.querySelector('strong').innerText.toLowerCase();
-            item.style.display = title.includes(searchValue) ? '' : 'none';
-        });
-    });
-</script>
 @endsection

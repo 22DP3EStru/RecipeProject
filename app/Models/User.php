@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-use App\Models\Recipe;
 
 class User extends Authenticatable
 {
@@ -42,17 +41,5 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * The recipes that the user has favorited.
-     */
-    public function favorites()
-    {
-        return $this->hasMany(Favorite::class);
-    }
-
-    public function recipes()
-    {
-        return $this->hasMany(Recipe::class);
-    }
 
 }
