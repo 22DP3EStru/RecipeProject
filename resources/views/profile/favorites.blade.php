@@ -1,28 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Visas receptes - RecipeHub')
+@section('title', 'Iemīļotās receptes - RecipeHub')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Visas receptes</h1>
-            <p class="text-gray-600">Atklājiet mūsu plašo receptes kolekciju</p>
-        </div>
-        @auth
-            <a href="{{ route('recipes.create') }}" 
-               class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 shadow-sm">
-                Pievienot recepti
-            </a>
-        @endauth
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Iemīļotās receptes</h1>
+        <p class="text-gray-600">Šeit ir visas jūsu iemīļotās receptes</p>
     </div>
 
     @if($recipes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            @foreach ($recipes as $recipe)
+            @foreach($recipes as $recipe)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     <div class="relative">
-                        @if ($recipe->image)
+                        @if($recipe->image)
                             <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
                                  class="w-full h-48 object-cover">
                         @else
@@ -33,16 +25,14 @@
                             </div>
                         @endif
                         
-                        @auth
-                            <button onclick="toggleFavorite('{{ $recipe->id }}')" 
-                                    class="absolute top-2 right-2 bg-white/80 hover:bg-white rounded-full p-2 transition-colors">
-                                <svg class="w-5 h-5 {{ auth()->user()->favoriteRecipes->contains($recipe->id) ? 'text-red-500 fill-current' : 'text-gray-600' }}" 
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                </svg>
-                            </button>
-                        @endauth
+                        <button onclick="toggleFavorite('{{ $recipe->id }}')" 
+                                class="absolute top-2 right-2 bg-white/80 hover:bg-white rounded-full p-2 transition-colors">
+                            <svg class="w-5 h-5 text-red-500 fill-current" 
+                                 fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
 
                         <span class="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-sm">
                             {{ $recipe->category->name }}
@@ -74,23 +64,21 @@
     @else
         <div class="text-center py-12">
             <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav recepšu</h3>
-            <p class="mt-2 text-gray-500">Vēl nav pievienotas receptes.</p>
-            @auth
-                <div class="mt-6">
-                    <a href="{{ route('recipes.create') }}" 
-                       class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition duration-200">
-                        Pievienot pirmo recepti
-                    </a>
-                </div>
-            @endauth
+            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav iemīļoto recepšu</h3>
+            <p class="mt-2 text-gray-500">Sāciet pievienot receptes saviem favorītiem!</p>
+            <div class="mt-6">
+                <a href="{{ route('recipes.index') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition duration-200">
+                    Pārlūkot receptes
+                </a>
+            </div>
         </div>
     @endif
 </div>
 
-@auth
 <script>
 function toggleFavorite(recipeId) {
     fetch(`/favorites/${recipeId}`, {
@@ -103,20 +91,13 @@ function toggleFavorite(recipeId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Update the heart icon
-            const button = event.target.closest('button');
-            const svg = button.querySelector('svg');
-            if (data.favorited) {
-                svg.classList.add('text-red-500', 'fill-current');
-                svg.classList.remove('text-gray-600');
-            } else {
-                svg.classList.remove('text-red-500', 'fill-current');
-                svg.classList.add('text-gray-600');
+            if (!data.favorited) {
+                // Recipe was unfavorited, remove from page
+                location.reload();
             }
         }
     })
     .catch(error => console.error('Error:', error));
 }
 </script>
-@endauth
 @endsection

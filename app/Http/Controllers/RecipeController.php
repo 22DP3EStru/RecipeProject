@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
-{
-    public function index() {
-        return view('recipes.index', ['recipes' => Recipe::with('user', 'category')->latest()->get()]);
+{    public function index() {
+        $recipes = Recipe::with('user', 'category')
+                        ->latest()
+                        ->paginate(12);
+        
+        $featuredRecipes = Recipe::with('user', 'category')
+                                ->where('is_featured', true)
+                                ->limit(3)
+                                ->get();
+        
+        return view('recipes.index', compact('recipes', 'featuredRecipes'));
     }
 
     public function create() {
@@ -65,5 +73,26 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe) {
         $recipe->delete();
         return redirect()->route('recipes.index')->with('success', 'Recepte izdzēsta!');
+    }
+
+    public function search(Request $request) {
+        $query = $request->get('q');
+        
+        if (empty($query)) {
+            return redirect()->route('recipes.index');
+        }
+
+        $recipes = Recipe::with('user', 'category')
+            ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%")
+                  ->orWhere('ingredients', 'like', "%{$query}%")
+                  ->orWhere('instructions', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->paginate(12)
+            ->appends(['q' => $query]);
+
+        return view('recipes.search', compact('recipes', 'query'));
     }
 }

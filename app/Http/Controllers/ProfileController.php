@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Recipe;
 
 class ProfileController extends Controller
 {
@@ -56,5 +57,32 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Display the user's favorite recipes.
+     */
+    public function favorites(Request $request): View
+    {
+        $favorites = $request->user()->favoriteRecipes()->with(['user', 'category'])->paginate(12);
+        
+        return view('profile.favorites', [
+            'recipes' => $favorites,
+        ]);
+    }
+
+    /**
+     * Display the user's own recipes.
+     */
+    public function recipes(Request $request): View
+    {
+        $userRecipes = Recipe::where('user_id', $request->user()->id)
+            ->with(['category'])
+            ->latest()
+            ->paginate(12);
+        
+        return view('profile.recipes', [
+            'recipes' => $userRecipes,
+        ]);
     }
 }

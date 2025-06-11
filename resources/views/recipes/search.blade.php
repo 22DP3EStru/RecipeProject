@@ -1,28 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'Visas receptes - RecipeHub')
+@section('title', 'Meklēšanas rezultāti - RecipeHub')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Visas receptes</h1>
-            <p class="text-gray-600">Atklājiet mūsu plašo receptes kolekciju</p>
-        </div>
-        @auth
-            <a href="{{ route('recipes.create') }}" 
-               class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 shadow-sm">
-                Pievienot recepti
-            </a>
-        @endauth
+    <!-- Search Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Meklēšanas rezultāti</h1>
+        @if($query)
+            <p class="text-gray-600">
+                Atrasti {{ $recipes->total() }} rezultāti meklējot 
+                <span class="font-semibold text-orange-600">"{{ $query }}"</span>
+            </p>
+        @endif
     </div>
 
+    <!-- Search Bar -->
+    <div class="mb-8">
+        <form action="{{ route('recipes.search') }}" method="GET" class="max-w-2xl">
+            <div class="relative">
+                <input type="text" name="q" placeholder="Meklēt receptes..." 
+                       value="{{ $query }}"
+                       class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <button type="submit" 
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <span class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-r-lg transition duration-200">
+                        Meklēt
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results -->
     @if($recipes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            @foreach ($recipes as $recipe)
+            @foreach($recipes as $recipe)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     <div class="relative">
-                        @if ($recipe->image)
+                        @if($recipe->image)
                             <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
                                  class="w-full h-48 object-cover">
                         @else
@@ -52,11 +73,11 @@
                     <div class="p-4">
                         <a href="{{ route('recipes.show', $recipe) }}">
                             <h3 class="font-bold text-lg mb-2 hover:text-orange-500 transition-colors">
-                                {{ $recipe->title }}
+                                {!! $query ? highlightSearchTerms($recipe->title, $query) : $recipe->title !!}
                             </h3>
                         </a>
                         <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-                            {{ Str::limit($recipe->description, 100) }}
+                            {!! $query ? highlightSearchTerms(Str::limit($recipe->description, 100), $query) : Str::limit($recipe->description, 100) !!}
                         </p>
                         <div class="flex justify-between items-center text-sm text-gray-500">
                             <span>{{ $recipe->user->name }}</span>
@@ -69,23 +90,38 @@
 
         <!-- Pagination -->
         <div class="mt-8">
-            {{ $recipes->links() }}
+            {{ $recipes->appends(['q' => $query])->links() }}
         </div>
     @else
         <div class="text-center py-12">
             <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav recepšu</h3>
-            <p class="mt-2 text-gray-500">Vēl nav pievienotas receptes.</p>
-            @auth
+            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav atrasti rezultāti</h3>
+            @if($query)
+                <p class="mt-2 text-gray-500">Neizdevās atrast receptes, kas atbilstu meklējumam "{{ $query }}"</p>
                 <div class="mt-6">
-                    <a href="{{ route('recipes.create') }}" 
+                    <a href="{{ route('recipes.index') }}" 
                        class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition duration-200">
-                        Pievienot pirmo recepti
+                        Skatīt visas receptes
                     </a>
                 </div>
-            @endauth
+            @else
+                <p class="mt-2 text-gray-500">Ievadiet meklēšanas frāzi, lai atrastu receptes</p>
+            @endif
+        </div>
+    @endif
+
+    @if($query && $recipes->count() > 0)
+        <!-- Search Suggestions -->
+        <div class="mt-12 bg-gray-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Meklēšanas padomi:</h3>
+            <ul class="text-sm text-gray-600 space-y-2">
+                <li>• Izmantojiet īsākus meklēšanas vārdus</li>
+                <li>• Meklējiet pēc sastāvdaļām (piemēram, "vista", "rīsi", "siers")</li>
+                <li>• Mēģiniet meklēt pēc ēdiena veida (piemēram, "zupa", "salāti", "deserts")</li>
+                <li>• Pārbaudiet pareizrakstību</li>
+            </ul>
         </div>
     @endif
 </div>
@@ -119,4 +155,13 @@ function toggleFavorite(recipeId) {
 }
 </script>
 @endauth
+
+@php
+    function highlightSearchTerms($text, $searchTerm) {
+        if (empty($searchTerm)) return $text;
+        
+        $pattern = '/(' . preg_quote($searchTerm, '/') . ')/i';
+        return preg_replace($pattern, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>', $text);
+    }
+@endphp
 @endsection

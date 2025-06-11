@@ -40,52 +40,93 @@ $register = function () {
 ?>
 
 <div>
-    <form wire:submit="register">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Pievienojies Receptūrei!</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-2">Izveido kontu, lai sāktu dalīties un atklātu daudz jaunu recepšu.</p>
+    </div>
+
+    <form wire:submit="register" class="space-y-6">
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
+            <x-input-label for="name" :value="__('Full Name')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-text-input wire:model="name" id="name" 
+                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200" 
+                type="text" 
+                name="name" 
+                required 
+                autofocus 
+                autocomplete="name" 
+                placeholder="Enter your full name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
+        <div>
+            <x-input-label for="email" :value="__('Email Address')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-text-input wire:model="email" id="email" 
+                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200" 
+                type="email" 
+                name="email" 
+                required 
+                autocomplete="username" 
+                placeholder="Enter your email address" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
+        <div>
+            <x-input-label for="password" :value="__('Password')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-text-input wire:model="password" id="password" 
+                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                type="password"
+                name="password"
+                required 
+                autocomplete="new-password" 
+                placeholder="Create a secure password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+        <div>
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-text-input wire:model="password_confirmation" id="password_confirmation" 
+                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                type="password"
+                name="password_confirmation" 
+                required 
+                autocomplete="new-password" 
+                placeholder="Confirm your password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
-            </a>
+        <!-- Terms Agreement -->
+        <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Izzveidojot kontu, jūs piekrītat mūsu 
+                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Pakalpojumu sniegšanas noteikumiem</a> 
+                un 
+                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Privātuma politikai</a>.
+            </p>
+        </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <!-- Submit Button -->
+        <div class="pt-4">
+            <button type="submit" 
+                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                {{ __('Izveidot manu Receptūres kontu') }}
+            </button>
         </div>
     </form>
+
+    <!-- Login Link -->
+    <div class="mt-6 text-center pt-6 border-t border-gray-200 dark:border-gray-600">
+        <p class="text-gray-600 dark:text-gray-400">
+            Vai jau eksistē konts? 
+            <a href="{{ route('login') }}" wire:navigate 
+               class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium transition duration-200">
+                Pieslēgties Receptūrei
+            </a>
+        </p>
+    </div>
 </div>

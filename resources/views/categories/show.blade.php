@@ -1,28 +1,61 @@
 @extends('layouts.app')
 
-@section('title', 'Visas receptes - RecipeHub')
+@section('title', $category->name . ' - Kategorijas - RecipeHub')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Visas receptes</h1>
-            <p class="text-gray-600">Atklājiet mūsu plašo receptes kolekciju</p>
+    <!-- Category Header -->
+    <div class="mb-8">
+        <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
+            <a href="{{ route('home') }}" class="hover:text-orange-600">Sākums</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <a href="{{ route('categories.index') }}" class="hover:text-orange-600">Kategorijas</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-gray-900">{{ $category->name }}</span>
+        </nav>
+
+        <div class="flex items-center space-x-4">
+            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    @switch($category->name)
+                        @case('Zupas')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                            @break
+                        @case('Pamatēdieni')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            @break
+                        @case('Deserti')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"/>
+                            @break
+                        @case('Uzkodas')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            @break
+                        @case('Dzērieni')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            @break
+                        @default
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    @endswitch
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">{{ $category->name }}</h1>
+                <p class="text-gray-600">{{ $recipes->total() }} {{ $recipes->total() === 1 ? 'recepte' : 'receptes' }}</p>
+            </div>
         </div>
-        @auth
-            <a href="{{ route('recipes.create') }}" 
-               class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 shadow-sm">
-                Pievienot recepti
-            </a>
-        @endauth
     </div>
 
+    <!-- Recipes Grid -->
     @if($recipes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            @foreach ($recipes as $recipe)
+            @foreach($recipes as $recipe)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     <div class="relative">
-                        @if ($recipe->image)
+                        @if($recipe->image)
                             <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
                                  class="w-full h-48 object-cover">
                         @else
@@ -43,10 +76,6 @@
                                 </svg>
                             </button>
                         @endauth
-
-                        <span class="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-sm">
-                            {{ $recipe->category->name }}
-                        </span>
                     </div>
                     
                     <div class="p-4">
@@ -76,8 +105,8 @@
             <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav recepšu</h3>
-            <p class="mt-2 text-gray-500">Vēl nav pievienotas receptes.</p>
+            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav recepšu šajā kategorijā</h3>
+            <p class="mt-2 text-gray-500">Šajā kategorijā vēl nav pievienotas receptes.</p>
             @auth
                 <div class="mt-6">
                     <a href="{{ route('recipes.create') }}" 
