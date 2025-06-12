@@ -3,22 +3,22 @@
 @section('title', $recipe->title . ' - RecipeHub')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-6 py-8">
+<div class="content-container max-w-4xl">
     <!-- Breadcrumb -->
-    <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-        <a href="{{ route('home') }}" class="hover:text-orange-600">Sākums</a>
+    <nav class="flex items-center space-x-2 text-sm mb-6">
+        <a href="{{ route('home') }}" class="nav-link">Sākums</a>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
-        <a href="{{ route('recipes.index') }}" class="hover:text-orange-600">Receptes</a>
+        <a href="{{ route('recipes.index') }}" class="nav-link">Receptes</a>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
-        <span class="text-gray-900">{{ $recipe->title }}</span>
+        <span class="font-medium">{{ $recipe->title }}</span>
     </nav>
 
     <!-- Recipe Header -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+    <div class="recipe-card mb-8">
         @if ($recipe->image)
             <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
                  class="w-full h-80 object-cover">
@@ -26,12 +26,12 @@
 
         <div class="p-6">
             <div class="flex items-center justify-between mb-4">
-                <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                <span class="badge-orange">
                     {{ $recipe->category->name }}
                 </span>
                 @auth
                     <button onclick="toggleFavorite('{{ $recipe->id }}')" 
-                            class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
+                            class="btn-secondary flex items-center space-x-2">
                         <svg class="w-5 h-5 {{ auth()->user()->favoriteRecipes->contains($recipe->id) ? 'text-red-500 fill-current' : 'text-gray-600' }}" 
                              fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -42,147 +42,135 @@
                 @endauth
             </div>
 
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $recipe->title }}</h1>
+            <h1 class="text-3xl font-bold mb-4">{{ $recipe->title }}</h1>
             
             <div class="flex items-center text-gray-600 mb-6">
                 <div class="flex items-center mr-6">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <span>{{ $recipe->user->name }}</span>
+                    {{ $recipe->user->name }}
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center mr-6">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span>{{ $recipe->created_at->diffForHumans() }}</span>
+                    {{ $recipe->cooking_time }} min
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                    </svg>
+                    {{ number_format($recipe->avgRating(), 1) }}
                 </div>
             </div>
 
-            <div class="prose max-w-none">
-                <h2 class="text-xl font-semibold text-gray-900 mb-3">Apraksts:</h2>
-                <p class="text-gray-700 leading-relaxed">{{ $recipe->description }}</p>
+            <p class="text-gray-700 mb-8">{{ $recipe->description }}</p>
+
+            <!-- Recipe Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Ingredients -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-4">Sastāvdaļas</h2>
+                    <ul class="space-y-2">
+                        @foreach(explode("\n", $recipe->ingredients) as $ingredient)
+                            @if(!empty(trim($ingredient)))
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 mr-2 text-orange-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                    {{ $ingredient }}
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Instructions -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-4">Pagatavošanas soļi</h2>
+                    <ol class="space-y-4">
+                        @foreach(explode("\n", $recipe->instructions) as $index => $instruction)
+                            @if(!empty(trim($instruction)))
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-800 rounded-full flex items-center justify-center mr-3 font-medium text-sm">
+                                        {{ $index + 1 }}
+                                    </span>
+                                    <span class="text-gray-700">{{ $instruction }}</span>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Rating and Comments Section -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        @auth
-            <!-- Rating Form -->
-            <div class="mb-8">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Novērtējiet šo recepti</h3>
-                <form action="{{ route('ratings.store') }}" method="POST" class="flex items-center space-x-4">
-                    @csrf
-                    <select name="rating" id="rating" class="rounded-lg border-gray-300 focus:ring-orange-500 focus:border-orange-500" required>
-                        <option value="">Izvēlieties vērtējumu</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="{{ $i }}">{{ $i }} {{ $i === 1 ? 'zvaigzne' : 'zvaigznes' }}</option>
-                        @endfor
-                    </select>
-                    <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
-                    <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200">
-                        Novērtēt
-                    </button>
-                </form>
-            </div>
+    <!-- Comments Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-6">Komentāri</h2>
 
-            <!-- Comment Form -->
-            <div class="mb-8">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Pievienot komentāru</h3>
-                <form action="{{ route('comments.store') }}" method="POST">
-                    @csrf
-                    <textarea name="body" id="body" rows="4" 
-                              class="w-full rounded-lg border-gray-300 focus:ring-orange-500 focus:border-orange-500" 
-                              placeholder="Dalieties ar savām domām par šo recepti..." required></textarea>
-                    <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
-                    <button type="submit" class="mt-3 bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg font-medium transition duration-200">
-                        Pievienot komentāru
-                    </button>
-                </form>
-            </div>
-        @else
-            <div class="text-center py-8 bg-gray-50 rounded-lg mb-8">
-                <p class="text-gray-600 mb-4">Piesakieties, lai novērtētu un komentētu šo recepti</p>
-                <div class="space-x-4">
-                    <a href="{{ route('login') }}" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200">
-                        Pieslēgties
-                    </a>
-                    <a href="{{ route('register') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200">
-                        Reģistrēties
-                    </a>
+        @auth
+            <form action="{{ route('comments.store', $recipe) }}" method="POST" class="mb-8">
+                @csrf
+                <div class="mb-4">
+                    <label for="content" class="form-label">Tavs komentārs</label>
+                    <textarea name="content" id="content" rows="3" class="form-input" placeholder="Dalies ar savām pārdomām..."></textarea>
+                    @error('content')
+                        <p class="form-error">{{ $message }}</p>
+                    @enderror
                 </div>
+                <button type="submit" class="btn-primary">Pievienot komentāru</button>
+            </form>
+        @else
+            <div class="bg-gray-50 rounded-lg p-4 mb-8">
+                <p class="text-center text-gray-600">
+                    Lai pievienotu komentāru,
+                    <a href="{{ route('login') }}" class="text-orange-600 hover:underline">piesakies</a>
+                    vai
+                    <a href="{{ route('register') }}" class="text-orange-600 hover:underline">reģistrējies</a>
+                </p>
             </div>
         @endauth
 
-        <!-- Comments Display -->
-        <div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-6">
-                Komentāri ({{ $recipe->comments->count() }})
-            </h3>
-            
-            @if($recipe->comments->count() > 0)
-                <div class="space-y-6">
-                    @foreach ($recipe->comments as $comment)
-                        <div class="border-b border-gray-200 pb-6 last:border-b-0">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                        <span class="text-orange-600 font-medium text-sm">
-                                            {{ strtoupper(substr($comment->user->name, 0, 1)) }}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900">{{ $comment->user->name }}</p>
-                                        <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-gray-700">{{ $comment->body }}</p>
+        <div class="space-y-6">
+            @forelse ($recipe->comments as $comment)
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                            <span class="text-orange-800 font-medium">{{ substr($comment->user->name, 0, 1) }}</span>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-medium">{{ $comment->user->name }}</span>
+                            <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                        </div>
+                        <p class="text-gray-700">{{ $comment->content }}</p>
+                    </div>
                 </div>
-            @else
-                <div class="text-center py-8">
-                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                    <p class="mt-4 text-gray-500">Vēl nav komentāru. Esiet pirmais, kas komentē!</p>
-                </div>
-            @endif
+            @empty
+                <p class="text-center text-gray-500">Pagaidām nav neviena komentāra. Esi pirmais, kas komentē!</p>
+            @endforelse
         </div>
     </div>
 </div>
 
-@auth
+@if(auth()->check())
 <script>
 function toggleFavorite(recipeId) {
-    fetch(`/favorites/${recipeId}`, {
+    fetch(`/recipes/${recipeId}/favorite`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            const button = event.target.closest('button');
-            const svg = button.querySelector('svg');
-            const text = button.querySelector('span');
-            if (data.favorited) {
-                svg.classList.add('text-red-500', 'fill-current');
-                svg.classList.remove('text-gray-600');
-                text.textContent = 'Noņemt no favorītiem';
-            } else {
-                svg.classList.remove('text-red-500', 'fill-current');
-                svg.classList.add('text-gray-600');
-                text.textContent = 'Pievienot favorītiem';
-            }
-        }
-    })
-    .catch(error => console.error('Error:', error));
+        location.reload();
+    });
 }
 </script>
-@endauth
+@endif
 @endsection

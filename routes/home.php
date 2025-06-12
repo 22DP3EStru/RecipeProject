@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Main homepage - shows welcome page
-Route::get('/', function () {
-    $featuredRecipes = \App\Models\Recipe::with(['user', 'category'])
-        ->latest()
-        ->limit(6)
-        ->get();
-    
-    $categories = \App\Models\Category::all();
-    
-    return view('welcome', compact('featuredRecipes', 'categories'));
-})->name('home');
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
 // Recipes pages
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');

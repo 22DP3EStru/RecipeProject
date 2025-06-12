@@ -22,12 +22,12 @@ class RecipeController extends Controller
 
     public function create() {
         return view('recipes.create');
-    }
-
-    public function store(Request $request) {
+    }    public function store(Request $request) {
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'ingredients' => 'nullable|string',
+            'instructions' => 'nullable|string',
             'image' => 'nullable|image',
             'category_id' => 'required|exists:categories,id',
         ]);

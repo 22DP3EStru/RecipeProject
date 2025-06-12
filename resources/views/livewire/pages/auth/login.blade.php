@@ -2,6 +2,7 @@
 
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 use function Livewire\Volt\form;
 use function Livewire\Volt\layout;
@@ -11,17 +12,18 @@ layout('layouts.guest');
 form(LoginForm::class);
 
 $login = function () {
-    $this->validate();
-
-    $this->form->authenticate();
-
-    Session::regenerate();
-
-    // Check if user is admin and redirect accordingly
-    if (auth()->user()->is_admin) {
-        $this->redirectIntended(default: route('admin.index', absolute: false), navigate: true);
-    } else {
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    try {
+        $this->validate();
+        $this->form->authenticate();
+        
+        // Redirect based on user role
+        if (Auth::user()->is_admin) {
+            $this->redirect(route('admin.index'), navigate: true);
+        } else {
+            $this->redirect(route('dashboard'), navigate: true);
+        }
+    } catch (\Exception $e) {
+        $this->addError('form.email', trans('auth.failed'));
     }
 };
 
@@ -30,8 +32,8 @@ $login = function () {
 <div>
     <!-- Header -->
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Sveicināti atpakaļ!</h2>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">Pieslēdzaties, lai apskatītu savas mīļākās receptes</p>
+        <h2 class="text-2xl font-bold text-black">Sveicināti atpakaļ!</h2>
+        <p class="text-black mt-2">Pieslēdzaties, lai apskatītu savas mīļākās receptes</p>
     </div>
 
     <!-- Session Status -->
@@ -42,7 +44,7 @@ $login = function () {
         <div>
             <x-input-label for="email" :value="__('Email Address')" class="text-gray-700 dark:text-gray-300 font-medium" />
             <x-text-input wire:model="form.email" id="email" 
-                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200" 
+                class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-white-700 dark:text-white transition duration-200" 
                 type="email" 
                 name="email" 
                 required 
@@ -85,8 +87,17 @@ $login = function () {
         <!-- Submit Button -->
         <div class="pt-4">
             <button type="submit" 
-                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                {{ __('Pieslēgties Receptūrei') }}
+                class="w-full bg-orange-600 hover:bg-orange-700 text-black font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 relative"
+                wire:loading.class="opacity-75 cursor-wait"
+                wire:loading.attr="disabled">
+                <span wire:loading.remove>{{ __('Pieslēgties Receptūrei') }}</span>
+                <span wire:loading>
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {{ __('Pieslēdzas...') }}
+                </span>
             </button>
         </div>
     </form>

@@ -11,7 +11,14 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/home.php';
 
 // Dashboard and profile routes (authenticated users)
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', function () {
+        $featuredRecipes = \App\Models\Recipe::with(['user', 'category'])
+            ->latest()
+            ->limit(6)
+            ->get();
+        
+        return view('dashboard', compact('featuredRecipes'));
+    })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -49,9 +56,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::delete('/user/{user}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
-    Route::delete('/recipe/{recipe}', [AdminController::class, 'deleteRecipe'])->name('admin.deleteRecipe');
+Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/recipes', [AdminController::class, 'recipes'])->name('recipes');
+    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::delete('/recipes/{recipe}', [AdminController::class, 'deleteRecipe'])->name('recipes.delete');
 });

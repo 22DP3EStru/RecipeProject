@@ -9,7 +9,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'image', 'user_id', 'category_id'];
+    protected $fillable = ['title', 'description', 'ingredients', 'instructions', 'image', 'user_id', 'category_id'];
 
     public function user() {
         return $this->belongsTo(User::class);

@@ -1,7 +1,7 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+<div class="recipe-card animate-fade-in">
     <div class="relative">
         <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
-             class="w-full h-48 object-cover">
+             class="recipe-image">
         
         @auth
             <button onclick="toggleFavorite('{{ $recipe->id }}')" 
@@ -12,9 +12,7 @@
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                 </svg>
             </button>
-        @endauth
-
-        <span class="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-sm">
+        @endauth        <span class="badge-orange absolute top-2 left-2">
             {{ $recipe->category->name }}
         </span>
     </div>
