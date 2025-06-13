@@ -23,4 +23,18 @@
             </a>
         @endif
     @endauth
+
+    <!-- Navigation Links -->
+    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            {{ __('Dashboard') }}
+        </x-nav-link>
+
+        <!-- Replace any admin route with simple URL -->
+        @if(Auth::check() && Auth::user()->is_admin)
+            <x-nav-link href="/admin" :active="request()->is('admin*')">
+                {{ __('Admin Panel') }}
+            </x-nav-link>
+        @endif
+    </div>
 </nav>

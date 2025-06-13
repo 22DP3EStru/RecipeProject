@@ -12,71 +12,76 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
-            if (!Auth::check() || !Auth::user()->is_admin) {
-                return redirect('/')->with('error', 'You do not have admin access.');
-            }
-            return $next($request);
-        });
     }
     
     public function index()
     {
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
+        
         $usersCount = User::count();
         $recipesCount = Recipe::count();
+        $adminsCount = User::where('is_admin', true)->count();
         $latestUsers = User::latest()->take(5)->get();
-        $latestRecipes = Recipe::with('user')->latest()->take(5)->get(); // Only load user relationship
+        $latestRecipes = Recipe::with('user')->latest()->take(5)->get();
         
-        return view('admin.dashboard', compact('usersCount', 'recipesCount', 'latestUsers', 'latestRecipes'));
+        return view('admin.dashboard', compact('usersCount', 'recipesCount', 'adminsCount', 'latestUsers', 'latestRecipes'));
     }
     
     public function users()
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
+        
+        $users = User::orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.users', compact('users'));
     }
     
     public function recipes()
     {
-        $recipes = Recipe::with('user')->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.recipes.index', compact('recipes'));
-    }
-    
-    public function editUser(User $user)
-    {
-        return view('admin.users.edit', compact('user'));
-    }
-    
-    public function updateUser(Request $request, User $user)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'is_admin' => 'boolean'
-        ]);
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
         
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'is_admin' => $request->has('is_admin')
-        ]);
-        
-        return redirect()->route('admin.users')->with('success', 'User updated successfully.');
+        $recipes = Recipe::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.recipes', compact('recipes'));
     }
     
     public function deleteUser(User $user)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
+        
         if ($user->id === Auth::id()) {
-            return back()->with('error', 'You cannot delete your own account.');
+            return back()->with('error', 'Cannot delete your own account');
         }
         
         $user->delete();
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+        return back()->with('success', 'User deleted successfully');
     }
     
     public function deleteRecipe(Recipe $recipe)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
+        
         $recipe->delete();
-        return redirect()->route('admin.recipes')->with('success', 'Recipe deleted successfully.');
+        return back()->with('success', 'Recipe deleted successfully');
+    }
+    
+    public function toggleAdmin(User $user)
+    {
+        if (!Auth::user()->is_admin) {
+            return redirect('/dashboard')->with('error', 'Access denied');
+        }
+        
+        $user->is_admin = !$user->is_admin;
+        $user->save();
+        
+        return back()->with('success', 'Admin status updated');
     }
 }

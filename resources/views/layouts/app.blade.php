@@ -132,7 +132,7 @@
                                 </a>
                                 @if(Auth::user()->is_admin)
                                     <div class="border-t border-gray-100 my-1"></div>
-                                    <a href="{{ route('admin.index') }}" class="block px-4 py-2 text-purple-700 hover:bg-purple-50 hover:text-purple-800 font-medium">
+                                    <a href="{{ route('/admin') }}" class="block px-4 py-2 text-purple-700 hover:bg-purple-50 hover:text-purple-800 font-medium">
                                         Admin Dashboard
                                     </a>
                                 @endif
@@ -227,7 +227,7 @@
                             Manas receptes
                         </a>
                         @if(Auth::user()->is_admin)
-                            <a href="{{ route('admin.index') }}" class="block text-black hover:text-orange-600 font-medium">
+                            <a href="{{ route('\admin') }}" class="block text-black hover:text-orange-600 font-medium">
                                 Admin Dashboard
                             </a>
                         @endif

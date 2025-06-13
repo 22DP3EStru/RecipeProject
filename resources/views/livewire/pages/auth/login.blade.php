@@ -18,7 +18,7 @@ $login = function () {
         
         // Redirect based on user role
         if (Auth::user()->is_admin) {
-            $this->redirect(route('admin.index'), navigate: true);
+            $this->redirect(route('\admin'), navigate: true);
         } else {
             $this->redirect(route('dashboard'), navigate: true);
         }
