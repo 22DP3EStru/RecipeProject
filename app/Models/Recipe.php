@@ -9,21 +9,41 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'ingredients', 'instructions', 'image', 'user_id', 'category_id'];
+    protected $fillable = [
+        'title',
+        'description',
+        'ingredients',
+        'instructions',
+        'prep_time',
+        'cook_time',
+        'servings',
+        'category',
+        'image',
+        'user_id',
+    ];
 
-    public function user() {
+    protected $casts = [
+        'ingredients' => 'array',
+        'instructions' => 'array',
+    ];
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function category() {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function comments() {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function ratings() {
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
+    }
+
+    public function avgRating()
+    {
+        return $this->ratings()->avg('rating') ?: 0;
+    }
+
+    public function getRatingCountAttribute()
+    {
+        return $this->ratings()->count();
     }
 }

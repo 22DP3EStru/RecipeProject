@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
-            if (!Auth::user()->is_admin) {
+            if (!Auth::check() || !Auth::user()->is_admin) {
                 return redirect('/')->with('error', 'You do not have admin access.');
             }
             return $next($request);
@@ -25,7 +25,7 @@ class AdminController extends Controller
         $usersCount = User::count();
         $recipesCount = Recipe::count();
         $latestUsers = User::latest()->take(5)->get();
-        $latestRecipes = Recipe::with('user')->latest()->take(5)->get();
+        $latestRecipes = Recipe::with('user')->latest()->take(5)->get(); // Only load user relationship
         
         return view('admin.dashboard', compact('usersCount', 'recipesCount', 'latestUsers', 'latestRecipes'));
     }
