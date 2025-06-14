@@ -14,17 +14,18 @@ class Recipe extends Model
         'description',
         'ingredients',
         'instructions',
+        'category',
         'prep_time',
         'cook_time',
         'servings',
-        'category',
-        'image',
+        'difficulty',
         'user_id',
     ];
 
     protected $casts = [
-        'ingredients' => 'array',
-        'instructions' => 'array',
+        'prep_time' => 'integer',
+        'cook_time' => 'integer',
+        'servings' => 'integer',
     ];
 
     public function user()
@@ -37,13 +38,18 @@ class Recipe extends Model
         return $this->hasMany(Rating::class);
     }
 
-    public function avgRating()
+    public function comments()
     {
-        return $this->ratings()->avg('rating') ?: 0;
+        return $this->hasMany(Comment::class);
     }
 
-    public function getRatingCountAttribute()
+    public function averageRating()
     {
-        return $this->ratings()->count();
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function totalTime()
+    {
+        return ($this->prep_time ?? 0) + ($this->cook_time ?? 0);
     }
 }

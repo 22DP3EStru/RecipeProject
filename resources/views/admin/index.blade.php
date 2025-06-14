@@ -148,9 +148,9 @@
         <!-- Quick Actions -->
         <div class="section">
             <h3>🚀 Quick Actions</h3>
-            <a href="/admin/users" class="btn">👥 Manage Users</a>
-            <a href="/admin/recipes" class="btn">🍽️ Manage Recipes</a>
-            <a href="/dashboard" class="btn">← Back to Dashboard</a>
+            <a href="{{ route('admin.users') }}" class="btn">👥 Manage Users</a>
+            <a href="{{ route('admin.recipes') }}" class="btn">🍽️ Manage Recipes</a>
+            <a href="{{ route('dashboard') }}" class="btn">← Back to Dashboard</a>
         </div>
         
         <!-- Recent Users -->
@@ -183,7 +183,7 @@
                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                         <td>
                             @if($user->id !== Auth::id())
-                                <a href="/admin/delete-user/{{ $user->id }}" 
+                                <a href="{{ route('admin.delete-user', $user->id) }}" 
                                    class="btn btn-danger" 
                                    onclick="return confirm('Delete {{ $user->name }}?')">
                                    Delete

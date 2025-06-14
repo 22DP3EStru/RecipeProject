@@ -16,9 +16,16 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     
-                    <!-- Add this Admin Panel link -->
+                    <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')">
+                        {{ __('Recipes') }}
+                    </x-nav-link>
+                    
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                        {{ __('Categories') }}
+                    </x-nav-link>
+                    
                     @if(Auth::check() && Auth::user()->is_admin)
-                        <x-nav-link href="/admin" :active="request()->is('admin*')">
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">
                             {{ __('Admin Panel') }}
                         </x-nav-link>
                     @endif
@@ -78,9 +85,8 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             
-            <!-- Add this for mobile -->
             @if(Auth::check() && Auth::user()->is_admin)
-                <x-responsive-nav-link href="/admin" :active="request()->is('admin*')">
+                <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">
                     {{ __('Admin Panel') }}
                 </x-responsive-nav-link>
             @endif

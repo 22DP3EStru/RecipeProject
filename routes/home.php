@@ -27,3 +27,14 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 
 // Search functionality
 Route::get('/search', [RecipeController::class, 'search'])->name('recipes.search');
+
+// Home routes
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+// Public recipe browsing (no auth required)
+Route::get('/recipes', function () {
+    $recipes = App\Models\Recipe::with('user')->latest()->paginate(12);
+    return view('recipes.index', compact('recipes'));
+})->name('recipes.index');

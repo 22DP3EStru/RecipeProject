@@ -64,11 +64,10 @@ class ProfileController extends Controller
      */
     public function favorites(Request $request): View
     {
-        $favorites = $request->user()->favoriteRecipes()->with(['user', 'category'])->paginate(12);
+        // For now, return empty collection since favorites system isn't set up yet
+        $favorites = collect();
         
-        return view('profile.favorites', [
-            'recipes' => $favorites,
-        ]);
+        return view('profile.favorites', compact('favorites'));
     }
 
     /**
@@ -76,13 +75,9 @@ class ProfileController extends Controller
      */
     public function recipes(Request $request): View
     {
-        $userRecipes = Recipe::where('user_id', $request->user()->id)
-            ->with(['category'])
-            ->latest()
-            ->paginate(12);
+        // Get user's own recipes
+        $recipes = Auth::user()->recipes()->latest()->paginate(12);
         
-        return view('profile.recipes', [
-            'recipes' => $userRecipes,
-        ]);
+        return view('profile.recipes', compact('recipes'));
     }
 }

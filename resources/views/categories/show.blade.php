@@ -49,47 +49,71 @@
         </div>
     </div>
 
+    <!-- Header -->
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+        <div class="p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">{{ $category->name }} receptes</h3>
+                    <p class="text-gray-600">{{ $recipes->total() }} {{ Str::plural('recepte', $recipes->total()) }} atrastas</p>
+                </div>
+                <div class="space-x-2">
+                    <a href="{{ route('categories.index') }}" 
+                       class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        ← Visas kategorijas
+                    </a>
+                    <a href="{{ route('recipes.index') }}" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Visas receptes
+                    </a>
+                    @auth
+                        <a href="{{ route('recipes.create') }}" 
+                           class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                            Izveidot recepti
+                        </a>
+                    @endauth
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Recipes Grid -->
     @if($recipes->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($recipes as $recipe)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="relative">
-                        @if($recipe->image)
-                            <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
-                                 class="w-full h-48 object-cover">
-                        @else
-                            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        @endif
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $recipe->title }}</h3>
+                            <span class="text-xs px-2 py-1 rounded-full 
+                                @if($recipe->difficulty == 'Easy') bg-green-100 text-green-800
+                                @elseif($recipe->difficulty == 'Medium') bg-yellow-100 text-yellow-800
+                                @else bg-red-100 text-red-800 @endif">
+                                {{ $recipe->difficulty }}
+                            </span>
+                        </div>
                         
-                        @auth
-                            <button onclick="toggleFavorite('{{ $recipe->id }}')" 
-                                    class="absolute top-2 right-2 bg-white/80 hover:bg-white rounded-full p-2 transition-colors">
-                                <svg class="w-5 h-5 {{ auth()->user()->favoriteRecipes->contains($recipe->id) ? 'text-red-500 fill-current' : 'text-gray-600' }}" 
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                </svg>
-                            </button>
-                        @endauth
-                    </div>
-                    
-                    <div class="p-4">
-                        <a href="{{ route('recipes.show', $recipe) }}">
-                            <h3 class="font-bold text-lg mb-2 hover:text-orange-500 transition-colors">
-                                {{ $recipe->title }}
-                            </h3>
-                        </a>
-                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-                            {{ Str::limit($recipe->description, 100) }}
-                        </p>
-                        <div class="flex justify-between items-center text-sm text-gray-500">
-                            <span>{{ $recipe->user->name }}</span>
+                        <p class="text-gray-600 text-sm mb-3">{{ Str::limit($recipe->description, 100) }}</p>
+                        
+                        <div class="flex justify-between items-center text-xs text-gray-500 mb-3">
+                            <span>Autors: {{ $recipe->user->name }}</span>
                             <span>{{ $recipe->created_at->diffForHumans() }}</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-xs text-gray-500 mb-4">
+                            @if($recipe->prep_time || $recipe->cook_time)
+                                <span>⏱️ {{ $recipe->totalTime() }} min kopā</span>
+                            @endif
+                            @if($recipe->servings)
+                                <span>🍽️ {{ $recipe->servings }} porcijas</span>
+                            @endif
+                        </div>
+                        
+                        <div class="text-right">
+                            <a href="{{ route('recipes.show', $recipe) }}" 
+                               class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Skatīt recepti →
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -97,24 +121,27 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-8">
+        <div class="mt-6">
             {{ $recipes->links() }}
         </div>
     @else
-        <div class="text-center py-12">
-            <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-900">Nav recepšu šajā kategorijā</h3>
-            <p class="mt-2 text-gray-500">Šajā kategorijā vēl nav pievienotas receptes.</p>
-            @auth
-                <div class="mt-6">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-center">
+                <div class="text-6xl mb-4">🍽️</div>
+                <h3 class="text-lg font-semibold mb-2">Nav recepšu šajā kategorijā</h3>
+                <p class="text-gray-600 mb-4">Esi pirmais, kas dalās ar {{ strtolower($category->name) }} recepti!</p>
+                @auth
                     <a href="{{ route('recipes.create') }}" 
-                       class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition duration-200">
-                        Pievienot pirmo recepti
+                       class="inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                        Izveidot {{ $category->name }} recepti
                     </a>
-                </div>
-            @endauth
+                @else
+                    <a href="{{ route('login') }}" 
+                       class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                        Pieteikties, lai izveidotu recepti
+                    </a>
+                @endauth
+            </div>
         </div>
     @endif
 </div>

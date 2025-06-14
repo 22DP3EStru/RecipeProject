@@ -184,34 +184,6 @@
             </div>
         </section>
 
-        <!-- Popular Recipes Section -->
-        <section class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <!-- Section Header -->
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="text-3xl font-bold mb-4">
-                        Populārākās Receptes
-                    </h2>
-                    <p class="text-gray-600">
-                        Atklājiet mūsu lietotāju visvairāk novērtētās receptes. Iedvesmojieties un pievienojieties gatavošanai!
-                    </p>
-                </div>
-
-                <!-- Recipes Grid -->
-                <div class="grid md:grid-cols-3 gap-8">
-                    @foreach($popularRecipes as $recipe)
-                        <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
-                            <h3 class="text-xl font-semibold mb-2">{{ $recipe->title }}</h3>
-                            <p class="text-gray-700 mb-4">{{ $recipe->description }}</p>
-                            <p class="text-sm text-gray-500 mb-2">Kategorija: {{ $recipe->category ?? 'Bez kategorijas' }}</p>
-                            <p class="text-sm text-gray-500 mb-2">Autors: {{ optional($recipe->user)->name ?? 'Nepazīstams lietotājs' }}</p>
-                            <p class="text-sm text-gray-500">Vērtējums: {{ number_format($recipe->ratings_avg_rating ?? 0, 1) }}/5</p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-
         <!-- Footer -->
         <footer class="bg-white border-t border-gray-100 py-12">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
