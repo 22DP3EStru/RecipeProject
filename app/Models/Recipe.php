@@ -15,37 +15,16 @@ class Recipe extends Model
         'ingredients',
         'instructions',
         'category',
+        'difficulty',
+        'servings',
         'prep_time',
         'cook_time',
-        'servings',
-        'difficulty',
-        'user_id',
-    ];
-
-    protected $casts = [
-        'prep_time' => 'integer',
-        'cook_time' => 'integer',
-        'servings' => 'integer',
+        'user_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function ratings()
-    {
-        return $this->hasMany(Rating::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function averageRating()
-    {
-        return $this->ratings()->avg('rating') ?? 0;
     }
 
     public function totalTime()

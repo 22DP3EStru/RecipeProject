@@ -1,42 +1,340 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Recipe App</title>
+    <style>
+        /* Dashboard Style Design */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-@section('content')
-<div class="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <h1 class="text-2xl font-bold mb-6 text-center">Ienākt</h1>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
 
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
-            @csrf
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid transparent;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, rgba(255, 65, 108, 0.1) 0%, rgba(255, 75, 43, 0.1) 100%);
+            border-color: rgba(255, 65, 108, 0.2);
+            color: #c62828;
+        }
+
+        .text-center { text-align: center; }
+
+        .welcome-back {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .auth-links {
+            text-align: center;
+            padding: 25px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .nav-bar { flex-direction: column; gap: 15px; }
+            .main-content { padding: 25px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🍽️ Welcome Back!</h1>
+            <p>Sign in to your Recipe App account</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <a href="/" class="nav-brand">🍽️ Recipe App</a>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="{{ route('register') }}">📝 Register</a>
+            </div>
             <div>
-                <label for="email" class="block mb-1">E-pasts</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                       class="w-full rounded-lg border-gray-300 focus:ring-primary focus:border-primary @error('email') border-red-500 @enderror">
-                @error('email')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
+                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Back to Home</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Welcome Message -->
+            <div class="welcome-back">
+                <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
+                <h2 style="color: #667eea; margin-bottom: 10px;">Ready to Cook?</h2>
+                <p style="color: #666; font-size: 16px;">Sign in to access your recipes and discover new culinary adventures!</p>
             </div>
 
-            <div>
-                <label for="password" class="block mb-1">Parole</label>
-                <input id="password" type="password" name="password" required
-                       class="w-full rounded-lg border-gray-300 focus:ring-primary focus:border-primary @error('password') border-red-500 @enderror">
-                @error('password')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            <!-- Error Messages -->
+            @if($errors->any())
+                <div class="alert alert-error">
+                    <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
+                        <span style="margin-right: 10px;">❌</span>
+                        Please fix the following errors:
+                    </h4>
+                    <ul style="margin-left: 30px; line-height: 1.6;">
+                        @foreach($errors->all() as $error)
+                            <li style="margin-bottom: 5px;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-            <div class="flex items-center justify-between">
-                <label class="flex items-center">
-                    <input class="rounded mr-2" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <span class="text-sm">Atcerēties mani</span>
-                </label>
+            <!-- Login Form -->
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">📧 Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" 
+                           class="form-input" placeholder="Enter your email address" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">🔒 Password</label>
+                    <input type="password" id="password" name="password" 
+                           class="form-input" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; color: #666; font-size: 16px;">
+                        <input type="checkbox" name="remember" style="margin-right: 12px; transform: scale(1.3);">
+                        Remember me for 30 days
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 30px; font-size: 18px; padding: 18px;">
+                    🔐 Sign In to Recipe App
+                </button>
+            </form>
+
+            <!-- Auth Links -->
+            <div class="auth-links">
+                <h4 style="color: #667eea; margin-bottom: 20px;">New to Recipe App?</h4>
+                <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
+                    Join thousands of food enthusiasts sharing their favorite recipes and discovering new culinary adventures!
+                </p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px;">
+                    <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 16px;">
+                        🚀 Create Free Account
+                    </a>
+                </div>
+                
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-sm text-primary hover:underline">Aizmirsi paroli?</a>
+                    <p style="margin: 0;">
+                        <a href="{{ route('password.request') }}" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 15px;">
+                            🔑 Forgot your password? Reset it here
+                        </a>
+                    </p>
                 @endif
             </div>
 
-            <button class="w-full py-2 bg-primary text-white rounded-lg font-semibold">Ienākt</button>
-        </form>
+            <!-- Features Preview -->
+            <div class="card">
+                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">✨ What awaits you inside</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📝</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Create Recipes</h5>
+                        <p style="color: #666; font-size: 13px;">Share your culinary masterpieces</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Discover Recipes</h5>
+                        <p style="color: #666; font-size: 13px;">Find new favorite dishes</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Join Community</h5>
+                        <p style="color: #666; font-size: 13px;">Connect with food lovers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-@endsection
+</body>
+</html>

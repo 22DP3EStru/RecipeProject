@@ -68,6 +68,11 @@ Route::get('/categories/{category}', function ($category) {
     return view('categories.show', compact('recipes', 'category'));
 })->name('categories.show');
 
+// Add this route for categories
+Route::get('/categories', function () {
+    return view('categories');
+})->middleware('auth');
+
 // Admin routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin', function () {
@@ -93,7 +98,7 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.recipes', compact('recipes'));
     })->name('admin.recipes');
 
-    Route::get('/admin/delete-user/{id}', function ($id) {
+    Route::delete('/admin/delete-user/{id}', function ($id) {
         if (!Auth::user()->is_admin) {
             return redirect('/dashboard');
         }
@@ -105,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('admin.index')->with('error', 'Cannot delete user');
     })->name('admin.delete-user');
 
-    Route::get('/admin/delete-recipe/{id}', function ($id) {
+    Route::delete('/admin/delete-recipe/{id}', function ($id) {
         if (!Auth::user()->is_admin) {
             return redirect('/dashboard');
         }

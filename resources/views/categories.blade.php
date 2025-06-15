@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Recipes - Recipe App</title>
+    <title>Recipe Categories - Recipe App</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -215,17 +215,6 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .difficulty-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .difficulty-easy { background: #c8e6c9; color: #2e7d32; }
-        .difficulty-medium { background: #fff3c4; color: #f57c00; }
-        .difficulty-hard { background: #ffcdd2; color: #c62828; }
-
         .text-center { text-align: center; }
 
         @media (max-width: 768px) {
@@ -241,8 +230,8 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>📝 My Recipes</h1>
-            <p>Your culinary creations ({{ $recipes->total() }} total)</p>
+            <h1>📂 Recipe Categories</h1>
+            <p>Explore recipes by category and discover new flavors</p>
         </div>
 
         <!-- Navigation -->
@@ -265,109 +254,122 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Recipe Statistics -->
+            <!-- Categories Statistics -->
             <div class="card">
-                <h3 class="card-title">📊 Your Recipe Statistics</h3>
+                <h3 class="card-title">📊 Category Statistics</h3>
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <span class="stat-number">{{ $recipes->total() }}</span>
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Total Categories</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
                         <span class="stat-label">Total Recipes</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->distinct('category')->count('category') }}</span>
-                        <span class="stat-label">Categories</span>
+                        <span class="stat-number">{{ \App\Models\Recipe::distinct('category')->count() }}</span>
+                        <span class="stat-label">Categories Used</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->whereDate('created_at', '>=', now()->subDays(30))->count() }}</span>
-                        <span class="stat-label">This Month</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->whereDate('created_at', today())->count() }}</span>
-                        <span class="stat-label">Today</span>
+                        <span class="stat-number">{{ \App\Models\Recipe::whereDate('created_at', today())->count() }}</span>
+                        <span class="stat-label">Recipes Today</span>
                     </div>
                 </div>
             </div>
 
-            <!-- My Recipes -->
-            @if($recipes->count() > 0)
-                <div class="card">
-                    <h3 class="card-title">📋 Your Recipes ({{ $recipes->total() }})</h3>
+            <!-- Categories Grid -->
+            <div class="card">
+                <h3 class="card-title">🎯 Browse by Category</h3>
+                @php
+                    $categoryData = [
+                        'Breakfast' => ['icon' => '🥞', 'description' => 'Start your day right'],
+                        'Lunch' => ['icon' => '🥗', 'description' => 'Midday fuel for energy'],
+                        'Dinner' => ['icon' => '🍽️', 'description' => 'Perfect evening meals'],
+                        'Desserts' => ['icon' => '🍰', 'description' => 'Sweet treats & indulgences'],
+                        'Appetizers' => ['icon' => '🥨', 'description' => 'Perfect party starters'],
+                        'Main Dishes' => ['icon' => '🍖', 'description' => 'Hearty centerpiece meals'],
+                        'Side Dishes' => ['icon' => '🥔', 'description' => 'Perfect accompaniments'],
+                        'Beverages' => ['icon' => '🥤', 'description' => 'Refreshing drinks'],
+                        'Snacks' => ['icon' => '🍿', 'description' => 'Quick bites & munchies'],
+                        'Vegetarian' => ['icon' => '🥬', 'description' => 'Plant-based delights'],
+                        'Vegan' => ['icon' => '🌱', 'description' => 'Completely plant-based'],
+                        'Gluten-Free' => ['icon' => '🌾', 'description' => 'Safe for celiac diets']
+                    ];
+                @endphp
+
+                <div class="grid grid-3">
+                    @foreach($categoryData as $category => $data)
+                        @php
+                            $count = \App\Models\Recipe::where('category', $category)->count();
+                        @endphp
+                        <div class="recipe-card" style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 15px;">{{ $data['icon'] }}</div>
+                            <h4 style="color: #667eea; margin-bottom: 10px; font-size: 1.3rem;">{{ $category }}</h4>
+                            <p style="color: #666; margin-bottom: 15px; font-size: 14px;">{{ $data['description'] }}</p>
+                            <div style="background: rgba(102, 126, 234, 0.05); padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                                <strong style="color: #667eea;">{{ $count }} recipes</strong>
+                            </div>
+                            @if($count > 0)
+                                <a href="/recipes?category={{ urlencode($category) }}" class="btn btn-primary" style="width: 100%;">
+                                    Explore {{ $category }}
+                                </a>
+                            @else
+                                <a href="/recipes/create" class="btn btn-success" style="width: 100%;">
+                                    Be the first!
+                                </a>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Popular Categories -->
+            <div class="card">
+                <h3 class="card-title">🔥 Most Popular Categories</h3>
+                @php
+                    $popularCategories = \App\Models\Recipe::select('category', \DB::raw('count(*) as total'))
+                        ->groupBy('category')
+                        ->orderBy('total', 'desc')
+                        ->limit(6)
+                        ->get();
+                @endphp
+
+                @if($popularCategories->count() > 0)
                     <div class="grid grid-3">
-                        @foreach($recipes as $recipe)
-                            <div class="recipe-card">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                    <h4 style="margin: 0; color: #667eea; font-size: 1.2rem;">{{ $recipe->title }}</h4>
-                                    <span class="difficulty-badge difficulty-{{ strtolower($recipe->difficulty) }}">
-                                        {{ $recipe->difficulty }}
-                                    </span>
+                        @foreach($popularCategories as $popular)
+                            <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                                    {{ $categoryData[$popular->category]['icon'] ?? '🍽️' }}
                                 </div>
-                                <p style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.4;">
-                                    {{ Str::limit($recipe->description, 100) }}
-                                </p>
-                                <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                                    <div class="grid grid-2" style="gap: 10px; font-size: 13px;">
-                                        <div><strong>Category:</strong> {{ $recipe->category }}</div>
-                                        @if($recipe->servings)
-                                            <div><strong>Servings:</strong> {{ $recipe->servings }}</div>
-                                        @endif
-                                        @if($recipe->prep_time || $recipe->cook_time)
-                                            <div><strong>Total Time:</strong> {{ $recipe->totalTime() }} min</div>
-                                        @endif
-                                        <div><strong>Created:</strong> {{ $recipe->created_at->diffForHumans() }}</div>
-                                    </div>
+                                <h5 style="color: #667eea; margin-bottom: 8px;">{{ $popular->category }}</h5>
+                                <div style="background: white; padding: 8px; border-radius: 6px; margin-bottom: 15px;">
+                                    <strong style="color: #667eea;">{{ $popular->total }} recipes</strong>
                                 </div>
-                                <div style="display: flex; gap: 8px;">
-                                    <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 13px;">
-                                        👁️ View
-                                    </a>
-                                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="flex: 1; padding: 10px; font-size: 13px;">
-                                        ✏️ Edit
-                                    </a>
-                                    <button onclick="deleteRecipe('{{ $recipe->id }}')" class="btn btn-danger" style="flex: 1; padding: 10px; font-size: 13px;">
-                                        🗑️ Delete
-                                    </button>
-                                </div>
-                                <form id="delete-form-{{ $recipe->id }}" method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
+                                <a href="/recipes?category={{ urlencode($popular->category) }}" class="btn btn-primary" style="font-size: 13px; padding: 8px 16px;">
+                                    Explore →
+                                </a>
                             </div>
                         @endforeach
                     </div>
-                </div>
-            @else
-                <div class="card text-center">
-                    <div style="padding: 50px;">
-                        <div style="font-size: 6rem; margin-bottom: 25px;">📝</div>
-                        <h3 style="color: #667eea; margin-bottom: 15px;">No recipes created yet</h3>
-                        <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
-                            Start your culinary journey by sharing your first recipe!
-                        </p>
-                        <a href="/recipes/create" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                            🍽️ Create Your First Recipe
-                        </a>
+                @else
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">📂</div>
+                        <p style="color: #666;">No recipes have been created yet.</p>
+                        <a href="/recipes/create" class="btn btn-success" style="margin-top: 15px;">Create First Recipe</a>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
 
             <!-- Quick Actions -->
             <div class="card">
                 <h3 class="card-title">🚀 Quick Actions</h3>
                 <div class="grid grid-3">
                     <a href="/recipes/create" class="btn btn-success">📝 Create Recipe</a>
-                    <a href="/recipes" class="btn btn-primary">🍽️ Browse Recipes</a>
+                    <a href="/recipes" class="btn btn-primary">🍽️ All Recipes</a>
                     <a href="/dashboard" class="btn btn-warning">🏠 Dashboard</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function deleteRecipe(recipeId) {
-            if (confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
-                document.getElementById('delete-form-' + recipeId).submit();
-            }
-        }
-    </script>
 </body>
 </html>

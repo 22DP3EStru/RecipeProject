@@ -16,33 +16,31 @@ class RecipeController extends Controller
     public function index(Request $request)
     {
         $query = Recipe::with('user');
-        
+
         // Search functionality
-        if ($request->has('search') && $request->search) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%")
-                  ->orWhere('ingredients', 'like', "%{$search}%");
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%')
+                  ->orWhere('ingredients', 'like', '%' . $request->search . '%');
             });
         }
-        
+
         // Category filter
-        if ($request->has('category') && $request->category) {
+        if ($request->category) {
             $query->where('category', $request->category);
         }
-        
+
         // Difficulty filter
-        if ($request->has('difficulty') && $request->difficulty) {
+        if ($request->difficulty) {
             $query->where('difficulty', $request->difficulty);
         }
-        
+
         $recipes = $query->latest()->paginate(12);
         
-        // Get unique categories for filter dropdown
-        $categories = Recipe::distinct()->pluck('category')->filter()->sort();
-        
+        // Get all categories for the filter dropdown
+        $categories = Recipe::distinct()->pluck('category')->filter()->sort()->values();
+
         return view('recipes.index', compact('recipes', 'categories'));
     }
 
@@ -53,32 +51,23 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
+            'description' => 'required|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
-            'category' => 'required|string|max:100',
+            'category' => 'required|string',
+            'difficulty' => 'required|string|in:Easy,Medium,Hard',
+            'servings' => 'nullable|integer|min:1',
             'prep_time' => 'nullable|integer|min:1',
             'cook_time' => 'nullable|integer|min:1',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
         ]);
 
-        Recipe::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'ingredients' => $request->ingredients,
-            'instructions' => $request->instructions,
-            'category' => $request->category,
-            'prep_time' => $request->prep_time,
-            'cook_time' => $request->cook_time,
-            'servings' => $request->servings,
-            'difficulty' => $request->difficulty,
-            'user_id' => Auth::id(),
-        ]);
+        $validated['user_id'] = Auth::id();
 
-        return redirect()->route('dashboard')->with('success', 'Recepte pievienota!');
+        Recipe::create($validated);
+
+        return redirect()->route('recipes.index')->with('success', 'Recepte pievienota!');
     }
 
     public function show(Recipe $recipe) {
@@ -87,9 +76,9 @@ class RecipeController extends Controller
 
     public function edit(Recipe $recipe)
     {
-        // Check if user owns the recipe
+        // Check if user owns this recipe
         if ($recipe->user_id !== Auth::id()) {
-            return redirect()->route('dashboard')->with('error', 'Jūs varat rediģēt tikai savas receptes.');
+            abort(403);
         }
 
         return view('recipes.edit', compact('recipe'));
@@ -97,52 +86,37 @@ class RecipeController extends Controller
 
     public function update(Request $request, Recipe $recipe)
     {
-        // Check if user owns the recipe
+        // Check if user owns this recipe
         if ($recipe->user_id !== Auth::id()) {
-            return redirect()->route('dashboard')->with('error', 'Jūs varat rediģēt tikai savas receptes.');
+            abort(403);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
+            'description' => 'required|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
-            'category' => 'required|string|max:100',
+            'category' => 'required|string',
+            'difficulty' => 'required|string|in:Easy,Medium,Hard',
+            'servings' => 'nullable|integer|min:1',
             'prep_time' => 'nullable|integer|min:1',
             'cook_time' => 'nullable|integer|min:1',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
         ]);
 
-        $recipe->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'ingredients' => $request->ingredients,
-            'instructions' => $request->instructions,
-            'category' => $request->category,
-            'prep_time' => $request->prep_time,
-            'cook_time' => $request->cook_time,
-            'servings' => $request->servings,
-            'difficulty' => $request->difficulty,
-        ]);
+        $recipe->update($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Recepte atjaunināta!');
+        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte atjaunināta!');
     }
 
     public function destroy(Recipe $recipe)
     {
-        // Check if user owns the recipe or is admin
-        if ($recipe->user_id !== Auth::id() && !Auth::user()->is_admin) {
-            return redirect()->route('dashboard')->with('error', 'Jūs varat dzēst tikai savas receptes.');
+        // Check if user owns this recipe
+        if ($recipe->user_id !== Auth::id()) {
+            abort(403);
         }
 
         $recipe->delete();
 
-        return redirect()->route('dashboard')->with('success', 'Recepte izdzēsta!');
-    }
-
-    public function search(Request $request)
-    {
-        return $this->index($request);
+        return redirect()->route('profile.recipes')->with('success', 'Recepte izdzēsta!');
     }
 }

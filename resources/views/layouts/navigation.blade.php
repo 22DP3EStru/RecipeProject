@@ -118,3 +118,7 @@
         </div>
     </div>
 </nav>
+
+@if(Auth::user()->is_admin)
+    <a href="{{ route('admin.index') }}">🔧 Admin</a>
+@endif
