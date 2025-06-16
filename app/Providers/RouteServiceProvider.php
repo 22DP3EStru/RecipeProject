@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to your application's "home" route.
+     * The path to your application's "home" screen.
      */
-    public const HOME = '/dashboard';
+    public const HOME = '/dashboard';  // Change this line
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// Remove MustVerifyEmail if it's there
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -32,7 +33,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function recipes()
+    public function recipes(): HasMany
     {
         return $this->hasMany(Recipe::class);
     }

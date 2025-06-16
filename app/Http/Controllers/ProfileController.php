@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Models\Recipe;
 
 class ProfileController extends Controller
 {
@@ -45,6 +44,9 @@ class ProfileController extends Controller
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
+        ], [
+            'password.required' => 'Parole ir obligāta.',
+            'password.current_password' => 'Nepareiza parole.',
         ]);
 
         $user = $request->user();
@@ -62,22 +64,16 @@ class ProfileController extends Controller
     /**
      * Display the user's favorite recipes.
      */
-    public function favorites(Request $request): View
+    public function favorites(): View
     {
-        // For now, return empty collection since favorites system isn't set up yet
-        $favorites = collect();
+        // For now, we'll show user's own recipes as "favorites"
+        // Later you can implement a proper favorites system
+        $user = Auth::user();
+        $favoriteRecipes = $user->recipes()->latest()->paginate(12);
         
-        return view('profile.favorites', compact('favorites'));
-    }
-
-    /**
-     * Display the user's own recipes.
-     */
-    public function recipes(Request $request): View
-    {
-        // Get user's own recipes
-        $recipes = Auth::user()->recipes()->latest()->paginate(12);
-        
-        return view('profile.recipes', compact('recipes'));
+        return view('profile.favorites', [
+            'recipes' => $favoriteRecipes,
+            'user' => $user
+        ]);
     }
 }

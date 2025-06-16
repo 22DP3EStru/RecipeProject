@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Recipe App</title>
+    <title>Reģistrēties - Recepšu Aplikācija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -97,20 +97,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
         .btn {
             display: inline-block;
             padding: 15px 30px;
@@ -123,6 +109,7 @@
             cursor: pointer;
             font-size: 16px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .btn:hover {
@@ -142,11 +129,6 @@
 
         .btn-warning {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             color: white;
         }
 
@@ -170,6 +152,7 @@
             font-size: 16px;
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.9);
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -192,8 +175,6 @@
             color: #c62828;
         }
 
-        .text-center { text-align: center; }
-
         .welcome-section {
             text-align: center;
             padding: 30px;
@@ -210,20 +191,6 @@
             margin-top: 30px;
         }
 
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-
-        .benefit-item {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 10px;
-        }
-
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .header p { font-size: 1rem; }
@@ -237,19 +204,19 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Join Recipe App!</h1>
-            <p>Create your account and start sharing recipes</p>
+            <h1>🍽️ Pievienojieties Recepšu Aplikācijai!</h1>
+            <p>Izveidojiet savu kontu un sāciet dalīties ar receptēm</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recipe App</a>
+            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/">🏠 Home</a>
-                <a href="{{ route('login') }}">🔐 Login</a>
+                <a href="/">🏠 Sākums</a>
+                <a href="{{ route('login') }}">🔐 Ielogoties</a>
             </div>
             <div>
-                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Back to Home</a>
+                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px; width: auto;">← Atpakaļ uz sākumu</a>
             </div>
         </nav>
 
@@ -258,8 +225,8 @@
             <!-- Welcome Section -->
             <div class="welcome-section">
                 <div style="font-size: 4rem; margin-bottom: 20px;">🎉</div>
-                <h2 style="color: #667eea; margin-bottom: 10px;">Welcome to Our Community!</h2>
-                <p style="color: #666; font-size: 16px;">Join thousands of food enthusiasts sharing their culinary creations</p>
+                <h2 style="color: #667eea; margin-bottom: 10px;">Laipni lūdzam mūsu kopienā!</h2>
+                <p style="color: #666; font-size: 16px;">Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar saviem kulinārijas radījumiem</p>
             </div>
 
             <!-- Error Messages -->
@@ -267,7 +234,7 @@
                 <div class="alert alert-error">
                     <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
                         <span style="margin-right: 10px;">❌</span>
-                        Please fix the following errors:
+                        Lūdzu, izlabojiet šādas kļūdas:
                     </h4>
                     <ul style="margin-left: 30px; line-height: 1.6;">
                         @foreach($errors->all() as $error)
@@ -282,95 +249,78 @@
                 @csrf
                 
                 <div class="form-group">
-                    <label class="form-label" for="name">👤 Full Name</label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" 
-                           class="form-input" placeholder="Enter your full name" required autofocus>
+                    <label class="form-label" for="name">👤 Pilnais vārds</label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           value="{{ old('name') }}" 
+                           class="form-input @error('name') is-invalid @enderror" 
+                           placeholder="Ievadiet savu pilno vārdu" 
+                           required 
+                           autofocus 
+                           autocomplete="name">
+                    @error('name')
+                        <span style="color: #c62828; font-size: 14px; margin-top: 5px; display: block;">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="email">📧 Email Address</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" 
-                           class="form-input" placeholder="Enter your email address" required>
+                    <label class="form-label" for="email">📧 E-pasta adrese</label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           value="{{ old('email') }}" 
+                           class="form-input @error('email') is-invalid @enderror" 
+                           placeholder="Ievadiet savu e-pasta adresi" 
+                           required 
+                           autocomplete="email">
+                    @error('email')
+                        <span style="color: #c62828; font-size: 14px; margin-top: 5px; display: block;">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">🔒 Password</label>
-                    <input type="password" id="password" name="password" 
-                           class="form-input" placeholder="Create a strong password (min 8 characters)" required>
+                    <label class="form-label" for="password">🔒 Parole</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           class="form-input @error('password') is-invalid @enderror" 
+                           placeholder="Izveidojiet drošu paroli (min 8 simboli)" 
+                           required 
+                           autocomplete="new-password">
+                    @error('password')
+                        <span style="color: #c62828; font-size: 14px; margin-top: 5px; display: block;">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password_confirmation">🔒 Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" 
-                           class="form-input" placeholder="Confirm your password" required>
+                    <label class="form-label" for="password_confirmation">🔒 Apstiprināt paroli</label>
+                    <input type="password" 
+                           id="password_confirmation" 
+                           name="password_confirmation" 
+                           class="form-input" 
+                           placeholder="Apstiprināt savu paroli" 
+                           required 
+                           autocomplete="new-password">
                 </div>
 
-                <button type="submit" class="btn btn-success" style="width: 100%; margin-bottom: 30px; font-size: 18px; padding: 18px;">
-                    🎉 Create My Account
-                </button>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 18px;">
+                        🎉 Izveidot manu kontu
+                    </button>
+                </div>
             </form>
-
-            <!-- What You Get -->
-            <div class="card">
-                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">🌟 What you get with your free account</h3>
-                <div class="benefits-grid">
-                    <div class="benefit-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📝</div>
-                        <h5 style="color: #56ab2f; margin-bottom: 8px;">Create Recipes</h5>
-                        <p style="color: #666; font-size: 13px; line-height: 1.4;">Share unlimited recipes with detailed ingredients and instructions</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
-                        <h5 style="color: #56ab2f; margin-bottom: 8px;">Smart Search</h5>
-                        <p style="color: #666; font-size: 13px; line-height: 1.4;">Find recipes by ingredients, categories, or difficulty levels</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">❤️</div>
-                        <h5 style="color: #56ab2f; margin-bottom: 8px;">Save Favorites</h5>
-                        <p style="color: #666; font-size: 13px; line-height: 1.4;">Bookmark your favorite recipes for quick access</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
-                        <h5 style="color: #56ab2f; margin-bottom: 8px;">Join Community</h5>
-                        <p style="color: #666; font-size: 13px; line-height: 1.4;">Connect with fellow food enthusiasts worldwide</p>
-                    </div>
-                </div>
-            </div>
 
             <!-- Auth Links -->
             <div class="auth-links">
-                <h4 style="color: #56ab2f; margin-bottom: 20px;">Already have an account?</h4>
+                <h4 style="color: #56ab2f; margin-bottom: 20px;">Jau ir konts?</h4>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    Sign in to access your recipes and continue your culinary journey!
+                    Ielogojieties, lai piekļūtu savām receptēm un turpinātu savu kulinārijas ceļojumu!
                 </p>
                 
-                <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 16px;">
-                    🔐 Sign In to Your Account
+                <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 16px; width: auto; display: inline-block;">
+                    🔐 Ielogoties savā kontā
                 </a>
-            </div>
-
-            <!-- Community Stats -->
-            <div class="card">
-                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">📊 Join Our Growing Community</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; text-align: center;">
-                    <div style="padding: 20px;">
-                        <div style="font-size: 2.5rem; color: #56ab2f; font-weight: bold; margin-bottom: 5px;">{{ \App\Models\User::count() }}+</div>
-                        <p style="color: #666; font-size: 14px;">Active Members</p>
-                    </div>
-                    <div style="padding: 20px;">
-                        <div style="font-size: 2.5rem; color: #56ab2f; font-weight: bold; margin-bottom: 5px;">{{ \App\Models\Recipe::count() }}+</div>
-                        <p style="color: #666; font-size: 14px;">Shared Recipes</p>
-                    </div>
-                    <div style="padding: 20px;">
-                        <div style="font-size: 2.5rem; color: #56ab2f; font-weight: bold; margin-bottom: 5px;">{{ \App\Models\Recipe::distinct('category')->count() }}+</div>
-                        <p style="color: #666; font-size: 14px;">Categories</p>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 25px; padding: 20px; background: rgba(86, 171, 47, 0.1); border-radius: 10px;">
-                    <p style="color: #666; font-style: italic; margin: 0;">
-                        "The best recipes come from passionate home cooks sharing their family secrets!"
-                    </p>
-                </div>
             </div>
         </div>
     </div>

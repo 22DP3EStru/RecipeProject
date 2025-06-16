@@ -27,4 +27,21 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Get the custom validation messages for the request.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Vārds ir obligāts.',
+            'name.string' => 'Vārdam jābūt teksta formātā.',
+            'name.max' => 'Vārds nedrīkst būt garāks par 255 simboliem.',
+            'email.required' => 'E-pasta adrese ir obligāta.',
+            'email.email' => 'E-pasta adresei jābūt derīgā formātā.',
+            'email.unique' => 'Šī e-pasta adrese jau ir reģistrēta.',
+        ];
+    }
 }

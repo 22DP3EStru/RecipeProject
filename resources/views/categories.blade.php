@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Categories - Recipe App</title>
+    <title>Kategorijas - Recepšu Aplikācija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -84,11 +84,6 @@
             transform: translateY(-2px);
         }
 
-        .nav-user {
-            color: #666;
-            font-weight: 500;
-        }
-
         .main-content {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -98,47 +93,82 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .category-card {
+            background: white;
             border-radius: 15px;
             padding: 30px;
-            margin-bottom: 30px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .grid {
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--category-color, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-breakfast { --category-color: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); }
+        .category-lunch { --category-color: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+        .category-dinner { --category-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .category-dessert { --category-color: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .category-drinks { --category-color: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .category-snacks { --category-color: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .category-salads { --category-color: linear-gradient(135deg, #96e6a1 0%, #d4fc79 100%); }
+        .category-soups { --category-color: linear-gradient(135deg, #ffa751 0%, #ffe259 100%); }
+        .category-default { --category-color: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+
+        .recipes-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
+            margin-top: 30px;
         }
 
-        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .recipe-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
 
         .btn {
             display: inline-block;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 12px 25px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
             text-align: center;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -152,77 +182,50 @@
             color: white;
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
         .btn-danger {
             background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             color: white;
         }
 
-        .btn-logout {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
-            padding: 10px 20px;
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .category-description {
             font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            min-height: 60px;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        .category-stats {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
 
-        .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
+        .stats-row:last-child {
+            margin-bottom: 0;
         }
-
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .recipe-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .text-center { text-align: center; }
 
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .header p { font-size: 1rem; }
             .nav-bar { flex-direction: column; gap: 15px; }
             .main-content { padding: 20px; }
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .recipes-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -230,143 +233,266 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>📂 Recipe Categories</h1>
-            <p>Explore recipes by category and discover new flavors</p>
+            <h1>📂 Kategorijas</h1>
+            <p>Atklājiet daudzveidīgo recepšu pasauli</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recipe App</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Dashboard</a>
-                <a href="/recipes">🍽️ Recipes</a>
-                <a href="/categories">📂 Categories</a>
-                <a href="/profile/recipes">📝 My Recipes</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="/recipes">🍽️ Receptes</a>
+                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
+                <a href="/profile/recipes">📝 Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Admin</a>
+                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="nav-user">👤 {{ Auth::user()->name }}</span>
-                <a href="/recipes/create" class="btn btn-success">+ Create Recipe</a>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
+                </form>
             </div>
         </nav>
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Categories Statistics -->
-            <div class="card">
-                <h3 class="card-title">📊 Category Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <span class="stat-number">12</span>
-                        <span class="stat-label">Total Categories</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
-                        <span class="stat-label">Total Recipes</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::distinct('category')->count() }}</span>
-                        <span class="stat-label">Categories Used</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::whereDate('created_at', today())->count() }}</span>
-                        <span class="stat-label">Recipes Today</span>
-                    </div>
-                </div>
+            <!-- Breadcrumb -->
+            <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a> 
+                <span style="color: #666;"> / </span>
+                <span style="color: #333; font-weight: 600;">📂 Kategorijas</span>
+            </div>
+
+            <!-- Categories Overview -->
+            <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); border-radius: 15px;">
+                @php
+                    $categories = \App\Models\Recipe::distinct('category')->pluck('category')->filter();
+                    $totalRecipes = \App\Models\Recipe::count();
+                @endphp
+                <h2 style="color: #56ab2f; margin-bottom: 15px;">{{ $categories->count() }} kategorijas pieejamas</h2>
+                <p style="color: #666; line-height: 1.6;">
+                    Kopā {{ $totalRecipes }} receptes sadalītas {{ $categories->count() }} dažādās kategorijās. 
+                    Izvēlieties kategoriju, lai atklātu garšīgas receptes!
+                </p>
             </div>
 
             <!-- Categories Grid -->
-            <div class="card">
-                <h3 class="card-title">🎯 Browse by Category</h3>
-                @php
-                    $categoryData = [
-                        'Breakfast' => ['icon' => '🥞', 'description' => 'Start your day right'],
-                        'Lunch' => ['icon' => '🥗', 'description' => 'Midday fuel for energy'],
-                        'Dinner' => ['icon' => '🍽️', 'description' => 'Perfect evening meals'],
-                        'Desserts' => ['icon' => '🍰', 'description' => 'Sweet treats & indulgences'],
-                        'Appetizers' => ['icon' => '🥨', 'description' => 'Perfect party starters'],
-                        'Main Dishes' => ['icon' => '🍖', 'description' => 'Hearty centerpiece meals'],
-                        'Side Dishes' => ['icon' => '🥔', 'description' => 'Perfect accompaniments'],
-                        'Beverages' => ['icon' => '🥤', 'description' => 'Refreshing drinks'],
-                        'Snacks' => ['icon' => '🍿', 'description' => 'Quick bites & munchies'],
-                        'Vegetarian' => ['icon' => '🥬', 'description' => 'Plant-based delights'],
-                        'Vegan' => ['icon' => '🌱', 'description' => 'Completely plant-based'],
-                        'Gluten-Free' => ['icon' => '🌾', 'description' => 'Safe for celiac diets']
-                    ];
-                @endphp
-
-                <div class="grid grid-3">
-                    @foreach($categoryData as $category => $data)
+            @if($categories->count() > 0)
+                <div class="categories-grid">
+                    @foreach($categories as $category)
                         @php
-                            $count = \App\Models\Recipe::where('category', $category)->count();
+                            $categoryRecipes = \App\Models\Recipe::where('category', $category);
+                            $totalCategoryRecipes = $categoryRecipes->count();
+                            $recentRecipes = $categoryRecipes->where('created_at', '>=', now()->subDays(7))->count();
+                            $popularAuthors = $categoryRecipes->with('user')->get()->groupBy('user_id')->count();
+                            
+                            // Determine category class
+                            $categoryClass = match(strtolower($category)) {
+                                'brokastis' => 'category-breakfast',
+                                'pusdienas' => 'category-lunch', 
+                                'vakariņas' => 'category-dinner',
+                                'deserti' => 'category-dessert',
+                                'dzērieni' => 'category-drinks',
+                                'uzkodas' => 'category-snacks',
+                                'salāti' => 'category-salads',
+                                'zupas' => 'category-soups',
+                                default => 'category-default'
+                            };
+                            
+                            // Category descriptions
+                            $descriptions = [
+                                'Brokastis' => 'Sāciet dienu ar garšīgām un barojošām brokastīm',
+                                'Pusdienas' => 'Sātīgi ēdieni dienas vidum un enerģijas uzpildīšanai',
+                                'Vakariņas' => 'Eleganti vakariņu ēdieni romantiski vai ģimenes vakariem',
+                                'Deserti' => 'Saldi kārumi un deserti īpašiem brīžiem',
+                                'Dzērieni' => 'Atspirdzinošie dzērieni un kokteiļi visām gaumēm',
+                                'Uzkodas' => 'Ātri un garšīgi uzkožamie visos dzīves brīžos',
+                                'Salāti' => 'Svaigi un veselīgi salāti pilni ar vitamīniem',
+                                'Zupas' => 'Siltas un mājīgas zupas aukstajiem vakariem'
+                            ];
                         @endphp
-                        <div class="recipe-card" style="text-align: center;">
-                            <div style="font-size: 4rem; margin-bottom: 15px;">{{ $data['icon'] }}</div>
-                            <h4 style="color: #667eea; margin-bottom: 10px; font-size: 1.3rem;">{{ $category }}</h4>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 14px;">{{ $data['description'] }}</p>
-                            <div style="background: rgba(102, 126, 234, 0.05); padding: 10px; border-radius: 8px; margin-bottom: 20px;">
-                                <strong style="color: #667eea;">{{ $count }} recipes</strong>
+                        
+                        <div class="category-card {{ $categoryClass }}">
+                            <div class="category-icon">
+                                @switch($category)
+                                    @case('Brokastis')
+                                        🍳
+                                        @break
+                                    @case('Pusdienas')
+                                        🍽️
+                                        @break
+                                    @case('Vakariņas')
+                                        🌙
+                                        @break
+                                    @case('Deserti')
+                                        🍰
+                                        @break
+                                    @case('Dzērieni')
+                                        🥤
+                                        @break
+                                    @case('Uzkodas')
+                                        🥨
+                                        @break
+                                    @case('Salāti')
+                                        🥗
+                                        @break
+                                    @case('Zupas')
+                                        🍲
+                                        @break
+                                    @default
+                                        🍴
+                                @endswitch
                             </div>
-                            @if($count > 0)
-                                <a href="/recipes?category={{ urlencode($category) }}" class="btn btn-primary" style="width: 100%;">
-                                    Explore {{ $category }}
-                                </a>
-                            @else
-                                <a href="/recipes/create" class="btn btn-success" style="width: 100%;">
-                                    Be the first!
-                                </a>
-                            @endif
+                            
+                            <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.4rem; font-weight: bold;">
+                                {{ $category }}
+                            </h3>
+                            
+                            <p class="category-description">
+                                {{ $descriptions[$category] ?? "Atklājiet garšīgas $category receptes šajā sadaļā" }}
+                            </p>
+                            
+                            <div class="category-stats">
+                                <div class="stats-row">
+                                    <span style="color: #666;">📊 Kopā recepšu:</span>
+                                    <span style="font-weight: bold; color: #667eea;">{{ $totalCategoryRecipes }}</span>
+                                </div>
+                                <div class="stats-row">
+                                    <span style="color: #666;">🆕 Jaunas šonedēļ:</span>
+                                    <span style="font-weight: bold; color: #56ab2f;">{{ $recentRecipes }}</span>
+                                </div>
+                                <div class="stats-row">
+                                    <span style="color: #666;">👥 Dažādi autori:</span>
+                                    <span style="font-weight: bold; color: #f093fb;">{{ $popularAuthors }}</span>
+                                </div>
+                                <div class="stats-row">
+                                    <span style="color: #666;">📈 Popularitāte:</span>
+                                    <span style="font-weight: bold;">
+                                        @if($totalCategoryRecipes >= 20)
+                                            🔥 Ļoti populāra
+                                        @elseif($totalCategoryRecipes >= 10)
+                                            ⭐ Populāra
+                                        @elseif($totalCategoryRecipes >= 5)
+                                            👍 Aktīva
+                                        @else
+                                            🌱 Augošā
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ route('categories.show', urlencode($category)) }}" class="btn btn-primary" style="width: 100%; font-size: 15px;">
+                                Skatīt {{ $totalCategoryRecipes }} {{ $totalCategoryRecipes == 1 ? 'recepti' : 'receptes' }} →
+                            </a>
                         </div>
                     @endforeach
                 </div>
-            </div>
+            @else
+                <!-- No Categories -->
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">📂</div>
+                    <h3 style="color: #666; margin-bottom: 15px;">Nav kategoriju</h3>
+                    <p style="color: #999; margin-bottom: 30px;">
+                        Vēl nav izveidota neviena recepte ar kategoriju.
+                    </p>
+                    <div>
+                        <a href="/recipes/create" class="btn btn-primary">
+                            📝 Izveidot pirmo recepti
+                        </a>
+                    </div>
+                </div>
+            @endif
 
-            <!-- Popular Categories -->
-            <div class="card">
-                <h3 class="card-title">🔥 Most Popular Categories</h3>
-                @php
-                    $popularCategories = \App\Models\Recipe::select('category', \DB::raw('count(*) as total'))
-                        ->groupBy('category')
-                        ->orderBy('total', 'desc')
-                        ->limit(6)
-                        ->get();
-                @endphp
-
-                @if($popularCategories->count() > 0)
-                    <div class="grid grid-3">
-                        @foreach($popularCategories as $popular)
-                            <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 20px; border-radius: 12px; text-align: center;">
-                                <div style="font-size: 2.5rem; margin-bottom: 10px;">
-                                    {{ $categoryData[$popular->category]['icon'] ?? '🍽️' }}
+            <!-- Recent Recipes from All Categories -->
+            @if($recipes->count() > 0)
+                <div style="margin-top: 50px;">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 1.8rem;">🕒 Jaunākās receptes no visām kategorijām</h3>
+                    <div class="recipes-grid">
+                        @foreach($recipes->sortByDesc('created_at')->take(6) as $recipe)
+                            <div class="recipe-card">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <h3 style="color: #667eea; font-size: 1.3rem;">
+                                        {{ $recipe->title }}
+                                    </h3>
+                                    <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">
+                                        JAUNA
+                                    </span>
                                 </div>
-                                <h5 style="color: #667eea; margin-bottom: 8px;">{{ $popular->category }}</h5>
-                                <div style="background: white; padding: 8px; border-radius: 6px; margin-bottom: 15px;">
-                                    <strong style="color: #667eea;">{{ $popular->total }} recipes</strong>
+                                
+                                <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">
+                                    {{ Str::limit($recipe->description, 100) }}
+                                </p>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; color: #999;">
+                                    <span style="background: rgba(240, 147, 251, 0.1); color: #f093fb; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">
+                                        📂 {{ $recipe->category ?? 'Nav norādīta' }}
+                                    </span>
+                                    <span>👨‍🍳 {{ $recipe->user->name }}</span>
                                 </div>
-                                <a href="/recipes?category={{ urlencode($popular->category) }}" class="btn btn-primary" style="font-size: 13px; padding: 8px 16px;">
-                                    Explore →
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <span style="background: rgba(255, 65, 108, 0.1); color: #ff416c; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">
+                                        {{ $recipe->difficulty ?? 'N/A' }}
+                                    </span>
+                                    <span style="color: #56ab2f; font-size: 12px; font-weight: 600;">
+                                        ✨ {{ $recipe->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+                                
+                                <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%;">
+                                    Skatīt recepti →
                                 </a>
                             </div>
                         @endforeach
                     </div>
-                @else
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">📂</div>
-                        <p style="color: #666;">No recipes have been created yet.</p>
-                        <a href="/recipes/create" class="btn btn-success" style="margin-top: 15px;">Create First Recipe</a>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="/recipes" class="btn btn-primary" style="padding: 15px 30px; font-size: 16px;">
+                            🔍 Skatīt visas {{ $totalRecipes }} receptes →
+                        </a>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
 
-            <!-- Quick Actions -->
-            <div class="card">
-                <h3 class="card-title">🚀 Quick Actions</h3>
-                <div class="grid grid-3">
-                    <a href="/recipes/create" class="btn btn-success">📝 Create Recipe</a>
-                    <a href="/recipes" class="btn btn-primary">🍽️ All Recipes</a>
-                    <a href="/dashboard" class="btn btn-warning">🏠 Dashboard</a>
+            <!-- Category Statistics -->
+            <div style="margin-top: 50px; padding: 30px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 15px;">
+                <h3 style="text-align: center; color: #f093fb; margin-bottom: 25px; font-size: 1.6rem;">📊 Kategoriju statistika</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🏆</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">
+                            @php
+                                $topCategory = $categories->map(function($cat) {
+                                    return [
+                                        'name' => $cat,
+                                        'count' => \App\Models\Recipe::where('category', $cat)->count()
+                                    ];
+                                })->sortByDesc('count')->first();
+                            @endphp
+                            {{ $topCategory['name'] ?? 'Nav' }}
+                        </div>
+                        <div style="color: #666; font-size: 14px;">Populārākā kategorija</div>
+                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">{{ $topCategory['count'] ?? 0 }} receptes</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📈</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ $totalRecipes }}</div>
+                        <div style="color: #666; font-size: 14px;">Kopā receptes</div>
+                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">Visās kategorijās</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ \App\Models\User::has('recipes')->count() }}</div>
+                        <div style="color: #666; font-size: 14px;">Aktīvi autori</div>
+                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">Kopš sākuma</div>
+                    </div>
                 </div>
             </div>
         </div>

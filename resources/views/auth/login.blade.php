@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Recipe App</title>
+    <title>Ielogoties - Recepšu Aplikācija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -107,10 +107,6 @@
             transition: transform 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
         .btn {
             display: inline-block;
             padding: 15px 30px;
@@ -142,11 +138,6 @@
 
         .btn-warning {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             color: white;
         }
 
@@ -192,8 +183,6 @@
             color: #c62828;
         }
 
-        .text-center { text-align: center; }
-
         .welcome-back {
             text-align: center;
             padding: 30px;
@@ -223,19 +212,19 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Welcome Back!</h1>
-            <p>Sign in to your Recipe App account</p>
+            <h1>🍽️ Laipni lūdzam atpakaļ!</h1>
+            <p>Ielogojieties savā Recepšu Aplikācijas kontā</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recipe App</a>
+            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/">🏠 Home</a>
-                <a href="{{ route('register') }}">📝 Register</a>
+                <a href="/">🏠 Sākums</a>
+                <a href="{{ route('register') }}">📝 Reģistrēties</a>
             </div>
             <div>
-                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Back to Home</a>
+                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Atpakaļ uz sākumu</a>
             </div>
         </nav>
 
@@ -244,8 +233,8 @@
             <!-- Welcome Message -->
             <div class="welcome-back">
                 <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
-                <h2 style="color: #667eea; margin-bottom: 10px;">Ready to Cook?</h2>
-                <p style="color: #666; font-size: 16px;">Sign in to access your recipes and discover new culinary adventures!</p>
+                <h2 style="color: #667eea; margin-bottom: 10px;">Gatavi gatavot?</h2>
+                <p style="color: #666; font-size: 16px;">Ielogojieties, lai piekļūtu savām receptēm un atklātu jaunus kulinārijas piedzīvojumus!</p>
             </div>
 
             <!-- Error Messages -->
@@ -253,7 +242,7 @@
                 <div class="alert alert-error">
                     <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
                         <span style="margin-right: 10px;">❌</span>
-                        Please fix the following errors:
+                        Lūdzu, izlabojiet šādas kļūdas:
                     </h4>
                     <ul style="margin-left: 30px; line-height: 1.6;">
                         @foreach($errors->all() as $error)
@@ -268,46 +257,46 @@
                 @csrf
                 
                 <div class="form-group">
-                    <label class="form-label" for="email">📧 Email Address</label>
+                    <label class="form-label" for="email">📧 E-pasta adrese</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" 
-                           class="form-input" placeholder="Enter your email address" required autofocus>
+                           class="form-input" placeholder="Ievadiet savu e-pasta adresi" required autofocus>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">🔒 Password</label>
+                    <label class="form-label" for="password">🔒 Parole</label>
                     <input type="password" id="password" name="password" 
-                           class="form-input" placeholder="Enter your password" required>
+                           class="form-input" placeholder="Ievadiet savu paroli" required>
                 </div>
 
                 <div class="form-group">
                     <label style="display: flex; align-items: center; color: #666; font-size: 16px;">
                         <input type="checkbox" name="remember" style="margin-right: 12px; transform: scale(1.3);">
-                        Remember me for 30 days
+                        Atcerēties mani 30 dienas
                     </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 30px; font-size: 18px; padding: 18px;">
-                    🔐 Sign In to Recipe App
+                    🔐 Ielogoties Recepšu Aplikācijā
                 </button>
             </form>
 
             <!-- Auth Links -->
             <div class="auth-links">
-                <h4 style="color: #667eea; margin-bottom: 20px;">New to Recipe App?</h4>
+                <h4 style="color: #667eea; margin-bottom: 20px;">Jauns Recepšu Aplikācijā?</h4>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    Join thousands of food enthusiasts sharing their favorite recipes and discovering new culinary adventures!
+                    Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar savām mīļākajām receptēm un atklāj jaunus kulinārijas piedzīvojumus!
                 </p>
                 
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px;">
                     <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 16px;">
-                        🚀 Create Free Account
+                        🚀 Izveidot bezmaksas kontu
                     </a>
                 </div>
                 
                 @if (Route::has('password.request'))
                     <p style="margin: 0;">
                         <a href="{{ route('password.request') }}" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 15px;">
-                            🔑 Forgot your password? Reset it here
+                            🔑 Aizmirsāt paroli? Atjaunojiet to šeit
                         </a>
                     </p>
                 @endif
@@ -315,22 +304,22 @@
 
             <!-- Features Preview -->
             <div class="card">
-                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">✨ What awaits you inside</h3>
+                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">✨ Kas jūs gaida iekšpusē</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                     <div style="text-align: center; padding: 20px;">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">📝</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">Create Recipes</h5>
-                        <p style="color: #666; font-size: 13px;">Share your culinary masterpieces</p>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Izveidot receptes</h5>
+                        <p style="color: #666; font-size: 13px;">Dalieties ar saviem kulinārijas meistarišķumiem</p>
                     </div>
                     <div style="text-align: center; padding: 20px;">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">Discover Recipes</h5>
-                        <p style="color: #666; font-size: 13px;">Find new favorite dishes</p>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Atklāt receptes</h5>
+                        <p style="color: #666; font-size: 13px;">Atrodiet jaunus mīļākos ēdienus</p>
                     </div>
                     <div style="text-align: center; padding: 20px;">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">Join Community</h5>
-                        <p style="color: #666; font-size: 13px;">Connect with food lovers</p>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Pievienoties kopienai</h5>
+                        <p style="color: #666; font-size: 13px;">Sazināties ar ēdiena mīlētājiem</p>
                     </div>
                 </div>
             </div>

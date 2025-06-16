@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard'; // Change this line
 
     /**
      * Create a new controller instance.
@@ -52,6 +52,16 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'name.required' => 'Vārds ir obligāts lauks.',
+            'name.string' => 'Vārdam jābūt teksta formātā.',
+            'name.max' => 'Vārds nedrīkst būt garāks par 255 simboliem.',
+            'email.required' => 'E-pasta adrese ir obligāta.',
+            'email.email' => 'E-pasta adresei jābūt derīgā formātā.',
+            'email.unique' => 'Šī e-pasta adrese jau ir reģistrēta.',
+            'password.required' => 'Parole ir obligāta.',
+            'password.min' => 'Parolei jābūt vismaz 8 simbolus garai.',
+            'password.confirmed' => 'Paroles nesakrīt.',
         ]);
     }
 

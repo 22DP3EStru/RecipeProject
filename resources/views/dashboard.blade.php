@@ -9,12 +9,13 @@ Route::get('/dashboard', function () {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Recipe App</title>
+    <title>Vadības panelis - Recepšu Aplikācija</title>
     <style>
+        /* Dashboard Style Design */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +35,6 @@ Route::get('/dashboard', function () {
             padding: 20px;
         }
 
-        /* Header */
         .header {
             text-align: center;
             color: white;
@@ -53,7 +53,6 @@ Route::get('/dashboard', function () {
             opacity: 0.9;
         }
 
-        /* Navigation */
         .nav-bar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -100,7 +99,6 @@ Route::get('/dashboard', function () {
             font-weight: 500;
         }
 
-        /* Main Content */
         .main-content {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -110,7 +108,6 @@ Route::get('/dashboard', function () {
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Cards */
         .card {
             background: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
@@ -132,7 +129,6 @@ Route::get('/dashboard', function () {
             text-align: center;
         }
 
-        /* Grid */
         .grid {
             display: grid;
             gap: 25px;
@@ -142,7 +138,6 @@ Route::get('/dashboard', function () {
         .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
         .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
-        /* Buttons */
         .btn {
             display: inline-block;
             padding: 15px 30px;
@@ -177,6 +172,11 @@ Route::get('/dashboard', function () {
             color: white;
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+        }
+
         .btn-logout {
             background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             color: white;
@@ -184,7 +184,6 @@ Route::get('/dashboard', function () {
             font-size: 14px;
         }
 
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -213,43 +212,8 @@ Route::get('/dashboard', function () {
             opacity: 0.9;
         }
 
-        /* Admin Alert */
-        .admin-alert {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 30px 0;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.3);
-        }
+        .text-center { text-align: center; }
 
-        /* Recipe Cards */
-        .recipe-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .difficulty-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .difficulty-easy { background: #c8e6c9; color: #2e7d32; }
-        .difficulty-medium { background: #fff3c4; color: #f57c00; }
-        .difficulty-hard { background: #ffcdd2; color: #c62828; }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .header p { font-size: 1rem; }
@@ -263,134 +227,151 @@ Route::get('/dashboard', function () {
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Recipe App Dashboard</h1>
-            <p>Welcome back, {{ Auth::user()->name }}!</p>
+            <h1>🍽️ Sveicināti atpakaļ!</h1>
+            <p>Jūsu kulinārais ceļojums turpinās, {{ Auth::user()->name }}!</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recipe App</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Dashboard</a>
-                <a href="/recipes">🍽️ Recipes</a>
-                <a href="/categories">📂 Categories</a>
-                <a href="/profile/recipes">📝 My Recipes</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="/recipes">🍽️ Receptes</a>
+                <a href="/categories">📂 Kategorijas</a>
+                <a href="/profile/recipes">📝 Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Admin</a>
+                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="nav-user">👤 {{ Auth::user()->name }}</span>
-                <a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-logout">Logout</a>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
+                </form>
             </div>
         </nav>
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Admin Alert -->
-            @if(Auth::user()->is_admin)
-                <div class="admin-alert">
-                    <h3 style="margin-bottom: 15px;">🔥 ADMINISTRATOR ACCESS</h3>
-                    <p style="margin-bottom: 20px;">You have full administrative privileges to manage the platform.</p>
-                    <a href="{{ route('admin.index') }}" class="btn btn-warning">🔧 Admin Panel</a>
-                </div>
-            @endif
-
-            <!-- User Info -->
-            <div class="card">
-                <h3 class="card-title">👤 Account Information</h3>
-                <div class="grid grid-2">
-                    <div>
-                        <p style="margin-bottom: 10px;"><strong>Name:</strong> {{ Auth::user()->name }}</p>
-                        <p style="margin-bottom: 10px;"><strong>Email:</strong> {{ Auth::user()->email }}</p>
-                    </div>
-                    <div>
-                        <p style="margin-bottom: 10px;"><strong>Member Since:</strong> {{ Auth::user()->created_at->format('F j, Y') }}</p>
-                        <p style="margin-bottom: 10px;"><strong>Account Type:</strong> 
-                            @if(Auth::user()->is_admin)
-                                <span style="color: #ff4b2b; font-weight: bold;">🔧 Administrator</span>
-                            @else
-                                <span style="color: #56ab2f; font-weight: bold;">👤 Regular User</span>
-                            @endif
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions - Removed one button -->
-            <div class="card">
-                <h3 class="card-title">🚀 Quick Actions</h3>
-                <div class="grid grid-3">
-                    <a href="/recipes/create" class="btn btn-success">📝 Create Recipe</a>
-                    <a href="/recipes" class="btn btn-primary">🍽️ Browse Recipes</a>
-                    <a href="/profile/recipes" class="btn btn-warning">📋 My Recipes</a>
-                </div>
+            <!-- Welcome Message -->
+            <div class="card text-center">
+                <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
+                <h2 style="color: #667eea; margin-bottom: 15px;">Sveicināti jūsu kulinārijas studijā!</h2>
+                <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
+                    Esiet gatavi radīt, dalīties un atklāt brīnišķīgas receptes. Jūsu nākamā mīļākā recepte gaida tikai dažus klikšķus attālumā!
+                </p>
             </div>
 
             <!-- Statistics -->
             <div class="card">
-                <h3 class="card-title">📊 Platform Statistics</h3>
+                <h3 class="card-title">📊 Jūsu kulinārijas statistika</h3>
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\User::count() }}</span>
-                        <span class="stat-label">Total Users</span>
+                        <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->count() }}</span>
+                        <span class="stat-label">Jūsu receptes</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
-                        <span class="stat-label">Total Recipes</span>
+                        <span class="stat-label">Kopā receptes</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->count() }}</span>
-                        <span class="stat-label">Your Recipes</span>
+                        <span class="stat-number">{{ \App\Models\User::count() }}</span>
+                        <span class="stat-label">Kopienas dalībnieki</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">{{ \App\Models\User::whereDate('created_at', today())->count() }}</span>
-                        <span class="stat-label">New Today</span>
+                        <span class="stat-number">{{ \App\Models\Recipe::whereDate('created_at', today())->count() }}</span>
+                        <span class="stat-label">Šodienas receptes</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Recipes -->
+            <!-- Quick Actions -->
             <div class="card">
-                <h3 class="card-title">🆕 Latest Recipes</h3>
-                @php
-                    $recentRecipes = \App\Models\Recipe::with('user')->latest()->take(6)->get();
-                @endphp
-                
-                @if($recentRecipes->count() > 0)
-                    <div class="grid grid-3">
+                <h3 class="card-title">🚀 Ātras darbības</h3>
+                <div class="grid grid-2">
+                    <a href="/recipes/create" class="btn btn-success">📝 Izveidot jaunu recepti</a>
+                    <a href="/recipes" class="btn btn-primary">🔍 Pārlūkot visas receptes</a>
+                    <a href="/categories" class="btn btn-warning">📂 Apskatīt kategorijas</a>
+                    <a href="/profile/recipes" class="btn btn-danger">📋 Manas receptes</a>
+                </div>
+            </div>
+
+            <!-- Recent Recipes -->
+            @php
+                $recentRecipes = \App\Models\Recipe::with('user')->latest()->limit(4)->get();
+            @endphp
+
+            @if($recentRecipes->count() > 0)
+                <div class="card">
+                    <h3 class="card-title">🕒 Jaunākās receptes</h3>
+                    <div class="grid grid-2">
                         @foreach($recentRecipes as $recipe)
-                            <div class="recipe-card">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                    <h4 style="margin: 0; color: #667eea; font-size: 1.1rem;">{{ $recipe->title }}</h4>
-                                    <span class="difficulty-badge difficulty-{{ strtolower($recipe->difficulty) }}">
-                                        {{ $recipe->difficulty }}
-                                    </span>
-                                </div>
-                                <p style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.4;">{{ Str::limit($recipe->description, 80) }}</p>
+                            <div style="background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 12px; border: 1px solid rgba(102, 126, 234, 0.1);">
+                                <h4 style="color: #667eea; margin-bottom: 10px;">{{ $recipe->title }}</h4>
+                                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ Str::limit($recipe->description, 80) }}</p>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 13px; color: #999;">
-                                    <span>By {{ $recipe->user->name }}</span>
+                                    <span>Autors: {{ $recipe->user->name }}</span>
                                     <span>{{ $recipe->created_at->diffForHumans() }}</span>
                                 </div>
-                                <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="width: 100%; padding: 10px;">View Recipe →</a>
+                                <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Skatīt recepti →</a>
                             </div>
                         @endforeach
                     </div>
-                @else
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">🍽️</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">No recipes created yet</h4>
-                        <p style="color: #666; margin-bottom: 25px;">Be the first to share a delicious recipe!</p>
-                        <a href="/recipes/create" class="btn btn-success">Create First Recipe</a>
+                </div>
+            @endif
+
+            <!-- Your Recent Recipes -->
+            @php
+                $myRecentRecipes = \App\Models\Recipe::where('user_id', Auth::id())->latest()->limit(3)->get();
+            @endphp
+
+            @if($myRecentRecipes->count() > 0)
+                <div class="card">
+                    <h3 class="card-title">📝 Jūsu jaunākās receptes</h3>
+                    <div class="grid grid-3">
+                        @foreach($myRecentRecipes as $recipe)
+                            <div style="background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); padding: 20px; border-radius: 12px;">
+                                <h4 style="color: #56ab2f; margin-bottom: 10px;">{{ $recipe->title }}</h4>
+                                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ Str::limit($recipe->description, 60) }}</p>
+                                <div style="font-size: 13px; color: #999; margin-bottom: 15px;">
+                                    Izveidots: {{ $recipe->created_at->diffForHumans() }}
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="flex: 1; padding: 8px; font-size: 13px;">Skatīt</a>
+                                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="flex: 1; padding: 8px; font-size: 13px;">Rediģēt</a>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endif
+                </div>
+            @else
+                <div class="card text-center">
+                    <div style="padding: 40px;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Jūs vēl neesat izveidojis nevienu recepti</h4>
+                        <p style="color: #666; margin-bottom: 25px;">Sāciet savu kulinārijas ceļojumu, izveidojot savu pirmo recepti!</p>
+                        <a href="/recipes/create" class="btn btn-success">Izveidot pirmo recepti</a>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Tips Section -->
+            <div class="card">
+                <h3 class="card-title">💡 Padomi un ieteikumi</h3>
+                <div class="grid grid-2">
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">🔍 Efektīva meklēšana</h4>
+                        <p style="color: #666; line-height: 1.6;">Izmantojiet meklēšanas filtrus, lai atrastu receptes pēc kategorijas, grūtības līmeņa vai sastāvdaļām.</p>
+                    </div>
+                    <div style="background: rgba(86, 171, 47, 0.1); padding: 25px; border-radius: 12px;">
+                        <h4 style="color: #56ab2f; margin-bottom: 15px;">📝 Recepšu rakstīšana</h4>
+                        <p style="color: #666; line-height: 1.6;">Iekļaujiet detalizētas instrukcijas un precīzas sastāvdaļas, lai citi varētu viegli sekot jūsu receptei.</p>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Logout Form -->
-        <form id="logout-form" action="/logout" method="POST" style="display: none;">
-            @csrf
-        </form>
     </div>
 </body>
 </html>

@@ -2,86 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Recipe;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     public function index()
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
-        
-        $usersCount = User::count();
-        $recipesCount = Recipe::count();
-        $adminsCount = User::where('is_admin', true)->count();
-        $latestUsers = User::latest()->take(5)->get();
-        $latestRecipes = Recipe::with('user')->latest()->take(5)->get();
-        
-        return view('admin.dashboard', compact('usersCount', 'recipesCount', 'adminsCount', 'latestUsers', 'latestRecipes'));
+        $totalUsers = User::count();
+        $totalRecipes = Recipe::count();
+        $totalAdmins = User::where('is_admin', true)->count();
+        $recentUsers = User::latest()->take(5)->get();
+        $recentRecipes = Recipe::with('user')->latest()->take(5)->get();
+
+        return view('admin.index', compact(
+            'totalUsers',
+            'totalRecipes', 
+            'totalAdmins',
+            'recentUsers',
+            'recentRecipes'
+        ));
     }
-    
+
     public function users()
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
-        
-        $users = User::orderBy('created_at', 'desc')->paginate(15);
+        $users = User::latest()->paginate(15);
         return view('admin.users', compact('users'));
     }
-    
+
     public function recipes()
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
-        
-        $recipes = Recipe::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        $recipes = Recipe::with('user')->latest()->paginate(15);
         return view('admin.recipes', compact('recipes'));
     }
-    
+
     public function deleteUser(User $user)
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
-        
-        if ($user->id === Auth::id()) {
-            return back()->with('error', 'Cannot delete your own account');
+        if ($user->is_admin) {
+            return back()->with('error', 'Nevar dzēst administratora kontu!');
         }
         
         $user->delete();
-        return back()->with('success', 'User deleted successfully');
+        return back()->with('success', 'Lietotājs veiksmīgi dzēsts!');
     }
-    
+
     public function deleteRecipe(Recipe $recipe)
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
-        
         $recipe->delete();
-        return back()->with('success', 'Recipe deleted successfully');
+        return back()->with('success', 'Recepte veiksmīgi dzēsta!');
     }
-    
+
     public function toggleAdmin(User $user)
     {
-        if (!Auth::user()->is_admin) {
-            return redirect('/dashboard')->with('error', 'Access denied');
-        }
+        $user->update(['is_admin' => !$user->is_admin]);
         
-        $user->is_admin = !$user->is_admin;
-        $user->save();
+        $message = $user->is_admin ? 'Lietotājs ir padarīts par administratoru!' : 'Administratora tiesības noņemtas!';
         
-        return back()->with('success', 'Admin status updated');
+        return back()->with('success', $message);
     }
 }

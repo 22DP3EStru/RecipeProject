@@ -10,10 +10,16 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_admin) {
-            return $next($request);
+        // Check if user is authenticated first
+        if (!Auth::check()) {
+            return redirect()->route('login');
         }
-        
-        return redirect('/')->with('error', 'You do not have admin access.');
+
+        // Then check if user is admin
+        if (!Auth::user()->is_admin) {
+            abort(403, 'Access denied. Admin privileges required.');
+        }
+
+        return $next($request);
     }
 }

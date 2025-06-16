@@ -14,21 +14,24 @@ class Recipe extends Model
         'description',
         'ingredients',
         'instructions',
-        'category',
-        'difficulty',
-        'servings',
         'prep_time',
         'cook_time',
-        'user_id'
+        'servings',
+        'difficulty',
+        'category',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'prep_time' => 'integer',
+        'cook_time' => 'integer',
+        'servings' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function totalTime()
-    {
-        return ($this->prep_time ?? 0) + ($this->cook_time ?? 0);
     }
 }
