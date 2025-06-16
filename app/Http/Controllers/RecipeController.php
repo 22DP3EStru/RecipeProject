@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RecipeController extends Controller
 {
@@ -30,41 +31,19 @@ class RecipeController extends Controller
         }
 
         $recipes = $query->latest()->paginate(12);
-        
-        // ADD THIS LINE - Get all categories for the filter dropdown
         $categories = Recipe::distinct('category')->pluck('category')->filter();
         
         return view('recipes.index', compact('recipes', 'categories'));
     }
 
-    // Add this search method
-    public function search(Request $request)
-    {
-        // Redirect to the index with search parameters
-        return redirect()->route('recipes.index', $request->all());
-    }
-
     public function show(Recipe $recipe)
     {
-        // Get related recipes from the same category
         $relatedRecipes = Recipe::with('user')
             ->where('category', $recipe->category)
             ->where('id', '!=', $recipe->id)
             ->inRandomOrder()
             ->take(4)
             ->get();
-        
-        // If not enough related recipes in same category, get from other categories
-        if ($relatedRecipes->count() < 4) {
-            $additionalRecipes = Recipe::with('user')
-                ->where('id', '!=', $recipe->id)
-                ->whereNotIn('id', $relatedRecipes->pluck('id'))
-                ->inRandomOrder()
-                ->take(4 - $relatedRecipes->count())
-                ->get();
-            
-            $relatedRecipes = $relatedRecipes->merge($additionalRecipes);
-        }
         
         return view('recipes.show', compact('recipe', 'relatedRecipes'));
     }
@@ -76,39 +55,47 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'ingredients' => 'required|string',
-            'instructions' => 'required|string',
-            'prep_time' => 'nullable|integer|min:0',
-            'cook_time' => 'nullable|integer|min:0',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
-            'category' => 'required|string',
-        ], [
-            'title.required' => 'Receptes nosaukums ir obligāts.',
-            'description.required' => 'Apraksts ir obligāts.',
-            'ingredients.required' => 'Sastāvdaļas ir obligātas.',
-            'instructions.required' => 'Instrukcijas ir obligātas.',
-            'difficulty.required' => 'Grūtības līmenis ir obligāts.',
-            'category.required' => 'Kategorija ir obligāta.',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'ingredients' => 'required|string',
+                'instructions' => 'required|string',
+                'prep_time' => 'nullable|integer|min:0',
+                'cook_time' => 'nullable|integer|min:0',
+                'servings' => 'nullable|integer|min:1',
+                'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
+                'category' => 'required|string',
+            ], [
+                'title.required' => 'Receptes nosaukums ir obligāts.',
+                'description.required' => 'Apraksts ir obligāts.',
+                'ingredients.required' => 'Sastāvdaļas ir obligātas.',
+                'instructions.required' => 'Instrukcijas ir obligātas.',
+                'difficulty.required' => 'Grūtības līmenis ir obligāts.',
+                'category.required' => 'Kategorija ir obligāta.',
+            ]);
 
-        Recipe::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'ingredients' => $request->ingredients,
-            'instructions' => $request->instructions,
-            'prep_time' => $request->prep_time,
-            'cook_time' => $request->cook_time,
-            'servings' => $request->servings,
-            'difficulty' => $request->difficulty,
-            'category' => $request->category,
-            'user_id' => Auth::id(),
-        ]);
+            $validated['user_id'] = Auth::id();
 
-        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi izveidota!');
+            $recipe = Recipe::create($validated);
+
+            Log::info('Recipe saved successfully', [
+                'recipe_id' => $recipe->id,
+                'user_id' => Auth::id(),
+                'title' => $recipe->title
+            ]);
+
+            return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi izveidota!');
+
+        } catch (\Exception $e) {
+            Log::error('Failed to save recipe', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+                'request_data' => $request->all()
+            ]);
+
+            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Lūdzu mēģiniet vēlreiz.');
+        }
     }
 
     public function edit(Recipe $recipe)
@@ -136,13 +123,6 @@ class RecipeController extends Controller
             'servings' => 'nullable|integer|min:1',
             'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
             'category' => 'required|string',
-        ], [
-            'title.required' => 'Receptes nosaukums ir obligāts.',
-            'description.required' => 'Apraksts ir obligāts.',
-            'ingredients.required' => 'Sastāvdaļas ir obligātas.',
-            'instructions.required' => 'Instrukcijas ir obligātas.',
-            'difficulty.required' => 'Grūtības līmenis ir obligāts.',
-            'category.required' => 'Kategorija ir obligāta.',
         ]);
 
         $recipe->update($request->all());
