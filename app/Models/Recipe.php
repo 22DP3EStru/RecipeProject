@@ -20,6 +20,7 @@ class Recipe extends Model
         'difficulty',
         'category',
         'user_id',
+        'image_path'
     ];
 
     protected $casts = [

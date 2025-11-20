@@ -326,6 +326,14 @@
                         <input type="number" id="servings" name="servings" value="{{ old('servings') }}" 
                                class="form-input" placeholder="4" min="1">
                     </div>
+
+                    <!-- Added read-only total time field to avoid JS error and show total -->
+                    <div class="form-group" style="margin-top:10px;">
+                        <label class="form-label" for="total_time">⏲️ Kopējais laiks</label>
+                        <input type="text" id="total_time" name="total_time" value="{{ old('total_time') }}" 
+                               class="form-input" placeholder="—" readonly>
+                        <small style="color:#666; display:block; margin-top:6px;">Automātiski aprēķināts no sagatavošanas un gatavošanas laikiem</small>
+                    </div>
                 </div>
 
                 <!-- Ingredients -->
@@ -420,21 +428,34 @@ Pievienojiet jebkādus īpašus padomus vai brīdinājumus!"
     </div>
 
     <script>
-        // Auto-calculate total time
+        // Safe auto-calculate total time: check elements before using them
         function updateTotalTime() {
-            const prep = parseInt(document.getElementById('prep_time').value) || 0;
-            const cook = parseInt(document.getElementById('cook_time').value) || 0;
-            const total = prep + cook;
+            const prepEl = document.getElementById('prep_time');
+            const cookEl = document.getElementById('cook_time');
             const totalField = document.getElementById('total_time');
+
+            if (!prepEl || !cookEl || !totalField) return;
+
+            const prep = parseInt(prepEl.value) || 0;
+            const cook = parseInt(cookEl.value) || 0;
+            const total = prep + cook;
+
             if (total > 0) {
-                totalField.value = total + ' minutes';
+                totalField.value = total + ' min';
             } else {
                 totalField.value = '';
             }
         }
 
-        document.getElementById('prep_time').addEventListener('input', updateTotalTime);
-        document.getElementById('cook_time').addEventListener('input', updateTotalTime);
+        // Attach listeners only if inputs exist
+        const prepInput = document.getElementById('prep_time');
+        const cookInput = document.getElementById('cook_time');
+
+        if (prepInput) prepInput.addEventListener('input', updateTotalTime);
+        if (cookInput) cookInput.addEventListener('input', updateTotalTime);
+
+        // Run once on load to initialize total_time if old values present
+        document.addEventListener('DOMContentLoaded', updateTotalTime);
     </script>
 </body>
 </html>

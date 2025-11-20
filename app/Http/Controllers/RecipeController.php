@@ -6,6 +6,7 @@ use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RecipeController extends Controller
 {
@@ -55,46 +56,38 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'ingredients' => 'required|string',
+            'instructions' => 'required|string',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
+            'difficulty' => 'nullable|string|max:50',
+            'category' => 'nullable|string|max:100',
+            'image' => 'nullable|image|max:4096',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('recipes', 'public');
+            $validated['image_path'] = $path;
+        }
+
+        $validated['user_id'] = Auth::id();
+
         try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'required|string',
-                'ingredients' => 'required|string',
-                'instructions' => 'required|string',
-                'prep_time' => 'nullable|integer|min:0',
-                'cook_time' => 'nullable|integer|min:0',
-                'servings' => 'nullable|integer|min:1',
-                'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
-                'category' => 'required|string',
-            ], [
-                'title.required' => 'Receptes nosaukums ir obligāts.',
-                'description.required' => 'Apraksts ir obligāts.',
-                'ingredients.required' => 'Sastāvdaļas ir obligātas.',
-                'instructions.required' => 'Instrukcijas ir obligātas.',
-                'difficulty.required' => 'Grūtības līmenis ir obligāts.',
-                'category.required' => 'Kategorija ir obligāta.',
-            ]);
-
-            $validated['user_id'] = Auth::id();
-
             $recipe = Recipe::create($validated);
 
-            Log::info('Recipe saved successfully', [
-                'recipe_id' => $recipe->id,
-                'user_id' => Auth::id(),
-                'title' => $recipe->title
-            ]);
+            if (!$recipe || !$recipe->exists) {
+                Log::error('Recipe not saved', ['data' => $validated]);
+                return back()->withInput()->with('error', 'Neizdevās publicēt recepti.');
+            }
 
-            return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi izveidota!');
-
+            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.');
         } catch (\Exception $e) {
-            Log::error('Failed to save recipe', [
-                'error' => $e->getMessage(),
-                'user_id' => Auth::id(),
-                'request_data' => $request->all()
-            ]);
-
-            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Lūdzu mēģiniet vēlreiz.');
+            Log::error('Recipe store error', ['error' => $e->getMessage(), 'data' => $validated]);
+            return back()->withInput()->with('error', 'Kļūda saglabājot recepti.');
         }
     }
 
