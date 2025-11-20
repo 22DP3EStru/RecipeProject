@@ -381,16 +381,20 @@
                     <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-warning" style="font-size: 18px; padding: 20px 40px;">
                         ❌ Atcelt
                     </a>
-                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;" 
-                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" style="font-size: 18px; padding: 20px 40px;">
-                            🗑️ Dzēst recepti
-                        </button>
-                    </form>
                 </div>
             </form>
+
+            <!-- Delete form moved OUTSIDE the edit form -->
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+                <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
+                      onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" style="font-size: 18px; padding: 20px 40px;">
+                        🗑️ Dzēst recepti
+                    </button>
+                </form>
+            </div>
 
             <!-- Tips -->
             <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; margin-top: 40px;">

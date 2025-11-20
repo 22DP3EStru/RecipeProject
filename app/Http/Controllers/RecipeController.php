@@ -113,7 +113,13 @@ class RecipeController extends Controller
             abort(403);
         }
 
-        $request->validate([
+        // Prevent accidental delete if form mistakenly sends _method=DELETE
+        if ($request->has('_method') && strtolower($request->input('_method')) === 'delete') {
+            abort(400, 'Invalid request method.');
+        }
+
+        // Validate only the fields we expect and use the validated data for update
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'ingredients' => 'required|string',
@@ -125,7 +131,7 @@ class RecipeController extends Controller
             'category' => 'required|string',
         ]);
 
-        $recipe->update($request->all());
+        $recipe->update($validated);
 
         return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmīgi atjaunināta!');
     }
