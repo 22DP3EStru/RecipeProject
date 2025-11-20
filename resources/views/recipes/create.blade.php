@@ -245,7 +245,7 @@
             @endif
 
             <!-- Recipe Form -->
-            <form method="POST" action="{{ route('recipes.store') }}">
+            <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data">
                 @csrf
                 
                 <!-- Basic Information -->

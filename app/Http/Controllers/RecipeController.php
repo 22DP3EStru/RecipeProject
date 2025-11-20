@@ -56,6 +56,9 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
+        // Optional temporary debug: uncomment to inspect incoming request
+        // dd($request->all());
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -70,24 +73,20 @@ class RecipeController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('recipes', 'public');
-            $validated['image_path'] = $path;
+            $validated['image_path'] = $request->file('image')->store('recipes', 'public');
         }
 
         $validated['user_id'] = Auth::id();
 
         try {
             $recipe = Recipe::create($validated);
-
-            if (!$recipe || !$recipe->exists) {
-                Log::error('Recipe not saved', ['data' => $validated]);
-                return back()->withInput()->with('error', 'Neizdevās publicēt recepti.');
-            }
-
             return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.');
         } catch (\Exception $e) {
-            Log::error('Recipe store error', ['error' => $e->getMessage(), 'data' => $validated]);
-            return back()->withInput()->with('error', 'Kļūda saglabājot recepti.');
+            Log::error('Recipe store error', [
+                'error' => $e->getMessage(),
+                'request' => $request->all()
+            ]);
+            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
         }
     }
 
