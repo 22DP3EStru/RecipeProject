@@ -54,3 +54,5 @@ Kur skatīt kodu
 - Kontrolieri: app/Http/Controllers/
 - Modeļi: app/Models/
 - Skati: resources/views/
+
+Dokumentācija : https://1drv.ms/w/c/e89a595db40b3546/ER993AF-T2FAqoGI6sv4PcoB2hhob859BA-QqS8gtjH-pQ?e=NTs7I3
