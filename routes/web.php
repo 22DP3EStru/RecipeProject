@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +19,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/categories', [CategoriesController::class, 'index'])
+Route::get('/categories', [CategoryController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('categories.index');
 
-Route::get('/categories/{category}', [CategoriesController::class, 'show'])
+Route::get('/categories/{category}', [CategoryController::class, 'show'])
     ->middleware(['auth', 'verified'])
     ->name('categories.show');
 

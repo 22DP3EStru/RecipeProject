@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Recipe;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -60,7 +61,6 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-
     /**
      * Display the user's favorite recipes.
      */
@@ -69,7 +69,7 @@ class ProfileController extends Controller
         // For now, we'll show user's own recipes as "favorites"
         // Later you can implement a proper favorites system
         $user = Auth::user();
-        $favoriteRecipes = $user->recipes()->latest()->paginate(12);
+        $favoriteRecipes = Recipe::where('user_id', $user->id)->latest()->paginate(12);
         
         return view('profile.favorites', [
             'recipes' => $favoriteRecipes,
