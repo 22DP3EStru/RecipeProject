@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecepÅu pÄrvaldÄ«ba - RecepÅu AplikÄcija</title>
+    <title>Recepšu pārvaldība - Recepšu Aplikācija</title>
     <style>
         * {
             margin: 0;
@@ -206,21 +206,21 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>š¨½ļø¸ RecepÅu pÄrvaldÄ«ba</h1>
-            <p>PÄrvaldiet visas sistÄ“mas receptes</p>
+            <h1>🍽️ Recepšu pārvaldība</h1>
+            <p>Pārvaldiet visas sistēmas receptes</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="{{ route('admin.index') }}">š”§ Admin panelis</a>
-                <a href="{{ route('admin.users') }}">š‘ LietotÄji</a>
-                <a href="{{ route('admin.recipes') }}">š¨½ļø¸ Receptes</a>
-                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="{{ route('admin.index') }}">🔧 Admin panelis</a>
+                <a href="{{ route('admin.users') }}">👥 Lietotāji</a>
+                <a href="{{ route('admin.recipes') }}">🍽️ Receptes</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 12px;">Iziet</button>
@@ -232,15 +232,15 @@
         <div class="main-content">
             <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="{{ route('admin.index') }}" style="color: #667eea; text-decoration: none;">š”§ Admin panelis</a> 
+                <a href="{{ route('admin.index') }}" style="color: #667eea; text-decoration: none;">🔧 Admin panelis</a> 
                 <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">š¨½ļø¸ RecepÅu pÄrvaldÄ«ba</span>
+                <span style="color: #333; font-weight: 600;">🍽️ Recepšu pārvaldība</span>
             </div>
 
             <!-- Success Messages -->
             @if(session('success'))
                 <div class="alert alert-success">
-                    ā… {{ session('success') }}
+                    ✅ {{ session('success') }}
                 </div>
             @endif
 
@@ -252,7 +252,7 @@
                 @endphp
                 <div class="stat-item">
                     <div class="stat-number">{{ $recipes->total() }}</div>
-                    <div class="stat-label">KopÄ recepÅu</div>
+                    <div class="stat-label">Kopā recepšu</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ $categories->count() }}</div>
@@ -260,11 +260,11 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ $recipes->where('created_at', '>=', now()->subDays(7))->count() }}</div>
-                    <div class="stat-label">Jaunas ÅonedÄ“Ä¼</div>
+                    <div class="stat-label">Jaunas šonedēļ</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ \App\Models\User::has('recipes')->count() }}</div>
-                    <div class="stat-label">AktÄ«vi autori</div>
+                    <div class="stat-label">Aktīvi autori</div>
                 </div>
             </div>
 
@@ -286,45 +286,45 @@
                             <!-- Recipe Meta -->
                             <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                                 <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-                                    <span style="color: #666;">š‘Øā€¨š¨³ Autors:</span>
+                                    <span style="color: #666;">👨‍🍳 Autors:</span>
                                     <span style="font-weight: 600;">{{ $recipe->user->name }}</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-                                    <span style="color: #666;">š“‚ Kategorija:</span>
+                                    <span style="color: #666;">📂 Kategorija:</span>
                                     <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 10px; font-size: 12px;">
-                                        {{ $recipe->category ?? 'Nav norÄdÄ«ta' }}
+                                        {{ $recipe->category ?? 'Nav norādīta' }}
                                     </span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-                                    <span style="color: #666;">š“ GrÅ«tÄ«ba:</span>
+                                    <span style="color: #666;">📊 Grūtība:</span>
                                     <span style="background: rgba(255, 65, 108, 0.1); color: #ff416c; padding: 2px 8px; border-radius: 10px; font-size: 12px;">
                                         {{ $recipe->difficulty ?? 'N/A' }}
                                     </span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; font-size: 14px;">
-                                    <span style="color: #666;">š“… Izveidots:</span>
+                                    <span style="color: #666;">📅 Izveidots:</span>
                                     <span>{{ $recipe->created_at->format('d.m.Y H:i') }}</span>
                                 </div>
                             </div>
 
                             <!-- Recipe Stats -->
                             <div style="display: flex; justify-content: space-between; font-size: 13px; color: #999; margin-bottom: 20px;">
-                                <span>ā¸±ļø¸ {{ $recipe->prep_time ?? 'N/A' }} min</span>
-                                <span>š‘ {{ $recipe->servings ?? 'N/A' }} porcijas</span>
-                                <span>š•’ {{ $recipe->created_at->diffForHumans() }}</span>
+                                <span>⏱️ {{ $recipe->prep_time ?? 'N/A' }} min</span>
+                                <span>👥 {{ $recipe->servings ?? 'N/A' }} porcijas</span>
+                                <span>🕒 {{ $recipe->created_at->diffForHumans() }}</span>
                             </div>
 
                             <!-- Action Buttons -->
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <!-- View Recipe -->
                                 <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
-                                    š‘ļø¸ SkatÄ«t
+                                    👁️ Skatīt
                                 </a>
 
                                 <!-- Edit Recipe (if admin or owner) -->
                                 @if(Auth::user()->is_admin || $recipe->user_id === Auth::id())
                                     <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-success">
-                                        ā¸ļø¸ RediÄ£Ä“t
+                                        ✏️ Rediģēt
                                     </a>
                                 @endif
 
@@ -333,14 +333,14 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" 
-                                            onclick="return confirm('Vai tieÅÄm dzÄ“st Åo recepti? Å Ä« darbÄ«ba ir neatgriezeniska!')">
-                                        š—‘ļø¸ DzÄ“st
+                                            onclick="return confirm('Vai tiešām dzēst šo recepti? Šī darbība ir neatgriezeniska!')">
+                                        🗑️ Dzēst
                                     </button>
                                 </form>
 
                                 <!-- View Author -->
                                 <a href="/recipes?user={{ $recipe->user->id }}" class="btn btn-secondary">
-                                    š‘¤ Autora receptes
+                                    👤 Autora receptes
                                 </a>
                             </div>
                         </div>
@@ -354,27 +354,27 @@
             @else
                 <!-- No Recipes -->
                 <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">š¨½ļø¸</div>
-                    <h3 style="color: #666; margin-bottom: 15px;">Nav recepÅu</h3>
-                    <p style="color: #999;">Nav atrasta neviena recepte sistÄ“mÄ.</p>
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">🍽️</div>
+                    <h3 style="color: #666; margin-bottom: 15px;">Nav recepšu</h3>
+                    <p style="color: #999;">Nav atrasta neviena recepte sistēmā.</p>
                 </div>
             @endif
 
             <!-- Quick Actions -->
             <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">š€ Ä€tras darbÄ«bas</h3>
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3>
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="{{ route('admin.index') }}" class="btn btn-primary">
-                        š”§ Admin panelis
+                        🔧 Admin panelis
                     </a>
                     <a href="{{ route('admin.users') }}" class="btn btn-success">
-                        š‘ PÄrvaldÄ«t lietotÄjus
+                        👥 Pārvaldīt lietotājus
                     </a>
                     <a href="/recipes" class="btn btn-secondary">
-                        š”¨ SkatÄ«t visas receptes
+                        🔍 Skatīt visas receptes
                     </a>
                     <a href="/dashboard" class="btn btn-secondary">
-                        š¸  VadÄ«bas panelis
+                        🏠 Vadības panelis
                     </a>
                 </div>
             </div>
@@ -382,4 +382,3 @@
     </div>
 </body>
 </html>
-

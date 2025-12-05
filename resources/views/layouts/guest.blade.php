@@ -38,11 +38,10 @@
                 <!-- Footer Link -->
                 <div class="mt-6 text-center">
                     <a href="/" wire:navigate class="text-sm text-gray-600 hover:text-orange-600 transition duration-200">
-                        ā† Back to RecipeHub
+                        ← Back to RecipeHub
                     </a>
                 </div>
             </div>
         </div>
     </body>
 </html>
-

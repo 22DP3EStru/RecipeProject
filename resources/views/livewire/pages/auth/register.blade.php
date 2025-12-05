@@ -26,14 +26,14 @@ rules([
 ]);
 
 $messages = [
-    'name.required' => 'LÅ«dzu ievadiet savu vÄrdu.',
-    'name.max' => 'VÄrds nedrÄ«kst bÅ«t garÄks par 255 simboliem.',
-    'email.required' => 'LÅ«dzu ievadiet savu e-pasta adresi.',
-    'email.email' => 'LÅ«dzu ievadiet derÄ«gu e-pasta adresi.',
-    'email.unique' => 'Å Äda e-pasta adrese jau ir reÄ£istrÄ“ta.',
-    'password.required' => 'LÅ«dzu izveidojiet paroli.',
-    'password.min' => 'Parolei jÄbÅ«t vismaz 8 simbolus garai.',
-    'password.confirmed' => 'Paroles nesakrÄ«t.',
+    'name.required' => 'Lūdzu ievadiet savu vārdu.',
+    'name.max' => 'Vārds nedrīkst būt garāks par 255 simboliem.',
+    'email.required' => 'Lūdzu ievadiet savu e-pasta adresi.',
+    'email.email' => 'Lūdzu ievadiet derīgu e-pasta adresi.',
+    'email.unique' => 'Šāda e-pasta adrese jau ir reģistrēta.',
+    'password.required' => 'Lūdzu izveidojiet paroli.',
+    'password.min' => 'Parolei jābūt vismaz 8 simbolus garai.',
+    'password.confirmed' => 'Paroles nesakrīt.',
 ];
 
 $register = function () {
@@ -61,14 +61,14 @@ $register = function () {
 <div>
     <!-- Header -->
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Pievienojies ReceptÅ«rei!</h2>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">Izveido kontu, lai sÄktu dalÄ«ties un atklÄtu daudz jaunu recepÅu.</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Pievienojies Receptūrei!</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-2">Izveido kontu, lai sāktu dalīties un atklātu daudz jaunu recepšu.</p>
     </div>
 
     <form wire:submit="register" class="space-y-6">
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('VÄrds, UzvÄrds')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-input-label for="name" :value="__('Vārds, Uzvārds')" class="text-gray-700 dark:text-gray-300 font-medium" />
             <x-text-input wire:model="name" id="name" 
                 class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200" 
                 type="text" 
@@ -76,7 +76,7 @@ $register = function () {
                 required 
                 autofocus 
                 autocomplete="name" 
-                placeholder="Ievadiet savu vÄrdu un uzvÄrdu" />
+                placeholder="Ievadiet savu vārdu un uzvārdu" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
@@ -102,30 +102,30 @@ $register = function () {
                 name="password"
                 required 
                 autocomplete="new-password" 
-                placeholder="Izveidojiet droÅu paroli" />
+                placeholder="Izveidojiet drošu paroli" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
         <div>
-            <x-input-label for="password_confirmation" :value="__('ApstiprinÄt paroli')" class="text-gray-700 dark:text-gray-300 font-medium" />
+            <x-input-label for="password_confirmation" :value="__('Apstiprināt paroli')" class="text-gray-700 dark:text-gray-300 font-medium" />
             <x-text-input wire:model="password_confirmation" id="password_confirmation" 
                 class="block mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition duration-200"
                 type="password"
                 name="password_confirmation" 
                 required 
                 autocomplete="new-password" 
-                placeholder="Ievadiet paroli vÄ“lreiz" />
+                placeholder="Ievadiet paroli vēlreiz" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
         <!-- Terms Agreement -->
         <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                Izzveidojot kontu, jÅ«s piekrÄ«tat mÅ«su 
-                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Pakalpojumu sniegÅanas noteikumiem</a> 
+                Izzveidojot kontu, jūs piekrītat mūsu 
+                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Pakalpojumu sniegšanas noteikumiem</a> 
                 un 
-                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">PrivÄtuma politikai</a>.
+                <a href="#" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Privātuma politikai</a>.
             </p>
         </div>
 
@@ -144,7 +144,7 @@ $register = function () {
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {{ __('ReÄ£istrÄ“ kontu...') }}
+                        {{ __('Reģistrē kontu...') }}
                     </span>
                 </div>
             </button>
@@ -154,12 +154,11 @@ $register = function () {
     <!-- Login Link -->
     <div class="mt-6 text-center pt-6 border-t border-gray-200 dark:border-gray-600">
         <p class="text-gray-600 dark:text-gray-400">
-            Vai jau eksistÄ“ konts? 
+            Vai jau eksistē konts? 
             <a href="{{ route('login') }}" wire:navigate 
                class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium transition duration-200">
-                PieslÄ“gties RecipeHub
+                Pieslēgties RecipeHub
             </a>
         </p>
     </div>
 </div>
-

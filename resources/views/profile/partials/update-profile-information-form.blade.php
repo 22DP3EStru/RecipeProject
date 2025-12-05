@@ -1,11 +1,11 @@
 ﻿<section>
     <header class="mb-6">
         <h2 class="text-lg font-medium">
-            Profila informÄcija
+            Profila informācija
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            Atjauniniet sava konta informÄciju un e-pasta adresi.
+            Atjauniniet sava konta informāciju un e-pasta adresi.
         </p>
     </header>
 
@@ -18,7 +18,7 @@
         @method('patch')
 
         <div>
-            <label for="name" class="form-label">VÄrds</label>
+            <label for="name" class="form-label">Vārds</label>
             <input type="text" id="name" name="name" class="form-input" value="{{ old('name', $user->name) }}" required autofocus />
             @error('name')
                 <p class="form-error">{{ $message }}</p>
@@ -35,16 +35,16 @@
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div class="mt-2">
                     <p class="text-sm text-gray-600">
-                        JÅ«su e-pasta adrese nav apstiprinÄta.
+                        Jūsu e-pasta adrese nav apstiprināta.
 
                         <button form="send-verification" class="nav-link text-sm">
-                            NoklikÅÄ·iniet Åeit, lai atkÄrtoti nosÅ«tÄ«tu verifikÄcijas e-pastu.
+                            Noklikšķiniet šeit, lai atkārtoti nosūtītu verifikācijas e-pastu.
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
                         <p class="mt-2 text-sm badge-green">
-                            Jauna verifikÄcijas saite ir nosÅ«tÄ«ta uz jÅ«su e-pasta adresi.
+                            Jauna verifikācijas saite ir nosūtīta uz jūsu e-pasta adresi.
                         </p>
                     @endif
                 </div>
@@ -53,15 +53,14 @@
 
         <div class="flex items-center gap-4">
             <button type="submit" class="btn-primary">
-                SaglabÄt izmaiÅ†as
+                Saglabāt izmaiņas
             </button>
 
             @if (session('status') === 'profile-updated')
                 <p class="text-sm badge-green">
-                    SaglabÄts!
+                    Saglabāts!
                 </p>
             @endif
         </div>
     </form>
 </section>
-

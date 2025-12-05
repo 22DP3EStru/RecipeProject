@@ -120,6 +120,5 @@
 </nav>
 
 @if(Auth::user()->is_admin)
-    <a href="{{ route('admin.index') }}">š”§ Admin</a>
+    <a href="{{ route('admin.index') }}">🔧 Admin</a>
 @endif
-

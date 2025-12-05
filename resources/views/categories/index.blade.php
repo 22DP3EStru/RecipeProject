@@ -43,43 +43,43 @@
                                 <div class="text-4xl mb-4">
                                     @switch($category['name'])
                                         @case('Breakfast')
-                                            š˛
+                                            🥞
                                             @break
                                         @case('Lunch')
-                                            š—
+                                            🥗
                                             @break
                                         @case('Dinner')
-                                            š¨½ļø¸
+                                            🍽️
                                             @break
                                         @case('Desserts')
-                                            š¨°
+                                            🍰
                                             @break
                                         @case('Appetizers')
-                                            šØ
+                                            🥨
                                             @break
                                         @case('Main Dishes')
-                                            š¨–
+                                            🍖
                                             @break
                                         @case('Side Dishes')
-                                            š”
+                                            🥔
                                             @break
                                         @case('Beverages')
-                                            š¤
+                                            🥤
                                             @break
                                         @case('Snacks')
-                                            š¨æ
+                                            🍿
                                             @break
                                         @case('Vegetarian')
-                                            š¬
+                                            🥬
                                             @break
                                         @case('Vegan')
-                                            š±
+                                            🌱
                                             @break
                                         @case('Gluten-Free')
-                                            š¾
+                                            🌾
                                             @break
                                         @default
-                                            š¨³
+                                            🍳
                                     @endswitch
                                 </div>
                                 
@@ -94,7 +94,7 @@
                                 <!-- View Button -->
                                 <div class="mt-4">
                                     <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition">
-                                        View Recipes ā†’
+                                        View Recipes →
                                     </span>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@
             @else
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-center">
-                        <div class="text-6xl mb-4">š“‚</div>
+                        <div class="text-6xl mb-4">📂</div>
                         <h3 class="text-lg font-semibold mb-2">No categories found</h3>
                         <p class="text-gray-600 mb-4">Be the first to create a recipe and establish categories!</p>
                         @auth
@@ -125,20 +125,19 @@
             <!-- Popular Categories Info -->
             <div class="bg-blue-50 overflow-hidden shadow-sm sm:rounded-lg mt-6">
                 <div class="p-6">
-                    <h4 class="text-md font-semibold mb-3">š’ Popular Recipe Categories</h4>
+                    <h4 class="text-md font-semibold mb-3">💡 Popular Recipe Categories</h4>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-700">
-                        <div>ā€¢ Breakfast & Brunch</div>
-                        <div>ā€¢ Main Dishes</div>
-                        <div>ā€¢ Desserts & Sweets</div>
-                        <div>ā€¢ Appetizers & Snacks</div>
-                        <div>ā€¢ Vegetarian & Vegan</div>
-                        <div>ā€¢ Quick & Easy</div>
-                        <div>ā€¢ Healthy Options</div>
-                        <div>ā€¢ International Cuisine</div>
+                        <div>• Breakfast & Brunch</div>
+                        <div>• Main Dishes</div>
+                        <div>• Desserts & Sweets</div>
+                        <div>• Appetizers & Snacks</div>
+                        <div>• Vegetarian & Vegan</div>
+                        <div>• Quick & Easy</div>
+                        <div>• Healthy Options</div>
+                        <div>• International Cuisine</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-

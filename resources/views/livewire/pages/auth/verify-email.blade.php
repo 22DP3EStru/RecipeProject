@@ -49,4 +49,3 @@ $logout = function (Logout $logout) {
         </button>
     </div>
 </div>
-

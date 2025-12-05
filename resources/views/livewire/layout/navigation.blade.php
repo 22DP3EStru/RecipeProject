@@ -102,4 +102,3 @@ $logout = function (Logout $logout) {
         </div>
     </div>
 </nav>
-

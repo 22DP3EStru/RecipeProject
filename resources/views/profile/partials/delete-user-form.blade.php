@@ -1,11 +1,11 @@
 ﻿<section class="space-y-6">
     <header class="mb-6">
         <h2 class="text-lg font-medium">
-            DzÄ“st kontu
+            Dzēst kontu
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            Kad jÅ«su konts tiks dzÄ“sts, visi tÄ resursi un dati tiks neatgriezeniski izdzÄ“sti. Pirms konta dzÄ“Åanas, lÅ«dzu, lejupielÄdÄ“jiet visus datus vai informÄciju, ko vÄ“laties saglabÄt.
+            Kad jūsu konts tiks dzēsts, visi tā resursi un dati tiks neatgriezeniski izdzēsti. Pirms konta dzēšanas, lūdzu, lejupielādējiet visus datus vai informāciju, ko vēlaties saglabāt.
         </p>
     </header>
 
@@ -14,7 +14,7 @@
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
         class="btn-secondary text-red-600 hover:bg-red-50"
     >
-        DzÄ“st kontu
+        Dzēst kontu
     </button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
@@ -23,11 +23,11 @@
             @method('delete')
 
             <h2 class="text-lg font-medium mb-4">
-                Vai tieÅÄm vÄ“laties dzÄ“st savu kontu?
+                Vai tiešām vēlaties dzēst savu kontu?
             </h2>
 
             <p class="text-sm text-gray-600 mb-6">
-                Kad jÅ«su konts tiks dzÄ“sts, visi tÄ resursi un dati tiks neatgriezeniski izdzÄ“sti. LÅ«dzu, ievadiet savu paroli, lai apstiprinÄtu, ka vÄ“laties neatgriezeniski dzÄ“st savu kontu.
+                Kad jūsu konts tiks dzēsts, visi tā resursi un dati tiks neatgriezeniski izdzēsti. Lūdzu, ievadiet savu paroli, lai apstiprinātu, ka vēlaties neatgriezeniski dzēst savu kontu.
             </p>
 
             <div class="mb-6">
@@ -50,10 +50,9 @@
                 </button>
 
                 <button type="submit" class="btn-primary bg-red-600 hover:bg-red-700">
-                    DzÄ“st kontu
+                    Dzēst kontu
                 </button>
             </div>
         </form>
     </x-modal>
 </section>
-

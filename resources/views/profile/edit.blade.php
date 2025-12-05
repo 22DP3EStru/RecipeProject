@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RediÄ£Ä“t profilu - RecepÅu AplikÄcija</title>
+    <title>Rediģēt profilu - Recepšu Aplikācija</title>
     <style>
         * {
             margin: 0;
@@ -256,25 +256,25 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>ā™ļø¸ Profila iestatÄ«jumi</h1>
-            <p>PÄrvaldiet savu kontu un personÄ«go informÄciju</p>
+            <h1>⚙️ Profila iestatījumi</h1>
+            <p>Pārvaldiet savu kontu un personīgo informāciju</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
-                <a href="/recipes">š¨½ļø¸ Receptes</a>
-                <a href="{{ route('categories.index') }}">š“‚ Kategorijas</a>
-                <a href="/profile/recipes">š“¯ Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">ā™ļø¸ Profils</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="/recipes">🍽️ Receptes</a>
+                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
+                <a href="/profile/recipes">📝 Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
+                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -286,21 +286,21 @@
         <div class="main-content">
             <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="/dashboard" style="color: #667eea; text-decoration: none;">š¸  VadÄ«bas panelis</a> 
+                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a> 
                 <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">ā™ļø¸ Profila iestatÄ«jumi</span>
+                <span style="color: #333; font-weight: 600;">⚙️ Profila iestatījumi</span>
             </div>
 
             <!-- Success Messages -->
             @if (session('status') === 'profile-updated')
                 <div class="alert alert-success">
-                    ā… Profils veiksmÄ«gi atjauninÄts!
+                    ✅ Profils veiksmīgi atjaunināts!
                 </div>
             @endif
 
             @if (session('status') === 'password-updated')
                 <div class="alert alert-success">
-                    ā… Parole veiksmÄ«gi nomainÄ«ta!
+                    ✅ Parole veiksmīgi nomainīta!
                 </div>
             @endif
 
@@ -309,10 +309,10 @@
                 <!-- Profile Information -->
                 <div class="profile-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #667eea;">š‘¤</div>
+                        <div class="card-icon" style="color: #667eea;">👤</div>
                         <div>
-                            <div class="card-title">Profila informÄcija</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Atjauniniet sava konta profila informÄciju un e-pasta adresi</p>
+                            <div class="card-title">Profila informācija</div>
+                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Atjauniniet sava konta profila informāciju un e-pasta adresi</p>
                         </div>
                     </div>
 
@@ -321,7 +321,7 @@
                         @method('patch')
 
                         <div class="form-group">
-                            <label for="name" class="form-label">VÄrds</label>
+                            <label for="name" class="form-label">Vārds</label>
                             <input id="name" name="name" type="text" class="form-input" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
                             @error('name')
                                 <div class="form-error">{{ $message }}</div>
@@ -337,19 +337,19 @@
 
                             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                                 <div class="alert alert-info" style="margin-top: 10px;">
-                                    <p>JÅ«su e-pasta adrese nav verificÄ“ta.</p>
+                                    <p>Jūsu e-pasta adrese nav verificēta.</p>
                                     <button form="send-verification" class="btn btn-secondary" style="margin-top: 10px;">
-                                        NosÅ«tÄ«t verificÄ“Åanas e-pastu atkÄrtoti
+                                        Nosūtīt verificēšanas e-pastu atkārtoti
                                     </button>
                                     @if (session('status') === 'verification-link-sent')
-                                        <p style="margin-top: 10px; color: #56ab2f;">Jauna verificÄ“Åanas saite ir nosÅ«tÄ«ta uz jÅ«su e-pasta adresi.</p>
+                                        <p style="margin-top: 10px; color: #56ab2f;">Jauna verificēšanas saite ir nosūtīta uz jūsu e-pasta adresi.</p>
                                     @endif
                                 </div>
                             @endif
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <button type="submit" class="btn btn-primary">SaglabÄt izmaiÅ†as</button>
+                            <button type="submit" class="btn btn-primary">Saglabāt izmaiņas</button>
                         </div>
                     </form>
                 </div>
@@ -357,10 +357,10 @@
                 <!-- Update Password -->
                 <div class="profile-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #56ab2f;">š”’</div>
+                        <div class="card-icon" style="color: #56ab2f;">🔒</div>
                         <div>
-                            <div class="card-title">NomainÄ«t paroli</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">NodroÅiniet, ka jÅ«su konts izmanto garu, nejauÅi Ä£enerÄ“tu paroli</p>
+                            <div class="card-title">Nomainīt paroli</div>
+                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Nodrošiniet, ka jūsu konts izmanto garu, nejauši ģenerētu paroli</p>
                         </div>
                     </div>
 
@@ -369,7 +369,7 @@
                         @method('put')
 
                         <div class="form-group">
-                            <label for="update_password_current_password" class="form-label">PaÅreizÄ“jÄ parole</label>
+                            <label for="update_password_current_password" class="form-label">Pašreizējā parole</label>
                             <input id="update_password_current_password" name="current_password" type="password" class="form-input" autocomplete="current-password">
                             @error('current_password', 'updatePassword')
                                 <div class="form-error">{{ $message }}</div>
@@ -377,7 +377,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="update_password_password" class="form-label">JaunÄ parole</label>
+                            <label for="update_password_password" class="form-label">Jaunā parole</label>
                             <input id="update_password_password" name="password" type="password" class="form-input" autocomplete="new-password">
                             @error('password', 'updatePassword')
                                 <div class="form-error">{{ $message }}</div>
@@ -385,7 +385,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="update_password_password_confirmation" class="form-label">ApstiprinÄt paroli</label>
+                            <label for="update_password_password_confirmation" class="form-label">Apstiprināt paroli</label>
                             <input id="update_password_password_confirmation" name="password_confirmation" type="password" class="form-input" autocomplete="new-password">
                             @error('password_confirmation', 'updatePassword')
                                 <div class="form-error">{{ $message }}</div>
@@ -393,7 +393,7 @@
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <button type="submit" class="btn btn-success">NomainÄ«t paroli</button>
+                            <button type="submit" class="btn btn-success">Nomainīt paroli</button>
                         </div>
                     </form>
                 </div>
@@ -401,39 +401,39 @@
                 <!-- Delete Account -->
                 <div class="profile-card delete-section">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #ff416c;">ā ļø¸</div>
+                        <div class="card-icon" style="color: #ff416c;">⚠️</div>
                         <div>
-                            <div class="card-title" style="color: #ff416c;">DzÄ“st kontu</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Kad jÅ«su konts tiks dzÄ“sts, visi tÄ resursi un dati tiks neatgriezeniski dzÄ“sti</p>
+                            <div class="card-title" style="color: #ff416c;">Dzēst kontu</div>
+                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Kad jūsu konts tiks dzēsts, visi tā resursi un dati tiks neatgriezeniski dzēsti</p>
                         </div>
                     </div>
 
                     <div style="background: rgba(255, 65, 108, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h4 style="color: #ff416c; margin-bottom: 10px;">ā ļø¸ BrÄ«dinÄjums</h4>
+                        <h4 style="color: #ff416c; margin-bottom: 10px;">⚠️ Brīdinājums</h4>
                         <p style="color: #666; line-height: 1.5;">
-                            Kad jÅ«su konts tiks dzÄ“sts, visas jÅ«su receptes un personÄ«gie dati tiks neatgriezeniski dzÄ“sti. 
-                            Pirms konta dzÄ“Åanas, lÅ«dzu, lejupielÄdÄ“jiet visus datus vai informÄciju, ko vÄ“laties saglabÄt.
+                            Kad jūsu konts tiks dzēsts, visas jūsu receptes un personīgie dati tiks neatgriezeniski dzēsti. 
+                            Pirms konta dzēšanas, lūdzu, lejupielādējiet visus datus vai informāciju, ko vēlaties saglabāt.
                         </p>
                     </div>
 
                     <button onclick="openDeleteModal()" class="btn btn-danger">
-                        š—‘ļø¸ DzÄ“st kontu
+                        🗑️ Dzēst kontu
                     </button>
                 </div>
             </div>
 
             <!-- Quick Actions -->
             <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">š€ Ä€tras darbÄ«bas</h3>
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3>
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="/profile/recipes" class="btn btn-primary">
-                        š“¯ Manas receptes
+                        📝 Manas receptes
                     </a>
                     <a href="/recipes/create" class="btn btn-success">
-                        ā˛• Izveidot jaunu recepti
+                        ➕ Izveidot jaunu recepti
                     </a>
                     <a href="/recipes" class="btn btn-secondary">
-                        š”¨ PÄrlÅ«kot receptes
+                        🔍 Pārlūkot receptes
                     </a>
                 </div>
             </div>
@@ -444,9 +444,9 @@
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <div style="text-align: center; margin-bottom: 25px;">
-                <div style="font-size: 4rem; color: #ff416c; margin-bottom: 15px;">ā ļø¸</div>
-                <h3 style="color: #ff416c; margin-bottom: 10px;">DzÄ“st kontu</h3>
-                <p style="color: #666;">Vai tieÅÄm vÄ“laties dzÄ“st savu kontu? Å Ä« darbÄ«ba ir neatgriezeniska.</p>
+                <div style="font-size: 4rem; color: #ff416c; margin-bottom: 15px;">⚠️</div>
+                <h3 style="color: #ff416c; margin-bottom: 10px;">Dzēst kontu</h3>
+                <p style="color: #666;">Vai tiešām vēlaties dzēst savu kontu? Šī darbība ir neatgriezeniska.</p>
             </div>
 
             <form method="post" action="{{ route('profile.destroy') }}">
@@ -454,8 +454,8 @@
                 @method('delete')
 
                 <div class="form-group">
-                    <label for="password" class="form-label">Ievadiet savu paroli, lai apstiprinÄtu:</label>
-                    <input id="password" name="password" type="password" class="form-input" placeholder="JÅ«su parole" required>
+                    <label for="password" class="form-label">Ievadiet savu paroli, lai apstiprinātu:</label>
+                    <input id="password" name="password" type="password" class="form-input" placeholder="Jūsu parole" required>
                     @error('password', 'userDeletion')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
@@ -466,7 +466,7 @@
                         Atcelt
                     </button>
                     <button type="submit" class="btn btn-danger">
-                        š—‘ļø¸ DzÄ“st kontu
+                        🗑️ Dzēst kontu
                     </button>
                 </div>
             </form>
@@ -499,4 +499,3 @@
     </script>
 </body>
 </html>
-

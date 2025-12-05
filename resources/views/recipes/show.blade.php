@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $recipe->title }} - RecepÅu AplikÄcija</title>
+    <title>{{ $recipe->title }} - Recepšu Aplikācija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -182,22 +182,22 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>š¨½ļø¸ {{ $recipe->title }}</h1>
+            <h1>🍽️ {{ $recipe->title }}</h1>
             <p>Autors: {{ $recipe->user->name }}</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
-                <a href="/recipes">š¨½ļø¸ Receptes</a>
-                <a href="/categories">š“‚ Kategorijas</a>
-                <a href="/profile/recipes">š“¯ Manas receptes</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="/recipes">🍽️ Receptes</a>
+                <a href="/categories">📂 Kategorijas</a>
+                <a href="/profile/recipes">📝 Manas receptes</a>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
-                <a href="/recipes" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">ā† AtpakaÄ¼ uz receptÄ“m</a>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <a href="/recipes" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Atpakaļ uz receptēm</a>
             </div>
         </nav>
 
@@ -214,44 +214,44 @@
             <!-- Recipe Meta Information -->
             <div class="recipe-meta">
                 <div class="meta-item">
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">š“‚</div>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">📂</div>
                     <h4 style="color: #667eea; margin-bottom: 5px;">Kategorija</h4>
-                    <p style="color: #666; font-weight: 600;">{{ $recipe->category ?? 'Nav norÄdÄ«ta' }}</p>
+                    <p style="color: #666; font-weight: 600;">{{ $recipe->category ?? 'Nav norādīta' }}</p>
                 </div>
                 
                 <div class="meta-item">
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">ā­</div>
-                    <h4 style="color: #667eea; margin-bottom: 5px;">GrÅ«tÄ«ba</h4>
-                    <p style="color: #666; font-weight: 600;">{{ $recipe->difficulty ?? 'Nav norÄdÄ«ta' }}</p>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">⭐</div>
+                    <h4 style="color: #667eea; margin-bottom: 5px;">Grūtība</h4>
+                    <p style="color: #666; font-weight: 600;">{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
                 </div>
                 
                 @if($recipe->prep_time)
                     <div class="meta-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š”Ŗ</div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">SagatavoÅana</h4>
-                        <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time }} minÅ«tes</p>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔪</div>
+                        <h4 style="color: #667eea; margin-bottom: 5px;">Sagatavošana</h4>
+                        <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time }} minūtes</p>
                     </div>
                 @endif
                 
                 @if($recipe->cook_time)
                     <div class="meta-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š”</div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">GatavoÅana</h4>
-                        <p style="color: #666; font-weight: 600;">{{ $recipe->cook_time }} minÅ«tes</p>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔥</div>
+                        <h4 style="color: #667eea; margin-bottom: 5px;">Gatavošana</h4>
+                        <p style="color: #666; font-weight: 600;">{{ $recipe->cook_time }} minūtes</p>
                     </div>
                 @endif
                 
                 @if($recipe->prep_time && $recipe->cook_time)
                     <div class="meta-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">ā¸±ļø¸</div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">KopÄ laiks</h4>
-                        <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time + $recipe->cook_time }} minÅ«tes</p>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">⏱️</div>
+                        <h4 style="color: #667eea; margin-bottom: 5px;">Kopā laiks</h4>
+                        <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time + $recipe->cook_time }} minūtes</p>
                     </div>
                 @endif
                 
                 @if($recipe->servings)
                     <div class="meta-item">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š‘</div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
                         <h4 style="color: #667eea; margin-bottom: 5px;">Porcijas</h4>
                         <p style="color: #666; font-weight: 600;">{{ $recipe->servings }} porcijas</p>
                     </div>
@@ -262,8 +262,8 @@
             <div class="card">
                 <div class="ingredients-list">
                     <h3 style="color: #56ab2f; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.8rem;">
-                        <span style="margin-right: 15px;">š•</span>
-                        SastÄvdaÄ¼as
+                        <span style="margin-right: 15px;">🥕</span>
+                        Sastāvdaļas
                     </h3>
                     <div style="background: rgba(255, 255, 255, 0.7); padding: 25px; border-radius: 12px; border-left: 4px solid #56ab2f;">
                         @php
@@ -273,7 +273,7 @@
                             @foreach($ingredients as $ingredient)
                                 @if(trim($ingredient))
                                     <li style="padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center;">
-                                        <span style="color: #56ab2f; margin-right: 10px; font-weight: bold;">ā“</span>
+                                        <span style="color: #56ab2f; margin-right: 10px; font-weight: bold;">✓</span>
                                         <span style="color: #333; font-size: 16px;">{{ trim($ingredient) }}</span>
                                     </li>
                                 @endif
@@ -287,8 +287,8 @@
             <div class="card">
                 <div class="instructions-list">
                     <h3 style="color: #ffc107; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.8rem;">
-                        <span style="margin-right: 15px;">š‘©ā€¨š¨³</span>
-                        GatavoÅanas instrukcijas
+                        <span style="margin-right: 15px;">👩‍🍳</span>
+                        Gatavošanas instrukcijas
                     </h3>
                     <div style="background: rgba(255, 255, 255, 0.7); padding: 25px; border-radius: 12px; border-left: 4px solid #ffc107;">
                         @php
@@ -313,7 +313,7 @@
 
             <!-- Recipe Author & Date -->
             <div class="card">
-                <h3 style="color: #333; margin-bottom: 20px; text-align: center;">š‘Øā€¨š¨³ Par Åo recepti</h3>
+                <h3 style="color: #333; margin-bottom: 20px; text-align: center;">👨‍🍳 Par šo recepti</h3>
                 <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; text-align: center;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                         <div>
@@ -321,11 +321,11 @@
                             <p style="color: #666; font-size: 18px; font-weight: 600;">{{ $recipe->user->name }}</p>
                         </div>
                         <div>
-                            <h4 style="color: #667eea; margin-bottom: 5px;">PublicÄ“ts</h4>
+                            <h4 style="color: #667eea; margin-bottom: 5px;">Publicēts</h4>
                             <p style="color: #666; font-size: 16px;">{{ $recipe->created_at->format('d.m.Y') }}</p>
                         </div>
                         <div>
-                            <h4 style="color: #667eea; margin-bottom: 5px;">PÄ“dÄ“jÄs izmaiÅ†as</h4>
+                            <h4 style="color: #667eea; margin-bottom: 5px;">Pēdējās izmaiņas</h4>
                             <p style="color: #666; font-size: 16px;">{{ $recipe->updated_at->diffForHumans() }}</p>
                         </div>
                     </div>
@@ -336,31 +336,31 @@
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
                 @if(Auth::id() === $recipe->user_id)
                     <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="font-size: 16px; padding: 15px 30px;">
-                        ā¸ļø¸ RediÄ£Ä“t recepti
+                        ✏️ Rediģēt recepti
                     </a>
                     <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;" 
-                          onsubmit="return confirm('Vai tieÅÄm vÄ“laties dzÄ“st Åo recepti? Å o darbÄ«bu nevar atsaukt.')">
+                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger" style="font-size: 16px; padding: 15px 30px;">
-                            š—‘ļø¸ DzÄ“st recepti
+                            🗑️ Dzēst recepti
                         </button>
                     </form>
                 @endif
                 
                 <a href="/recipes" class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;">
-                    š”¨ PÄrlÅ«kot citas receptes
+                    🔍 Pārlūkot citas receptes
                 </a>
                 
                 <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 16px; padding: 15px 30px;">
-                    š“¯ Izveidot jaunu recepti
+                    📝 Izveidot jaunu recepti
                 </a>
             </div>
 
             <!-- Related Recipes -->
             @if(isset($relatedRecipes) && $relatedRecipes->count() > 0)
                 <div class="card" style="margin-top: 40px;">
-                    <h3 style="color: #333; margin-bottom: 25px; text-align: center;">š”¨ LÄ«dzÄ«gas receptes</h3>
+                    <h3 style="color: #333; margin-bottom: 25px; text-align: center;">🔍 Līdzīgas receptes</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         @foreach($relatedRecipes as $relatedRecipe)
                             <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.3s ease;" 
@@ -373,7 +373,7 @@
                                     <span>{{ $relatedRecipe->user->name }}</span>
                                 </div>
                                 <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 14px;">
-                                    SkatÄ«t recepti ā†’
+                                    Skatīt recepti →
                                 </a>
                             </div>
                         @endforeach
@@ -384,4 +384,3 @@
     </div>
 </body>
 </html>
-

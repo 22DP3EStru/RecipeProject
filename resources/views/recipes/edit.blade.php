@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RediÄ£Ä“t recepti - {{ $recipe->title }}</title>
+    <title>Rediģēt recepti - {{ $recipe->title }}</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -199,22 +199,22 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>ā¸ļø¸ RediÄ£Ä“t recepti</h1>
+            <h1>✏️ Rediģēt recepti</h1>
             <p>Atjauniniet savu recepti "{{ $recipe->title }}"</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
             <div class="nav-links">
-                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
-                <a href="/recipes">š¨½ļø¸ Receptes</a>
-                <a href="/categories">š“‚ Kategorijas</a>
-                <a href="/profile/recipes">š“¯ Manas receptes</a>
+                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="/recipes">🍽️ Receptes</a>
+                <a href="/categories">📂 Kategorijas</a>
+                <a href="/profile/recipes">📝 Manas receptes</a>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
-                <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">ā† AtpakaÄ¼ uz recepti</a>
+                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Atpakaļ uz recepti</a>
             </div>
         </nav>
 
@@ -222,10 +222,10 @@
         <div class="main-content">
             <!-- Welcome Message -->
             <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 15px;">
-                <div style="font-size: 4rem; margin-bottom: 20px;">ā¸ļø¸</div>
+                <div style="font-size: 4rem; margin-bottom: 20px;">✏️</div>
                 <h2 style="color: #f093fb; margin-bottom: 15px;">Uzlabojiet savu recepti!</h2>
                 <p style="color: #666; line-height: 1.6;">
-                    Atjauniniet informÄciju, pievienojiet jaunas detaÄ¼as vai uzlabojiet instrukcijas.
+                    Atjauniniet informāciju, pievienojiet jaunas detaļas vai uzlabojiet instrukcijas.
                 </p>
             </div>
 
@@ -233,8 +233,8 @@
             @if($errors->any())
                 <div class="alert alert-error">
                     <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">ā¯</span>
-                        LÅ«dzu, izlabojiet ÅÄdas kÄ¼Å«das:
+                        <span style="margin-right: 10px;">❌</span>
+                        Lūdzu, izlabojiet šādas kļūdas:
                     </h4>
                     <ul style="margin-left: 30px; line-height: 1.6;">
                         @foreach($errors->all() as $error)
@@ -252,50 +252,50 @@
                 <!-- Basic Information -->
                 <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                     <h3 style="color: #667eea; margin-bottom: 20px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">š“‹</span>
-                        Pamata informÄcija
+                        <span style="margin-right: 10px;">📋</span>
+                        Pamata informācija
                     </h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="title">š¨½ļø¸ Receptes nosaukums</label>
+                        <label class="form-label" for="title">🍽️ Receptes nosaukums</label>
                         <input type="text" id="title" name="title" value="{{ old('title', $recipe->title) }}" 
-                               class="form-input" placeholder="PiemÄ“ram: MÄjas biezpiens ar ievÄrÄ«jumu" required>
+                               class="form-input" placeholder="Piemēram: Mājas biezpiens ar ievārījumu" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="description">š“– Apraksts</label>
+                        <label class="form-label" for="description">📖 Apraksts</label>
                         <textarea id="description" name="description" class="form-textarea" 
-                                  placeholder="ÄŖss apraksts par recepti - kas padara to Ä«paÅu?"
+                                  placeholder="Īss apraksts par recepti - kas padara to īpašu?"
                                   required>{{ old('description', $recipe->description) }}</textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="category">š“‚ Kategorija</label>
+                            <label class="form-label" for="category">📂 Kategorija</label>
                             <select id="category" name="category" class="form-select" required>
-                                <option value="">IzvÄ“lieties kategoriju</option>
-                                <option value="Brokastis" {{ old('category', $recipe->category) == 'Brokastis' ? 'selected' : '' }}>š˛ Brokastis</option>
-                                <option value="Pusdienas" {{ old('category', $recipe->category) == 'Pusdienas' ? 'selected' : '' }}>š— Pusdienas</option>
-                                <option value="VakariÅ†as" {{ old('category', $recipe->category) == 'VakariÅ†as' ? 'selected' : '' }}>š¨½ļø¸ VakariÅ†as</option>
-                                <option value="Deserti" {{ old('category', $recipe->category) == 'Deserti' ? 'selected' : '' }}>š¨° Deserti</option>
-                                <option value="Uzkodas" {{ old('category', $recipe->category) == 'Uzkodas' ? 'selected' : '' }}>šØ Uzkodas</option>
-                                <option value="DzÄ“rieni" {{ old('category', $recipe->category) == 'DzÄ“rieni' ? 'selected' : '' }}>š¤ DzÄ“rieni</option>
-                                <option value="SalÄti" {{ old('category', $recipe->category) == 'SalÄti' ? 'selected' : '' }}>š™ SalÄti</option>
-                                <option value="Zupas" {{ old('category', $recipe->category) == 'Zupas' ? 'selected' : '' }}>š¨² Zupas</option>
-                                <option value="VeÄ£etÄrÄs" {{ old('category', $recipe->category) == 'VeÄ£etÄrÄs' ? 'selected' : '' }}>š¬ VeÄ£etÄrÄs</option>
-                                <option value="VegÄnÄs" {{ old('category', $recipe->category) == 'VegÄnÄs' ? 'selected' : '' }}>š± VegÄnÄs</option>
-                                <option value="BezglutÄ“na" {{ old('category', $recipe->category) == 'BezglutÄ“na' ? 'selected' : '' }}>š¾ BezglutÄ“na</option>
-                                <option value="Ä€tras receptes" {{ old('category', $recipe->category) == 'Ä€tras receptes' ? 'selected' : '' }}>ā Ä€tras receptes</option>
+                                <option value="">Izvēlieties kategoriju</option>
+                                <option value="Brokastis" {{ old('category', $recipe->category) == 'Brokastis' ? 'selected' : '' }}>🥞 Brokastis</option>
+                                <option value="Pusdienas" {{ old('category', $recipe->category) == 'Pusdienas' ? 'selected' : '' }}>🥗 Pusdienas</option>
+                                <option value="Vakariņas" {{ old('category', $recipe->category) == 'Vakariņas' ? 'selected' : '' }}>🍽️ Vakariņas</option>
+                                <option value="Deserti" {{ old('category', $recipe->category) == 'Deserti' ? 'selected' : '' }}>🍰 Deserti</option>
+                                <option value="Uzkodas" {{ old('category', $recipe->category) == 'Uzkodas' ? 'selected' : '' }}>🥨 Uzkodas</option>
+                                <option value="Dzērieni" {{ old('category', $recipe->category) == 'Dzērieni' ? 'selected' : '' }}>🥤 Dzērieni</option>
+                                <option value="Salāti" {{ old('category', $recipe->category) == 'Salāti' ? 'selected' : '' }}>🥙 Salāti</option>
+                                <option value="Zupas" {{ old('category', $recipe->category) == 'Zupas' ? 'selected' : '' }}>🍲 Zupas</option>
+                                <option value="Veģetārās" {{ old('category', $recipe->category) == 'Veģetārās' ? 'selected' : '' }}>🥬 Veģetārās</option>
+                                <option value="Vegānās" {{ old('category', $recipe->category) == 'Vegānās' ? 'selected' : '' }}>🌱 Vegānās</option>
+                                <option value="Bezglutēna" {{ old('category', $recipe->category) == 'Bezglutēna' ? 'selected' : '' }}>🌾 Bezglutēna</option>
+                                <option value="Ātras receptes" {{ old('category', $recipe->category) == 'Ātras receptes' ? 'selected' : '' }}>⚡ Ātras receptes</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="difficulty">ā­ GrÅ«tÄ«bas lÄ«menis</label>
+                            <label class="form-label" for="difficulty">⭐ Grūtības līmenis</label>
                             <select id="difficulty" name="difficulty" class="form-select" required>
-                                <option value="">IzvÄ“lieties grÅ«tÄ«bu</option>
-                                <option value="Viegla" {{ old('difficulty', $recipe->difficulty) == 'Viegla' ? 'selected' : '' }}>š¢ Viegla</option>
-                                <option value="VidÄ“ja" {{ old('difficulty', $recipe->difficulty) == 'VidÄ“ja' ? 'selected' : '' }}>š VidÄ“ja</option>
-                                <option value="GrÅ«ta" {{ old('difficulty', $recipe->difficulty) == 'GrÅ«ta' ? 'selected' : '' }}>š”´ GrÅ«ta</option>
+                                <option value="">Izvēlieties grūtību</option>
+                                <option value="Viegla" {{ old('difficulty', $recipe->difficulty) == 'Viegla' ? 'selected' : '' }}>🟢 Viegla</option>
+                                <option value="Vidēja" {{ old('difficulty', $recipe->difficulty) == 'Vidēja' ? 'selected' : '' }}>🟡 Vidēja</option>
+                                <option value="Grūta" {{ old('difficulty', $recipe->difficulty) == 'Grūta' ? 'selected' : '' }}>🔴 Grūta</option>
                             </select>
                         </div>
                     </div>
@@ -304,26 +304,26 @@
                 <!-- Time and Servings -->
                 <div style="background: rgba(240, 147, 251, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                     <h3 style="color: #f093fb; margin-bottom: 20px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">ā¸±ļø¸</span>
+                        <span style="margin-right: 10px;">⏱️</span>
                         Laiks un porcijas
                     </h3>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="prep_time">š”Ŗ SagatavoÅanas laiks (minÅ«tÄ“s)</label>
+                            <label class="form-label" for="prep_time">🔪 Sagatavošanas laiks (minūtēs)</label>
                             <input type="number" id="prep_time" name="prep_time" value="{{ old('prep_time', $recipe->prep_time) }}" 
                                    class="form-input" placeholder="15" min="0">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="cook_time">š” GatavoÅanas laiks (minÅ«tÄ“s)</label>
+                            <label class="form-label" for="cook_time">🔥 Gatavošanas laiks (minūtēs)</label>
                             <input type="number" id="cook_time" name="cook_time" value="{{ old('cook_time', $recipe->cook_time) }}" 
                                    class="form-input" placeholder="30" min="0">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="servings">š‘ Porciju skaits</label>
+                        <label class="form-label" for="servings">👥 Porciju skaits</label>
                         <input type="number" id="servings" name="servings" value="{{ old('servings', $recipe->servings) }}" 
                                class="form-input" placeholder="4" min="1">
                     </div>
@@ -332,17 +332,17 @@
                 <!-- Ingredients -->
                 <div style="background: rgba(86, 171, 47, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                     <h3 style="color: #56ab2f; margin-bottom: 20px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">š•</span>
-                        SastÄvdaÄ¼as
+                        <span style="margin-right: 10px;">🥕</span>
+                        Sastāvdaļas
                     </h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="ingredients">š“¯ SastÄvdaÄ¼u saraksts</label>
+                        <label class="form-label" for="ingredients">📝 Sastāvdaļu saraksts</label>
                         <textarea id="ingredients" name="ingredients" class="form-textarea" style="min-height: 200px;" 
-                                  placeholder="Uzskaitiet visas sastÄvdaÄ¼as, katru jaunÄ rindÄ..."
+                                  placeholder="Uzskaitiet visas sastāvdaļas, katru jaunā rindā..."
                                   required>{{ old('ingredients', $recipe->ingredients) }}</textarea>
                         <small style="color: #666; margin-top: 5px; display: block;">
-                            š’ Padoms: Uzskaitiet katru sastÄvdaÄ¼u jaunÄ rindÄ ar precÄ«zu daudzumu
+                            💡 Padoms: Uzskaitiet katru sastāvdaļu jaunā rindā ar precīzu daudzumu
                         </small>
                     </div>
                 </div>
@@ -350,17 +350,17 @@
                 <!-- Instructions -->
                 <div style="background: rgba(255, 193, 7, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                     <h3 style="color: #ffc107; margin-bottom: 20px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">š‘©ā€¨š¨³</span>
-                        GatavoÅanas instrukcijas
+                        <span style="margin-right: 10px;">👩‍🍳</span>
+                        Gatavošanas instrukcijas
                     </h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="instructions">š“‹ Soli pa solim instrukcijas</label>
+                        <label class="form-label" for="instructions">📋 Soli pa solim instrukcijas</label>
                         <textarea id="instructions" name="instructions" class="form-textarea" style="min-height: 300px;" 
-                                  placeholder="Aprakstiet gatavoÅanas procesu soli pa solim..."
+                                  placeholder="Aprakstiet gatavošanas procesu soli pa solim..."
                                   required>{{ old('instructions', $recipe->instructions) }}</textarea>
                         <small style="color: #666; margin-top: 5px; display: block;">
-                            š’ Padoms: BÅ«t precÄ«zs un skaidrs. IekÄ¼aujiet temperatÅ«ras, laikus un Ä«paÅus paÅ†Ä“mienus
+                            💡 Padoms: Būt precīzs un skaidrs. Iekļaujiet temperatūras, laikus un īpašus paņēmienus
                         </small>
                     </div>
                 </div>
@@ -369,17 +369,17 @@
                 <div style="background: rgba(102, 126, 234, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666;">
                         <span>Recepte izveidota: {{ $recipe->created_at->format('d.m.Y H:i') }}</span>
-                        <span>PÄ“dÄ“jÄs izmaiÅ†as: {{ $recipe->updated_at->format('d.m.Y H:i') }}</span>
+                        <span>Pēdējās izmaiņas: {{ $recipe->updated_at->format('d.m.Y H:i') }}</span>
                     </div>
                 </div>
 
                 <!-- Submit Buttons -->
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
                     <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                        š’¾ SaglabÄt izmaiÅ†as
+                        💾 Saglabāt izmaiņas
                     </button>
                     <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-warning" style="font-size: 18px; padding: 20px 40px;">
-                        ā¯ Atcelt
+                        ❌ Atcelt
                     </a>
                 </div>
             </form>
@@ -387,33 +387,33 @@
             <!-- Delete form moved OUTSIDE the edit form -->
             <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
                 <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
-                      onsubmit="return confirm('Vai tieÅÄm vÄ“laties dzÄ“st Åo recepti? Å o darbÄ«bu nevar atsaukt.');">
+                      onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" style="font-size: 18px; padding: 20px 40px;">
-                        š—‘ļø¸ DzÄ“st recepti
+                        🗑️ Dzēst recepti
                     </button>
                 </form>
             </div>
 
             <!-- Tips -->
             <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; margin-top: 40px;">
-                <h3 style="color: #667eea; margin-bottom: 20px; text-align: center;">š’ Padomi recepÅu uzlaboÅanai</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px; text-align: center;">💡 Padomi recepšu uzlabošanai</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                     <div style="text-align: center; padding: 15px;">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">š“¯</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">RegulÄri atjauniniet</h5>
-                        <p style="color: #666; font-size: 13px;">Uzlabojiet receptes, balstoties uz atsauksmÄ“m</p>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">📝</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Regulāri atjauniniet</h5>
+                        <p style="color: #666; font-size: 13px;">Uzlabojiet receptes, balstoties uz atsauksmēm</p>
                     </div>
                     <div style="text-align: center; padding: 15px;">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">šˇÆ</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">PrecizÄ“jiet detaÄ¼as</h5>
-                        <p style="color: #666; font-size: 13px;">Pievienojiet temperatÅ«ras un laikus</p>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🎯</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">Precizējiet detaļas</h5>
+                        <p style="color: #666; font-size: 13px;">Pievienojiet temperatūras un laikus</p>
                     </div>
                     <div style="text-align: center; padding: 15px;">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">š’¬</div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">💬</div>
                         <h5 style="color: #667eea; margin-bottom: 8px;">Pievienojiet padomus</h5>
-                        <p style="color: #666; font-size: 13px;">Dalieties ar saviem Ä«paÅajiem trikiem</p>
+                        <p style="color: #666; font-size: 13px;">Dalieties ar saviem īpašajiem trikiem</p>
                     </div>
                 </div>
             </div>
@@ -421,4 +421,3 @@
     </div>
 </body>
 </html>
-
