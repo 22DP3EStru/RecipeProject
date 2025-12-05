@@ -1,4 +1,4 @@
-<nav class="-mx-3 flex flex-1 justify-end">
+﻿<nav class="-mx-3 flex flex-1 justify-end">
     @auth
         <a
             href="{{ url('/dashboard') }}"
@@ -38,3 +38,4 @@
         @endif
     </div>
 </nav>
+

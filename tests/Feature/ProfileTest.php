@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Models\User;
 use Livewire\Volt\Volt;
@@ -87,3 +87,4 @@ test('correct password must be provided to delete account', function () {
 
     $this->assertNotNull($user->fresh());
 });
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -59,3 +59,4 @@ $confirmPassword = function () {
         </div>
     </form>
 </div>
+

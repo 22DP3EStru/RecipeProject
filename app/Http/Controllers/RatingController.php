@@ -20,6 +20,7 @@ class RatingController extends Controller
             ['rating' => $data['rating']]
         );
 
-        return back()->with('success', 'Vērtējums saglabāts!');
+        return back()->with('success', 'VÄ“rtÄ“jums saglabÄts!');
     }
 }
+

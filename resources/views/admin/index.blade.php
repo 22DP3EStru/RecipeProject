@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrācijas panelis - Recepšu Aplikācija</title>
+    <title>AdministrÄcijas panelis - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -85,32 +85,33 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔧 Administrācijas panelis</h1>
-            <p>Pārvaldiet lietotājus un receptes</p>
+            <h1>š”§ AdministrÄcijas panelis</h1>
+            <p>PÄrvaldiet lietotÄjus un receptes</p>
         </div>
 
         <div class="main-content">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>👥 Lietotāji</h3>
+                    <h3>š‘ LietotÄji</h3>
                     <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalUsers }}</p>
-                    <a href="{{ route('admin.users') }}" class="btn btn-primary">Pārvaldīt</a>
+                    <a href="{{ route('admin.users') }}" class="btn btn-primary">PÄrvaldÄ«t</a>
                 </div>
 
                 <div class="stat-card">
-                    <h3>🍽️ Receptes</h3>
+                    <h3>š¨½ļø¸ Receptes</h3>
                     <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalRecipes }}</p>
-                    <a href="{{ route('admin.recipes') }}" class="btn btn-primary">Pārvaldīt</a>
+                    <a href="{{ route('admin.recipes') }}" class="btn btn-primary">PÄrvaldÄ«t</a>
                 </div>
 
                 <div class="stat-card">
-                    <h3>🔧 Administratori</h3>
+                    <h3>š”§ Administratori</h3>
                     <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalAdmins }}</p>
                 </div>
             </div>
 
-            <a href="/dashboard" class="btn btn-primary">← Atpakaļ uz vadības paneli</a>
+            <a href="/dashboard" class="btn btn-primary">ā† AtpakaÄ¼ uz vadÄ«bas paneli</a>
         </div>
     </div>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<div class="recipe-card animate-fade-in">
+﻿<div class="recipe-card animate-fade-in">
     <div class="relative">
         <img src="{{ Storage::url($recipe->image) }}" alt="{{ $recipe->title }}" 
              class="recipe-image">
@@ -59,3 +59,4 @@
         </span>
     </div>
 </div>
+

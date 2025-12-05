@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
@@ -59,3 +59,4 @@ $sendPasswordResetLink = function () {
         </div>
     </form>
 </div>
+

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manas receptes - Recepšu Aplikācija</title>
+    <title>Manas receptes - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -176,24 +176,24 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>📝 Manas receptes</h1>
-            <p>Jūsu personīgā recepšu kolekcija</p>
+            <h1>š“¯ Manas receptes</h1>
+            <p>JÅ«su personÄ«gÄ recepÅu kolekcija</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="/categories">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="/recipes">š¨½ļø¸ Receptes</a>
+                <a href="/categories">š“‚ Kategorijas</a>
+                <a href="/profile/recipes">š“¯ Manas receptes</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -205,10 +205,10 @@
         <div class="main-content">
             <!-- Profile Header -->
             <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); border-radius: 15px;">
-                <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
-                <h2 style="color: #56ab2f; margin-bottom: 15px;">{{ Auth::user()->name }} kulinārais profils</h2>
+                <div style="font-size: 4rem; margin-bottom: 20px;">š‘Øā€¨š¨³</div>
+                <h2 style="color: #56ab2f; margin-bottom: 15px;">{{ Auth::user()->name }} kulinÄrais profils</h2>
                 <p style="color: #666; line-height: 1.6;">
-                    Šeit ir visas jūsu izveidotās receptes. Dalieties ar saviem kulinārijas meistarišķumiem ar pasauli!
+                    Å eit ir visas jÅ«su izveidotÄs receptes. Dalieties ar saviem kulinÄrijas meistariÅÄ·umiem ar pasauli!
                 </p>
             </div>
 
@@ -216,11 +216,11 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
                     <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">{{ $recipes->total() }}</div>
-                    <div style="opacity: 0.9;">Kopā receptes</div>
+                    <div style="opacity: 0.9;">KopÄ receptes</div>
                 </div>
                 <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
                     <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">{{ $recipes->where('created_at', '>=', now()->subDays(30))->count() }}</div>
-                    <div style="opacity: 0.9;">Šajā mēnesī</div>
+                    <div style="opacity: 0.9;">Å ajÄ mÄ“nesÄ«</div>
                 </div>
                 <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
                     <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">{{ $recipes->unique('category')->count() }}</div>
@@ -232,10 +232,10 @@
             <div style="text-align: center; margin-bottom: 40px;">
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                        📝 Izveidot jaunu recepti
+                        š“¯ Izveidot jaunu recepti
                     </a>
                     <a href="/recipes" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                        🔍 Pārlūkot visas receptes
+                        š”¨ PÄrlÅ«kot visas receptes
                     </a>
                 </div>
             </div>
@@ -249,13 +249,13 @@
                             <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">{{ Str::limit($recipe->description, 100) }}</p>
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #888;">
-                                <div>📂 {{ $recipe->category ?? 'Nav kategorijas' }}</div>
-                                <div>⭐ {{ $recipe->difficulty ?? 'Nav norādīta' }}</div>
+                                <div>š“‚ {{ $recipe->category ?? 'Nav kategorijas' }}</div>
+                                <div>ā­ {{ $recipe->difficulty ?? 'Nav norÄdÄ«ta' }}</div>
                                 @if($recipe->prep_time || $recipe->cook_time)
-                                    <div>⏱️ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
+                                    <div>ā¸±ļø¸ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
                                 @endif
                                 @if($recipe->servings)
-                                    <div>👥 {{ $recipe->servings }} porcijas</div>
+                                    <div>š‘ {{ $recipe->servings }} porcijas</div>
                                 @endif
                             </div>
                             
@@ -267,17 +267,17 @@
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
                                 <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="padding: 10px; font-size: 13px;">
-                                    👁️ Skatīt
+                                    š‘ļø¸ SkatÄ«t
                                 </a>
                                 <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="padding: 10px; font-size: 13px;">
-                                    ✏️ Rediģēt
+                                    ā¸ļø¸ RediÄ£Ä“t
                                 </a>
                                 <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;" 
-                                      onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti?')">
+                                      onsubmit="return confirm('Vai tieÅÄm vÄ“laties dzÄ“st Åo recepti?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" style="padding: 10px; font-size: 13px; width: 100%;">
-                                        🗑️ Dzēst
+                                        š—‘ļø¸ DzÄ“st
                                     </button>
                                 </form>
                             </div>
@@ -291,13 +291,13 @@
                 </div>
             @else
                 <div class="card" style="text-align: center; padding: 60px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
-                    <h3 style="color: #56ab2f; margin-bottom: 15px;">Jūs vēl neesat izveidojis nevienu recepti</h3>
+                    <div style="font-size: 4rem; margin-bottom: 20px;">š“¯</div>
+                    <h3 style="color: #56ab2f; margin-bottom: 15px;">JÅ«s vÄ“l neesat izveidojis nevienu recepti</h3>
                     <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
-                        Sāciet savu kulinārijas ceļojumu, izveidojot savu pirmo recepti! Dalieties ar savām mīļākajām receptēm ar kopienu.
+                        SÄciet savu kulinÄrijas ceÄ¼ojumu, izveidojot savu pirmo recepti! Dalieties ar savÄm mÄ«Ä¼ÄkajÄm receptÄ“m ar kopienu.
                     </p>
                     <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                        📝 Izveidot pirmo recepti
+                        š“¯ Izveidot pirmo recepti
                     </a>
                 </div>
             @endif
@@ -305,19 +305,19 @@
             <!-- Tips for Recipe Creation -->
             @if($recipes->count() < 5)
                 <div class="card">
-                    <h3 style="text-align: center; color: #333; margin-bottom: 25px;">💡 Padomi recepšu izveidošanai</h3>
+                    <h3 style="text-align: center; color: #333; margin-bottom: 25px;">š’ Padomi recepÅu izveidoÅanai</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px;">
-                            <h4 style="color: #667eea; margin-bottom: 10px;">📸 Pievienojiet fotogrāfijas</h4>
-                            <p style="color: #666; line-height: 1.5; font-size: 14px;">Vizuāli pievilcīgas fotogrāfijas palielina receptes popularitāti.</p>
+                            <h4 style="color: #667eea; margin-bottom: 10px;">š“ø Pievienojiet fotogrÄfijas</h4>
+                            <p style="color: #666; line-height: 1.5; font-size: 14px;">VizuÄli pievilcÄ«gas fotogrÄfijas palielina receptes popularitÄti.</p>
                         </div>
                         <div style="background: rgba(86, 171, 47, 0.1); padding: 20px; border-radius: 12px;">
-                            <h4 style="color: #56ab2f; margin-bottom: 10px;">📝 Detalizēti apraksti</h4>
-                            <p style="color: #666; line-height: 1.5; font-size: 14px;">Iekļaujiet precīzas sastāvdaļas un skaidras instrukcijas.</p>
+                            <h4 style="color: #56ab2f; margin-bottom: 10px;">š“¯ DetalizÄ“ti apraksti</h4>
+                            <p style="color: #666; line-height: 1.5; font-size: 14px;">IekÄ¼aujiet precÄ«zas sastÄvdaÄ¼as un skaidras instrukcijas.</p>
                         </div>
                         <div style="background: rgba(240, 147, 251, 0.1); padding: 20px; border-radius: 12px;">
-                            <h4 style="color: #f093fb; margin-bottom: 10px;">⏱️ Norādiet laikus</h4>
-                            <p style="color: #666; line-height: 1.5; font-size: 14px;">Palīdziet citiem plānot ar precīziem gatavošanas laikiem.</p>
+                            <h4 style="color: #f093fb; margin-bottom: 10px;">ā¸±ļø¸ NorÄdiet laikus</h4>
+                            <p style="color: #666; line-height: 1.5; font-size: 14px;">PalÄ«dziet citiem plÄnot ar precÄ«ziem gatavoÅanas laikiem.</p>
                         </div>
                     </div>
                 </div>
@@ -326,3 +326,4 @@
     </div>
 </body>
 </html>
+

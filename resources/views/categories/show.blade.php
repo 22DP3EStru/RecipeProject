@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $categoryName ?? 'Kategorija' }} - Recepšu Aplikācija</title>
+    <title>{{ $categoryName ?? 'Kategorija' }} - RecepÅu AplikÄcija</title>
     <style>
         * {
             margin: 0;
@@ -155,25 +155,25 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>📂 {{ $categoryName ?? 'Kategorija' }}</h1>
-            <p>Receptes kategorijā "{{ $categoryName ?? 'Nezināma kategorija' }}"</p>
+            <h1>š“‚ {{ $categoryName ?? 'Kategorija' }}</h1>
+            <p>Receptes kategorijÄ "{{ $categoryName ?? 'NezinÄma kategorija' }}"</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="/recipes">š¨½ļø¸ Receptes</a>
+                <a href="{{ route('categories.index') }}">š“‚ Kategorijas</a>
+                <a href="/profile/recipes">š“¯ Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">ā™ļø¸ Profils</a>
                 @if(Auth::user() && Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -185,7 +185,7 @@
         <div class="main-content">
             <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="{{ route('categories.index') }}" style="color: #667eea; text-decoration: none;">📂 Kategorijas</a> 
+                <a href="{{ route('categories.index') }}" style="color: #667eea; text-decoration: none;">š“‚ Kategorijas</a> 
                 <span style="color: #666;"> / </span>
                 <span style="color: #333; font-weight: 600;">{{ $categoryName ?? 'Kategorija' }}</span>
             </div>
@@ -197,7 +197,7 @@
                     {{ isset($recipes) && $recipes->total() == 1 ? 'recepte' : 'receptes' }}
                 </h2>
                 <p style="color: #666; line-height: 1.6;">
-                    Atklājiet visas receptes kategorijā "{{ $categoryName ?? 'Nezināma kategorija' }}"
+                    AtklÄjiet visas receptes kategorijÄ "{{ $categoryName ?? 'NezinÄma kategorija' }}"
                 </p>
             </div>
 
@@ -214,8 +214,8 @@
                             </p>
                             
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; color: #999;">
-                                <span>👨‍🍳 {{ $recipe->user->name ?? 'Nezināms' }}</span>
-                                <span>⏱️ {{ $recipe->prep_time ?? 'N/A' }} min</span>
+                                <span>š‘Øā€¨š¨³ {{ $recipe->user->name ?? 'NezinÄms' }}</span>
+                                <span>ā¸±ļø¸ {{ $recipe->prep_time ?? 'N/A' }} min</span>
                             </div>
                             
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -228,7 +228,7 @@
                             </div>
                             
                             <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%;">
-                                Skatīt recepti →
+                                SkatÄ«t recepti ā†’
                             </a>
                         </div>
                     @endforeach
@@ -241,17 +241,17 @@
             @else
                 <!-- No Recipes -->
                 <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">🍽️</div>
-                    <h3 style="color: #666; margin-bottom: 15px;">Nav recepšu šajā kategorijā</h3>
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">š¨½ļø¸</div>
+                    <h3 style="color: #666; margin-bottom: 15px;">Nav recepÅu ÅajÄ kategorijÄ</h3>
                     <p style="color: #999; margin-bottom: 30px;">
-                        Kategorijā "{{ $categoryName ?? 'Nezināma kategorija' }}" vēl nav pievienota neviena recepte.
+                        KategorijÄ "{{ $categoryName ?? 'NezinÄma kategorija' }}" vÄ“l nav pievienota neviena recepte.
                     </p>
                     <div>
                         <a href="/recipes/create" class="btn btn-primary" style="margin-right: 15px;">
-                            📝 Izveidot jaunu recepti
+                            š“¯ Izveidot jaunu recepti
                         </a>
                         <a href="{{ route('categories.index') }}" class="btn" style="background: #6c757d; color: white;">
-                            ← Atpakaļ uz kategorijām
+                            ā† AtpakaÄ¼ uz kategorijÄm
                         </a>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
             <!-- Other Categories -->
             @if(isset($allCategories) && $allCategories->count() > 1)
                 <div style="margin-top: 50px; padding: 30px; background: rgba(240, 147, 251, 0.1); border-radius: 15px;">
-                    <h3 style="text-align: center; color: #f093fb; margin-bottom: 25px;">🔍 Citas kategorijas</h3>
+                    <h3 style="text-align: center; color: #f093fb; margin-bottom: 25px;">š”¨ Citas kategorijas</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
                         @foreach($allCategories as $cat)
                             @if($cat !== ($categoryName ?? ''))
@@ -309,3 +309,4 @@
     @endauth
 </body>
 </html>
+

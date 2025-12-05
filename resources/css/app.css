@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -330,3 +330,4 @@ body {
 .mb-2 { margin-bottom: 20px; }
 .mt-1 { margin-top: 10px; }
 .mt-2 { margin-top: 20px; }
+

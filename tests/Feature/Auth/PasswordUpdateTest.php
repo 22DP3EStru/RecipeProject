@@ -39,3 +39,4 @@ test('correct password must be provided to update password', function () {
         ->assertHasErrors(['current_password'])
         ->assertNoRedirect();
 });
+

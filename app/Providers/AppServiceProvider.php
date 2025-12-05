@@ -24,3 +24,4 @@ class AppServiceProvider extends ServiceProvider
         Route::aliasMiddleware('admin', \App\Http\Middleware\AdminMiddleware::class);
     }
 }
+

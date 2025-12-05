@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ielogoties - Recepšu Aplikācija</title>
+    <title>Ielogoties - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -212,19 +212,19 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Laipni lūdzam atpakaļ!</h1>
-            <p>Ielogojieties savā Recepšu Aplikācijas kontā</p>
+            <h1>š¨½ļø¸ Laipni lÅ«dzam atpakaÄ¼!</h1>
+            <p>Ielogojieties savÄ RecepÅu AplikÄcijas kontÄ</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/">🏠 Sākums</a>
-                <a href="{{ route('register') }}">📝 Reģistrēties</a>
+                <a href="/">š¸  SÄkums</a>
+                <a href="{{ route('register') }}">š“¯ ReÄ£istrÄ“ties</a>
             </div>
             <div>
-                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Atpakaļ uz sākumu</a>
+                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">ā† AtpakaÄ¼ uz sÄkumu</a>
             </div>
         </nav>
 
@@ -232,17 +232,17 @@
         <div class="main-content">
             <!-- Welcome Message -->
             <div class="welcome-back">
-                <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
+                <div style="font-size: 4rem; margin-bottom: 20px;">š‘Øā€¨š¨³</div>
                 <h2 style="color: #667eea; margin-bottom: 10px;">Gatavi gatavot?</h2>
-                <p style="color: #666; font-size: 16px;">Ielogojieties, lai piekļūtu savām receptēm un atklātu jaunus kulinārijas piedzīvojumus!</p>
+                <p style="color: #666; font-size: 16px;">Ielogojieties, lai piekÄ¼Å«tu savÄm receptÄ“m un atklÄtu jaunus kulinÄrijas piedzÄ«vojumus!</p>
             </div>
 
             <!-- Error Messages -->
             @if($errors->any())
                 <div class="alert alert-error">
                     <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">❌</span>
-                        Lūdzu, izlabojiet šādas kļūdas:
+                        <span style="margin-right: 10px;">ā¯</span>
+                        LÅ«dzu, izlabojiet ÅÄdas kÄ¼Å«das:
                     </h4>
                     <ul style="margin-left: 30px; line-height: 1.6;">
                         @foreach($errors->all() as $error)
@@ -257,13 +257,13 @@
                 @csrf
                 
                 <div class="form-group">
-                    <label class="form-label" for="email">📧 E-pasta adrese</label>
+                    <label class="form-label" for="email">š“§ E-pasta adrese</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" 
                            class="form-input" placeholder="Ievadiet savu e-pasta adresi" required autofocus>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">🔒 Parole</label>
+                    <label class="form-label" for="password">š”’ Parole</label>
                     <input type="password" id="password" name="password" 
                            class="form-input" placeholder="Ievadiet savu paroli" required>
                 </div>
@@ -271,32 +271,32 @@
                 <div class="form-group">
                     <label style="display: flex; align-items: center; color: #666; font-size: 16px;">
                         <input type="checkbox" name="remember" style="margin-right: 12px; transform: scale(1.3);">
-                        Atcerēties mani 30 dienas
+                        AtcerÄ“ties mani 30 dienas
                     </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 30px; font-size: 18px; padding: 18px;">
-                    🔐 Ielogoties Recepšu Aplikācijā
+                    š” Ielogoties RecepÅu AplikÄcijÄ
                 </button>
             </form>
 
             <!-- Auth Links -->
             <div class="auth-links">
-                <h4 style="color: #667eea; margin-bottom: 20px;">Jauns Recepšu Aplikācijā?</h4>
+                <h4 style="color: #667eea; margin-bottom: 20px;">Jauns RecepÅu AplikÄcijÄ?</h4>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar savām mīļākajām receptēm un atklāj jaunus kulinārijas piedzīvojumus!
+                    Pievienojieties tÅ«kstoÅiem Ä“diena entuziastu, kas dalÄs ar savÄm mÄ«Ä¼ÄkajÄm receptÄ“m un atklÄj jaunus kulinÄrijas piedzÄ«vojumus!
                 </p>
                 
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px;">
                     <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 16px;">
-                        🚀 Izveidot bezmaksas kontu
+                        š€ Izveidot bezmaksas kontu
                     </a>
                 </div>
                 
                 @if (Route::has('password.request'))
                     <p style="margin: 0;">
                         <a href="{{ route('password.request') }}" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 15px;">
-                            🔑 Aizmirsāt paroli? Atjaunojiet to šeit
+                            š”‘ AizmirsÄt paroli? Atjaunojiet to Åeit
                         </a>
                     </p>
                 @endif
@@ -304,22 +304,22 @@
 
             <!-- Features Preview -->
             <div class="card">
-                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">✨ Kas jūs gaida iekšpusē</h3>
+                <h3 style="text-align: center; color: #333; margin-bottom: 25px;">āØ Kas jÅ«s gaida iekÅpusÄ“</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                     <div style="text-align: center; padding: 20px;">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📝</div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š“¯</div>
                         <h5 style="color: #667eea; margin-bottom: 8px;">Izveidot receptes</h5>
-                        <p style="color: #666; font-size: 13px;">Dalieties ar saviem kulinārijas meistarišķumiem</p>
+                        <p style="color: #666; font-size: 13px;">Dalieties ar saviem kulinÄrijas meistariÅÄ·umiem</p>
                     </div>
                     <div style="text-align: center; padding: 20px;">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
-                        <h5 style="color: #667eea; margin-bottom: 8px;">Atklāt receptes</h5>
-                        <p style="color: #666; font-size: 13px;">Atrodiet jaunus mīļākos ēdienus</p>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š”¨</div>
+                        <h5 style="color: #667eea; margin-bottom: 8px;">AtklÄt receptes</h5>
+                        <p style="color: #666; font-size: 13px;">Atrodiet jaunus mÄ«Ä¼Äkos Ä“dienus</p>
                     </div>
                     <div style="text-align: center; padding: 20px;">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">š‘</div>
                         <h5 style="color: #667eea; margin-bottom: 8px;">Pievienoties kopienai</h5>
-                        <p style="color: #666; font-size: 13px;">Sazināties ar ēdiena mīlētājiem</p>
+                        <p style="color: #666; font-size: 13px;">SazinÄties ar Ä“diena mÄ«lÄ“tÄjiem</p>
                     </div>
                 </div>
             </div>
@@ -327,3 +327,4 @@
     </div>
 </body>
 </html>
+

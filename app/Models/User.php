@@ -46,3 +46,4 @@ class User extends Authenticatable
         return $this->belongsToMany(\App\Models\Recipe::class, 'favorites', 'user_id', 'recipe_id')->withTimestamps();
     }
 }
+

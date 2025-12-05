@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -99,3 +99,4 @@ $sendVerification = function () {
         </div>
     </form>
 </section>
+

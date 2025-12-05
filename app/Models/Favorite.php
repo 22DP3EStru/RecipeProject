@@ -28,3 +28,4 @@ class Favorite extends Model
         return $this->belongsTo(\App\Models\Recipe::class);
     }
 }
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
@@ -32,8 +32,8 @@ $login = function () {
 <div>
     <!-- Header -->
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-black">Sveicināti atpakaļ!</h2>
-        <p class="text-black mt-2">Pieslēdzaties, lai apskatītu savas mīļākās receptes</p>
+        <h2 class="text-2xl font-bold text-black">SveicinÄti atpakaÄ¼!</h2>
+        <p class="text-black mt-2">PieslÄ“dzaties, lai apskatÄ«tu savas mÄ«Ä¼ÄkÄs receptes</p>
     </div>
 
     <!-- Session Status -->
@@ -73,7 +73,7 @@ $login = function () {
                 <input wire:model="form.remember" id="remember" type="checkbox" 
                     class="rounded border-gray-300 dark:border-gray-600 text-orange-600 shadow-sm focus:ring-orange-500 dark:bg-gray-700 dark:focus:ring-orange-500" 
                     name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Atcerēties mani') }}</span>
+                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('AtcerÄ“ties mani') }}</span>
             </label>
 
             @if (Route::has('password.request'))
@@ -90,13 +90,13 @@ $login = function () {
                 class="w-full bg-orange-600 hover:bg-orange-700 text-black font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 relative"
                 wire:loading.class="opacity-75 cursor-wait"
                 wire:loading.attr="disabled">
-                <span wire:loading.remove>{{ __('Pieslēgties Receptūrei') }}</span>
+                <span wire:loading.remove>{{ __('PieslÄ“gties ReceptÅ«rei') }}</span>
                 <span wire:loading>
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    {{ __('Pieslēdzas...') }}
+                    {{ __('PieslÄ“dzas...') }}
                 </span>
             </button>
         </div>
@@ -106,12 +106,13 @@ $login = function () {
     @if (Route::has('register'))
         <div class="mt-6 text-center pt-6 border-t border-gray-200 dark:border-gray-600">
             <p class="text-gray-600 dark:text-gray-400">
-                Nav vēl konts? 
+                Nav vÄ“l konts? 
                 <a href="{{ route('register') }}" wire:navigate 
                    class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium transition duration-200">
-                    Izveidot Receptūres kontu
+                    Izveidot ReceptÅ«res kontu
                 </a>
             </p>
         </div>
     @endif
 </div>
+

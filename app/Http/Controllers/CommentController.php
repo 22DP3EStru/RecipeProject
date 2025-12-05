@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
@@ -15,6 +14,7 @@ class CommentController extends Controller
         ]);
         $data['user_id'] = Auth::id();
         Comment::create($data);
-        return back()->with('success', 'Komentārs pievienots!');
+        return back()->with('success', 'KomentÄrs pievienots!');
     }
 }
+

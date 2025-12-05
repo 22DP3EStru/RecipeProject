@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +13,7 @@ Route::get('/dashboard', function () {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vadības panelis - Recepšu Aplikācija</title>
+    <title>VadÄ«bas panelis - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -227,25 +227,25 @@ Route::get('/dashboard', function () {
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Sveicināti atpakaļ!</h1>
-            <p>Jūsu kulinārais ceļojums turpinās, {{ Auth::user()->name }}!</p>
+            <h1>š¨½ļø¸ SveicinÄti atpakaÄ¼!</h1>
+            <p>JÅ«su kulinÄrais ceÄ¼ojums turpinÄs, {{ Auth::user()->name }}!</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="/categories">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="/recipes">š¨½ļø¸ Receptes</a>
+                <a href="/categories">š“‚ Kategorijas</a>
+                <a href="/profile/recipes">š“¯ Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">ā™ļø¸ Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -257,44 +257,44 @@ Route::get('/dashboard', function () {
         <div class="main-content">
             <!-- Welcome Message -->
             <div class="card text-center">
-                <div style="font-size: 4rem; margin-bottom: 20px;">👨‍🍳</div>
-                <h2 style="color: #667eea; margin-bottom: 15px;">Sveicināti jūsu kulinārijas studijā!</h2>
+                <div style="font-size: 4rem; margin-bottom: 20px;">š‘Øā€¨š¨³</div>
+                <h2 style="color: #667eea; margin-bottom: 15px;">SveicinÄti jÅ«su kulinÄrijas studijÄ!</h2>
                 <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
-                    Esiet gatavi radīt, dalīties un atklāt brīnišķīgas receptes. Jūsu nākamā mīļākā recepte gaida tikai dažus klikšķus attālumā!
+                    Esiet gatavi radÄ«t, dalÄ«ties un atklÄt brÄ«niÅÄ·Ä«gas receptes. JÅ«su nÄkamÄ mÄ«Ä¼ÄkÄ recepte gaida tikai daÅ¾us klikÅÄ·us attÄlumÄ!
                 </p>
             </div>
 
             <!-- Statistics -->
             <div class="card">
-                <h3 class="card-title">📊 Jūsu kulinārijas statistika</h3>
+                <h3 class="card-title">š“ JÅ«su kulinÄrijas statistika</h3>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::where('user_id', Auth::id())->count() }}</span>
-                        <span class="stat-label">Jūsu receptes</span>
+                        <span class="stat-label">JÅ«su receptes</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
-                        <span class="stat-label">Kopā receptes</span>
+                        <span class="stat-label">KopÄ receptes</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\User::count() }}</span>
-                        <span class="stat-label">Kopienas dalībnieki</span>
+                        <span class="stat-label">Kopienas dalÄ«bnieki</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::whereDate('created_at', today())->count() }}</span>
-                        <span class="stat-label">Šodienas receptes</span>
+                        <span class="stat-label">Å odienas receptes</span>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
             <div class="card">
-                <h3 class="card-title">🚀 Ātras darbības</h3>
+                <h3 class="card-title">š€ Ä€tras darbÄ«bas</h3>
                 <div class="grid grid-2">
-                    <a href="/recipes/create" class="btn btn-success">📝 Izveidot jaunu recepti</a>
-                    <a href="/recipes" class="btn btn-primary">🔍 Pārlūkot visas receptes</a>
-                    <a href="/categories" class="btn btn-warning">📂 Apskatīt kategorijas</a>
-                    <a href="/profile/recipes" class="btn btn-danger">📋 Manas receptes</a>
+                    <a href="/recipes/create" class="btn btn-success">š“¯ Izveidot jaunu recepti</a>
+                    <a href="/recipes" class="btn btn-primary">š”¨ PÄrlÅ«kot visas receptes</a>
+                    <a href="/categories" class="btn btn-warning">š“‚ ApskatÄ«t kategorijas</a>
+                    <a href="/profile/recipes" class="btn btn-danger">š“‹ Manas receptes</a>
                 </div>
             </div>
 
@@ -305,7 +305,7 @@ Route::get('/dashboard', function () {
 
             @if($recentRecipes->count() > 0)
                 <div class="card">
-                    <h3 class="card-title">🕒 Jaunākās receptes</h3>
+                    <h3 class="card-title">š•’ JaunÄkÄs receptes</h3>
                     <div class="grid grid-2">
                         @foreach($recentRecipes as $recipe)
                             <div style="background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 12px; border: 1px solid rgba(102, 126, 234, 0.1);">
@@ -315,7 +315,7 @@ Route::get('/dashboard', function () {
                                     <span>Autors: {{ $recipe->user->name }}</span>
                                     <span>{{ $recipe->created_at->diffForHumans() }}</span>
                                 </div>
-                                <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Skatīt recepti →</a>
+                                <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">SkatÄ«t recepti ā†’</a>
                             </div>
                         @endforeach
                     </div>
@@ -329,7 +329,7 @@ Route::get('/dashboard', function () {
 
             @if($myRecentRecipes->count() > 0)
                 <div class="card">
-                    <h3 class="card-title">📝 Jūsu jaunākās receptes</h3>
+                    <h3 class="card-title">š“¯ JÅ«su jaunÄkÄs receptes</h3>
                     <div class="grid grid-3">
                         @foreach($myRecentRecipes as $recipe)
                             <div style="background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); padding: 20px; border-radius: 12px;">
@@ -339,8 +339,8 @@ Route::get('/dashboard', function () {
                                     Izveidots: {{ $recipe->created_at->diffForHumans() }}
                                 </div>
                                 <div style="display: flex; gap: 8px;">
-                                    <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="flex: 1; padding: 8px; font-size: 13px;">Skatīt</a>
-                                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="flex: 1; padding: 8px; font-size: 13px;">Rediģēt</a>
+                                    <a href="/recipes/{{ $recipe->id }}" class="btn btn-primary" style="flex: 1; padding: 8px; font-size: 13px;">SkatÄ«t</a>
+                                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="flex: 1; padding: 8px; font-size: 13px;">RediÄ£Ä“t</a>
                                 </div>
                             </div>
                         @endforeach
@@ -349,9 +349,9 @@ Route::get('/dashboard', function () {
             @else
                 <div class="card text-center">
                     <div style="padding: 40px;">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Jūs vēl neesat izveidojis nevienu recepti</h4>
-                        <p style="color: #666; margin-bottom: 25px;">Sāciet savu kulinārijas ceļojumu, izveidojot savu pirmo recepti!</p>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š“¯</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">JÅ«s vÄ“l neesat izveidojis nevienu recepti</h4>
+                        <p style="color: #666; margin-bottom: 25px;">SÄciet savu kulinÄrijas ceÄ¼ojumu, izveidojot savu pirmo recepti!</p>
                         <a href="/recipes/create" class="btn btn-success">Izveidot pirmo recepti</a>
                     </div>
                 </div>
@@ -359,15 +359,15 @@ Route::get('/dashboard', function () {
 
             <!-- Tips Section -->
             <div class="card">
-                <h3 class="card-title">💡 Padomi un ieteikumi</h3>
+                <h3 class="card-title">š’ Padomi un ieteikumi</h3>
                 <div class="grid grid-2">
                     <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px;">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">🔍 Efektīva meklēšana</h4>
-                        <p style="color: #666; line-height: 1.6;">Izmantojiet meklēšanas filtrus, lai atrastu receptes pēc kategorijas, grūtības līmeņa vai sastāvdaļām.</p>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">š”¨ EfektÄ«va meklÄ“Åana</h4>
+                        <p style="color: #666; line-height: 1.6;">Izmantojiet meklÄ“Åanas filtrus, lai atrastu receptes pÄ“c kategorijas, grÅ«tÄ«bas lÄ«meÅ†a vai sastÄvdaÄ¼Äm.</p>
                     </div>
                     <div style="background: rgba(86, 171, 47, 0.1); padding: 25px; border-radius: 12px;">
-                        <h4 style="color: #56ab2f; margin-bottom: 15px;">📝 Recepšu rakstīšana</h4>
-                        <p style="color: #666; line-height: 1.6;">Iekļaujiet detalizētas instrukcijas un precīzas sastāvdaļas, lai citi varētu viegli sekot jūsu receptei.</p>
+                        <h4 style="color: #56ab2f; margin-bottom: 15px;">š“¯ RecepÅu rakstÄ«Åana</h4>
+                        <p style="color: #666; line-height: 1.6;">IekÄ¼aujiet detalizÄ“tas instrukcijas un precÄ«zas sastÄvdaÄ¼as, lai citi varÄ“tu viegli sekot jÅ«su receptei.</p>
                     </div>
                 </div>
             </div>
@@ -375,3 +375,4 @@ Route::get('/dashboard', function () {
     </div>
 </body>
 </html>
+

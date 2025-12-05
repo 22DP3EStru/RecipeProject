@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Models\User;
 use Livewire\Volt\Volt;
@@ -70,3 +70,4 @@ test('users can logout', function () {
 
     $this->assertGuest();
 });
+

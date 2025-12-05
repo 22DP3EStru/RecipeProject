@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>ADMIN PANEL</title>
@@ -17,19 +17,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔧 ADMIN PANEL - SUCCESS!</h1>
+        <h1>š”§ ADMIN PANEL - SUCCESS!</h1>
         
         <p><strong>Logged in as:</strong> {{ Auth::user()->name }} ({{ Auth::user()->email }})</p>
         
         <div class="stat-box">
-            <h3>📊 Statistics</h3>
+            <h3>š“ Statistics</h3>
             <p>Total Users: <strong>{{ App\Models\User::count() }}</strong></p>
             <p>Total Recipes: <strong>{{ App\Models\Recipe::count() }}</strong></p>
             <p>Total Admins: <strong>{{ App\Models\User::where('is_admin', true)->count() }}</strong></p>
         </div>
         
         <div class="user-list">
-            <h3>👥 All Users</h3>
+            <h3>š‘ All Users</h3>
             <table>
                 <thead>
                     <tr>
@@ -47,7 +47,7 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->is_admin ? '✅ YES' : '❌ NO' }}</td>
+                        <td>{{ $user->is_admin ? 'ā… YES' : 'ā¯ NO' }}</td>
                         <td>{{ $user->created_at->format('Y-m-d') }}</td>
                         <td>
                             @if($user->id !== Auth::id())
@@ -63,7 +63,7 @@
         </div>
         
         <div class="user-list">
-            <h3>🍽️ All Recipes</h3>
+            <h3>š¨½ļø¸ All Recipes</h3>
             <table>
                 <thead>
                     <tr>
@@ -93,7 +93,8 @@
         </div>
         
         <br>
-        <a href="/dashboard" class="btn">← Back to Dashboard</a>
+        <a href="/dashboard" class="btn">ā† Back to Dashboard</a>
     </div>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -38,10 +38,11 @@
                 <!-- Footer Link -->
                 <div class="mt-6 text-center">
                     <a href="/" wire:navigate class="text-sm text-gray-600 hover:text-orange-600 transition duration-200">
-                        ← Back to RecipeHub
+                        ā† Back to RecipeHub
                     </a>
                 </div>
             </div>
         </div>
     </body>
 </html>
+

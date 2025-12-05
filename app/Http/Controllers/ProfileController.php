@@ -46,7 +46,7 @@ class ProfileController extends Controller
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ], [
-            'password.required' => 'Parole ir obligāta.',
+            'password.required' => 'Parole ir obligÄta.',
             'password.current_password' => 'Nepareiza parole.',
         ]);
 
@@ -77,3 +77,4 @@ class ProfileController extends Controller
         ]);
     }
 }
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -78,3 +78,4 @@ $updatePassword = function () {
         </div>
     </form>
 </section>
+

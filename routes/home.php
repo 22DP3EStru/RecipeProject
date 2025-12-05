@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CategoryController;
@@ -38,3 +38,4 @@ Route::get('/recipes', function () {
     $recipes = App\Models\Recipe::with('user')->latest()->paginate(12);
     return view('recipes.index', compact('recipes'));
 })->name('recipes.index');
+

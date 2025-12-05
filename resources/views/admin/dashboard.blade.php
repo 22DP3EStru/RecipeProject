@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-black leading-tight">
             {{ __('Admin Dashboard') }}
@@ -38,7 +38,7 @@
                         </div>
                         <div class="mt-4">
                             <a href="{{ route('admin.users') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Manage Users →
+                                Manage Users ā†’
                             </a>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="mt-4">
                             <a href="{{ route('admin.recipes') }}" class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                Manage Recipes →
+                                Manage Recipes ā†’
                             </a>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                                 <div class="flex items-center justify-between border-b pb-3 last:border-b-0">
                                     <div class="flex items-center">
                                         <div class="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-800 mr-3">
-                                            🍽️
+                                            š¨½ļø¸
                                         </div>
                                         <div>
                                             <p class="font-medium text-black">{{ $recipe->title }}</p>
@@ -176,3 +176,4 @@
         </div>
     </div>
 </x-app-layout>
+

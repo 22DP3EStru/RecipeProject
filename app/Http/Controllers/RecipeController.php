@@ -80,13 +80,13 @@ class RecipeController extends Controller
 
         try {
             $recipe = Recipe::create($validated);
-            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.');
+            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicÄ“ta.');
         } catch (\Exception $e) {
             Log::error('Recipe store error', [
                 'error' => $e->getMessage(),
                 'request' => $request->all()
             ]);
-            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
+            return back()->withInput()->with('error', 'KÄ¼Å«da saglabÄjot recepti. Skatiet storage/logs/laravel.log');
         }
     }
 
@@ -119,13 +119,13 @@ class RecipeController extends Controller
             'prep_time' => 'nullable|integer|min:0',
             'cook_time' => 'nullable|integer|min:0',
             'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
+            'difficulty' => 'required|string|in:Viegla,VidÄ“ja,GrÅ«ta',
             'category' => 'required|string',
         ]);
 
         $recipe->update($validated);
 
-        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmīgi atjaunināta!');
+        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmÄ«gi atjauninÄta!');
     }
 
     public function destroy(Recipe $recipe)
@@ -136,7 +136,7 @@ class RecipeController extends Controller
 
         $recipe->delete();
 
-        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi dzēsta!');
+        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmÄ«gi dzÄ“sta!');
     }
 
     public function userRecipes()
@@ -148,3 +148,4 @@ class RecipeController extends Controller
         return view('profile.recipes', compact('recipes'));
     }
 }
+

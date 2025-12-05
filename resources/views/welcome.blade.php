@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sveicināti - Recepšu Aplikācija</title>
+    <title>SveicinÄti - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -241,27 +241,27 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Recepšu Aplikācija</h1>
-            <p>Atklāj, dalies un izveido brīnišķīgas receptes</p>
+            <h1>š¨½ļø¸ RecepÅu AplikÄcija</h1>
+            <p>AtklÄj, dalies un izveido brÄ«niÅÄ·Ä«gas receptes</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/">🏠 Sākums</a>
-                <a href="#features">✨ Iespējas</a>
-                <a href="#about">📖 Par mums</a>
-                <a href="#contact">📞 Kontakti</a>
+                <a href="/">š¸  SÄkums</a>
+                <a href="#features">āØ IespÄ“jas</a>
+                <a href="#about">š“– Par mums</a>
+                <a href="#contact">š“˛ Kontakti</a>
             </div>
             <div style="display: flex; gap: 15px;">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-primary">Vadības panelis</a>
+                        <a href="{{ url('/dashboard') }}" class="btn btn-primary">VadÄ«bas panelis</a>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-success">Reģistrēties</a>
+                            <a href="{{ route('register') }}" class="btn btn-success">ReÄ£istrÄ“ties</a>
                         @endif
                     @endauth
                 @endif
@@ -272,25 +272,25 @@
         <div class="main-content">
             <!-- Hero Section -->
             <div class="hero-section">
-                <h2>Sveicināti kulinārijas pasaulē! 👨‍🍳</h2>
-                <p>Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar savām mīļākajām receptēm.<br>
-                   Atklājiet jaunas garšas, apgūstiet gatavošanas paņēmienus un sazinieties ar citiem ēdiena mīlētājiem.</p>
+                <h2>SveicinÄti kulinÄrijas pasaulÄ“! š‘Øā€¨š¨³</h2>
+                <p>Pievienojieties tÅ«kstoÅiem Ä“diena entuziastu, kas dalÄs ar savÄm mÄ«Ä¼ÄkajÄm receptÄ“m.<br>
+                   AtklÄjiet jaunas garÅas, apgÅ«stiet gatavoÅanas paÅ†Ä“mienus un sazinieties ar citiem Ä“diena mÄ«lÄ“tÄjiem.</p>
                 @auth
                     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                         <a href="{{ url('/dashboard') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                            🏠 Uz vadības paneli
+                            š¸  Uz vadÄ«bas paneli
                         </a>
                         <a href="/recipes/create" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                            📝 Izveidot pirmo recepti
+                            š“¯ Izveidot pirmo recepti
                         </a>
                     </div>
                 @else
                     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                         <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                            🚀 Sākt bez maksas
+                            š€ SÄkt bez maksas
                         </a>
                         <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                            🔐 Ielogoties
+                            š” Ielogoties
                         </a>
                     </div>
                 @endauth
@@ -298,82 +298,82 @@
 
             <!-- Platform Statistics -->
             <div class="card">
-                <h3 class="card-title">📊 Mūsu augošā kopiena</h3>
+                <h3 class="card-title">š“ MÅ«su augoÅÄ kopiena</h3>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
-                        <span class="stat-label">Kopā recepes</span>
+                        <span class="stat-label">KopÄ recepes</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\User::count() }}</span>
-                        <span class="stat-label">Kopienas dalībnieki</span>
+                        <span class="stat-label">Kopienas dalÄ«bnieki</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::distinct('category')->count() }}</span>
-                        <span class="stat-label">Recepšu kategorijas</span>
+                        <span class="stat-label">RecepÅu kategorijas</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-number">{{ \App\Models\Recipe::whereDate('created_at', '>=', now()->subDays(7))->count() }}</span>
-                        <span class="stat-label">Šīs nedēļas receptes</span>
+                        <span class="stat-label">Å Ä«s nedÄ“Ä¼as receptes</span>
                     </div>
                 </div>
             </div>
 
             <!-- Features Section -->
             <div id="features" class="card">
-                <h3 class="card-title">✨ Kāpēc izvēlēties Recepšu Aplikāciju?</h3>
+                <h3 class="card-title">āØ KÄpÄ“c izvÄ“lÄ“ties RecepÅu AplikÄciju?</h3>
                 <div class="grid grid-3">
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Vienkārša recepšu izveide</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š“¯</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">VienkÄrÅa recepÅu izveide</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Izveidojiet un dalieties ar savām receptēm, izmantojot mūsu intuitīvo formu. 
-                            Pievienojiet sastāvdaļas, instrukcijas, gatavošanas laikus un grūtības līmeņus.
+                            Izveidojiet un dalieties ar savÄm receptÄ“m, izmantojot mÅ«su intuitÄ«vo formu. 
+                            Pievienojiet sastÄvdaÄ¼as, instrukcijas, gatavoÅanas laikus un grÅ«tÄ«bas lÄ«meÅ†us.
                         </p>
                     </div>
                     
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">🔍</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Viedā meklēšana</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š”¨</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">ViedÄ meklÄ“Åana</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Atrodiet ideālo recepti ar mūsu uzlaboto meklēšanas un filtrēšanas sistēmu. 
-                            Meklējiet pēc sastāvdaļām, kategorijas vai grūtības līmeņa.
+                            Atrodiet ideÄlo recepti ar mÅ«su uzlaboto meklÄ“Åanas un filtrÄ“Åanas sistÄ“mu. 
+                            MeklÄ“jiet pÄ“c sastÄvdaÄ¼Äm, kategorijas vai grÅ«tÄ«bas lÄ«meÅ†a.
                         </p>
                     </div>
                     
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">👥</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Kopienas vadīta</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š‘</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Kopienas vadÄ«ta</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Pievienojieties dzīvajai ēdiena entuziastu kopienai. 
-                            Dalieties ar saviem kulinārijas radījumiem un atklājiet jaunus favorītus.
+                            Pievienojieties dzÄ«vajai Ä“diena entuziastu kopienai. 
+                            Dalieties ar saviem kulinÄrijas radÄ«jumiem un atklÄjiet jaunus favorÄ«tus.
                         </p>
                     </div>
                     
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">📂</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Organizētas kategorijas</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š“‚</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">OrganizÄ“tas kategorijas</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Pārlūkojiet receptes pēc kategorijām: brokastis, vakariņas, deserti, 
-                            veģetārās, vegānās un citas.
+                            PÄrlÅ«kojiet receptes pÄ“c kategorijÄm: brokastis, vakariÅ†as, deserti, 
+                            veÄ£etÄrÄs, vegÄnÄs un citas.
                         </p>
                     </div>
                     
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">⏱️</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Gatavošanas laiki</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">ā¸±ļø¸</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">GatavoÅanas laiki</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Zināt precīzi, cik ilgi prasīs katra recepte ar detalizētu 
-                            sagatavošanas un gatavošanas laika informāciju.
+                            ZinÄt precÄ«zi, cik ilgi prasÄ«s katra recepte ar detalizÄ“tu 
+                            sagatavoÅanas un gatavoÅanas laika informÄciju.
                         </p>
                     </div>
                     
                     <div class="feature-card">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">📱</div>
-                        <h4 style="color: #667eea; margin-bottom: 15px;">Mobilajām ierīcēm draudzīga</h4>
+                        <div style="font-size: 4rem; margin-bottom: 20px;">š“±</div>
+                        <h4 style="color: #667eea; margin-bottom: 15px;">MobilajÄm ierÄ«cÄ“m draudzÄ«ga</h4>
                         <p style="color: #666; line-height: 1.6;">
-                            Piekļūstiet savām receptēm jebkur, jebkurā laikā. Mūsu adaptīvais dizains 
-                            lieliski darbojas visās ierīcēs.
+                            PiekÄ¼Å«stiet savÄm receptÄ“m jebkur, jebkurÄ laikÄ. MÅ«su adaptÄ«vais dizains 
+                            lieliski darbojas visÄs ierÄ«cÄ“s.
                         </p>
                     </div>
                 </div>
@@ -382,7 +382,7 @@
             <!-- Popular Categories Preview -->
             @if(\App\Models\Recipe::count() > 0)
                 <div class="card">
-                    <h3 class="card-title">🔥 Populārākās recepšu kategorijas</h3>
+                    <h3 class="card-title">š” PopulÄrÄkÄs recepÅu kategorijas</h3>
                     @php
                         $popularCategories = \App\Models\Recipe::select('category', \DB::raw('count(*) as total'))
                             ->groupBy('category')
@@ -396,13 +396,13 @@
                             <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 20px; border-radius: 12px; text-align: center;">
                                 <div style="font-size: 3rem; margin-bottom: 10px;">
                                     @switch($category->category)
-                                        @case('Brokastis') 🥞 @break
-                                        @case('Pusdienas') 🥗 @break
-                                        @case('Vakariņas') 🍽️ @break
-                                        @case('Deserti') 🍰 @break
-                                        @case('Uzkodas') 🥨 @break
-                                        @case('Dzērieni') 🥤 @break
-                                        @default 🍽️ @break
+                                        @case('Brokastis') š˛ @break
+                                        @case('Pusdienas') š— @break
+                                        @case('VakariÅ†as') š¨½ļø¸ @break
+                                        @case('Deserti') š¨° @break
+                                        @case('Uzkodas') šØ @break
+                                        @case('DzÄ“rieni') š¤ @break
+                                        @default š¨½ļø¸ @break
                                     @endswitch
                                 </div>
                                 <h5 style="color: #667eea; margin-bottom: 8px;">{{ $category->category }}</h5>
@@ -413,9 +413,9 @@
 
                     <div style="text-align: center; margin-top: 30px;">
                         @auth
-                            <a href="/categories" class="btn btn-primary">🍽️ Apskatīt visas kategorijas</a>
+                            <a href="/categories" class="btn btn-primary">š¨½ļø¸ ApskatÄ«t visas kategorijas</a>
                         @else
-                            <a href="{{ route('register') }}" class="btn btn-success">🚀 Pievienojies, lai apskatītu kategorijas</a>
+                            <a href="{{ route('register') }}" class="btn btn-success">š€ Pievienojies, lai apskatÄ«tu kategorijas</a>
                         @endauth
                     </div>
                 </div>
@@ -423,16 +423,16 @@
 
             <!-- About Section -->
             <div id="about" class="card">
-                <h3 class="card-title">📖 Par Recepšu Aplikāciju</h3>
+                <h3 class="card-title">š“– Par RecepÅu AplikÄciju</h3>
                 <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                     <p style="color: #666; font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
-                        Recepšu Aplikācija ir vairāk nekā tikai recepšu koplietošanas platforma – tā ir kopiena, kurā 
-                        ēdiena mīlētāji sanāk kopā, lai svinētu kulinārijas mākslu. Neatkarīgi no tā, vai esat profesionāls 
-                        pavārs vai mājas gatavošanas entuziasts, jūs atradīsiet iedvesmu, paņēmienus un garšīgas receptes, ko izmēģināt.
+                        RecepÅu AplikÄcija ir vairÄk nekÄ tikai recepÅu koplietoÅanas platforma ā€“ tÄ ir kopiena, kurÄ 
+                        Ä“diena mÄ«lÄ“tÄji sanÄk kopÄ, lai svinÄ“tu kulinÄrijas mÄkslu. NeatkarÄ«gi no tÄ, vai esat profesionÄls 
+                        pavÄrs vai mÄjas gatavoÅanas entuziasts, jÅ«s atradÄ«siet iedvesmu, paÅ†Ä“mienus un garÅÄ«gas receptes, ko izmÄ“Ä£inÄt.
                     </p>
                     <p style="color: #666; font-size: 16px; line-height: 1.6;">
-                        Mūsu misija ir padarīt gatavošanu pieejamu, patīkamu un sociālu. Pievienojieties mums, lai izveidotu 
-                        pasaules visaptverošāko un draudzīgāko recepšu kolekciju!
+                        MÅ«su misija ir padarÄ«t gatavoÅanu pieejamu, patÄ«kamu un sociÄlu. Pievienojieties mums, lai izveidotu 
+                        pasaules visaptveroÅÄko un draudzÄ«gÄko recepÅu kolekciju!
                     </p>
                 </div>
             </div>
@@ -441,16 +441,16 @@
             @guest
                 <div class="card text-center">
                     <div style="padding: 40px;">
-                        <h3 style="color: #667eea; margin-bottom: 20px; font-size: 2rem;">Gatavi sākt gatavot? 🍳</h3>
+                        <h3 style="color: #667eea; margin-bottom: 20px; font-size: 2rem;">Gatavi sÄkt gatavot? š¨³</h3>
                         <p style="color: #666; margin-bottom: 30px; font-size: 18px; line-height: 1.6;">
-                            Pievienojieties mūsu kopienai šodien un sāciet dalīties ar saviem kulinārijas meistarišķumiem!
+                            Pievienojieties mÅ«su kopienai Åodien un sÄciet dalÄ«ties ar saviem kulinÄrijas meistariÅÄ·umiem!
                         </p>
                         <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                             <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                                🚀 Izveidot bezmaksas kontu
+                                š€ Izveidot bezmaksas kontu
                             </a>
                             <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                                🔐 Ielogoties tagad
+                                š” Ielogoties tagad
                             </a>
                         </div>
                     </div>
@@ -460,3 +460,4 @@
     </div>
 </body>
 </html>
+

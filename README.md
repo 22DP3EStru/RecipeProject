@@ -1,58 +1,59 @@
-# Recepšu Aplikācija
+﻿# RecepÅu AplikÄcija
 
-Īss apraksts
+ÄŖss apraksts
 ------------
-Vienkārša Laravel bāzēta recepšu tīmekļa vietne, kas ļauj reģistrētiem lietotājiem izveidot, rediģēt, skatīt un dzēst receptes. Vietne piedāvā kategorizāciju, meklēšanu, iecienītāko (favorites) sistēmu un administratora paneli lietotāju un recepšu pārvaldībai.
+VienkÄrÅa Laravel bÄzÄ“ta recepÅu tÄ«mekÄ¼a vietne, kas Ä¼auj reÄ£istrÄ“tiem lietotÄjiem izveidot, rediÄ£Ä“t, skatÄ«t un dzÄ“st receptes. Vietne piedÄvÄ kategorizÄciju, meklÄ“Åanu, iecienÄ«tÄko (favorites) sistÄ“mu un administratora paneli lietotÄju un recepÅu pÄrvaldÄ«bai.
 
-Kas šī vietne nodrošina
+Kas ÅÄ« vietne nodroÅina
 ------------------------
-- Lietotāju reģistrācija un autentifikācija.
-- Receptes CRUD (izveide, lasīšana, rediģēšana, dzēšana).
-- Kategorijas — receptes var tikt grupētas pēc veida (piem., brokastis, vakariņas, deserti).
-- Meklēšana un filtri pēc kategorijas un grūtības.
-- Iecienītākās receptes (favorites) — lietotāji var atzīmēt receptes.
-- Admin panelis — pārvaldīt lietotājus, receptes un piešķirt admin tiesības.
+- LietotÄju reÄ£istrÄcija un autentifikÄcija.
+- Receptes CRUD (izveide, lasÄ«Åana, rediÄ£Ä“Åana, dzÄ“Åana).
+- Kategorijas ā€” receptes var tikt grupÄ“tas pÄ“c veida (piem., brokastis, vakariÅ†as, deserti).
+- MeklÄ“Åana un filtri pÄ“c kategorijas un grÅ«tÄ«bas.
+- IecienÄ«tÄkÄs receptes (favorites) ā€” lietotÄji var atzÄ«mÄ“t receptes.
+- Admin panelis ā€” pÄrvaldÄ«t lietotÄjus, receptes un pieÅÄ·irt admin tiesÄ«bas.
 
-Kā vietne strādā (lietotāja plūsma)
+KÄ vietne strÄdÄ (lietotÄja plÅ«sma)
 -----------------------------------
-1. Lietotājs reģistrējas vai piesakās.
-2. Var pārlūkot receptes pēc kategorijām vai meklēt pēc atslēgvārdiem.
-3. Receptes lapā var redzēt sastāvdaļas, instrukcijas un saistītās receptes.
-4. Piesakoties, lietotājs var saglabāt receptes kā iecienītākās, kā arī pievienot un rediģēt savas receptes.
-5. Administrators redz papildus pārvaldības lapu, kur iespējams dzēst receptes vai lietotājus un mainīt admin statusus.
+1. LietotÄjs reÄ£istrÄ“jas vai piesakÄs.
+2. Var pÄrlÅ«kot receptes pÄ“c kategorijÄm vai meklÄ“t pÄ“c atslÄ“gvÄrdiem.
+3. Receptes lapÄ var redzÄ“t sastÄvdaÄ¼as, instrukcijas un saistÄ«tÄs receptes.
+4. Piesakoties, lietotÄjs var saglabÄt receptes kÄ iecienÄ«tÄkÄs, kÄ arÄ« pievienot un rediÄ£Ä“t savas receptes.
+5. Administrators redz papildus pÄrvaldÄ«bas lapu, kur iespÄ“jams dzÄ“st receptes vai lietotÄjus un mainÄ«t admin statusus.
 
-Tehniskais pārskats
+Tehniskais pÄrskats
 -------------------
 - Backend: Laravel (PHP)
-- Datubāze: MySQL / MariaDB (konfigurējama .env)
-- Modeļi: User, Recipe, Favorite (un opc. Category)
+- DatubÄze: MySQL / MariaDB (konfigurÄ“jama .env)
+- ModeÄ¼i: User, Recipe, Favorite (un opc. Category)
 - Skati: Blade template faili resources/views/
-- Maršruti: routes/web.php
-- Middleware: admin — aizsargā admin sadaļu
+- MarÅruti: routes/web.php
+- Middleware: admin ā€” aizsargÄ admin sadaÄ¼u
 
-Uzstādīšana lokāli (ātra)
+UzstÄdÄ«Åana lokÄli (Ätra)
 --------------------------
-1. Nokopēt .env piemēru un iestatīt DB datus:
+1. NokopÄ“t .env piemÄ“ru un iestatÄ«t DB datus:
    cp .env.example .env
-2. Instalēt atkarības:
+2. InstalÄ“t atkarÄ«bas:
    composer install
-3. Ģenerēt app key un migrēt DB:
+3. Ä¢enerÄ“t app key un migrÄ“t DB:
    php artisan key:generate
    php artisan migrate
-4. (Ja nepieciešams) palaist projektu:
+4. (Ja nepiecieÅams) palaist projektu:
    php artisan serve
 
-Piezīmes par drošību un datiem
+PiezÄ«mes par droÅÄ«bu un datiem
 ------------------------------
-- Pārliecinieties, ka sessions un CSRF ir pareizi konfigurēti (.env SESSION_DRIVER, SESSION_DOMAIN).
-- Datu dublēšana ir ieteicama pirms nozīmīgām izmaiņām vai migrācijām.
-- Admin tiesības piešķirt uzmanīgi — tikai uzticamiem kontiem.
+- PÄrliecinieties, ka sessions un CSRF ir pareizi konfigurÄ“ti (.env SESSION_DRIVER, SESSION_DOMAIN).
+- Datu dublÄ“Åana ir ieteicama pirms nozÄ«mÄ«gÄm izmaiÅ†Äm vai migrÄcijÄm.
+- Admin tiesÄ«bas pieÅÄ·irt uzmanÄ«gi ā€” tikai uzticamiem kontiem.
 
-Kur skatīt kodu
+Kur skatÄ«t kodu
 ---------------
-- Maršruti: routes/web.php
+- MarÅruti: routes/web.php
 - Kontrolieri: app/Http/Controllers/
-- Modeļi: app/Models/
+- ModeÄ¼i: app/Models/
 - Skati: resources/views/
 
-Dokumentācija : https://1drv.ms/w/c/e89a595db40b3546/ER993AF-T2FAqoGI6sv4PcoB2hhob859BA-QqS8gtjH-pQ?e=NTs7I3
+DokumentÄcija : https://1drv.ms/w/c/e89a595db40b3546/ER993AF-T2FAqoGI6sv4PcoB2hhob859BA-QqS8gtjH-pQ?e=NTs7I3
+

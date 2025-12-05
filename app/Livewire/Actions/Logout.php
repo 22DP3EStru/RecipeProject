@@ -18,3 +18,4 @@ class Logout
         Session::regenerateToken();
     }
 }
+

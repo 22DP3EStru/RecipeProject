@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reģistrēties - Recepšu Aplikācija</title>
+    <title>ReÄ£istrÄ“ties - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -204,19 +204,19 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Pievienojieties Recepšu Aplikācijai!</h1>
-            <p>Izveidojiet savu kontu un sāciet dalīties ar receptēm</p>
+            <h1>š¨½ļø¸ Pievienojieties RecepÅu AplikÄcijai!</h1>
+            <p>Izveidojiet savu kontu un sÄciet dalÄ«ties ar receptÄ“m</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/">🏠 Sākums</a>
-                <a href="{{ route('login') }}">🔐 Ielogoties</a>
+                <a href="/">š¸  SÄkums</a>
+                <a href="{{ route('login') }}">š” Ielogoties</a>
             </div>
             <div>
-                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px; width: auto;">← Atpakaļ uz sākumu</a>
+                <a href="/" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px; width: auto;">ā† AtpakaÄ¼ uz sÄkumu</a>
             </div>
         </nav>
 
@@ -224,17 +224,17 @@
         <div class="main-content">
             <!-- Welcome Section -->
             <div class="welcome-section">
-                <div style="font-size: 4rem; margin-bottom: 20px;">🎉</div>
-                <h2 style="color: #667eea; margin-bottom: 10px;">Laipni lūdzam mūsu kopienā!</h2>
-                <p style="color: #666; font-size: 16px;">Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar saviem kulinārijas radījumiem</p>
+                <div style="font-size: 4rem; margin-bottom: 20px;">šˇ‰</div>
+                <h2 style="color: #667eea; margin-bottom: 10px;">Laipni lÅ«dzam mÅ«su kopienÄ!</h2>
+                <p style="color: #666; font-size: 16px;">Pievienojieties tÅ«kstoÅiem Ä“diena entuziastu, kas dalÄs ar saviem kulinÄrijas radÄ«jumiem</p>
             </div>
 
             <!-- Error Messages -->
             @if($errors->any())
                 <div class="alert alert-error">
                     <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">❌</span>
-                        Lūdzu, izlabojiet šādas kļūdas:
+                        <span style="margin-right: 10px;">ā¯</span>
+                        LÅ«dzu, izlabojiet ÅÄdas kÄ¼Å«das:
                     </h4>
                     <ul style="margin-left: 30px; line-height: 1.6;">
                         @foreach($errors->all() as $error)
@@ -249,13 +249,13 @@
                 @csrf
                 
                 <div class="form-group">
-                    <label class="form-label" for="name">👤 Pilnais vārds</label>
+                    <label class="form-label" for="name">š‘¤ Pilnais vÄrds</label>
                     <input type="text" 
                            id="name" 
                            name="name" 
                            value="{{ old('name') }}" 
                            class="form-input @error('name') is-invalid @enderror" 
-                           placeholder="Ievadiet savu pilno vārdu" 
+                           placeholder="Ievadiet savu pilno vÄrdu" 
                            required 
                            autofocus 
                            autocomplete="name">
@@ -265,7 +265,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="email">📧 E-pasta adrese</label>
+                    <label class="form-label" for="email">š“§ E-pasta adrese</label>
                     <input type="email" 
                            id="email" 
                            name="email" 
@@ -280,12 +280,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">🔒 Parole</label>
+                    <label class="form-label" for="password">š”’ Parole</label>
                     <input type="password" 
                            id="password" 
                            name="password" 
                            class="form-input @error('password') is-invalid @enderror" 
-                           placeholder="Izveidojiet drošu paroli (min 8 simboli)" 
+                           placeholder="Izveidojiet droÅu paroli (min 8 simboli)" 
                            required 
                            autocomplete="new-password">
                     @error('password')
@@ -294,19 +294,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password_confirmation">🔒 Apstiprināt paroli</label>
+                    <label class="form-label" for="password_confirmation">š”’ ApstiprinÄt paroli</label>
                     <input type="password" 
                            id="password_confirmation" 
                            name="password_confirmation" 
                            class="form-input" 
-                           placeholder="Apstiprināt savu paroli" 
+                           placeholder="ApstiprinÄt savu paroli" 
                            required 
                            autocomplete="new-password">
                 </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 18px;">
-                        🎉 Izveidot manu kontu
+                        šˇ‰ Izveidot manu kontu
                     </button>
                 </div>
             </form>
@@ -315,14 +315,15 @@
             <div class="auth-links">
                 <h4 style="color: #56ab2f; margin-bottom: 20px;">Jau ir konts?</h4>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    Ielogojieties, lai piekļūtu savām receptēm un turpinātu savu kulinārijas ceļojumu!
+                    Ielogojieties, lai piekÄ¼Å«tu savÄm receptÄ“m un turpinÄtu savu kulinÄrijas ceÄ¼ojumu!
                 </p>
                 
                 <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 16px; width: auto; display: inline-block;">
-                    🔐 Ielogoties savā kontā
+                    š” Ielogoties savÄ kontÄ
                 </a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

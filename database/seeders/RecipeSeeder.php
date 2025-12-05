@@ -14,7 +14,7 @@ class RecipeSeeder extends Seeder
     {
         // Make sure we have categories
         if (Category::count() === 0) {
-            $categories = collect(['Zupas', 'Pamatēdieni', 'Deserti', 'Uzkodas', 'Dzērieni'])->map(function ($name) {
+            $categories = collect(['Zupas', 'PamatÄ“dieni', 'Deserti', 'Uzkodas', 'DzÄ“rieni'])->map(function ($name) {
                 return Category::create(['name' => $name]);
             });
         } else {
@@ -35,44 +35,44 @@ class RecipeSeeder extends Seeder
         $users = User::all();        // Create example recipes
         $exampleRecipes = [
             [
-                'title' => 'Kartupeļu pankūkas',
-                'description' => 'Tradicionālās latviešu kartupeļu pankūkas ar skābo krējumu. Vienkārša un garda recepte visai ģimenei!',
-                'ingredients' => "1 kg kartupeļu\n2 olas\n2 sīpoli\n3 ēd.k. kviešu milti\nSāls un pipari pēc garšas\nAugu eļļa cepšanai\n200g skābais krējums pasniegšanai",
-                'instructions' => "1. Nomizo un sarīvē kartupeļus, nospiež lieko šķidrumu.\n2. Nomizo un smalki sarīvē sīpolus.\n3. Lielā bļodā sajauc kartupeļus, sīpolus, olas, miltus, sāli un piparus.\n4. Uzkarsē pannu ar eļļu un ar karoti liek kartupeļu masu, izveido pankūkas.\n5. Cep uz vidējas uguns 3-4 minūtes no katras puses līdz zeltaini brūnas.\n6. Pasniedz ar skābo krējumu un zaļumiem.",
-                'category_name' => 'Pamatēdieni',
+                'title' => 'KartupeÄ¼u pankÅ«kas',
+                'description' => 'TradicionÄlÄs latvieÅu kartupeÄ¼u pankÅ«kas ar skÄbo krÄ“jumu. VienkÄrÅa un garda recepte visai Ä£imenei!',
+                'ingredients' => "1 kg kartupeÄ¼u\n2 olas\n2 sÄ«poli\n3 Ä“d.k. kvieÅu milti\nSÄls un pipari pÄ“c garÅas\nAugu eÄ¼Ä¼a cepÅanai\n200g skÄbais krÄ“jums pasniegÅanai",
+                'instructions' => "1. Nomizo un sarÄ«vÄ“ kartupeÄ¼us, nospieÅ¾ lieko ÅÄ·idrumu.\n2. Nomizo un smalki sarÄ«vÄ“ sÄ«polus.\n3. LielÄ bÄ¼odÄ sajauc kartupeÄ¼us, sÄ«polus, olas, miltus, sÄli un piparus.\n4. UzkarsÄ“ pannu ar eÄ¼Ä¼u un ar karoti liek kartupeÄ¼u masu, izveido pankÅ«kas.\n5. Cep uz vidÄ“jas uguns 3-4 minÅ«tes no katras puses lÄ«dz zeltaini brÅ«nas.\n6. Pasniedz ar skÄbo krÄ“jumu un zaÄ¼umiem.",
+                'category_name' => 'PamatÄ“dieni',
                 'created_at' => now()->subDays(1),
             ],
             [
-                'title' => 'Rabarberu krēma kūka',
-                'description' => 'Garda rabarberu kūka ar krēma pildījumu un kraukšķīgo virskārtu. Ideāla svētku galdam vai ikdienas našķim.',
-                'ingredients' => "Mīklai:\n200g sviesta (istabas temperatūrā)\n150g cukura\n1 ola\n300g kviešu miltu\n1 tējk. cepamā pulvera\nŠķipsniņa sāls\n\nPildījumam:\n500g rabarberu\n100g cukura\n2 ēd.k. kartupeļu cietes\n200ml saldā krējuma\n2 ēd.k. vaniļas cukura",
-                'instructions' => "1. Mīklai sajauc sviestu ar cukuru, pievieno olu un samaisa.\n2. Pievieno miltus ar cepamo pulveri un sāli, samīca viendabīgu mīklu.\n3. 2/3 mīklas izklāj cepamajā formā, pārējo mīklu noliec ledusskapī.\n4. Rabarberus notīra, sagriež gabaliņos un sajauc ar cukuru un kartupeļu cieti.\n5. Rabarberu maisījumu izklāj uz mīklas pamatnes.\n6. Pārējo mīklu sarīvē vai sadrupina pa virsu.\n7. Cep 180°C krāsnī 40-45 minūtes līdz zeltaini brūna.\n8. Atdzesē un pasniedz ar putukrējumu vai vaniļas saldējumu.",
+                'title' => 'Rabarberu krÄ“ma kÅ«ka',
+                'description' => 'Garda rabarberu kÅ«ka ar krÄ“ma pildÄ«jumu un kraukÅÄ·Ä«go virskÄrtu. IdeÄla svÄ“tku galdam vai ikdienas naÅÄ·im.',
+                'ingredients' => "MÄ«klai:\n200g sviesta (istabas temperatÅ«rÄ)\n150g cukura\n1 ola\n300g kvieÅu miltu\n1 tÄ“jk. cepamÄ pulvera\nÅ Ä·ipsniÅ†a sÄls\n\nPildÄ«jumam:\n500g rabarberu\n100g cukura\n2 Ä“d.k. kartupeÄ¼u cietes\n200ml saldÄ krÄ“juma\n2 Ä“d.k. vaniÄ¼as cukura",
+                'instructions' => "1. MÄ«klai sajauc sviestu ar cukuru, pievieno olu un samaisa.\n2. Pievieno miltus ar cepamo pulveri un sÄli, samÄ«ca viendabÄ«gu mÄ«klu.\n3. 2/3 mÄ«klas izklÄj cepamajÄ formÄ, pÄrÄ“jo mÄ«klu noliec ledusskapÄ«.\n4. Rabarberus notÄ«ra, sagrieÅ¾ gabaliÅ†os un sajauc ar cukuru un kartupeÄ¼u cieti.\n5. Rabarberu maisÄ«jumu izklÄj uz mÄ«klas pamatnes.\n6. PÄrÄ“jo mÄ«klu sarÄ«vÄ“ vai sadrupina pa virsu.\n7. Cep 180Ā°C krÄsnÄ« 40-45 minÅ«tes lÄ«dz zeltaini brÅ«na.\n8. AtdzesÄ“ un pasniedz ar putukrÄ“jumu vai vaniÄ¼as saldÄ“jumu.",
                 'category_name' => 'Deserti',
                 'created_at' => now()->subDays(2),
             ],
             [
-                'title' => 'Tradicionālā biešu aukstā zupa',
-                'description' => 'Atsvaidzinoša vasaras biešu zupa ar gurķiem, olām un dillēm. Iecienīts vasaras ēdiens karstām dienām.',
-                'ingredients' => "500g vārītas bietes\n2 gurķi\n3 cieti vārītas olas\n100g redīsu\n3 loki\nSauja diļļu\n1l kefīra\n200ml skābā krējuma\nSāls pēc garšas\nCitrona sula pēc garšas",
-                'instructions' => "1. Vārītās bietes nomizo un sarīvē vai sagriež mazos kubiņos.\n2. Gurķus un redīsus sagriež mazos kubiņos.\n3. Olas nomizo un sagriež mazos gabaliņos.\n4. Lokus un dilles smalki sagriež.\n5. Lielā traukā sajauc bietes, gurķus, redīsus un zaļumus.\n6. Pievieno kefīru un skābo krējumu, samaisa.\n7. Pēc garšas pievieno sāli un citrona sulu.\n8. Zupu atdzesē ledusskapī vismaz 1 stundu.\n9. Pasniedz ar vārītiem kartupeļiem un papildu skābo krējumu.",
+                'title' => 'TradicionÄlÄ bieÅu aukstÄ zupa',
+                'description' => 'AtsvaidzinoÅa vasaras bieÅu zupa ar gurÄ·iem, olÄm un dillÄ“m. IecienÄ«ts vasaras Ä“diens karstÄm dienÄm.',
+                'ingredients' => "500g vÄrÄ«tas bietes\n2 gurÄ·i\n3 cieti vÄrÄ«tas olas\n100g redÄ«su\n3 loki\nSauja diÄ¼Ä¼u\n1l kefÄ«ra\n200ml skÄbÄ krÄ“juma\nSÄls pÄ“c garÅas\nCitrona sula pÄ“c garÅas",
+                'instructions' => "1. VÄrÄ«tÄs bietes nomizo un sarÄ«vÄ“ vai sagrieÅ¾ mazos kubiÅ†os.\n2. GurÄ·us un redÄ«sus sagrieÅ¾ mazos kubiÅ†os.\n3. Olas nomizo un sagrieÅ¾ mazos gabaliÅ†os.\n4. Lokus un dilles smalki sagrieÅ¾.\n5. LielÄ traukÄ sajauc bietes, gurÄ·us, redÄ«sus un zaÄ¼umus.\n6. Pievieno kefÄ«ru un skÄbo krÄ“jumu, samaisa.\n7. PÄ“c garÅas pievieno sÄli un citrona sulu.\n8. Zupu atdzesÄ“ ledusskapÄ« vismaz 1 stundu.\n9. Pasniedz ar vÄrÄ«tiem kartupeÄ¼iem un papildu skÄbo krÄ“jumu.",
                 'category_name' => 'Zupas',
                 'created_at' => now()->subDays(3),
             ],
             [
-                'title' => 'Cēzara salāti',
-                'description' => 'Klasiskā Cēzara salāti ar vistas fileju, Parmezāna sieru un grauzdiņiem. Vienkārši pagatavojami, bet eleganti.',
+                'title' => 'CÄ“zara salÄti',
+                'description' => 'KlasiskÄ CÄ“zara salÄti ar vistas fileju, ParmezÄna sieru un grauzdiÅ†iem. VienkÄrÅi pagatavojami, bet eleganti.',
                 'category_name' => 'Uzkodas',
                 'created_at' => now()->subDays(4),
             ],
             [
-                'title' => 'Mājas limonāde',
-                'description' => 'Atsvaidzinoša mājas limonāde ar citroniem, liepziedieem un medu.',
-                'category_name' => 'Dzērieni',
+                'title' => 'MÄjas limonÄde',
+                'description' => 'AtsvaidzinoÅa mÄjas limonÄde ar citroniem, liepziedieem un medu.',
+                'category_name' => 'DzÄ“rieni',
                 'created_at' => now()->subHours(12),
             ],
             [
-                'title' => 'Jāņu siers',
-                'description' => 'Tradicionāla latviešu Jāņu siera recepte ar ķimenēm un sviestu.',
+                'title' => 'JÄÅ†u siers',
+                'description' => 'TradicionÄla latvieÅu JÄÅ†u siera recepte ar Ä·imenÄ“m un sviestu.',
                 'category_name' => 'Uzkodas',
                 'created_at' => now()->subHours(6),
             ],
@@ -104,7 +104,7 @@ class RecipeSeeder extends Seeder
             
             // Add a comment to each recipe
             Comment::create([
-                'body' => 'Ļoti garšīga recepte! Noteikti izmēģināšu.',
+                'body' => 'Ä»oti garÅÄ«ga recepte! Noteikti izmÄ“Ä£inÄÅu.',
                 'user_id' => $users->where('id', '!=', $user->id)->random()->id,
                 'recipe_id' => $recipe->id,
                 'created_at' => $recipeData['created_at']->addHours(random_int(1, 8)),
@@ -112,3 +112,4 @@ class RecipeSeeder extends Seeder
         }
     }
 }
+

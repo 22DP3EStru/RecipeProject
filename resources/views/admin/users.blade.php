@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lietotāju pārvaldība - Recepšu Aplikācija</title>
+    <title>LietotÄju pÄrvaldÄ«ba - RecepÅu AplikÄcija</title>
     <style>
         * {
             margin: 0;
@@ -180,6 +180,13 @@
             color: white;
         }
 
+        .text-success {
+            color: #56ab2f;
+        }
+        .text-danger {
+            color: #ff416c;
+        }
+
         .alert {
             padding: 15px 20px;
             border-radius: 10px;
@@ -239,21 +246,21 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>👥 Lietotāju pārvaldība</h1>
-            <p>Pārvaldiet visus sistēmas lietotājus</p>
+            <h1>š‘ LietotÄju pÄrvaldÄ«ba</h1>
+            <p>PÄrvaldiet visus sistÄ“mas lietotÄjus</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="{{ route('admin.index') }}">🔧 Admin panelis</a>
-                <a href="{{ route('admin.users') }}">👥 Lietotāji</a>
-                <a href="{{ route('admin.recipes') }}">🍽️ Receptes</a>
-                <a href="/dashboard">🏠 Vadības panelis</a>
+                <a href="{{ route('admin.index') }}">š”§ Admin panelis</a>
+                <a href="{{ route('admin.users') }}">š‘ LietotÄji</a>
+                <a href="{{ route('admin.recipes') }}">š¨½ļø¸ Receptes</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 12px;">Iziet</button>
@@ -265,21 +272,21 @@
         <div class="main-content">
             <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="{{ route('admin.index') }}" style="color: #667eea; text-decoration: none;">🔧 Admin panelis</a> 
+                <a href="{{ route('admin.index') }}" style="color: #667eea; text-decoration: none;">š”§ Admin panelis</a> 
                 <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">👥 Lietotāju pārvaldība</span>
+                <span style="color: #333; font-weight: 600;">š‘ LietotÄju pÄrvaldÄ«ba</span>
             </div>
 
             <!-- Success/Error Messages -->
             @if(session('success'))
                 <div class="alert alert-success">
-                    ✅ {{ session('success') }}
+                    ā… {{ session('success') }}
                 </div>
             @endif
 
             @if(session('error'))
                 <div class="alert alert-error">
-                    ❌ {{ session('error') }}
+                    ā¯ {{ session('error') }}
                 </div>
             @endif
 
@@ -287,7 +294,7 @@
             <div class="stats-bar">
                 <div class="stat-item">
                     <div class="stat-number">{{ $users->total() }}</div>
-                    <div class="stat-label">Kopā lietotāju</div>
+                    <div class="stat-label">KopÄ lietotÄju</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ $users->where('is_admin', true)->count() }}</div>
@@ -295,11 +302,11 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ $users->where('is_admin', false)->count() }}</div>
-                    <div class="stat-label">Parastie lietotāji</div>
+                    <div class="stat-label">Parastie lietotÄji</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</div>
-                    <div class="stat-label">Jauni šonedēļ</div>
+                    <div class="stat-label">Jauni ÅonedÄ“Ä¼</div>
                 </div>
             </div>
 
@@ -310,9 +317,9 @@
                         <div class="user-card">
                             <!-- User Badge -->
                             @if($user->is_admin)
-                                <div class="admin-badge">🔧 Administrators</div>
+                                <div class="admin-badge">š”§ Administrators</div>
                             @else
-                                <div class="user-badge">👤 Lietotājs</div>
+                                <div class="user-badge">š‘¤ LietotÄjs</div>
                             @endif
 
                             <!-- User Info -->
@@ -321,24 +328,24 @@
                                     {{ $user->name }}
                                 </h3>
                                 <p style="color: #666; margin-bottom: 8px;">
-                                    📧 {{ $user->email }}
+                                    š“§ {{ $user->email }}
                                 </p>
                                 <div style="display: flex; justify-content: space-between; font-size: 14px; color: #999;">
-                                    <span>📅 Reģ: {{ $user->created_at->format('d.m.Y') }}</span>
-                                    <span>🍽️ {{ $user->recipes->count() }} receptes</span>
-                                </div>
-                            </div>
+                                    <span>š“… ReÄ£: {{ $user->created_at->format('d.m.Y') }}</span>
+                                    <span class="{{ $user->email_verified_at ? 'text-success' : 'text-danger' }}">
+                                        {{ $user->email_verified_at ? 'ā… JÄ' : 'ā¯ NÄ“' }}
+                                    </span>
 
                             <!-- User Stats -->
                             <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                                 <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                                    <span>📧 E-pasts apstiprināts:</span>
-                                    <span style="color: {!! $user->email_verified_at ? '#56ab2f' : '#ff416c' !!};">
-                                        {{ $user->email_verified_at ? '✅ Jā' : '❌ Nē' }}
+                                    <span>š“§ E-pasts apstiprinÄts:</span>
+                                    <span class="{{ $user->email_verified_at ? 'text-success' : 'text-danger' }}">
+                                        {{ $user->email_verified_at ? 'ā… JÄ' : 'ā¯ NÄ“' }}
                                     </span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 8px;">
-                                    <span>🕒 Pēdējā aktivitāte:</span>
+                                    <span>š•’ PÄ“dÄ“jÄ aktivitÄte:</span>
                                     <span>{{ $user->updated_at->diffForHumans() }}</span>
                                 </div>
                             </div>
@@ -351,8 +358,8 @@
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="btn {{ $user->is_admin ? 'btn-warning' : 'btn-success' }}" 
-                                                onclick="return confirm('Vai tiešām mainīt lietotāja statusu?')">
-                                            {{ $user->is_admin ? '🔻 Noņemt admin' : '🔺 Padarīt par admin' }}
+                                                onclick="return confirm('Vai tieÅÄm mainÄ«t lietotÄja statusu?')">
+                                            {{ $user->is_admin ? 'š”» NoÅ†emt admin' : 'š”ŗ PadarÄ«t par admin' }}
                                         </button>
                                     </form>
 
@@ -362,21 +369,21 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger" 
-                                                    onclick="return confirm('Vai tiešām dzēst šo lietotāju? Šī darbība ir neatgriezeniska!')">
-                                                🗑️ Dzēst
+                                                    onclick="return confirm('Vai tieÅÄm dzÄ“st Åo lietotÄju? Å Ä« darbÄ«ba ir neatgriezeniska!')">
+                                                š—‘ļø¸ DzÄ“st
                                             </button>
                                         </form>
                                     @endif
                                 @else
                                     <span class="btn btn-secondary" style="cursor: not-allowed; opacity: 0.6;">
-                                        👑 Jūs pats
+                                        š‘‘ JÅ«s pats
                                     </span>
                                 @endif
 
                                 <!-- View User Recipes -->
                                 @if($user->recipes->count() > 0)
                                     <a href="/recipes?user={{ $user->id }}" class="btn btn-primary">
-                                        👁️ Skatīt receptes ({{ $user->recipes->count() }})
+                                        š‘ļø¸ SkatÄ«t receptes ({{ $user->recipes->count() }})
                                     </a>
                                 @endif
                             </div>
@@ -391,24 +398,24 @@
             @else
                 <!-- No Users -->
                 <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">👥</div>
-                    <h3 style="color: #666; margin-bottom: 15px;">Nav lietotāju</h3>
-                    <p style="color: #999;">Nav atrasts neviens lietotājs sistēmā.</p>
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">š‘</div>
+                    <h3 style="color: #666; margin-bottom: 15px;">Nav lietotÄju</h3>
+                    <p style="color: #999;">Nav atrasts neviens lietotÄjs sistÄ“mÄ.</p>
                 </div>
             @endif
 
             <!-- Quick Actions -->
             <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3>
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">š€ Ä€tras darbÄ«bas</h3>
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="{{ route('admin.index') }}" class="btn btn-primary">
-                        🔧 Admin panelis
+                        š”§ Admin panelis
                     </a>
                     <a href="{{ route('admin.recipes') }}" class="btn btn-success">
-                        🍽️ Pārvaldīt receptes
+                        š¨½ļø¸ PÄrvaldÄ«t receptes
                     </a>
                     <a href="/dashboard" class="btn btn-secondary">
-                        🏠 Vadības panelis
+                        š¸  VadÄ«bas panelis
                     </a>
                 </div>
             </div>
@@ -416,3 +423,4 @@
     </div>
 </body>
 </html>
+

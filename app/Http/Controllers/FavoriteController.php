@@ -41,3 +41,4 @@ class FavoriteController extends Controller
         ]);
     }
 }
+

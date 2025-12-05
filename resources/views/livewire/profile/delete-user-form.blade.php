@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
@@ -74,3 +74,4 @@ $deleteUser = function (Logout $logout) {
         </form>
     </x-modal>
 </section>
+

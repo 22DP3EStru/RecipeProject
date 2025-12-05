@@ -36,12 +36,13 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Vārds ir obligāts.',
-            'name.string' => 'Vārdam jābūt teksta formātā.',
-            'name.max' => 'Vārds nedrīkst būt garāks par 255 simboliem.',
-            'email.required' => 'E-pasta adrese ir obligāta.',
-            'email.email' => 'E-pasta adresei jābūt derīgā formātā.',
-            'email.unique' => 'Šī e-pasta adrese jau ir reģistrēta.',
+            'name.required' => 'VÄrds ir obligÄts.',
+            'name.string' => 'VÄrdam jÄbÅ«t teksta formÄtÄ.',
+            'name.max' => 'VÄrds nedrÄ«kst bÅ«t garÄks par 255 simboliem.',
+            'email.required' => 'E-pasta adrese ir obligÄta.',
+            'email.email' => 'E-pasta adresei jÄbÅ«t derÄ«gÄ formÄtÄ.',
+            'email.unique' => 'Å Ä« e-pasta adrese jau ir reÄ£istrÄ“ta.',
         ];
     }
 }
+

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -40,25 +39,26 @@ class AdminController extends Controller
     public function deleteUser(User $user)
     {
         if ($user->is_admin) {
-            return back()->with('error', 'Nevar dzēst administratora kontu!');
+            return back()->with('error', 'Nevar dzÄ“st administratora kontu!');
         }
         
         $user->delete();
-        return back()->with('success', 'Lietotājs veiksmīgi dzēsts!');
+        return back()->with('success', 'LietotÄjs veiksmÄ«gi dzÄ“sts!');
     }
 
     public function deleteRecipe(Recipe $recipe)
     {
         $recipe->delete();
-        return back()->with('success', 'Recepte veiksmīgi dzēsta!');
+        return back()->with('success', 'Recepte veiksmÄ«gi dzÄ“sta!');
     }
 
     public function toggleAdmin(User $user)
     {
         $user->update(['is_admin' => !$user->is_admin]);
         
-        $message = $user->is_admin ? 'Lietotājs ir padarīts par administratoru!' : 'Administratora tiesības noņemtas!';
+        $message = $user->is_admin ? 'LietotÄjs ir padarÄ«ts par administratoru!' : 'Administratora tiesÄ«bas noÅ†emtas!';
         
         return back()->with('success', $message);
     }
 }
+

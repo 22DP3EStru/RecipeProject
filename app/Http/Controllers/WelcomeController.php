@@ -21,3 +21,4 @@ class WelcomeController extends Controller
         return view('welcome', compact('popularRecipes'));
     }
 }
+

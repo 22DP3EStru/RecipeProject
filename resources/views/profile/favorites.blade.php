@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manas iecienītākās receptes - Recepšu Aplikācija</title>
+    <title>Manas iecienÄ«tÄkÄs receptes - RecepÅu AplikÄcija</title>
     <style>
         * {
             margin: 0;
@@ -155,26 +155,26 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>❤️ Manas iecienītākās receptes</h1>
-            <p>Jūsu saglabātās un iecienītākās receptes</p>
+            <h1>ā¯¤ļø¸ Manas iecienÄ«tÄkÄs receptes</h1>
+            <p>JÅ«su saglabÄtÄs un iecienÄ«tÄkÄs receptes</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
-                <a href="{{ route('profile.favorites') }}">❤️ Iecienītākās</a>
-                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="/recipes">š¨½ļø¸ Receptes</a>
+                <a href="{{ route('categories.index') }}">š“‚ Kategorijas</a>
+                <a href="/profile/recipes">š“¯ Manas receptes</a>
+                <a href="{{ route('profile.favorites') }}">ā¯¤ļø¸ IecienÄ«tÄkÄs</a>
+                <a href="{{ route('profile.edit') }}">ā™ļø¸ Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+                <span style="color: #666; font-weight: 500;">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -186,17 +186,17 @@
         <div class="main-content">
             <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(255, 65, 108, 0.1); border-radius: 10px;">
-                <a href="{{ route('profile.edit') }}" style="color: #ff416c; text-decoration: none;">⚙️ Profils</a> 
+                <a href="{{ route('profile.edit') }}" style="color: #ff416c; text-decoration: none;">ā™ļø¸ Profils</a> 
                 <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">❤️ Iecienītākās receptes</span>
+                <span style="color: #333; font-weight: 600;">ā¯¤ļø¸ IecienÄ«tÄkÄs receptes</span>
             </div>
 
             <!-- Favorites Info -->
             <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(255, 65, 108, 0.1) 0%, rgba(255, 75, 43, 0.1) 100%); border-radius: 15px;">
-                <div style="font-size: 4rem; margin-bottom: 20px;">❤️</div>
-                <h2 style="color: #ff416c; margin-bottom: 15px;">{{ $recipes->total() }} {{ $recipes->total() == 1 ? 'iecienītā recepte' : 'iecienītās receptes' }}</h2>
+                <div style="font-size: 4rem; margin-bottom: 20px;">ā¯¤ļø¸</div>
+                <h2 style="color: #ff416c; margin-bottom: 15px;">{{ $recipes->total() }} {{ $recipes->total() == 1 ? 'iecienÄ«tÄ recepte' : 'iecienÄ«tÄs receptes' }}</h2>
                 <p style="color: #666; line-height: 1.6;">
-                    Šeit ir visas jūsu iecienītākās un saglabātās receptes vienuviet.
+                    Å eit ir visas jÅ«su iecienÄ«tÄkÄs un saglabÄtÄs receptes vienuviet.
                 </p>
             </div>
 
@@ -209,8 +209,8 @@
                                 <h3 style="color: #667eea; font-size: 1.3rem;">
                                     {{ $recipe->title }}
                                 </h3>
-                                <button style="background: none; border: none; font-size: 1.5rem; color: #ff416c; cursor: pointer;" title="Noņemt no iecienītājiem">
-                                    ❤️
+                                <button style="background: none; border: none; font-size: 1.5rem; color: #ff416c; cursor: pointer;" title="NoÅ†emt no iecienÄ«tÄjiem">
+                                    ā¯¤ļø¸
                                 </button>
                             </div>
                             
@@ -219,8 +219,8 @@
                             </p>
                             
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; color: #999;">
-                                <span>📂 {{ $recipe->category ?? 'Nav norādīta' }}</span>
-                                <span>⏱️ {{ $recipe->prep_time ?? 'N/A' }} min</span>
+                                <span>š“‚ {{ $recipe->category ?? 'Nav norÄdÄ«ta' }}</span>
+                                <span>ā¸±ļø¸ {{ $recipe->prep_time ?? 'N/A' }} min</span>
                             </div>
                             
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -234,10 +234,10 @@
                             
                             <div style="display: flex; gap: 10px;">
                                 <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="flex: 1;">
-                                    Skatīt recepti
+                                    SkatÄ«t recepti
                                 </a>
                                 <a href="{{ route('recipes.edit', $recipe) }}" class="btn" style="background: #6c757d; color: white; padding: 12px 20px;">
-                                    ✏️
+                                    ā¸ļø¸
                                 </a>
                             </div>
                         </div>
@@ -251,17 +251,17 @@
             @else
                 <!-- No Favorites -->
                 <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">💔</div>
-                    <h3 style="color: #666; margin-bottom: 15px;">Jums vēl nav iecienīto recepšu</h3>
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">š’”</div>
+                    <h3 style="color: #666; margin-bottom: 15px;">Jums vÄ“l nav iecienÄ«to recepÅu</h3>
                     <p style="color: #999; margin-bottom: 30px;">
-                        Sāciet pārlūkot receptes un pievienojiet tās saviem iecienītajiem!
+                        SÄciet pÄrlÅ«kot receptes un pievienojiet tÄs saviem iecienÄ«tajiem!
                     </p>
                     <div>
                         <a href="/recipes" class="btn btn-primary" style="margin-right: 15px;">
-                            🔍 Pārlūkot receptes
+                            š”¨ PÄrlÅ«kot receptes
                         </a>
                         <a href="/recipes/create" class="btn" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white;">
-                            📝 Izveidot jaunu recepti
+                            š“¯ Izveidot jaunu recepti
                         </a>
                     </div>
                 </div>
@@ -269,16 +269,16 @@
 
             <!-- Quick Actions -->
             <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3>
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">š€ Ä€tras darbÄ«bas</h3>
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="/recipes" class="btn btn-primary">
-                        🔍 Meklēt jaunas receptes
+                        š”¨ MeklÄ“t jaunas receptes
                     </a>
                     <a href="/profile/recipes" class="btn" style="background: #6c757d; color: white;">
-                        📝 Manas receptes
+                        š“¯ Manas receptes
                     </a>
                     <a href="{{ route('categories.index') }}" class="btn" style="background: linear-gradient(135deg, #240b36 0%, #c31432 100%); color: white;">
-                        📂 Kategorijas
+                        š“‚ Kategorijas
                     </a>
                 </div>
             </div>
@@ -286,3 +286,4 @@
     </div>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'TastyClone - Delicious Recipes for Everyone')
 
@@ -46,3 +46,4 @@
     </div>
 </section>
 @endsection
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
@@ -95,3 +95,4 @@ $resetPassword = function () {
         </div>
     </form>
 </div>
+

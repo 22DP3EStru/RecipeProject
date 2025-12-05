@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pārlūkot receptes - Recepšu Aplikācija</title>
+    <title>PÄrlÅ«kot receptes - RecepÅu AplikÄcija</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -242,24 +242,24 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🔍 Pārlūkot receptes</h1>
-            <p>Atklājiet brīnišķīgas receptes no mūsu kopienas</p>
+            <h1>š”¨ PÄrlÅ«kot receptes</h1>
+            <p>AtklÄjiet brÄ«niÅÄ·Ä«gas receptes no mÅ«su kopienas</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">š¨½ļø¸ RecepÅu AplikÄcija</a>
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="/categories">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
+                <a href="/dashboard">š¸  VadÄ«bas panelis</a>
+                <a href="/recipes">š¨½ļø¸ Receptes</a>
+                <a href="/categories">š“‚ Kategorijas</a>
+                <a href="/profile/recipes">š“¯ Manas receptes</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">š”§ AdministrÄcija</a>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="nav-user">👤 {{ Auth::user()->name }}</span>
+                <span class="nav-user">š‘¤ {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
@@ -274,13 +274,13 @@
                 <form method="GET" action="{{ route('recipes.index') }}">
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 15px; align-items: end;">
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">🔍 Meklēt receptes</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">š”¨ MeklÄ“t receptes</label>
                             <input type="text" name="search" value="{{ request('search') }}" 
-                                   class="form-input" placeholder="Meklēt pēc nosaukuma, apraksta vai sastāvdaļām...">
+                                   class="form-input" placeholder="MeklÄ“t pÄ“c nosaukuma, apraksta vai sastÄvdaÄ¼Äm...">
                         </div>
                         
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">📂 Kategorija</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">š“‚ Kategorija</label>
                             <select name="category" class="form-input">
                                 <option value="">Visas kategorijas</option>
                                 @foreach($categories as $category)
@@ -292,22 +292,22 @@
                         </div>
                         
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">⭐ Grūtība</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">ā­ GrÅ«tÄ«ba</label>
                             <select name="difficulty" class="form-input">
                                 <option value="">Jebkura</option>
                                 <option value="Viegla" {{ request('difficulty') == 'Viegla' ? 'selected' : '' }}>Viegla</option>
-                                <option value="Vidēja" {{ request('difficulty') == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
-                                <option value="Grūta" {{ request('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
+                                <option value="VidÄ“ja" {{ request('difficulty') == 'VidÄ“ja' ? 'selected' : '' }}>VidÄ“ja</option>
+                                <option value="GrÅ«ta" {{ request('difficulty') == 'GrÅ«ta' ? 'selected' : '' }}>GrÅ«ta</option>
                             </select>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" style="padding: 12px 25px;">Meklēt</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 12px 25px;">MeklÄ“t</button>
                     </div>
                     
                     @if(request()->hasAny(['search', 'category', 'difficulty']))
                         <div style="margin-top: 15px;">
                             <a href="{{ route('recipes.index') }}" class="btn btn-warning" style="padding: 8px 16px; font-size: 14px;">
-                                Notīrīt filtrus
+                                NotÄ«rÄ«t filtrus
                             </a>
                         </div>
                     @endif
@@ -317,14 +317,14 @@
             <!-- Results Summary -->
             <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
                 <h3 style="color: #667eea; margin-bottom: 10px;">
-                    📊 Atrasts {{ $recipes->total() }} recepšu rezultāts
+                    š“ Atrasts {{ $recipes->total() }} recepÅu rezultÄts
                 </h3>
                 @if(request()->hasAny(['search', 'category', 'difficulty']))
                     <p style="color: #666;">
-                        Filtrēti rezultāti: 
-                        @if(request('search')) meklēšana "{{ request('search') }}" @endif
+                        FiltrÄ“ti rezultÄti: 
+                        @if(request('search')) meklÄ“Åana "{{ request('search') }}" @endif
                         @if(request('category')) | kategorija "{{ request('category') }}" @endif
-                        @if(request('difficulty')) | grūtība "{{ request('difficulty') }}" @endif
+                        @if(request('difficulty')) | grÅ«tÄ«ba "{{ request('difficulty') }}" @endif
                     </p>
                 @endif
             </div>
@@ -332,7 +332,7 @@
             <!-- Quick Action -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                    📝 Pievienot jaunu recepti
+                    š“¯ Pievienot jaunu recepti
                 </a>
             </div>
 
@@ -345,13 +345,13 @@
                             <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">{{ Str::limit($recipe->description, 100) }}</p>
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #888;">
-                                <div>📂 {{ $recipe->category ?? 'Nav kategorijas' }}</div>
-                                <div>⭐ {{ $recipe->difficulty ?? 'Nav norādīta' }}</div>
+                                <div>š“‚ {{ $recipe->category ?? 'Nav kategorijas' }}</div>
+                                <div>ā­ {{ $recipe->difficulty ?? 'Nav norÄdÄ«ta' }}</div>
                                 @if($recipe->prep_time || $recipe->cook_time)
-                                    <div>⏱️ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
+                                    <div>ā¸±ļø¸ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
                                 @endif
                                 @if($recipe->servings)
-                                    <div>👥 {{ $recipe->servings }} porcijas</div>
+                                    <div>š‘ {{ $recipe->servings }} porcijas</div>
                                 @endif
                             </div>
                             
@@ -363,7 +363,7 @@
                             </div>
                             
                             <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%; padding: 12px;">
-                                Skatīt recepti →
+                                SkatÄ«t recepti ā†’
                             </a>
                         </div>
                     @endforeach
@@ -375,13 +375,13 @@
                 </div>
             @else
                 <div class="card" style="text-align: center; padding: 60px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">🔍</div>
+                    <div style="font-size: 4rem; margin-bottom: 20px;">š”¨</div>
                     <h3 style="color: #667eea; margin-bottom: 15px;">Nav atrasta neviena recepte</h3>
                     <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
-                        Mēģiniet mainīt meklēšanas kritērijus vai izveidojiet jaunu recepti!
+                        MÄ“Ä£iniet mainÄ«t meklÄ“Åanas kritÄ“rijus vai izveidojiet jaunu recepti!
                     </p>
                     <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <a href="{{ route('recipes.index') }}" class="btn btn-warning">Skatīt visas receptes</a>
+                        <a href="{{ route('recipes.index') }}" class="btn btn-warning">SkatÄ«t visas receptes</a>
                         <a href="{{ route('recipes.create') }}" class="btn btn-success">Izveidot jaunu recepti</a>
                     </div>
                 </div>
@@ -390,3 +390,4 @@
     </div>
 </body>
 </html>
+

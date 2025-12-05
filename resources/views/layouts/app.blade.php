@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
@@ -27,7 +27,7 @@
                 <div class="hidden md:flex flex-1 max-w-lg mx-8">
                     <form action="{{ route('recipes.search') }}" method="GET" class="w-full">
                         <div class="relative">
-                            <input type="text" name="q" placeholder="Meklēt receptes..." 
+                            <input type="text" name="q" placeholder="MeklÄ“t receptes..." 
                                    value="{{ request('q') }}"
                                    class="form-input pl-10">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -62,10 +62,10 @@
                                 Visas receptes
                             </a>
                             <a href="{{ route('recipes.index', ['sort' => 'popular']) }}" class="block px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600">
-                                Populārākās receptes
+                                PopulÄrÄkÄs receptes
                             </a>
                             <a href="{{ route('recipes.index', ['sort' => 'latest']) }}" class="block px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600 rounded-b-lg">
-                                Jaunākās receptes
+                                JaunÄkÄs receptes
                             </a>
                         </div>
                     </div>
@@ -122,10 +122,10 @@
                                  x-transition:leave-end="transform opacity-0 scale-95"
                                  class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600 rounded-t-lg">
-                                    Rediģēt profilu
+                                    RediÄ£Ä“t profilu
                                 </a>
                                 <a href="{{ route('profile.favorites') }}" class="block px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600">
-                                    Iemīļotās receptes
+                                    IemÄ«Ä¼otÄs receptes
                                 </a>
                                 <a href="{{ route('profile.recipes') }}" class="block px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600">
                                     Manas receptes
@@ -139,17 +139,17 @@
                                 <form action="{{ route('logout') }}" method="POST" class="block">
                                     @csrf
                                     <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-50 hover:text-orange-600 rounded-b-lg">
-                                        Atslēgties
+                                        AtslÄ“gties
                                     </button>
                                 </form>
                             </div>
                         </div>
                     @else
                         <a href="{{ route('login') }}" class="text-black hover:text-orange-600 font-medium transition duration-200">
-                            Pieslēgties
+                            PieslÄ“gties
                         </a>
                         <a href="{{ route('register') }}" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200 shadow-sm">
-                            Reģistrēties
+                            ReÄ£istrÄ“ties
                         </a>
                     @endauth
                 </div>
@@ -167,7 +167,7 @@
                 <!-- Mobile Search -->
                 <form action="{{ route('recipes.search') }}" method="GET" class="mb-4">
                     <div class="relative">
-                        <input type="text" name="q" placeholder="Meklēt receptes..." 
+                        <input type="text" name="q" placeholder="MeklÄ“t receptes..." 
                                value="{{ request('q') }}"
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -187,10 +187,10 @@
                                 Visas receptes
                             </a>
                             <a href="{{ route('recipes.index', ['sort' => 'popular']) }}" class="block text-black hover:text-orange-600">
-                                Populārākās receptes
+                                PopulÄrÄkÄs receptes
                             </a>
                             <a href="{{ route('recipes.index', ['sort' => 'latest']) }}" class="block text-black hover:text-orange-600">
-                                Jaunākās receptes
+                                JaunÄkÄs receptes
                             </a>
                         </div>
                     </div>
@@ -208,7 +208,7 @@
                                 </a>
                             @endforeach
                             <a href="{{ route('categories.index') }}" class="block text-orange-600 hover:text-orange-700 italic">
-                                Skatīt visas...
+                                SkatÄ«t visas...
                             </a>
                         </div>
                     </div>
@@ -218,10 +218,10 @@
                             Pievienot recepti
                         </a>
                         <a href="{{ route('profile.edit') }}" class="block text-black hover:text-orange-600 font-medium">
-                            Rediģēt profilu
+                            RediÄ£Ä“t profilu
                         </a>
                         <a href="{{ route('profile.favorites') }}" class="block text-black hover:text-orange-600 font-medium">
-                            Iemīļotās receptes
+                            IemÄ«Ä¼otÄs receptes
                         </a>
                         <a href="{{ route('profile.recipes') }}" class="block text-black hover:text-orange-600 font-medium">
                             Manas receptes
@@ -234,15 +234,15 @@
                         <form action="{{ route('logout') }}" method="POST" class="block">
                             @csrf
                             <button type="submit" class="text-left text-black hover:text-orange-600 font-medium">
-                                Atslēgties
+                                AtslÄ“gties
                             </button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="block text-black hover:text-orange-600 font-medium">
-                            Pieslēgties
+                            PieslÄ“gties
                         </a>
                         <a href="{{ route('register') }}" class="block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium text-center">
-                            Reģistrēties
+                            ReÄ£istrÄ“ties
                         </a>
                     @endauth
                 </div>
@@ -290,7 +290,7 @@
                     </svg>
                     <span class="text-lg font-semibold">RecipeHub</span>
                 </div>                    <p class="text-black text-sm">
-                    © 2025 RecipeHub. Made with ❤️ for food lovers everywhere.
+                    Ā© 2025 RecipeHub. Made with ā¯¤ļø¸ for food lovers everywhere.
                 </p>
             </div>
         </div>
@@ -305,3 +305,4 @@
     </script>
 </body>
 </html>
+

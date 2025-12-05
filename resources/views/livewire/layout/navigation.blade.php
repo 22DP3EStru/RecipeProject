@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Livewire\Actions\Logout;
 
@@ -102,3 +102,4 @@ $logout = function (Logout $logout) {
         </div>
     </div>
 </nav>
+
