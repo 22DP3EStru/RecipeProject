@@ -10,6 +10,15 @@ use Illuminate\Support\Str;
 
 class RecipeController extends Controller
 {
+     public function __construct()
+    {
+        $this->middleware('auth')->except([
+            'index',
+            'show',
+            'search',
+        ]);
+    }
+    
     public function index(Request $request)
     {
         $query = Recipe::with('user');
@@ -56,9 +65,6 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
-        // Optional temporary debug: uncomment to inspect incoming request
-        // dd($request->all());
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
