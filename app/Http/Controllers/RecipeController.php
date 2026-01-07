@@ -21,7 +21,9 @@ class RecipeController extends Controller
     
     public function index(Request $request)
     {
-        $query = Recipe::with('user');
+        $query = Recipe::with('user')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews');
 
         if ($request->has('search') && $request->search) {
             $search = $request->search;
@@ -48,15 +50,29 @@ class RecipeController extends Controller
 
     public function show(Recipe $recipe)
     {
+        // ielādējam atsauksmes + autorus
+        $recipe->load(['user', 'reviews.user']);
+
+        // līdzīgās receptes (tavs esošais kods)
         $relatedRecipes = Recipe::with('user')
             ->where('category', $recipe->category)
-            ->where('id', '!=', $recipe->id)
+            ->where('id', '!=', $recipe->id) 
             ->inRandomOrder()
             ->take(4)
             ->get();
-        
-        return view('recipes.show', compact('recipe', 'relatedRecipes'));
+        // lietotāja atsauksme (ja ielogojies)
+        $myReview = null;
+        if (Auth::check()) {
+            $myReview = $recipe->reviews->firstWhere('user_id', Auth::id());
+        }
+
+        return view('recipes.show', compact(
+            'recipe',
+            'relatedRecipes',
+            'myReview'
+        ));
     }
+
 
     public function create()
     {
@@ -153,5 +169,6 @@ class RecipeController extends Controller
 
         return view('profile.recipes', compact('recipes'));
     }
+
 }
 

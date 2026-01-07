@@ -354,6 +354,24 @@
                                     <div>👥 {{ $recipe->servings }} porcijas</div>
                                 @endif
                             </div>
+
+                            {{-- ✅ Vērtējums (iekš kartītes) --}}
+                            <div style="margin: 6px 0 14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="font-weight:700; color:#666;">
+                                    {{ $recipe->reviews_avg_rating ? round($recipe->reviews_avg_rating, 1) : 'Nav vērtējumu' }} / 5
+                                </span>
+
+                                <span style="color:#888;">
+                                    ({{ $recipe->reviews_count }})
+                                </span>
+
+                                <span style="margin-left:auto; color:#ffc107; font-weight:800;">
+                                    @php $r = (int) round($recipe->reviews_avg_rating ?? 0); @endphp
+                                    @for($i=1; $i<=5; $i++)
+                                        {!! $i <= $r ? '★' : '☆' !!}
+                                    @endfor
+                                </span>
+                            </div>
                             
                             <div style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; margin-bottom: 20px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #999;">

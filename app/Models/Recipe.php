@@ -37,5 +37,11 @@ class Recipe extends Model
     {
         return $this->belongsToMany(\App\Models\User::class, 'favorites', 'recipe_id', 'user_id')->withTimestamps();
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\RecipeReview::class)->latest();
+    }
+
 }
 

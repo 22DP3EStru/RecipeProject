@@ -25,15 +25,13 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        // Check if user is admin and redirect accordingly
-        if (Auth::user()->is_admin) {
-            return redirect()->intended(route('/admin', absolute: false));
-        } else {
-            return redirect()->intended(route('dashboard', absolute: false));
-        }
+        return redirect()->intended(
+            Auth::user()->is_admin
+                ? route('admin.index', absolute: false)
+                : route('dashboard', absolute: false)
+        );
     }
 
     /**
@@ -44,10 +42,8 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
     }
 }
-
