@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recipe_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+  
+
+  db:
+    image: mysql:8.0
+    container_name: recipe_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: recipeproject
+      MYSQL_USER: recipeuser
+      MYSQL_PASSWORD: recipepass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: recipe_pma
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpass
+    ports:
+      - "8080:80"
+
+  nginx:
+    container_name: recipe_nginx
+    ports:
+      - "8000:80"
+    build:
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www
+
+volumes:
+  dbdata:
