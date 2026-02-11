@@ -1,22 +1,28 @@
 ﻿<?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\RecipeReviewController;
-use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
+// Public (bez login)
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
 Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
 
+// Dashboard (tikai ielogotiem)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -48,9 +54,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'destroy'])->name('recipes.reviews.destroy');
 
     // Admin
-    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('index');          // /admin  -> admin.index
-        Route::get('/users', [AdminController::class, 'users'])->name('users');     // /admin/users -> admin.users
+    Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/recipes', [AdminController::class, 'recipes'])->name('recipes');
 
         Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.destroy');
