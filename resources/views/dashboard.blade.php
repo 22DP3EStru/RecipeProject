@@ -1,14 +1,4 @@
-﻿<?php
-
-use Illuminate\Support\Facades\Route;
-
-Route::get('/dashboard', function () {
-    return view('test-dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-?>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
@@ -239,11 +229,17 @@ Route::get('/dashboard', function () {
                 <a href="/recipes">🍽️ Receptes</a>
                 <a href="/categories">📂 Kategorijas</a>
                 <a href="/profile/recipes">📝 Manas receptes</a>
+
+                <!-- ✅ FAVORĪTI VIENMĒR REDZAMI -->
+                <a href="{{ route('profile.favorites') }}">❤️ Favorīti</a>
+
                 <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
+
                 @if(Auth::user()->is_admin)
                     <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
                 @endif
             </div>
+
             <div style="display: flex; align-items: center; gap: 15px;">
                 <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
@@ -295,6 +291,9 @@ Route::get('/dashboard', function () {
                     <a href="/recipes" class="btn btn-primary">🔍 Pārlūkot visas receptes</a>
                     <a href="/categories" class="btn btn-warning">📂 Apskatīt kategorijas</a>
                     <a href="/profile/recipes" class="btn btn-danger">📋 Manas receptes</a>
+
+                    <!-- ✅ FAVORĪTI POGA (vienmēr, pat ja tukšs) -->
+                    <a href="{{ route('profile.favorites') }}" class="btn btn-primary">❤️ Mani favorīti</a>
                 </div>
             </div>
 

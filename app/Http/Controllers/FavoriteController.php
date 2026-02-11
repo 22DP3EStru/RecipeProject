@@ -3,42 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
-use App\Models\Favorite;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function toggle(Recipe $recipe)
+    public function index(Request $request)
     {
-        $user = Auth::user();
+        $recipes = $request->user()
+            ->favoriteRecipes()
+            ->latest('favorites.created_at')
+            ->paginate(12);
 
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized'
-            ], 401);
-        }
+        return view('profile.favorites', compact('recipes'));
+    }
 
-        $favorite = Favorite::where('user_id', $user->id)
-                            ->where('recipe_id', $recipe->id)
-                            ->first();
+    public function toggle(Request $request, Recipe $recipe)
+    {
+        $request->user()->favoriteRecipes()->toggle($recipe->id);
 
-        if ($favorite) {
-            $favorite->delete();
-            $favorited = false;
-        } else {
-            Favorite::create([
-                'user_id' => $user->id,
-                'recipe_id' => $recipe->id,
-            ]);
-            $favorited = true;
-        }
-
-        return response()->json([
-            'success' => true,
-            'favorited' => $favorited
-        ]);
+        return back()->with('success', 'Favorīti atjaunināti.');
     }
 }
-

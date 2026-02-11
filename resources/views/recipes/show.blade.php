@@ -203,9 +203,42 @@
             color: #2f6b1b;
             font-weight: 700;
         }
+
+        /* FAVORITES (HEART) */
+        .heart-btn{
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            line-height: 1;
+            padding: 8px 10px;
+            border-radius: 12px;
+            transition: transform .15s ease, background .15s ease;
+        }
+        .heart-btn:hover{
+            transform: translateY(-2px);
+            background: rgba(102,126,234,0.12);
+        }
+        .heart-wrap{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:10px;
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
+    @php
+        $isFav = false;
+        if(Auth::check()){
+            $isFav = Auth::user()
+                ->favoriteRecipes()
+                ->where('recipe_id', $recipe->id)
+                ->exists();
+        }
+    @endphp
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -221,6 +254,9 @@
                 <a href="/recipes">🍽️ Receptes</a>
                 <a href="/categories">📂 Kategorijas</a>
                 <a href="/profile/recipes">📝 Manas receptes</a>
+                @auth
+                    <a href="{{ route('profile.favorites') }}">❤️ Favorīti</a>
+                @endauth
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
                 @auth
@@ -234,8 +270,25 @@
         <div class="main-content">
             <!-- Recipe Header -->
             <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 15px;">
-                <h1 style="color: #667eea; margin-bottom: 15px; font-size: 2.5rem;">{{ $recipe->title }}</h1>
-                <p style="color: #666; font-size: 18px; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+
+                <div class="heart-wrap">
+                    <h1 style="color: #667eea; margin: 0; font-size: 2.5rem;">{{ $recipe->title }}</h1>
+
+                    @auth
+                        <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
+                            @csrf
+                            <button type="submit" class="heart-btn" aria-label="Pievienot favorītiem">
+                                {!! $isFav ? '❤️' : '🤍' !!}
+                            </button>
+                        </form>
+                    @endauth
+
+                    @guest
+                        <span title="Pieslēdzies, lai pievienotu favorītiem" style="font-size:28px; opacity:.6;">🤍</span>
+                    @endguest
+                </div>
+
+                <p style="color: #666; font-size: 18px; line-height: 1.6; max-width: 800px; margin: 10px auto 0;">
                     {{ $recipe->description }}
                 </p>
             </div>
@@ -247,13 +300,13 @@
                     <h4 style="color: #667eea; margin-bottom: 5px;">Kategorija</h4>
                     <p style="color: #666; font-weight: 600;">{{ $recipe->category ?? 'Nav norādīta' }}</p>
                 </div>
-                
+
                 <div class="meta-item">
                     <div style="font-size: 2.5rem; margin-bottom: 10px;">⭐</div>
                     <h4 style="color: #667eea; margin-bottom: 5px;">Grūtība</h4>
                     <p style="color: #666; font-weight: 600;">{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
                 </div>
-                
+
                 @if($recipe->prep_time)
                     <div class="meta-item">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🔪</div>
@@ -261,7 +314,7 @@
                         <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time }} minūtes</p>
                     </div>
                 @endif
-                
+
                 @if($recipe->cook_time)
                     <div class="meta-item">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🔥</div>
@@ -269,7 +322,7 @@
                         <p style="color: #666; font-weight: 600;">{{ $recipe->cook_time }} minūtes</p>
                     </div>
                 @endif
-                
+
                 @if($recipe->prep_time && $recipe->cook_time)
                     <div class="meta-item">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">⏱️</div>
@@ -277,7 +330,7 @@
                         <p style="color: #666; font-weight: 600;">{{ $recipe->prep_time + $recipe->cook_time }} minūtes</p>
                     </div>
                 @endif
-                
+
                 @if($recipe->servings)
                     <div class="meta-item">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
@@ -360,7 +413,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Reviews Section -->
             @php
                 $avg = $recipe->reviews->avg('rating');
@@ -371,9 +424,9 @@
             <div class="card">
                 <h3 style="color: #333; margin-bottom: 20px; text-align: center;">⭐ Atsauksmes</h3>
 
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
-            @endif
+                @if(session('success'))
+                    <div class="flash-success">{{ session('success') }}</div>
+                @endif
 
                 <div style="text-align:center; margin-bottom: 15px;">
                     <span style="display:inline-block; padding:6px 10px; border-radius:999px; background: rgba(102,126,234,0.12); color:#667eea; font-weight:800;">
@@ -381,123 +434,122 @@
                     </span>
                 </div>
 
-            @auth
-                <div class="review-card">
-                    {{-- JA NAV ATSAUKSMES --}}
-                    @if(!$myReview)
-                        <div style="font-weight:800; margin-bottom:10px;">Tava atsauksme</div>
+                @auth
+                    <div class="review-card">
+                        {{-- JA NAV ATSAUKSMES --}}
+                        @if(!$myReview)
+                            <div style="font-weight:800; margin-bottom:10px;">Tava atsauksme</div>
 
-                        <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
-                            @csrf
+                            <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
+                                @csrf
 
-                            <div style="margin-bottom:10px;">
-                                <div class="stars">
-                                    @for($i=5; $i>=1; $i--)
-                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
-                                        <label for="star{{ $i }}">★</label>
-                                    @endfor
+                                <div style="margin-bottom:10px;">
+                                    <div class="stars">
+                                        @for($i=5; $i>=1; $i--)
+                                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
+                                            <label for="star{{ $i }}">★</label>
+                                        @endfor
+                                    </div>
+                                    @error('rating') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
                                 </div>
-                                @error('rating') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
-                            </div>
 
-                            <textarea name="comment" rows="4" maxlength="2000"
-                                    style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);"
-                                    placeholder="Uzraksti savu viedokli..."></textarea>
-                            @error('comment') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
+                                <textarea name="comment" rows="4" maxlength="2000"
+                                        style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);"
+                                        placeholder="Uzraksti savu viedokli..."></textarea>
+                                @error('comment') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
 
-                            <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
-                                ✅ Pievienot atsauksmi
-                            </button>
-                        </form>
-
-                    {{-- JA ATSAUKSME IR: RĀDĀM + EDIT + DELETE --}}
-                    @else
-                        <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
-                            <div>
-                                <div style="font-weight:800;">Tava atsauksme</div>
-                                <div style="margin-top:5px;">
-                                    @for($s=1; $s<=5; $s++)
-                                        {!! $s <= $myReview->rating
-                                            ? '<span style="color:#ffc107;">★</span>'
-                                            : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
-                                    @endfor
-                                </div>
-                            </div>
-
-                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                <button class="btn btn-warning"
-                                        type="button"
-                                        onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
-                                    ✏️ Rediģēt manu atsauksmi
+                                <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
+                                    ✅ Pievienot atsauksmi
                                 </button>
+                            </form>
 
-                                <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
-                                    onsubmit="return confirm('Dzēst savu atsauksmi?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">
-                                        🗑️ Dzēst manu atsauksmi
+                        {{-- JA ATSAUKSME IR: RĀDĀM + EDIT + DELETE --}}
+                        @else
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
+                                <div>
+                                    <div style="font-weight:800;">Tava atsauksme</div>
+                                    <div style="margin-top:5px;">
+                                        @for($s=1; $s<=5; $s++)
+                                            {!! $s <= $myReview->rating
+                                                ? '<span style="color:#ffc107;">★</span>'
+                                                : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                                    <button class="btn btn-warning"
+                                            type="button"
+                                            onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
+                                        ✏️ Rediģēt manu atsauksmi
                                     </button>
-                                </form>
-                            </div>
-                        </div>
 
-                        @if($myReview->comment)
-                            <div style="margin-top:10px; color:#555;">{{ $myReview->comment }}</div>
+                                    <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
+                                        onsubmit="return confirm('Dzēst savu atsauksmi?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">
+                                            🗑️ Dzēst manu atsauksmi
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            @if($myReview->comment)
+                                <div style="margin-top:10px; color:#555;">{{ $myReview->comment }}</div>
+                            @endif
+
+                            {{-- SLĒPTĀ REDIĢĒŠANAS FORMA --}}
+                            <form id="edit-review-form"
+                                method="POST"
+                                action="{{ route('recipes.reviews.store', $recipe) }}"
+                                style="display:none; margin-top:15px;">
+                                @csrf
+
+                                <div class="stars" style="margin-bottom:10px;">
+                                    @for($i=5; $i>=1; $i--)
+                                        <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
+                                            @checked((int)$myReview->rating === $i) required>
+                                        <label for="editStar{{ $i }}">★</label>
+                                    @endfor
+                                </div>
+
+                                <textarea name="comment" rows="4" maxlength="2000"
+                                        style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);">{{ $myReview->comment }}</textarea>
+
+                                <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
+                                    💾 Saglabāt izmaiņas
+                                </button>
+                            </form>
                         @endif
-
-                        {{-- SLĒPTĀ REDIĢĒŠANAS FORMA --}}
-                        <form id="edit-review-form"
-                            method="POST"
-                            action="{{ route('recipes.reviews.store', $recipe) }}"
-                            style="display:none; margin-top:15px;">
-                            @csrf
-
-                            <div class="stars" style="margin-bottom:10px;">
-                                @for($i=5; $i>=1; $i--)
-                                    <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
-                                        @checked((int)$myReview->rating === $i) required>
-                                    <label for="editStar{{ $i }}">★</label>
-                                @endfor
-                            </div>
-
-                            <textarea name="comment" rows="4" maxlength="2000"
-                                    style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);">{{ $myReview->comment }}</textarea>
-
-                            <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
-                                💾 Saglabāt izmaiņas
-                            </button>
-                        </form>
-                    @endif
-                </div>
-            @endauth
-
-            {{-- VISU ATSauksmju saraksts --}}
-            @forelse($recipe->reviews as $review)
-                <div class="review-card">
-                    <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
-                        <div style="font-weight:800;">
-                            {{ $review->user->name }}
-                            <span style="margin-left:10px;">
-                                @for($s=1; $s<=5; $s++)
-                                    {!! $s <= $review->rating ? '<span style="color:#ffc107;">★</span>' : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
-                                @endfor
-                            </span>
-                        </div>
-                        <div style="color:#888; font-size:13px;">{{ $review->created_at->format('d.m.Y H:i') }}</div>
                     </div>
+                @endauth
 
-                    @if($review->comment)
-                        <div style="line-height:1.6;">{{ $review->comment }}</div>
-                    @endif
-                </div>
-            @empty
-                <div class="review-card" style="text-align:center;">
-                    Šai receptei vēl nav atsauksmju.
-                </div>
-            @endforelse
-        </div>
+                {{-- VISU ATSauksmju saraksts --}}
+                @forelse($recipe->reviews as $review)
+                    <div class="review-card">
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+                            <div style="font-weight:800;">
+                                {{ $review->user->name }}
+                                <span style="margin-left:10px;">
+                                    @for($s=1; $s<=5; $s++)
+                                        {!! $s <= $review->rating ? '<span style="color:#ffc107;">★</span>' : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
+                                    @endfor
+                                </span>
+                            </div>
+                            <div style="color:#888; font-size:13px;">{{ $review->created_at->format('d.m.Y H:i') }}</div>
+                        </div>
 
+                        @if($review->comment)
+                            <div style="line-height:1.6;">{{ $review->comment }}</div>
+                        @endif
+                    </div>
+                @empty
+                    <div class="review-card" style="text-align:center;">
+                        Šai receptei vēl nav atsauksmju.
+                    </div>
+                @endforelse
+            </div>
 
             <!-- Action Buttons -->
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
@@ -505,7 +557,7 @@
                     <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="font-size: 16px; padding: 15px 30px;">
                         ✏️ Rediģēt recepti
                     </a>
-                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;" 
+                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;"
                           onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
                         @csrf
                         @method('DELETE')
@@ -514,11 +566,11 @@
                         </button>
                     </form>
                 @endif
-                
+
                 <a href="/recipes" class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;">
                     🔍 Pārlūkot citas receptes
                 </a>
-                
+
                 <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 16px; padding: 15px 30px;">
                     📝 Izveidot jaunu recepti
                 </a>
@@ -530,8 +582,8 @@
                     <h3 style="color: #333; margin-bottom: 25px; text-align: center;">🔍 Līdzīgas receptes</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         @foreach($relatedRecipes as $relatedRecipe)
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.3s ease;" 
-                                 onmouseover="this.style.transform='translateY(-5px)'" 
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.3s ease;"
+                                 onmouseover="this.style.transform='translateY(-5px)'"
                                  onmouseout="this.style.transform='translateY(0)'">
                                 <h4 style="color: #667eea; margin-bottom: 10px;">{{ $relatedRecipe->title }}</h4>
                                 <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ Str::limit($relatedRecipe->description, 80) }}</p>
