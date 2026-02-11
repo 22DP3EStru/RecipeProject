@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $categoryName ?? 'Kategorija' }} - Recepšu Aplikācija</title>
+    <title>{{ $categoryName ?? 'Kategorija' }} - Vecmāmiņas Receptes</title>
     <style>
         * {
             margin: 0;
@@ -161,7 +161,7 @@
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
                 <a href="/dashboard">🏠 Vadības panelis</a>
                 <a href="/recipes">🍽️ Receptes</a>

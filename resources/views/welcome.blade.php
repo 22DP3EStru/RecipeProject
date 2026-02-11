@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sveicināti - Recepšu Aplikācija</title>
+    <title>Sveicināti - Vecmāmiņas Receptes</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -241,13 +241,13 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Recepšu Aplikācija</h1>
+            <h1>🍽️ Vecmāmiņas Receptes</h1>
             <p>Atklāj, dalies un izveido brīnišķīgas receptes</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
                 <a href="/">🏠 Sākums</a>
                 <a href="#features">✨ Iespējas</a>
@@ -321,7 +321,7 @@
 
             <!-- Features Section -->
             <div id="features" class="card">
-                <h3 class="card-title">✨ Kāpēc izvēlēties Recepšu Aplikāciju?</h3>
+                <h3 class="card-title">✨ Kāpēc izvēlēties Vecmāmiņas Receptes?</h3>
                 <div class="grid grid-3">
                     <div class="feature-card">
                         <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
@@ -423,10 +423,10 @@
 
             <!-- About Section -->
             <div id="about" class="card">
-                <h3 class="card-title">📖 Par Recepšu Aplikāciju</h3>
+                <h3 class="card-title">📖 Par Vecmāmiņas Receptes</h3>
                 <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                     <p style="color: #666; font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
-                        Recepšu Aplikācija ir vairāk nekā tikai recepšu koplietošanas platforma – tā ir kopiena, kurā 
+                        Vecmāmiņas Receptes ir vairāk nekā tikai recepšu koplietošanas platforma – tā ir kopiena, kurā 
                         ēdiena mīlētāji sanāk kopā, lai svinētu kulinārijas mākslu. Neatkarīgi no tā, vai esat profesionāls 
                         pavārs vai mājas gatavošanas entuziasts, jūs atradīsiet iedvesmu, paņēmienus un garšīgas receptes, ko izmēģināt.
                     </p>

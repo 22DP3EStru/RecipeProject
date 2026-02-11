@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ielogoties - Recepšu Aplikācija</title>
+    <title>Ielogoties - Vecmāmiņas Receptes</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -213,12 +213,12 @@
         <!-- Header -->
         <div class="header">
             <h1>🍽️ Laipni lūdzam atpakaļ!</h1>
-            <p>Ielogojieties savā Recepšu Aplikācijas kontā</p>
+            <p>Ielogojieties savā Vecmāmiņas Receptes kontā</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
                 <a href="/">🏠 Sākums</a>
                 <a href="{{ route('register') }}">📝 Reģistrēties</a>
@@ -276,13 +276,13 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 30px; font-size: 18px; padding: 18px;">
-                    🔐 Ielogoties Recepšu Aplikācijā
+                    🔐 Ielogoties Vecmāmiņas Receptes
                 </button>
             </form>
 
             <!-- Auth Links -->
             <div class="auth-links">
-                <h4 style="color: #667eea; margin-bottom: 20px;">Jauns Recepšu Aplikācijā?</h4>
+                <h4 style="color: #667eea; margin-bottom: 20px;">Jauns Vecmāmiņas Receptes?</h4>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
                     Pievienojieties tūkstošiem ēdiena entuziastu, kas dalās ar savām mīļākajām receptēm un atklāj jaunus kulinārijas piedzīvojumus!
                 </p>

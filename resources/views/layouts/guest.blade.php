@@ -38,7 +38,7 @@
                 <!-- Footer Link -->
                 <div class="mt-6 text-center">
                     <a href="/" wire:navigate class="text-sm text-gray-600 hover:text-orange-600 transition duration-200">
-                        ← Back to RecipeHub
+                        ← Back to Vecmāmiņas Receptes
                     </a>
                 </div>
             </div>

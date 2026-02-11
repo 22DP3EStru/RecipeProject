@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reģistrēties - Recepšu Aplikācija</title>
+    <title>Reģistrēties - Vecmāmiņas Receptes</title>
     <style>
         /* Dashboard Style Design */
         * {
@@ -204,13 +204,13 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🍽️ Pievienojieties Recepšu Aplikācijai!</h1>
+            <h1>🍽️ Pievienojieties Vecmāmiņas Receptes!</h1>
             <p>Izveidojiet savu kontu un sāciet dalīties ar receptēm</p>
         </div>
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
                 <a href="/">🏠 Sākums</a>
                 <a href="{{ route('login') }}">🔐 Ielogoties</a>

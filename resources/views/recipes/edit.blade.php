@@ -205,7 +205,7 @@
 
         <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a>
+            <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
                 <a href="/dashboard">🏠 Vadības panelis</a>
                 <a href="/recipes">🍽️ Receptes</a>

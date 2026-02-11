@@ -109,7 +109,7 @@ $login = function () {
                 Nav vēl konts? 
                 <a href="{{ route('register') }}" wire:navigate 
                    class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium transition duration-200">
-                    Izveidot Receptūres kontu
+                    Izveidot Vecmāmiņas Receptes kontu
                 </a>
             </p>
         </div>

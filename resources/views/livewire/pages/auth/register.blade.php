@@ -52,7 +52,7 @@ $register = function () {
 
         $this->redirect('/dashboard', navigate: true);
     } catch (\Exception $e) {
-        $this->addError('email', 'Registration failed. Please try again.');
+        $this->addError('email', 'Reģistrācija neizdevās. Lūdzu, mēģiniet vēlreiz.');
     }
 };
 
@@ -61,7 +61,7 @@ $register = function () {
 <div>
     <!-- Header -->
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Pievienojies Receptūrei!</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Pievienojies Vecmāmiņas Receptes!</h2>
         <p class="text-gray-600 dark:text-gray-400 mt-2">Izveido kontu, lai sāktu dalīties un atklātu daudz jaunu recepšu.</p>
     </div>
 
@@ -157,7 +157,7 @@ $register = function () {
             Vai jau eksistē konts? 
             <a href="{{ route('login') }}" wire:navigate 
                class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium transition duration-200">
-                Pieslēgties RecipeHub
+                Pieslēgties Vecmāmiņas Receptes
             </a>
         </p>
     </div>

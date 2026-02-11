@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lietotāju pārvaldība - Recepšu Aplikācija</title>
+    <title>Lietotāju pārvaldība - Vecmāmiņas Receptes</title>
     <style>
         * {
             margin: 0;
@@ -333,7 +333,7 @@
                             <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                                 <div style="display: flex; justify-content: space-between; font-size: 13px;">
                                     <span>📧 E-pasts apstiprināts:</span>
-                                    <span style="color:{!! $user->email_verified_at ? '#56ab2f' : '#ff416c' !!};">
+                                    <span style="color: {{ $user->email_verified_at ? '#56ab2f' : '#ff416c' }};">
                                         {{ $user->email_verified_at ? '✅ Jā' : '❌ Nē' }}
                                     </span>
                                 </div>
