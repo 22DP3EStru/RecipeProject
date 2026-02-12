@@ -1,116 +1,118 @@
-﻿<!DOCTYPE html>
-<html lang="lv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrācijas panelis - Vecmāmiņas Receptes</title>
+﻿<x-app-layout> {{-- Izmanto aplikācijas pamata layout (Jetstream/Breeze) --}}
+    <x-slot name="header"> {{-- Aizpilda layout header slotu --}}
+        <h2 class="font-semibold text-xl text-black leading-tight"> {{-- Virsraksts ar Tailwind stiliem --}}
+            {{ __('Administrācijas panelis - Vecmāmiņas Receptes') }} {{-- Lokalizējams virsraksts --}}
+        </h2> {{-- Aizver virsrakstu --}}
+    </x-slot> {{-- Aizver header slotu --}}
+
+    {{-- Iekšējie CSS stili šai lapai --}}
     <style>
-        /* Dashboard Style Design */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Dashboard Style Design */ /* Paneļa dizaina stili */
+        * { /* Attiecas uz visiem elementiem */
+            margin: 0; /* Noņem ārējās atstarpes */
+            padding: 0; /* Noņem iekšējās atstarpes */
+            box-sizing: border-box; /* Iekļauj padding/border elementa izmērā */
+        } /* Beidzas universālais selektors */
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+        body { /* Lapas pamatstils */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonts */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Fona gradients */
+            min-height: 100vh; /* Minimālais augstums – pilns ekrāns */
+            color: #333; /* Teksta krāsa */
+        } /* Beidzas body stils */
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { /* Galvenais konteineris */
+            max-width: 1200px; /* Maksimālais platums */
+            margin: 0 auto; /* Centrē horizontāli */
+            padding: 20px; /* Iekšējā atstarpe */
+        } /* Beidzas container stils */
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 40px 0;
-        }
+        .header { /* Header bloks */
+            text-align: center; /* Centrē tekstu */
+            color: white; /* Balts teksts */
+            margin-bottom: 40px; /* Atstarpe zem header */
+            padding: 40px 0; /* Vertikālais padding */
+        } /* Beidzas header stils */
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        .header h1 { /* Header virsraksts */
+            font-size: 3rem; /* Virsraksta izmērs */
+            margin-bottom: 15px; /* Atstarpe zem virsraksta */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Teksta ēna */
+        } /* Beidzas header h1 stils */
 
-        .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        .main-content { /* Galvenā satura kartīte */
+            background: rgba(255, 255, 255, 0.95); /* Puscaurspīdīgs balts fons */
+            backdrop-filter: blur(10px); /* Blur efekts */
+            border-radius: 20px; /* Noapaļoti stūri */
+            padding: 40px; /* Iekšējā atstarpe */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Ēna */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Viegls border */
+        } /* Beidzas main-content stils */
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+        .stats-grid { /* Statistikas režģis */
+            display: grid; /* Grid izkārtojums */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Elastīgas kolonnas */
+            gap: 20px; /* Atstarpe starp kartītēm */
+            margin-bottom: 40px; /* Atstarpe zem grid */
+        } /* Beidzas stats-grid stils */
 
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+        .stat-card { /* Statistikas kartīte */
+            background: white; /* Balts fons */
+            padding: 25px; /* Iekšējā atstarpe */
+            border-radius: 15px; /* Noapaļoti stūri */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Ēna */
+            text-align: center; /* Centrē tekstu */
+        } /* Beidzas stat-card stils */
 
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+        .btn { /* Pogas pamata stils */
+            display: inline-block; /* Inline-block poga */
+            padding: 12px 25px; /* Iekšējā atstarpe */
+            border-radius: 10px; /* Noapaļoti stūri */
+            text-decoration: none; /* Noņem underline linkiem */
+            font-weight: 600; /* Treknāks teksts */
+            text-align: center; /* Centrē tekstu */
+            transition: all 0.3s ease; /* Animācija */
+            border: none; /* Noņem border */
+            cursor: pointer; /* Pointer kursors */
+            font-size: 14px; /* Teksta izmērs */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ēna */
+        } /* Beidzas btn stils */
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🔧 Administrācijas panelis</h1>
-            <p>Pārvaldiet lietotājus un receptes</p>
-        </div>
+        .btn-primary { /* Primārā poga */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradients */
+            color: white; /* Balts teksts */
+        } /* Beidzas btn-primary stils */
+    </style> {{-- Beidzas CSS --}}
 
-        <div class="main-content">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>👥 Lietotāji</h3>
-                    <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalUsers }}</p>
-                    <a href="{{ route('admin.users') }}" class="btn btn-primary">Pārvaldīt</a>
-                </div>
+    <div class="py-12"> {{-- Vertikālais padding (Tailwind) --}}
+        <div class="container"> {{-- Lapai centrēts konteineris --}}
+            <div class="header"> {{-- Header daļa --}}
+                <h1>🔧 Administrācijas panelis</h1> {{-- Lapas virsraksts --}}
+                <p>Pārvaldiet lietotājus un receptes</p> {{-- Apakšteksts --}}
+            </div> {{-- Beidzas header --}}
 
-                <div class="stat-card">
-                    <h3>🍽️ Receptes</h3>
-                    <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalRecipes }}</p>
-                    <a href="{{ route('admin.recipes') }}" class="btn btn-primary">Pārvaldīt</a>
-                </div>
+            <div class="main-content"> {{-- Galvenais saturs --}}
+                <div class="stats-grid"> {{-- Statistikas kartītes --}}
+                    <div class="stat-card"> {{-- Kartīte: lietotāji --}}
+                        <h3>👥 Lietotāji</h3> {{-- Kartītes virsraksts --}}
+                        <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalUsers }}</p> {{-- Izvada lietotāju skaitu --}}
+                        <a href="{{ route('admin.users') }}" class="btn btn-primary">Pārvaldīt</a> {{-- Links uz admin.users --}}
+                    </div> {{-- Beidzas kartīte: lietotāji --}}
 
-                <div class="stat-card">
-                    <h3>🔧 Administratori</h3>
-                    <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalAdmins }}</p>
-                </div>
-            </div>
+                    <div class="stat-card"> {{-- Kartīte: receptes --}}
+                        <h3>🍽️ Receptes</h3> {{-- Kartītes virsraksts --}}
+                        <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalRecipes }}</p> {{-- Izvada recepšu skaitu --}}
+                        <a href="{{ route('admin.recipes') }}" class="btn btn-primary">Pārvaldīt</a> {{-- Links uz admin.recipes --}}
+                    </div> {{-- Beidzas kartīte: receptes --}}
 
-            <a href="/dashboard" class="btn btn-primary">← Atpakaļ uz vadības paneli</a>
-        </div>
-    </div>
-</body>
-</html>
+                    <div class="stat-card"> {{-- Kartīte: administratori --}}
+                        <h3>🔧 Administratori</h3> {{-- Kartītes virsraksts --}}
+                        <p style="font-size: 2rem; color: #667eea; margin: 10px 0;">{{ $totalAdmins }}</p> {{-- Izvada adminu skaitu --}}
+                    </div> {{-- Beidzas kartīte: administratori --}}
+                </div> {{-- Beidzas stats-grid --}}
+
+                <a href="/dashboard" class="btn btn-primary">← Atpakaļ uz vadības paneli</a> {{-- Poga atpakaļ uz /dashboard --}}
+            </div> {{-- Beidzas main-content --}}
+        </div> {{-- Beidzas container --}}
+    </div> {{-- Beidzas py-12 --}}
+</x-app-layout> {{-- Beidzas layout --}}

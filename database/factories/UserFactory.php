@@ -1,21 +1,21 @@
-<?php
+<?php // Norāda, ka šis ir PHP fails
 
-namespace Database\Factories;
+namespace Database\Factories; // Definē nosaukumvietu (namespace) fabriku klasēm
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory; // Iekļauj bāzes Factory klasi
+use Illuminate\Support\Str; // Iekļauj Str klasi darbam ar string funkcijām
+use Illuminate\Support\Facades\Hash; // Iekļauj Hash fasādi paroles šifrēšanai
 
-class UserFactory extends Factory
+class UserFactory extends Factory // Definē UserFactory klasi, kas paplašina Factory
 {
-    public function definition(): array
+    public function definition(): array // Metode, kas nosaka noklusējuma datu struktūru lietotāja ģenerēšanai
     {
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'name' => $this->faker->name(), // Ģenerē nejaušu lietotāja vārdu
+            'email' => $this->faker->unique()->safeEmail(), // Ģenerē unikālu un drošu e-pasta adresi
+            'email_verified_at' => now(), // Iestata e-pasta apstiprināšanas laiku uz pašreizējo brīdi
+            'password' => Hash::make('password'), // Šifrē noklusējuma paroli "password"
+            'remember_token' => Str::random(10), // Ģenerē nejaušu 10 simbolu atcerēšanās tokenu
         ];
     }
 }

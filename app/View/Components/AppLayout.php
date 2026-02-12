@@ -1,18 +1,18 @@
-<?php
+<?php // Norāda, ka šis ir PHP fails
 
-namespace App\View\Components;
+namespace App\View\Components; // Definē nosaukumvietu (namespace), kurā atrodas šis View komponents
 
-use Illuminate\View\Component;
-use Illuminate\View\View;
+use Illuminate\View\Component; // Iekļauj bāzes Component klasi Laravel View komponentiem
+use Illuminate\View\View; // Iekļauj View klasi, kas reprezentē Blade skatu
 
-class AppLayout extends Component
+class AppLayout extends Component // Definē AppLayout komponenti, kas paplašina Component klasi
 {
     /**
-     * Get the view / contents that represents the component.
+     * Get the view / contents that represents the component. // Dokumentācijas komentārs par metodes nozīmi
      */
-    public function render(): View
+    public function render(): View // Metode, kas nosaka, kuru Blade skatu atgriezt
     {
-        return view('layouts.app');
+        return view('layouts.app'); // Atgriež Blade skatu no resources/views/layouts/app.blade.php
     }
 }
 
