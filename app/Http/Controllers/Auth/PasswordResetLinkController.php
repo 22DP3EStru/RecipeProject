@@ -1,45 +1,43 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Šis kontrolieris atrodas Auth mapē
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller; // Pamata Controller klase
+use Illuminate\Http\RedirectResponse; // Norāda, ka metode atgriezīs pāradresāciju
+use Illuminate\Http\Request; // HTTP pieprasījums
+use Illuminate\Support\Facades\Password; // Laravel paroles atiestatīšanas sistēma
+use Illuminate\View\View; // Norāda, ka metode var atgriezt skatu
 
-class PasswordResetLinkController extends Controller
+class PasswordResetLinkController extends Controller // Kontrolieris paroles atiestatīšanas linka nosūtīšanai
 {
-    /**
-     * Display the password reset link request view.
-     */
-    public function create(): View
+    public function create(): View // Parāda "aizmirsu paroli" lapu
     {
-        return view('auth.forgot-password');
+        return view('auth.forgot-password'); // Atver forgot-password blade failu
     }
 
-    /**
-     * Handle an incoming password reset link request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse 
+    // Apstrādā formu, kad lietotājs ievada savu e-pastu
     {
-        $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([ // Pārbauda ievadīto e-pastu
+            'email' => ['required', 'email'], 
+            // E-pasts obligāts un pareizā formātā
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink(
-            $request->only('email')
+        // Mēģina nosūtīt paroles atiestatīšanas linku uz e-pastu
+
+            $request->only('email') 
+            // Ņem tikai e-pasta lauku no formas
         );
 
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        // Pārbauda, vai links tika veiksmīgi nosūtīts
+
+            ? back()->with('status', __($status))
+            // Ja veiksmīgi → atgriežas atpakaļ ar statusa ziņu
+
+            : back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
+            // Ja kļūda → atgriežas atpakaļ ar kļūdas ziņojumu
     }
 }
-

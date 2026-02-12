@@ -1,48 +1,47 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Requests;
+namespace App\Http\Requests; // Šī klase atrodas Requests mapē (speciāla validācijas klase)
 
-use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Models\User; // User modelis (users tabula)
+use Illuminate\Foundation\Http\FormRequest; // Laravel forma ar iebūvētu validāciju
+use Illuminate\Validation\Rule; // Papildu validācijas noteikumi (piemēram, unique ar ignore)
 
-class ProfileUpdateRequest extends FormRequest
+class ProfileUpdateRequest extends FormRequest // Speciāls request profila atjaunināšanai
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(): array // Validācijas noteikumi profila formai
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'], 
+            // Vārds obligāts, teksts, max 255 simboli
+
             'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
+                'required', // E-pasts obligāts
+                'string', // Teksts
+                'lowercase', // Tiek pārveidots uz mazajiem burtiem
+                'email', // Jābūt pareizā e-pasta formātā
+                'max:255', // Max 255 simboli
                 Rule::unique(User::class)->ignore($this->user()->id),
+                // E-pastam jābūt unikālam users tabulā,
+                // bet ignorē pašreizējā lietotāja ID (lai var atstāt savu e-pastu nemainītu)
             ],
         ];
     }
 
     /**
      * Get the custom validation messages for the request.
-     *
-     * @return array<string, string>
      */
-    public function messages(): array
+    public function messages(): array // Pielāgotie kļūdu ziņojumi
     {
         return [
-            'name.required' => 'VÄrds ir obligÄts.',
-            'name.string' => 'VÄrdam jÄbÅ«t teksta formÄtÄ.',
-            'name.max' => 'VÄrds nedrÄ«kst bÅ«t garÄks par 255 simboliem.',
-            'email.required' => 'E-pasta adrese ir obligÄta.',
-            'email.email' => 'E-pasta adresei jÄbÅ«t derÄ«gÄ formÄtÄ.',
-            'email.unique' => 'Å Ä« e-pasta adrese jau ir reÄ£istrÄ“ta.',
+            'name.required' => 'Vārds ir obligāts.',
+            'name.string' => 'Vārdam jābūt teksta formātā.',
+            'name.max' => 'Vārds nedrīkst būt garāks par 255 simboliem.',
+            'email.required' => 'E-pasta adrese ir obligāta.',
+            'email.email' => 'E-pasta adresei jābūt derīgā formātā.',
+            'email.unique' => 'Šī e-pasta adrese jau ir reģistrēta.',
         ];
     }
 }
-

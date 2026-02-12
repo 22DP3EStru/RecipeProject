@@ -1,26 +1,41 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // Kontrolieris atrodas Controllers mapē
 
-use App\Models\Recipe;
-use Illuminate\Http\Request;
+use App\Models\Recipe; // Recipe modelis (recipes tabula)
+use Illuminate\Http\Request; // HTTP pieprasījums
 
-class FavoriteController extends Controller
+class FavoriteController extends Controller // Kontrolieris favorītu funkcionalitātei
 {
-    public function index(Request $request)
+    public function index(Request $request) // Parāda lietotāja favorītu receptes
     {
-        $recipes = $request->user()
-            ->favoriteRecipes()
-            ->latest('favorites.created_at')
-            ->paginate(12);
+        $recipes = $request->user() 
+            // Dabū pašreiz ielogoto lietotāju
 
-        return view('profile.favorites', compact('recipes'));
+            ->favoriteRecipes() 
+            // Izsauc attiecību (relationship) no User modeļa
+            // (daudzi pret daudziem starp users un recipes caur favorites tabulu)
+
+            ->latest('favorites.created_at') 
+            // Sakārto pēc pievienošanas datuma (jaunākie favorīti pirmie)
+
+            ->paginate(12); 
+            // Parāda 12 receptes vienā lapā (ar lapošanu)
+
+        return view('profile.favorites', compact('recipes')); 
+        // Atver profila favorītu lapu un padod tai receptes
     }
 
-    public function toggle(Request $request, Recipe $recipe)
+    public function toggle(Request $request, Recipe $recipe) 
+    // Pievieno vai noņem recepti no favorītiem
     {
-        $request->user()->favoriteRecipes()->toggle($recipe->id);
+        $request->user()
+            ->favoriteRecipes()
+            ->toggle($recipe->id); 
+        // Ja recepte jau ir favorītos → noņem
+        // Ja nav → pievieno
 
-        return back()->with('success', 'Favorīti atjaunināti.');
+        return back()->with('success', 'Favorīti atjaunināti.'); 
+        // Atgriežas atpakaļ ar paziņojumu
     }
 }

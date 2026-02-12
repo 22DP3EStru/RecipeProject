@@ -1,41 +1,38 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Norāda, ka šis kontrolieris atrodas Auth mapē
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller; // Pamata Controller klase
+use Illuminate\Http\RedirectResponse; // Norāda, ka metode var atgriezt pāradresāciju
+use Illuminate\Http\Request; // Parasts HTTP pieprasījums
+use Illuminate\Support\Facades\Auth; // Laravel autentifikācijas sistēma
+use Illuminate\Validation\ValidationException; // Klase kļūdu izmešanai validācijas gadījumā
+use Illuminate\View\View; // Norāda, ka metode var atgriezt skatu (lapu)
 
-class ConfirmablePasswordController extends Controller
+class ConfirmablePasswordController extends Controller // Kontrolieris paroles apstiprināšanai
 {
-    /**
-     * Show the confirm password view.
-     */
-    public function show(): View
+    public function show(): View // Parāda paroles apstiprināšanas lapu
     {
-        return view('auth.confirm-password');
+        return view('auth.confirm-password'); // Atver confirm-password blade failu
     }
 
-    /**
-     * Confirm the user's password.
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse // Apstrādā paroles apstiprināšanas formu
     {
-        if (! Auth::guard('web')->validate([
-            'email' => $request->user()->email,
-            'password' => $request->password,
-        ])) {
-            throw ValidationException::withMessages([
-                'password' => __('auth.password'),
+        if (! Auth::guard('web')->validate([ // Pārbauda, vai ievadītā parole ir pareiza
+            'email' => $request->user()->email, // Ņem pašreiz ielogotā lietotāja e-pastu
+            'password' => $request->password, // Ņem ievadīto paroli no formas
+        ])) { // Ja parole NAV pareiza
+
+            throw ValidationException::withMessages([ // Izmet validācijas kļūdu
+                'password' => __('auth.password'), // Parāda kļūdas ziņojumu par nepareizu paroli
             ]);
         }
 
-        $request->session()->put('auth.password_confirmed_at', time());
+        $request->session()->put('auth.password_confirmed_at', time()); 
+        // Saglabā sesijā laiku, kad parole tika apstiprināta
+        // (lai sistēma zinātu, ka lietotājs tikko apstiprināja paroli)
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false)); 
+        // Pārsūta lietotāju uz dashboard vai iepriekš mēģināto lapu
     }
 }
-

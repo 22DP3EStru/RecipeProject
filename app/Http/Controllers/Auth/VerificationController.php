@@ -1,42 +1,50 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Kontrolieris atrodas Auth mapē
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Http\Controllers\Controller; // Pamata Controller klase
+use Illuminate\Foundation\Auth\VerifiesEmails; 
+// Trait, kas satur visu gatavo e-pasta verifikācijas loģiku
 
-class VerificationController extends Controller
+class VerificationController extends Controller // Kontrolieris e-pasta apstiprināšanai
 {
     /*
     |--------------------------------------------------------------------------
     | Email Verification Controller
     |--------------------------------------------------------------------------
     |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
+    | Šis ir Laravel paskaidrojošs komentārs.
+    | Tas nozīmē, ka šis kontrolieris apstrādā e-pasta apstiprināšanu
+    | un ļauj atkārtoti nosūtīt verifikācijas e-pastu.
     |
     */
 
-    use VerifiesEmails;
+    use VerifiesEmails; // Iekļauj Laravel iebūvēto e-pasta verifikācijas funkcionalitāti
 
     /**
      * Where to redirect users after verification.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/home'; 
+    // Pēc veiksmīgas e-pasta apstiprināšanas lietotājs tiks pārsūtīts uz /home
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct() // Konstruktors (izpildās, kad tiek izveidots kontrolieris)
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        $this->middleware('auth'); 
+        // Šo kontrolieri var izmantot tikai ielogots lietotājs
+
+        $this->middleware('signed')->only('verify'); 
+        // Verify metodei jābūt ar drošu (parakstītu) URL,
+        // lai nevarētu viltot verifikācijas linku
+
+        $this->middleware('throttle:6,1')->only('verify', 'resend'); 
+        // Ierobežo pieprasījumus:
+        // max 6 reizes 1 minūtē (lai novērstu spam vai uzbrukumus)
     }
 }
-

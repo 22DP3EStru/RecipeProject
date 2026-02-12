@@ -1,63 +1,70 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Šis kontrolieris atrodas Auth mapē
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller; // Pamata Controller klase
+use App\Models\User; // Lietotāja modelis (tabula users)
+use Illuminate\Auth\Events\PasswordReset; // Notikums, kas tiek izsaukts pēc paroles maiņas
+use Illuminate\Http\RedirectResponse; // Norāda, ka metode var atgriezt pāradresāciju
+use Illuminate\Http\Request; // HTTP pieprasījums
+use Illuminate\Support\Facades\Hash; // Paroļu šifrēšanai
+use Illuminate\Support\Facades\Password; // Laravel paroles atiestatīšanas sistēma
+use Illuminate\Support\Str; // String palīgfunkcijas (piemēram, random)
+use Illuminate\Validation\Rules; // Paroles validācijas noteikumi
+use Illuminate\View\View; // Norāda, ka metode var atgriezt skatu
 
-class NewPasswordController extends Controller
+class NewPasswordController extends Controller // Kontrolieris paroles atiestatīšanai
 {
-    /**
-     * Display the password reset view.
-     */
-    public function create(Request $request): View
+    public function create(Request $request): View // Parāda paroles maiņas lapu
     {
-        return view('auth.reset-password', ['request' => $request]);
+        return view('auth.reset-password', ['request' => $request]); 
+        // Atver reset-password blade failu un padod request datus
     }
 
-    /**
-     * Handle an incoming new password request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse 
+    // Apstrādā jaunas paroles iesniegšanu
     {
-        $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $request->validate([ // Pārbauda ievadītos datus
+            'token' => ['required'], // Token ir obligāts (no e-pasta linka)
+            'email' => ['required', 'email'], // E-pasts obligāts un pareizā formātā
+            'password' => ['required', 'confirmed', Rules\Password::defaults()], 
+            // Parole obligāta, jāatbilst confirmation laukam un Laravel noteikumiem
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+        $status = Password::reset( 
+        // Mēģina atiestatīt lietotāja paroli
 
-                event(new PasswordReset($user));
+            $request->only('email', 'password', 'password_confirmation', 'token'), 
+            // Ņem tikai nepieciešamos laukus
+
+            function (User $user) use ($request) { 
+            // Funkcija, kas izpildās, ja token un dati ir pareizi
+
+                $user->forceFill([ 
+                // Aizpilda lietotāja datus
+
+                    'password' => Hash::make($request->password), 
+                    // Saglabā paroli šifrētā veidā
+
+                    'remember_token' => Str::random(60), 
+                    // Izveido jaunu remember token drošības nolūkos
+
+                ])->save(); 
+                // Saglabā izmaiņas datubāzē
+
+                event(new PasswordReset($user)); 
+                // Izsauc notikumu, ka parole ir mainīta
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         return $status == Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        // Pārbauda, vai parole tika veiksmīgi atiestatīta
+
+            ? redirect()->route('login')->with('status', __($status))
+            // Ja veiksmīgi → pārsūta uz login ar statusa ziņu
+
+            : back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
+            // Ja kļūda → atgriežas atpakaļ ar kļūdas ziņojumu
     }
 }
-

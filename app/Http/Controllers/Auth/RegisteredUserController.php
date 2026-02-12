@@ -1,52 +1,71 @@
-<?php
+<?php // Sākas PHP kods
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Šis kontrolieris atrodas Auth mapē
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller; // Pamata Controller klase
+use App\Models\User; // User modelis (users tabula)
+use Illuminate\Auth\Events\Registered; // Notikums, kas tiek izsaukts pēc reģistrācijas
+use Illuminate\Http\RedirectResponse; // Norāda, ka metode atgriezīs pāradresāciju
+use Illuminate\Http\Request; // HTTP pieprasījums
+use Illuminate\Support\Facades\Auth; // Autentifikācijas sistēma
+use Illuminate\Support\Facades\Hash; // Paroļu šifrēšanai
+use Illuminate\Validation\Rules; // Papildu paroles validācijas noteikumi
+use Illuminate\View\View; // Norāda, ka metode var atgriezt skatu
 
-class RegisteredUserController extends Controller
+class RegisteredUserController extends Controller // Kontrolieris jaunā lietotāja reģistrācijai
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): View
+    public function create(): View // Parāda reģistrācijas lapu
     {
-        return view('auth.register');
+        return view('auth.register'); // Atver register blade failu
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse 
+    // Apstrādā reģistrācijas formu
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'min:8', 'regex:/[A-Z]/', 'regex:/[a-z]/', 'regex:/[0-9]/', 'confirmed' , Rules\Password::defaults()],
+        $request->validate([ // Pārbauda ievadītos datus
+
+            'name' => ['required', 'string', 'max:255'], 
+            // Vārds obligāts, teksts, max 255 simboli
+
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class], 
+            // E-pasts obligāts, mazajiem burtiem,
+            // pareizā formātā, max 255 simboli,
+            // un nedrīkst jau eksistēt users tabulā
+
+            'password' => [
+                'required', 
+                'string', 
+                'min:8', 
+                'regex:/[A-Z]/', 
+                'regex:/[a-z]/', 
+                'regex:/[0-9]/', 
+                'confirmed', 
+                Rules\Password::defaults()
+            ],
+            // Parole obligāta
+            // vismaz 8 simboli
+            // jābūt vismaz 1 lielajam burtam
+            // vismaz 1 mazajam burtam
+            // vismaz 1 ciparam
+            // jābūt password_confirmation laukam
+            // un jāatbilst Laravel noklusējuma drošības noteikumiem
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user = User::create([ // Izveido jaunu lietotāju datubāzē
+            'name' => $request->name, // Saglabā vārdu
+            'email' => $request->email, // Saglabā e-pastu
+            'password' => Hash::make($request->password), 
+            // Saglabā paroli šifrētā veidā (nevis kā tekstu)
         ]);
 
-        event(new Registered($user));
+        event(new Registered($user)); 
+        // Izsauc notikumu, ka lietotājs ir reģistrējies
+        // (piemēram, var tikt nosūtīts verifikācijas e-pasts)
 
-        Auth::login($user);
+        Auth::login($user); 
+        // Automātiski ielogo lietotāju pēc reģistrācijas
 
-        // Redirect to profile after registration
-        return redirect()->route('profile.edit');
+        return redirect()->route('profile.edit'); 
+        // Pēc reģistrācijas pārsūta uz profila rediģēšanas lapu
     }
 }
-
