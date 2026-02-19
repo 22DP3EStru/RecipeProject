@@ -1,6 +1,6 @@
-﻿@tailwind base; /* Iekļauj Tailwind pamata (reset) stilus */
-@tailwind components; /* Iekļauj Tailwind komponentu klases */
-@tailwind utilities; /* Iekļauj Tailwind utility klases */
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
 /* Recipe App - Global Styles */ /* Globālie stili recepšu lietotnei */
