@@ -1,0 +1,332 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Recipe App - Global Styles */ /* Globālie stili recepšu lietotnei */
+* { /* Attiecas uz visiem HTML elementiem */
+    margin: 0; /* Noņem ārējās atstarpes */
+    padding: 0; /* Noņem iekšējās atstarpes */
+    box-sizing: border-box; /* Padding un border tiek iekļauti kopējā izmērā */
+}
+
+body { /* Lapas pamatstils */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonts */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Fona gradients */
+    min-height: 100vh; /* Minimālais augstums – pilns skata laukums */
+    color: #333; /* Teksta pamatkrāsa */
+}
+
+.app-container { /* Galvenais aplikācijas konteiners */
+    max-width: 1200px; /* Maksimālais platums */
+    margin: 0 auto; /* Centrē horizontāli */
+    padding: 20px; /* Iekšējā atstarpe */
+}
+
+/* Header */ /* Galvene */
+.header {
+    text-align: center; /* Centrē tekstu */
+    color: white; /* Balta teksta krāsa */
+    margin-bottom: 40px; /* Atstarpe zem galvenes */
+    padding: 40px 0; /* Vertikālā atstarpe */
+}
+
+.header h1 {
+    font-size: 3rem; /* Virsraksta izmērs */
+    margin-bottom: 15px; /* Atstarpe zem virsraksta */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Teksta ēna */
+}
+
+.header p {
+    font-size: 1.3rem; /* Paragrāfa izmērs */
+    opacity: 0.9; /* Nedaudz caurspīdīgs */
+}
+
+/* Navigation */ /* Navigācijas josla */
+.nav-bar {
+    background: rgba(255, 255, 255, 0.95); /* Puscaurspīdīgs balts fons */
+    -webkit-backdrop-filter: blur(10px); /* Blur efekts Safari */
+    backdrop-filter: blur(10px); /* Blur efekts */
+    border-radius: 15px; /* Noapaļoti stūri */
+    padding: 20px; /* Iekšējā atstarpe */
+    margin-bottom: 30px; /* Atstarpe zem navigācijas */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Ēna */
+    display: flex; /* Flexbox izkārtojums */
+    justify-content: space-between; /* Elementi abās pusēs */
+    align-items: center; /* Vertikāli centrē */
+    flex-wrap: wrap; /* Pārliekas jaunā rindā */
+}
+
+.nav-brand {
+    font-size: 24px; /* Logotipa izmērs */
+    font-weight: bold; /* Treknraksts */
+    color: #667eea; /* Krāsa */
+    text-decoration: none; /* Noņem underline */
+}
+
+.nav-links {
+    display: flex; /* Flex konteineris */
+    gap: 20px; /* Atstarpe starp linkiem */
+    flex-wrap: wrap; /* Atļauj pārkārtošanu */
+}
+
+.nav-links a {
+    color: #333; /* Teksta krāsa */
+    text-decoration: none; /* Noņem underline */
+    padding: 8px 16px; /* Iekšējā atstarpe */
+    border-radius: 8px; /* Noapaļoti stūri */
+    transition: all 0.3s ease; /* Animācijas pāreja */
+    font-weight: 500; /* Pus-trekns */
+}
+
+.nav-links a:hover {
+    background: #667eea; /* Hover fons */
+    color: white; /* Hover teksts */
+    transform: translateY(-2px); /* Paceļ elementu */
+}
+
+.nav-user {
+    color: #666; /* Pelēks teksts */
+    font-weight: 500; /* Pus-trekns */
+}
+
+/* Main Content */ /* Galvenais saturs */
+.main-content {
+    background: rgba(255, 255, 255, 0.95); /* Fona krāsa */
+    -webkit-backdrop-filter: blur(10px); /* Safari blur */
+    backdrop-filter: blur(10px); /* Blur efekts */
+    border-radius: 20px; /* Noapaļoti stūri */
+    padding: 40px; /* Iekšējā atstarpe */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Ēna */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Viegls border */
+}
+
+/* Cards */ /* Kartītes */
+.card {
+    background: rgba(255, 255, 255, 0.8); /* Fons */
+    border-radius: 15px; /* Noapaļoti stūri */
+    padding: 30px; /* Iekšējā atstarpe */
+    margin-bottom: 30px; /* Atstarpe zem kartītes */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Ēna */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Border */
+    transition: transform 0.3s ease; /* Animācija */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Paceļ kartīti hover */
+}
+
+.card-title {
+    font-size: 1.5rem; /* Virsraksta izmērs */
+    color: #333; /* Teksta krāsa */
+    margin-bottom: 20px; /* Atstarpe */
+    text-align: center; /* Centrē */
+}
+
+/* Grid */ /* Režģa izkārtojums */
+.grid {
+    display: grid; /* CSS grid */
+    gap: 25px; /* Atstarpe starp elementiem */
+}
+
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); } /* 2 kolonnu režģis */
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } /* 3 kolonnu režģis */
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } /* 4 kolonnu režģis */
+
+/* Buttons */ /* Pogas */
+.btn {
+    display: inline-block; /* Inline bloka elements */
+    padding: 15px 30px; /* Iekšējā atstarpe */
+    border-radius: 12px; /* Noapaļoti stūri */
+    text-decoration: none; /* No underline */
+    font-weight: 600; /* Treknāks teksts */
+    text-align: center; /* Centrē tekstu */
+    transition: all 0.3s ease; /* Animācija */
+    border: none; /* Noņem border */
+    cursor: pointer; /* Rāda pointer */
+    font-size: 16px; /* Teksta izmērs */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ēna */
+}
+
+.btn:hover {
+    transform: translateY(-3px); /* Paceļ pogu */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Lielāka ēna */
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Primārā poga */
+    color: white; /* Balts teksts */
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); /* Success poga */
+    color: white; /* Balts teksts */
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); /* Warning poga */
+    color: white; /* Balts teksts */
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Danger poga */
+    color: white; /* Balts teksts */
+}
+
+.btn-logout {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Logout poga */
+    color: white; /* Balts teksts */
+    padding: 10px 20px; /* Mazāka atstarpe */
+    font-size: 14px; /* Mazāks teksts */
+}
+
+/* Forms */ /* Formu stili */
+.form-group {
+    margin-bottom: 20px; /* Atstarpe zem katras formas grupas */
+}
+
+.form-label {
+    display: block; /* Parāda kā bloka elementu */
+    margin-bottom: 8px; /* Atstarpe zem label */
+    font-weight: 600; /* Treknāks teksts */
+    color: #333; /* Teksta krāsa */
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%; /* Aizņem visu pieejamo platumu */
+    padding: 12px 16px; /* Iekšējā atstarpe */
+    border: 2px solid rgba(102, 126, 234, 0.2); /* Viegls border */
+    border-radius: 10px; /* Noapaļoti stūri */
+    font-size: 14px; /* Teksta izmērs */
+    transition: all 0.3s ease; /* Animācijas pāreja */
+    background: rgba(255, 255, 255, 0.9); /* Gandrīz balts fons */
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none; /* Noņem default outline */
+    border-color: #667eea; /* Maina border krāsu fokusā */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); /* Zilvioleta glow ēna */
+}
+
+/* Stats */ /* Statistikas sadaļa */
+.stats-grid {
+    display: grid; /* Grid izkārtojums */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Elastīgas kolonnas */
+    gap: 20px; /* Atstarpe starp blokiem */
+    margin: 30px 0; /* Vertikālās atstarpes */
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradienta fons */
+    color: white; /* Balts teksts */
+    padding: 30px; /* Iekšējā atstarpe */
+    border-radius: 15px; /* Noapaļoti stūri */
+    text-align: center; /* Centrē tekstu */
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); /* Ēna */
+}
+
+.stat-number {
+    font-size: 3rem; /* Liels skaitļa izmērs */
+    font-weight: bold; /* Trekns */
+    display: block; /* Jauna rinda */
+    margin-bottom: 10px; /* Atstarpe zem skaitļa */
+}
+
+.stat-label {
+    font-size: 1rem; /* Teksta izmērs */
+    opacity: 0.9; /* Nedaudz caurspīdīgs */
+}
+
+/* Admin Alert */ /* Admin brīdinājuma bloks */
+.admin-alert {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Sarkans gradients */
+    color: white; /* Balts teksts */
+    padding: 25px; /* Iekšējā atstarpe */
+    border-radius: 15px; /* Noapaļoti stūri */
+    margin: 30px 0; /* Vertikālās atstarpes */
+    text-align: center; /* Centrē tekstu */
+    box-shadow: 0 8px 25px rgba(255, 65, 108, 0.3); /* Sarkana ēna */
+}
+
+/* Recipe Cards */ /* Recepšu kartītes */
+.recipe-card {
+    background: rgba(255, 255, 255, 0.9); /* Balts fons */
+    border-radius: 15px; /* Noapaļoti stūri */
+    padding: 20px; /* Iekšējā atstarpe */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Ēna */
+    transition: all 0.3s ease; /* Animācija */
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px); /* Paceļ kartīti hover */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Lielāka ēna */
+}
+
+.difficulty-badge {
+    padding: 6px 12px; /* Iekšējā atstarpe */
+    border-radius: 20px; /* Apaļš stils */
+    font-size: 12px; /* Mazāks teksts */
+    font-weight: 600; /* Trekns */
+}
+
+.difficulty-easy { background: #c8e6c9; color: #2e7d32; } /* Viegls – zaļš */
+.difficulty-medium { background: #fff3c4; color: #f57c00; } /* Vidējs – oranžs */
+.difficulty-hard { background: #ffcdd2; color: #c62828; } /* Grūts – sarkans */
+
+/* Alerts */ /* Ziņojumu paziņojumi */
+.alert {
+    padding: 20px; /* Iekšējā atstarpe */
+    border-radius: 12px; /* Noapaļoti stūri */
+    margin: 20px 0; /* Vertikālās atstarpes */
+}
+
+.alert-error {
+    background: rgba(244, 67, 54, 0.1); /* Gaiši sarkans fons */
+    border-left: 4px solid #f44336; /* Sarkana kreisā līnija */
+    color: #c62828; /* Tumši sarkans teksts */
+}
+
+.alert-success {
+    background: rgba(76, 175, 80, 0.1); /* Gaiši zaļš fons */
+    border-left: 4px solid #4caf50; /* Zaļa līnija */
+    color: #2e7d32; /* Tumši zaļš teksts */
+}
+
+.alert-info {
+    background: rgba(33, 150, 243, 0.1); /* Gaiši zils fons */
+    border-left: 4px solid #2196f3; /* Zila līnija */
+    color: #1565c0; /* Tumši zils teksts */
+}
+
+/* Sections */ /* Sadaļu bloki */
+.section {
+    background: rgba(240, 248, 255, 0.5); /* Gaišzils fons */
+    border-radius: 12px; /* Noapaļoti stūri */
+    padding: 25px; /* Iekšējā atstarpe */
+    margin: 25px 0; /* Vertikālās atstarpes */
+    border-left: 4px solid #667eea; /* Zilvioleta kreisā līnija */
+}
+
+.section-title {
+    color: #667eea; /* Virsraksta krāsa */
+    font-size: 1.3rem; /* Izmērs */
+    margin-bottom: 15px; /* Atstarpe zem virsraksta */
+    font-weight: 600; /* Trekns */
+}
+
+/* Responsive */ /* Adaptīvais dizains */
+@media (max-width: 768px) { /* Ja ekrāns mazāks par 768px */
+    .header h1 { font-size: 2rem; } /* Mazāks virsraksts */
+    .header p { font-size: 1rem; } /* Mazāks teksts */
+    .nav-bar { flex-direction: column; gap: 15px; } /* Navigācija kolonnā */
+    .main-content { padding: 20px; } /* Mazāks padding */
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } /* Viena kolonna */
+}
+
+/* Utilities */ /* Palīgklases */
+.text-center { text-align: center; } /* Centrē tekstu */
+.mb-0 { margin-bottom: 0; } /* Nav apakšējās atstarpes */
+.mb-1 { margin-bottom: 10px; } /* 10px apakšējā atstarpe */
+.mb-2 { margin-bottom: 20px; } /* 20px apakšējā atstarpe */
+.mt-1 { margin-top: 10px; } /* 10px augšējā atstarpe */
+.mt-2 { margin-top: 20px; } /* 20px augšējā atstarpe */

@@ -1,0 +1,23 @@
+﻿<?php // Norāda, ka šis ir PHP migrācijas fails
+
+use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
+use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras izmaiņām
+use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+
+return new class extends Migration { // Definē anonīmu klasi, kas paplašina Migration
+    public function up(): void
+    {
+        Schema::table('recipes', function (Blueprint $table) {
+            $table->text('instructions')->nullable()->after('ingredients');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('recipes', function (Blueprint $table) {
+            $table->dropColumn('instructions');
+        });
+    }
+};
+
+
