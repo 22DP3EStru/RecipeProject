@@ -1,4 +1,5 @@
-<x-app-layout> {{-- Izmanto aplikācijas pamata layout (Jetstream/Breeze) --}}
+@extends('layouts.app')
+@section('content') {{-- Izmanto aplikācijas pamata layout (Jetstream/Breeze) --}}
     <x-slot name="header"> {{-- Aizpilda layout header slotu --}}
         <h2 class="font-semibold text-xl text-black leading-tight"> {{-- Header virsraksta stils --}}
             {{ __('Recepšu pārvaldība - Vecmāmiņas Receptes') }} {{-- Lokalizējams virsraksts --}}
@@ -204,32 +205,7 @@
         } /* Beidzas media query */
     </style> {{-- Beidzas CSS --}}
 
-    <div class="py-12"> {{-- Vertikālais padding (Tailwind) --}}
-        <div class="container"> {{-- Centrēts konteineris --}}
-            <!-- Header --> {{-- Galvenes sadaļa --}}
-            <div class="header"> {{-- Header bloks --}}
-                <h1>🍽️ Recepšu pārvaldība</h1> {{-- Lapas virsraksts --}}
-                <p>Pārvaldiet visas sistēmas receptes</p> {{-- Apraksts --}}
-            </div> {{-- Beidzas header --}}
-
-            <!-- Navigation --> {{-- Navigācijas josla --}}
-            <nav class="nav-bar"> {{-- Navigācija --}}
-                <a href="/dashboard" class="nav-brand">🍽️ Recepšu Aplikācija</a> {{-- Logo links uz dashboard --}}
-                <div class="nav-links"> {{-- Linku grupa --}}
-                    <a href="{{ route('admin.index') }}">🔧 Admin panelis</a> {{-- Links uz admin paneli --}}
-                    <a href="{{ route('admin.users') }}">👥 Lietotāji</a> {{-- Links uz lietotāju pārvaldību --}}
-                    <a href="{{ route('admin.recipes') }}">🍽️ Receptes</a> {{-- Links uz recepšu pārvaldību --}}
-                    <a href="/dashboard">🏠 Vadības panelis</a> {{-- Links atpakaļ uz dashboard --}}
-                </div> {{-- Beidzas linku grupa --}}
-                <div style="display: flex; align-items: center; gap: 15px;"> {{-- Lietotāja info + logout rinda (inline stils) --}}
-                    <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span> {{-- Parāda pieslēgto lietotāju --}}
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;"> {{-- Logout forma --}}
-                        @csrf {{-- CSRF aizsardzība --}}
-                        <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 12px;">Iziet</button> {{-- Logout poga --}}
-                    </form> {{-- Beidzas logout forma --}}
-                </div> {{-- Beidzas user/logout rinda --}}
-            </nav> {{-- Beidzas navigācija --}}
-
+    
             <!-- Main Content --> {{-- Galvenais saturs --}}
             <div class="main-content"> {{-- Satura kartīte --}}
                 <!-- Breadcrumb --> {{-- Maizes drupačas navigācija --}}
@@ -382,4 +358,4 @@
             </div> {{-- Beidzas main-content --}}
         </div> {{-- Beidzas container --}}
     </div> {{-- Beidzas py-12 --}}
-</x-app-layout> {{-- Aizver layout --}}
+@endsection {{-- Aizver layout --}}
