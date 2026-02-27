@@ -10,32 +10,71 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
     use HasFactory; // Pievieno HasFactory funkcionalitāti šim modelim
 
     protected $fillable = [ // Norāda laukus, kurus drīkst masveidā aizpildīt (mass assignment)
-        'title','description','ingredients','instructions', // Pamatinformācija par recepti
-        'prep_time','cook_time','servings','difficulty', // Laika un sarežģītības parametri
-        'category','user_id','image_path' // Kategorija, autora ID un attēla ceļš
+        'title',
+        'description',
+        'ingredients',
+        'instructions',
+        'prep_time',
+        'cook_time',
+        'servings',
+        'difficulty',
+        'category',
+        'user_id',
+
+        // ✅ MEDIA (JAUNIE LAUKI)
+        'image_path',
+        'image_url',
+        'video_path',
+        'video_url',
     ];
 
     protected $casts = [ // Nosaka automātisko datu tipu pārveidi (type casting)
-        'prep_time' => 'integer', // Pārvērš sagatavošanas laiku par integer
-        'cook_time' => 'integer', // Pārvērš gatavošanas laiku par integer
-        'servings' => 'integer', // Pārvērš porciju skaitu par integer
-        'created_at' => 'datetime', // Pārvērš izveides datumu par datetime objektu
-        'updated_at' => 'datetime', // Pārvērš atjaunošanas datumu par datetime objektu
+        'prep_time' => 'integer',
+        'cook_time' => 'integer',
+        'servings' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user() // Definē attiecību ar User modeli (receptes autors)
     {
-        return $this->belongsTo(User::class); // Norāda, ka recepte pieder vienam lietotājam (many-to-one)
+        return $this->belongsTo(User::class);
+    }
+
+    public function ingredientsItems()
+    {
+        return $this->hasMany(\App\Models\RecipeIngredient::class, 'recipe_id');
     }
 
     public function favoritedByUsers() // Definē many-to-many attiecību ar lietotājiem caur favorites tabulu
     {
-        return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps(); // Norāda starptabulu 'favorites' un pievieno created_at/updated_at laukus pivot tabulai
+        return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps();
     }
 
     public function reviews() // Definē attiecību ar RecipeReview modeli
     {
-        return $this->hasMany(\App\Models\RecipeReview::class)->latest(); // Norāda, ka receptei var būt vairāki review, sakārtoti pēc jaunākā
+        return $this->hasMany(\App\Models\RecipeReview::class)->latest();
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | MEDIA HELPER METHODS (optional but useful)
+    |--------------------------------------------------------------------------
+    */
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path
+            ? asset('storage/' . $this->image_path)
+            : null;
+    }
+
+    public function getVideoUrlAttribute()
+    {
+        if ($this->video_path) {
+            return asset('storage/' . $this->video_path);
+        }
+
+        return $this->attributes['video_url'] ?? null;
+    }
 }

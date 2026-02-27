@@ -1,174 +1,296 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Controllers; // Kontrolieris atrodas Controllers mapē
+namespace App\Http\Controllers;
 
-use App\Models\Recipe; // Recipe modelis (recipes tabula)
-use Illuminate\Http\Request; // HTTP pieprasījums (formu/URL dati)
-use Illuminate\Support\Facades\Auth; // Lai dabūtu ielogoto lietotāju / pārbaudītu vai ielogots
-use Illuminate\Support\Facades\Log; // Lai pierakstītu kļūdas laravel.log failā
-use Illuminate\Support\Str; // Teksta palīgfunkcijas (šajā failā īsti netiek izmantots)
+use App\Models\Recipe;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
-class RecipeController extends Controller // Kontrolieris recepšu funkcijām (saraksts, skatīt, izveidot, labot, dzēst)
+class RecipeController extends Controller
 {
-    public function __construct() // Konstruktors (izpildās, kad kontrolieris tiek izmantots)
+    public function __construct()
     {
-        $this->middleware('auth')->except([ // Prasa login visām metodēm, izņemot šīs
-            'index', // recepšu saraksts publiski
-            'show',  // recepte publiski
-            'search', // meklēšana publiski (te gan atsevišķas metodes nav redzama, bet ir atļauta)
+        $this->middleware('auth')->except([
+            'index',
+            'show',
+            'search',
         ]);
     }
 
-    public function index(Request $request) // Recešu saraksts + filtri
+    public function index(Request $request)
     {
-        $query = Recipe::with('user') // Paņem receptes kopā ar autoru (user)
-            ->withAvg('reviews', 'rating') // Pievieno vidējo vērtējumu no reviews (rating)
-            ->withCount('reviews'); // Pievieno reviews skaitu (cik atsauksmes)
+        $query = Recipe::with('user')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews');
 
-        if ($request->has('search') && $request->search) { // Ja URL/formā ir search un tas nav tukšs
-            $search = $request->search; // Paņem meklēšanas tekstu
-            $query->where(function($q) use ($search) { // Grupē nosacījumus vienā blokā
-                $q->where('title', 'like', "%{$search}%") // Meklē virsrakstā
-                  ->orWhere('description', 'like', "%{$search}%") // Vai aprakstā
-                  ->orWhere('ingredients', 'like', "%{$search}%"); // Vai sastāvdaļās
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('ingredients', 'like', "%{$search}%"); // legacy field
             });
         }
 
-        if ($request->has('category') && $request->category) { // Ja ir izvēlēta kategorija
-            $query->where('category', $request->category); // Filtrē pēc kategorijas
+        if ($request->has('category') && $request->category) {
+            $query->where('category', $request->category);
         }
 
-        if ($request->has('difficulty') && $request->difficulty) { // Ja ir izvēlēta grūtība
-            $query->where('difficulty', $request->difficulty); // Filtrē pēc grūtības
+        if ($request->has('difficulty') && $request->difficulty) {
+            $query->where('difficulty', $request->difficulty);
         }
 
-        $recipes = $query->latest()->paginate(12); // Sakārto jaunākās pirmās un rāda 12 vienā lapā
-        $categories = Recipe::distinct('category')->pluck('category')->filter(); // Paņem unikālās kategorijas sarakstā
+        $recipes = $query->latest()->paginate(12);
+        $categories = Recipe::distinct('category')->pluck('category')->filter();
 
-        return view('recipes.index', compact('recipes', 'categories')); // Atver recipes.index skatu ar receptēm + kategorijām
+        return view('recipes.index', compact('recipes', 'categories'));
     }
 
-    public function show(Recipe $recipe) // Parāda vienu recepti (Laravel pats atrod pēc ID no URL)
+    public function show(Recipe $recipe)
     {
-        $recipe->load(['user', 'reviews.user']); // Ielādē autoru + atsauksmes un atsauksmju autorus
-
-        $relatedRecipes = Recipe::with('user') // Līdzīgās receptes (ar autoru)
-            ->where('category', $recipe->category) // Tajā pašā kategorijā
-            ->where('id', '!=', $recipe->id) // Izņemot šo pašu recepti
-            ->inRandomOrder() // Sajauc nejaušā secībā
-            ->take(4) // Paņem 4 gabalus
-            ->get(); // Izpilda un dabū kolekciju
-
-        $myReview = null; // Noklusēti: lietotāja atsauksme nav atrasta
-        if (Auth::check()) { // Ja lietotājs ir ielogots
-            $myReview = $recipe->reviews->firstWhere('user_id', Auth::id()); // Atrod pirmo atsauksmi no šī lietotāja
-        }
-
-        return view('recipes.show', compact( // Atver receptes skatīšanās lapu
-            'recipe', // pašu recepti
-            'relatedRecipes', // līdzīgās receptes
-            'myReview' // mana atsauksme (ja ir)
-        ));
-    }
-
-    public function create() // Parāda receptes izveides formu
-    {
-        return view('recipes.create'); // Atver recipes.create skatu
-    }
-
-    public function store(Request $request) // Saglabā jaunu recepti pēc formas iesniegšanas
-    {
-        $validated = $request->validate([ // Pārbauda ievadītos laukus
-            'title' => 'required|string|max:255', // Nosaukums obligāts, teksts, max 255
-            'description' => 'required|string', // Apraksts obligāts
-            'ingredients' => 'required|string', // Sastāvdaļas obligātas
-            'instructions' => 'required|string', // Instrukcijas obligātas
-            'prep_time' => 'nullable|integer|min:0', // Gatavošanas sagatavošanas laiks nav obligāts, bet ja ir, tad skaitlis >=0
-            'cook_time' => 'nullable|integer|min:0', // Gatavošanas laiks nav obligāts, bet ja ir, tad skaitlis >=0
-            'servings' => 'nullable|integer|min:1', // Porcijas nav obligātas, bet ja ir, tad >=1
-            'difficulty' => 'nullable|string|max:50', // Grūtība nav obligāta
-            'category' => 'nullable|string|max:100', // Kategorija nav obligāta
-            'image' => 'nullable|image|max:4096', // Attēls nav obligāts, ja ir, jābūt bildei un max ~4MB
+        $recipe->load([
+            'user',
+            'reviews.user',
+            'ingredientsItems',
         ]);
 
-        if ($request->hasFile('image')) { // Ja lietotājs augšupielādēja attēlu
-            $validated['image_path'] = $request->file('image')->store('recipes', 'public'); 
-            // Saglabā bildi storage/public/recipes un ieliek ceļu image_path laukā
+        $relatedRecipes = Recipe::with('user')
+            ->where('category', $recipe->category)
+            ->where('id', '!=', $recipe->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        $myReview = null;
+        if (Auth::check()) {
+            $myReview = $recipe->reviews->firstWhere('user_id', Auth::id());
         }
 
-        $validated['user_id'] = Auth::id(); // Pievieno receptes autoru (ielogotā lietotāja ID)
+        return view('recipes.show', compact('recipe', 'relatedRecipes', 'myReview'));
+    }
 
-        try { // Mēģina saglabāt recepti
-            $recipe = Recipe::create($validated); // Izveido recepti datubāzē
-            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.'); 
-            // Aizved uz receptes skatīšanās lapu ar paziņojumu
-        } catch (\Exception $e) { // Ja kaut kas nogāja greizi
-            Log::error('Recipe store error', [ // Ieraksta kļūdu laravel.log
-                'error' => $e->getMessage(), // Kļūdas teksts
-                'request' => $request->all() // Visi ievadītie dati (debug nolūkiem)
+    public function create()
+    {
+        return view('recipes.create');
+    }
+
+    /**
+     * ✅ No ingredient_*[] masīviem:
+     *  - izveido recipe_ingredients ierakstus
+     *  - uzģenerē legacy text lauku recipes.ingredients (meklēšanai + backward-compat)
+     */
+    private function syncIngredientsFromArrays(Recipe $recipe, Request $request): void
+    {
+        $names = $request->input('ingredient_name', []);
+        $qtys  = $request->input('ingredient_qty', []);
+        $units = $request->input('ingredient_unit', []);
+
+        // Notīra vecos
+        $recipe->ingredientsItems()->delete();
+
+        $legacyLines = [];
+
+        $count = max(count($names), count($qtys), count($units));
+        for ($i = 0; $i < $count; $i++) {
+            $name = trim((string)($names[$i] ?? ''));
+            $qtyRaw = $qtys[$i] ?? null;
+            $unit = trim((string)($units[$i] ?? ''));
+
+            if ($name === '') {
+                continue; // tukša rinda -> ignorē
+            }
+
+            // quantity var būt null (piem. "pēc garšas")
+            $quantity = null;
+            if ($qtyRaw !== null && $qtyRaw !== '') {
+                // normalizē komatu uz punktu
+                $qtyNorm = str_replace(',', '.', (string)$qtyRaw);
+                if (is_numeric($qtyNorm)) {
+                    $quantity = (float)$qtyNorm;
+                }
+            }
+
+            $recipe->ingredientsItems()->create([
+                'name' => $name,
+                'quantity' => $quantity,
+                'unit' => $unit !== '' ? $unit : null,
             ]);
-            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log'); 
-            // Atgriežas atpakaļ, saglabā ievadītos datus un parāda kļūdas ziņu
+
+            // Legacy string: "200 g Milti" / "Milti"
+            if ($quantity !== null && $unit !== '') {
+                $legacyLines[] = rtrim(rtrim((string)$quantity, '0'), '.') . ' ' . $unit . ' ' . $name;
+            } elseif ($quantity !== null) {
+                $legacyLines[] = rtrim(rtrim((string)$quantity, '0'), '.') . ' ' . $name;
+            } else {
+                $legacyLines[] = $name . ($unit !== '' ? ' (' . $unit . ')' : '');
+            }
         }
+
+        // uzliek recipes.ingredients tekstu, lai search un vecie skati turpina strādāt
+        $recipe->ingredients = implode("\n", $legacyLines);
+        $recipe->save();
     }
 
-    public function edit(Recipe $recipe) // Parāda receptes rediģēšanas formu
+    public function store(Request $request)
     {
-        if ($recipe->user_id !== Auth::id()) { // Ja šī recepte nepieder ielogotajam lietotājam
-            abort(403); // Aizliedz piekļuvi (403 = Forbidden)
-        }
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'instructions' => 'required|string',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
+            'difficulty' => 'nullable|string|max:50',
+            'category' => 'nullable|string|max:100',
 
-        return view('recipes.edit', compact('recipe')); // Atver recipes.edit skatu ar receptes datiem
-    }
+            // ✅ NEW: ingredients arrays
+            'ingredient_name' => 'required|array|min:1',
+            'ingredient_name.*' => 'nullable|string|max:255',
+            'ingredient_qty' => 'nullable|array',
+            'ingredient_qty.*' => 'nullable',
+            'ingredient_unit' => 'nullable|array',
+            'ingredient_unit.*' => 'nullable|string|max:30',
 
-    public function update(Request $request, Recipe $recipe) // Saglabā izmaiņas receptē
-    {
-        if ($recipe->user_id !== Auth::id()) { // Ja recepte nepieder lietotājam
-            abort(403); // Aizliedz
-        }
-
-        if ($request->has('_method') && strtolower($request->input('_method')) === 'delete') { 
-            // Aizsardzība: ja forma kļūdaini sūta DELETE, tad šo bloķē
-            abort(400, 'Invalid request method.'); // 400 = slikts pieprasījums
-        }
-
-        $validated = $request->validate([ // Pārbauda laukus, ko drīkst atjaunināt
-            'title' => 'required|string|max:255', // Nosaukums obligāts
-            'description' => 'required|string', // Apraksts obligāts
-            'ingredients' => 'required|string', // Sastāvdaļas obligātas
-            'instructions' => 'required|string', // Instrukcijas obligātas
-            'prep_time' => 'nullable|integer|min:0', // Sagatavošanas laiks (ja ir)
-            'cook_time' => 'nullable|integer|min:0', // Gatavošanas laiks (ja ir)
-            'servings' => 'nullable|integer|min:1', // Porcijas (ja ir)
-            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta', // Grūtība obligāta un tikai no šīm vērtībām
-            'category' => 'required|string', // Kategorija obligāta
+            // ✅ MEDIA
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
+            'image_url' => 'nullable|url|max:2048',
+            'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
+            'video_url' => 'nullable|url|max:2048',
         ]);
 
-        $recipe->update($validated); // Atjaunina recepti datubāzē ar validētajiem datiem
+        $validated['user_id'] = Auth::id();
 
-        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmīgi atjaunināta!'); 
-        // Aizved atpakaļ uz receptes lapu ar paziņojumu
-    }
-
-    public function destroy(Recipe $recipe) // Dzēš recepti
-    {
-        if ($recipe->user_id !== Auth::id() && !Auth::user()->is_admin) { 
-            // Dzēst drīkst: vai nu receptes autors, vai admins
-            abort(403); // Ja neviens no tiem → aizliedz
+        // Media
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
+            $validated['image_url'] = null;
+        } elseif ($request->filled('image_url')) {
+            $validated['image_url'] = $request->input('image_url');
+            $validated['image_path'] = null;
         }
 
-        $recipe->delete(); // Dzēš recepti no datubāzes
+        if ($request->hasFile('video')) {
+            $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
+            $validated['video_url'] = null;
+        } elseif ($request->filled('video_url')) {
+            $validated['video_url'] = $request->input('video_url');
+        }
 
-        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi dzēsta!'); 
-        // Aizved uz profila recepšu sarakstu ar paziņojumu
+        // Legacy field placeholder (tiks aizpildīts syncIngredientsFromArrays)
+        $validated['ingredients'] = '';
+
+        try {
+            $recipe = Recipe::create($validated);
+
+            // ✅ saglabā ingredientus tabulā + uzģenerē legacy string
+            $this->syncIngredientsFromArrays($recipe, $request);
+
+            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.');
+        } catch (\Exception $e) {
+            Log::error('Recipe store error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
+        }
     }
 
-    public function userRecipes() // Parāda tikai manas receptes profilā
+    public function edit(Recipe $recipe)
     {
-        $recipes = Recipe::where('user_id', Auth::id()) // Paņem receptes, kur user_id ir mans ID
-                        ->latest() // Jaunākās pirmās
-                        ->paginate(12); // 12 vienā lapā
+        if ($recipe->user_id !== Auth::id()) {
+            abort(403);
+        }
 
-        return view('profile.recipes', compact('recipes')); // Atver profila recepšu lapu
+        $recipe->load('ingredientsItems');
+
+        return view('recipes.edit', compact('recipe'));
+    }
+
+    public function update(Request $request, Recipe $recipe)
+    {
+        if ($recipe->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'instructions' => 'required|string',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
+            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
+            'category' => 'required|string',
+
+            // ✅ NEW: ingredients arrays
+            'ingredient_name' => 'required|array|min:1',
+            'ingredient_name.*' => 'nullable|string|max:255',
+            'ingredient_qty' => 'nullable|array',
+            'ingredient_qty.*' => 'nullable|numeric|min:0',
+            'ingredient_unit' => 'nullable|array',
+            'ingredient_unit.*' => 'nullable|string|max:30',
+
+            // ✅ MEDIA
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
+            'image_url' => 'nullable|url|max:2048',
+            'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
+            'video_url' => 'nullable|url|max:2048',
+        ]);
+
+        // IMAGE update
+        if ($request->hasFile('image')) {
+            if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
+            $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
+            $validated['image_url'] = null;
+        } elseif ($request->filled('image_url')) {
+            if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
+            $validated['image_path'] = null;
+            $validated['image_url'] = $request->input('image_url');
+        }
+
+        // VIDEO update
+        if ($request->hasFile('video')) {
+            if ($recipe->video_path) Storage::disk('public')->delete($recipe->video_path);
+            $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
+            $validated['video_url'] = null;
+        } elseif ($request->filled('video_url')) {
+            $validated['video_url'] = $request->input('video_url');
+        }
+
+        // Legacy field placeholder (tiks aizpildīts syncIngredientsFromArrays)
+        $validated['ingredients'] = $recipe->ingredients ?? '';
+
+        $recipe->update($validated);
+
+        // ✅ ingredientu tabula + legacy string
+        $this->syncIngredientsFromArrays($recipe, $request);
+
+        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmīgi atjaunināta!');
+    }
+
+    public function destroy(Recipe $recipe)
+    {
+        if ($recipe->user_id !== Auth::id() && !Auth::user()->is_admin) {
+            abort(403);
+        }
+
+        if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
+        if ($recipe->video_path) Storage::disk('public')->delete($recipe->video_path);
+
+        $recipe->ingredientsItems()->delete();
+        $recipe->delete();
+
+        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi dzēsta!');
+    }
+
+    public function userRecipes()
+    {
+        $recipes = Recipe::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(12);
+
+        return view('profile.recipes', compact('recipes'));
     }
 }
