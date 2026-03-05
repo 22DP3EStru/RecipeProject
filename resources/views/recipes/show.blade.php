@@ -236,13 +236,14 @@
     $origTotal = $origPrep + $origCook;
 
     // ✅ DROŠI: JAUNĀS TABULAS KOLEKCIJA (NEJAUKT AR $recipe->ingredients STRING KOLONNU)
-    $ingredientsRel = null;
+    $ingredientsRel = collect();
     try {
-        $ingredientsRel = $recipe->getRelation('ingredients'); // ielādēta kolekcija (ja kontrolierī load('ingredients'))
+        // svarīgi: kā METODE, nevis property
+        $ingredientsRel = $recipe->ingredientsItems;
     } catch (\Throwable $e) {
-        $ingredientsRel = null;
+        $ingredientsRel = collect();
     }
-@endphp
+    @endphp
 
 <div class="container">
     <!-- Header -->
@@ -409,17 +410,20 @@
                                 <li style="padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; gap:10px;">
                                     <span style="color: #56ab2f; margin-right: 6px; font-weight: bold;">✓</span>
 
+                                    @php
+                                        $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? $ing->pivot->quantity ?? null;
+                                    @endphp
                                     {{-- daudzums (pārrēķināms) --}}
-                                    @if(!is_null($ing->quantity))
+                                    @if(!is_null($q))
                                         <span class="ingredientQty"
-                                              data-original="{{ $ing->quantity }}"
-                                              style="color:#333; font-weight:900;">
-                                            {{ rtrim(rtrim(number_format((float)$ing->quantity, 2, '.', ''), '0'), '.') }}
+                                            data-original="{{ (float)$q }}"
+                                            style="color:#333; font-weight:900;">
+                                            {{ rtrim(rtrim(number_format((float)$q, 2, '.', ''), '0'), '.') }}
                                         </span>
                                     @else
                                         <span class="ingredientQty"
-                                              data-original=""
-                                              style="color:#333; font-weight:900;"></span>
+                                            data-original=""
+                                            style="color:#333; font-weight:900;"></span>
                                     @endif
 
                                     {{-- mērvienība --}}
@@ -734,11 +738,24 @@
         if (cookEl)  cookEl.textContent = String(newCook);
         if (totalEl) totalEl.textContent = String(newTotal);
 
-        // pārrēķina tikai jaunās tabulas sastāvdaļas (kur ir data-original skaitlis)
         document.querySelectorAll('.ingredientQty').forEach(el => {
-            const raw = el.dataset.original;
-            const orig = Number(raw);
-            if (!Number.isFinite(orig)) return;
+
+            const raw0 = (el.dataset.original ?? '').toString().trim();
+            if (!raw0) return;
+
+            const raw = raw0.replace(',', '.');
+
+            let orig;
+
+            if (raw.includes('/')) {
+                const [a, b] = raw.split('/').map(s => Number(s.trim()));
+                if (!Number.isFinite(a) || !Number.isFinite(b) || b === 0) return;
+                orig = a / b;
+            } else {
+                orig = parseFloat(raw);
+                if (!Number.isFinite(orig)) return;
+            }
+
             el.textContent = formatQty(orig * k);
         });
     }

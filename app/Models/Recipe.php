@@ -46,6 +46,11 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
         return $this->hasMany(\App\Models\RecipeIngredient::class, 'recipe_id');
     }
 
+    public function ingredients()
+    {
+        return $this->ingredientsItems();
+    }
+
     public function favoritedByUsers() // Definē many-to-many attiecību ar lietotājiem caur favorites tabulu
     {
         return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps();

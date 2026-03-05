@@ -112,7 +112,7 @@
             .form-row { grid-template-columns: 1fr; }
         }
 
-        /* ✅ MEDIA box (tādā pašā stilā kā pārējais) */
+        /* ✅ MEDIA box */
         .media-box{
             background: rgba(102, 126, 234, 0.05);
             padding: 25px;
@@ -173,29 +173,22 @@
 </head>
 <body>
 @php
-    // ✅ old() masīvi validācijas gadījumā
+    // old() masīvi validācijas gadījumā
     $oldNames = old('ingredient_name');
     $oldQtys  = old('ingredient_qty');
     $oldUnits = old('ingredient_unit');
     $useOld = is_array($oldNames) || is_array($oldQtys) || is_array($oldUnits);
 
-    // ✅ DROŠI paņemam attiecību kolekciju (nevis string kolonnu "ingredients")
-    $ingredientsRel = null;
-    try {
-        $ingredientsRel = $recipe->getRelation('ingredients'); // kolekcija, ja kontrolierī load('ingredients')
-    } catch (\Throwable $e) {
-        $ingredientsRel = null;
-    }
+    // ✅ ņemam no pareizā relationship: ingredientsItems
+    $ingredientsRel = $recipe->ingredientsItems ?? collect();
 @endphp
 
 <div class="container">
-    <!-- Header -->
     <div class="header">
         <h1>✏️ Rediģēt recepti</h1>
         <p>Atjauniniet savu recepti "{{ $recipe->title }}"</p>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav-bar">
         <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
         <div class="nav-links">
@@ -210,10 +203,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="main-content">
 
-        <!-- Welcome Message -->
         <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 15px;">
             <div style="font-size: 4rem; margin-bottom: 20px;">✏️</div>
             <h2 style="color: #f093fb; margin-bottom: 15px;">Uzlabojiet savu recepti!</h2>
@@ -222,7 +213,6 @@
             </p>
         </div>
 
-        <!-- Error Messages -->
         @if($errors->any())
             <div class="alert alert-error">
                 <h4 style="margin-bottom: 15px; display: flex; align-items: center;">
@@ -241,7 +231,6 @@
             @csrf
             @method('PUT')
 
-            <!-- Basic Information -->
             <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                 <h3 style="color: #667eea; margin-bottom: 20px; display: flex; align-items: center;">
                     <span style="margin-right: 10px;">📋</span>
@@ -293,7 +282,6 @@
                 </div>
             </div>
 
-            <!-- Time and Servings -->
             <div style="background: rgba(240, 147, 251, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                 <h3 style="color: #f093fb; margin-bottom: 20px; display: flex; align-items: center;">
                     <span style="margin-right: 10px;">⏱️</span>
@@ -321,7 +309,7 @@
                 </div>
             </div>
 
-            <!-- ✅ Ingredients (PAREIZI: recipe_ingredients + fallback) -->
+            <!-- ✅ Ingredients -->
             <div style="background: rgba(86, 171, 47, 0.05); padding: 25px; border-radius: 15px; margin-bottom: 30px;">
                 <h3 style="color: #56ab2f; margin-bottom: 20px; display: flex; align-items: center;">
                     <span style="margin-right: 10px;">🥕</span>
@@ -332,7 +320,6 @@
                     <label class="form-label">🧾 Sastāvdaļu saraksts (daudzums / mērv. / nosaukums)</label>
 
                     <div id="ingredientsWrap">
-                        {{-- 1) Ja bija validācijas kļūdas: rādām old() --}}
                         @if($useOld)
                             @php
                                 $names = is_array($oldNames) ? $oldNames : [];
@@ -354,12 +341,11 @@
                                 </div>
                             @endfor
 
-                        {{-- 2) Ja nav old(): mēģinam ņemt no attiecības --}}
                         @elseif($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
                             @foreach($ingredientsRel as $ing)
                                 <div class="ing-row">
                                     <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                           value="{{ $ing->quantity }}" placeholder="Daudzums (piem. 200)">
+                                           value="{{ is_null($ing->quantity) ? '' : (float)$ing->quantity }}" placeholder="Daudzums (piem. 200)">
                                     <input class="form-input ing-unit" name="ingredient_unit[]" type="text"
                                            value="{{ $ing->unit }}" placeholder="Mērv. (g, ml, gab)">
                                     <input class="form-input ing-name" name="ingredient_name[]" type="text" required
@@ -368,28 +354,16 @@
                                 </div>
                             @endforeach
 
-                        {{-- 3) Fallback: ja jaunā tabula tukša -> parādam veco textarea rindiņās, kā names --}}
                         @else
-                            @php
-                                $legacyLines = array_values(array_filter(array_map('trim', explode("\n", (string)old('ingredients', $recipe->ingredients)))));
-                                if(count($legacyLines) < 1) $legacyLines = [''];
-                            @endphp
-
-                            @foreach($legacyLines as $line)
-                                <div class="ing-row">
-                                    <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                           value="" placeholder="Daudzums (piem. 200)">
-                                    <input class="form-input ing-unit" name="ingredient_unit[]" type="text"
-                                           value="" placeholder="Mērv. (g, ml, gab)">
-                                    <input class="form-input ing-name" name="ingredient_name[]" type="text" required
-                                           value="{{ $line }}" placeholder="Sastāvdaļa (piem. Milti)">
-                                    <button type="button" class="btn btn-danger" onclick="removeIngRow(this)" style="padding:12px 14px;">✖</button>
-                                </div>
-                            @endforeach
-
-                            <small style="color:#666; display:block; margin-top:10px; font-weight:800;">
-                                (Šai receptei sastāvdaļas bija vecajā formātā – te tās ir ieliktas “nosaukums” laukā.)
-                            </small>
+                            <div class="ing-row">
+                                <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0"
+                                       value="" placeholder="Daudzums (piem. 200)">
+                                <input class="form-input ing-unit" name="ingredient_unit[]" type="text"
+                                       value="" placeholder="Mērv. (g, ml, gab)">
+                                <input class="form-input ing-name" name="ingredient_name[]" type="text" required
+                                       value="" placeholder="Sastāvdaļa (piem. Milti)">
+                                <button type="button" class="btn btn-danger" onclick="removeIngRow(this)" style="padding:12px 14px;">✖</button>
+                            </div>
                         @endif
                     </div>
 
@@ -398,14 +372,9 @@
                     </button>
 
                     <small style="color: #666; margin-top: 10px; display: block;">
-                        💡 Padoms: Ja kādai sastāvdaļai nav jēgas daudzumu norādīt (piem. “pēc garšas”), atstāj “Daudzums” tukšu.
+                        💡 Padoms: Ja nav jēgas daudzumu norādīt (piem. “pēc garšas”), atstāj “Daudzums” tukšu.
                     </small>
                 </div>
-
-                {{-- ✅ SAGLABĀ "ingredients" string lauku saderībai ar esošo controller validāciju.
-                     Controller tavā gadījumā vēl prasa 'ingredients' => required|string.
-                     Šo lauku mēs atjaunosim ar JS no rindām. --}}
-                <textarea id="ingredientsText" name="ingredients" style="display:none;">{{ old('ingredients', $recipe->ingredients) }}</textarea>
             </div>
 
             <!-- Instructions -->
@@ -496,7 +465,6 @@
                 <span class="pill">💡 Vari atstāt tukšu, ja negribi mainīt media.</span>
             </div>
 
-            <!-- Recipe Info -->
             <div style="background: rgba(102, 126, 234, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666; flex-wrap:wrap; gap:10px;">
                     <span>Recepte izveidota: {{ $recipe->created_at->format('d.m.Y H:i') }}</span>
@@ -504,7 +472,6 @@
                 </div>
             </div>
 
-            <!-- Submit Buttons -->
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
                 <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
                     💾 Saglabāt izmaiņas
@@ -515,7 +482,6 @@
             </div>
         </form>
 
-        <!-- Delete form OUTSIDE -->
         <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
             <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
                   onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.');">
@@ -527,7 +493,6 @@
             </form>
         </div>
 
-        <!-- Tips -->
         <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; margin-top: 40px;">
             <h3 style="color: #667eea; margin-bottom: 20px; text-align: center;">💡 Padomi recepšu uzlabošanai</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
@@ -564,7 +529,6 @@ function addIngRow(){
         <button type="button" class="btn btn-danger" onclick="removeIngRow(this)" style="padding:12px 14px;">✖</button>
     `;
     wrap.appendChild(row);
-    syncIngredientsText();
 }
 
 function removeIngRow(btn){
@@ -573,43 +537,7 @@ function removeIngRow(btn){
     if (rows.length <= 1) return; // atstāj vismaz 1 rindu
     const row = btn.closest('.ing-row');
     if (row) row.remove();
-    syncIngredientsText();
 }
-
-// ✅ uztur "ingredients" textarea saderībai ar controller (required|string)
-function syncIngredientsText(){
-    const text = document.getElementById('ingredientsText');
-    if (!text) return;
-
-    const lines = [];
-    document.querySelectorAll('#ingredientsWrap .ing-row').forEach(row => {
-        const qty  = row.querySelector('input[name="ingredient_qty[]"]')?.value?.trim() || '';
-        const unit = row.querySelector('input[name="ingredient_unit[]"]')?.value?.trim() || '';
-        const name = row.querySelector('input[name="ingredient_name[]"]')?.value?.trim() || '';
-
-        if (!name) return;
-
-        // veidojam vienkāršu, cilvēkam lasāmu rindu (Controller tāpat sinhronizē pa rindām)
-        let line = '';
-        if (qty) line += qty;
-        if (unit) line += (line ? ' ' : '') + unit;
-        line += (line ? ' ' : '') + name;
-
-        lines.push(line.trim());
-    });
-
-    // lai neizkrīt validācija, ja kaut kas tukšs:
-    text.value = lines.length ? lines.join("\n") : '';
-}
-
-// listen uz visiem inputs (delegation)
-document.addEventListener('input', (e) => {
-    if (e.target && (e.target.name === 'ingredient_qty[]' || e.target.name === 'ingredient_unit[]' || e.target.name === 'ingredient_name[]')) {
-        syncIngredientsText();
-    }
-});
-
-document.addEventListener('DOMContentLoaded', syncIngredientsText);
 </script>
 </body>
 </html>

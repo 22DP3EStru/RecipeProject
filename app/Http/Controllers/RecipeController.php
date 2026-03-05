@@ -48,13 +48,55 @@ class RecipeController extends Controller
         return view('recipes.index', compact('recipes', 'categories'));
     }
 
+    /**
+     * ✅ Backfill vecajiem ierakstiem:
+     * Ja recipe_ingredients.quantity ir NULL, bet name ir "200 g Milti",
+     * tad sadala un ieliek quantity/unit/name pareizajās kolonnās.
+     */
+    private function tryBackfillIngredientQuantity(Recipe $recipe): void
+    {
+        // pārliecināmies, ka kolekcija ir ielādēta
+        $items = $recipe->relationLoaded('ingredientsItems')
+            ? $recipe->ingredientsItems
+            : $recipe->ingredientsItems()->get();
+
+        foreach ($items as $item) {
+            if (!is_null($item->quantity)) continue;
+
+            $line = trim((string)$item->name);
+            if ($line === '') continue;
+
+            // "200 g milti" / "2 gab olas" / "0.5 l piens" / "2,5 kg kartupeļi"
+            if (preg_match('/^(\d+(?:[.,]\d+)?)\s*([^\d\s]+)?\s+(.+)$/u', $line, $m)) {
+                $qty = (float) str_replace(',', '.', $m[1]);
+                $unit = isset($m[2]) ? trim($m[2]) : null;
+                $name = trim($m[3]);
+
+                $item->quantity = $qty;
+                // ja unit jau bija aizpildīts, neatņemam; citādi ieliekam no parsēšanas
+                if (empty($item->unit) && !empty($unit)) {
+                    $item->unit = $unit;
+                }
+                $item->name = $name;
+                $item->save();
+            }
+        }
+    }
+
     public function show(Recipe $recipe)
     {
+        // ✅ Ielādē eksistējošo relationship (nevis "ingredients" alias)
         $recipe->load([
             'user',
             'reviews.user',
             'ingredientsItems',
         ]);
+
+        // ✅ Vecajiem ierakstiem automātiski aizpilda quantity/unit no "name"
+        $this->tryBackfillIngredientQuantity($recipe);
+
+        // pārlādē, lai Blade redz svaigās vērtības
+        $recipe->load('ingredientsItems');
 
         $relatedRecipes = Recipe::with('user')
             ->where('category', $recipe->category)
@@ -203,6 +245,10 @@ class RecipeController extends Controller
             abort(403);
         }
 
+        $recipe->load('ingredientsItems');
+
+        // ✅ ja vecie ieraksti ir nepareizi (quantity NULL + name "200 g ..."), salabo uzreiz
+        $this->tryBackfillIngredientQuantity($recipe);
         $recipe->load('ingredientsItems');
 
         return view('recipes.edit', compact('recipe'));
