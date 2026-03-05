@@ -22,6 +22,18 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
 
+Route::get('/recipes/{recipe}/pdf', [RecipeController::class, 'downloadPdf'])
+    ->middleware(['auth','verified']) // ja gribi tikai ielogotiem
+    ->name('recipes.pdf');
+
+Route::get('/recipes/{recipe}/pdf/image', [RecipeController::class, 'downloadImagePdf'])
+    ->middleware(['auth','verified'])
+    ->name('recipes.pdf.image');
+
+Route::get('/recipes/{recipe}/print', [RecipeController::class, 'printView'])
+    ->middleware(['auth','verified'])
+    ->name('recipes.print');
+    
 // Dashboard (tikai ielogotiem)
 Route::get('/dashboard', function () {
     return view('dashboard');

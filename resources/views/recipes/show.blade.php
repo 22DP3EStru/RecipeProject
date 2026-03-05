@@ -170,7 +170,7 @@
             transition: transform .15s ease, background .15s ease;
         }
         .heart-btn:hover{ transform: translateY(-2px); background: rgba(102,126,234,0.12); }
-        .heart-wrap{ display:flex; justify-content:center; align-items:center; gap:10px; margin-top: 12px; }
+        .heart-wrap{ display:flex; justify-content:center; align-items:center; gap:10px; margin-top: 12px; flex-wrap:wrap; }
 
         /* ✅ MEDIA BLOCK */
         .media-wrap{ max-width: 820px; margin: 0 auto 10px; padding-top: 18px; }
@@ -215,6 +215,24 @@
         }
         .servings-hint{ font-size: 13px; color: #666; font-weight: 700; opacity: .9; }
         .meta-value-inline{ color:#666; font-weight: 600; }
+
+        /* ✅ PDF/PRINT ACTIONS */
+        .action-row{
+            display:flex;
+            justify-content:center;
+            gap:12px;
+            flex-wrap:wrap;
+            margin: 18px 0 0;
+        }
+        .btn-small{
+            padding: 10px 18px;
+            font-size: 14px;
+        }
+        .btn-outline{
+            background: rgba(255,255,255,0.9);
+            color:#333;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body>
@@ -235,15 +253,14 @@
     $origCook = (int)($recipe->cook_time ?? 0);
     $origTotal = $origPrep + $origCook;
 
-    // ✅ DROŠI: JAUNĀS TABULAS KOLEKCIJA (NEJAUKT AR $recipe->ingredients STRING KOLONNU)
+    // ✅ DROŠI: JAUNĀS TABULAS KOLEKCIJA
     $ingredientsRel = collect();
     try {
-        // svarīgi: kā METODE, nevis property
         $ingredientsRel = $recipe->ingredientsItems;
     } catch (\Throwable $e) {
         $ingredientsRel = collect();
     }
-    @endphp
+@endphp
 
 <div class="container">
     <!-- Header -->
@@ -310,6 +327,19 @@
                     aria-label="Porciju skaits"
                 >
                 <span class="servings-hint">(oriģināli: {{ $origServings }})</span>
+            </div>
+
+            {{-- ✅ PDF / BILDES PDF / DRUKA --}}
+            <div class="action-row">
+                <a href="{{ route('recipes.pdf', $recipe) }}" class="btn btn-primary btn-small">
+                    📄 Lejupielādēt PDF
+                </a>
+                <a href="{{ route('recipes.pdf.image', $recipe) }}" class="btn btn-success btn-small">
+                    🖼️ Bildi uz PDF
+                </a>
+                <a href="{{ route('recipes.print', $recipe) }}" class="btn btn-outline btn-small">
+                    🖨️ Drukāt (Ctrl+P)
+                </a>
             </div>
 
             <!-- ✅ MEDIA (faili + linki) -->
@@ -411,8 +441,9 @@
                                     <span style="color: #56ab2f; margin-right: 6px; font-weight: bold;">✓</span>
 
                                     @php
-                                        $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? $ing->pivot->quantity ?? null;
+                                        $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? (isset($ing->pivot) ? ($ing->pivot->quantity ?? null) : null);
                                     @endphp
+
                                     {{-- daudzums (pārrēķināms) --}}
                                     @if(!is_null($q))
                                         <span class="ingredientQty"
@@ -531,7 +562,6 @@
 
             @auth
                 <div class="review-card">
-                    {{-- JA NAV ATSAUKSMES --}}
                     @if(!$myReview)
                         <div style="font-weight:800; margin-bottom:10px;">Tava atsauksme</div>
 
@@ -549,16 +579,14 @@
                             </div>
 
                             <textarea name="comment" rows="4" maxlength="2000"
-                                    style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);"
-                                    placeholder="Uzraksti savu viedokli..."></textarea>
+                                      style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);"
+                                      placeholder="Uzraksti savu viedokli..."></textarea>
                             @error('comment') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
 
                             <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
                                 ✅ Pievienot atsauksmi
                             </button>
                         </form>
-
-                    {{-- JA ATSAUKSME IR: RĀDĀM + EDIT + DELETE --}}
                     @else
                         <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
                             <div>
@@ -580,7 +608,7 @@
                                 </button>
 
                                 <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
-                                    onsubmit="return confirm('Dzēst savu atsauksmi?')">
+                                      onsubmit="return confirm('Dzēst savu atsauksmi?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">
@@ -594,23 +622,22 @@
                             <div style="margin-top:10px; color:#555;">{{ $myReview->comment }}</div>
                         @endif
 
-                        {{-- SLĒPTĀ REDIĢĒŠANAS FORMA --}}
                         <form id="edit-review-form"
-                            method="POST"
-                            action="{{ route('recipes.reviews.store', $recipe) }}"
-                            style="display:none; margin-top:15px;">
+                              method="POST"
+                              action="{{ route('recipes.reviews.store', $recipe) }}"
+                              style="display:none; margin-top:15px;">
                             @csrf
 
                             <div class="stars" style="margin-bottom:10px;">
                                 @for($i=5; $i>=1; $i--)
                                     <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
-                                        @checked((int)$myReview->rating === $i) required>
+                                           @checked((int)$myReview->rating === $i) required>
                                     <label for="editStar{{ $i }}">★</label>
                                 @endfor
                             </div>
 
                             <textarea name="comment" rows="4" maxlength="2000"
-                                    style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);">{{ $myReview->comment }}</textarea>
+                                      style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);">{{ $myReview->comment }}</textarea>
 
                             <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
                                 💾 Saglabāt izmaiņas
@@ -620,7 +647,6 @@
                 </div>
             @endauth
 
-            {{-- VISU ATSauksmju saraksts --}}
             @forelse($recipe->reviews as $review)
                 <div class="review-card">
                     <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
@@ -681,7 +707,7 @@
                              onmouseover="this.style.transform='translateY(-5px)'"
                              onmouseout="this.style.transform='translateY(0)'">
                             <h4 style="color: #667eea; margin-bottom: 10px;">{{ $relatedRecipe->title }}</h4>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ Str::limit($relatedRecipe->description, 80) }}</p>
+                            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
                             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888; margin-bottom: 15px;">
                                 <span>{{ $relatedRecipe->category }}</span>
                                 <span>{{ $relatedRecipe->user->name }}</span>
@@ -717,7 +743,7 @@
     }
 
     function formatQty(n){
-        const rounded = Math.round(n * 100) / 100; // 2 cipari aiz komata
+        const rounded = Math.round(n * 100) / 100;
         return String(rounded).replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
     }
 
@@ -739,7 +765,6 @@
         if (totalEl) totalEl.textContent = String(newTotal);
 
         document.querySelectorAll('.ingredientQty').forEach(el => {
-
             const raw0 = (el.dataset.original ?? '').toString().trim();
             if (!raw0) return;
 
