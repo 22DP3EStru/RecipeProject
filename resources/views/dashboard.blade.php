@@ -241,11 +241,8 @@
                 <a href="/recipes" class="btn btn-primary">🔍 Pārlūkot visas receptes</a>
                 <a href="/categories" class="btn btn-warning">📂 Apskatīt kategorijas</a>
                 <a href="/profile/recipes" class="btn btn-danger">📋 Manas receptes</a>
-
                 <a href="/profile/favorites" class="btn btn-primary">❤️ Mani favorīti</a>
-
-                <!-- ✅ KONTAKTI POGA arī quick actions -->
-                <a href="{{ route('contact') }}">📞 Kontakti</a>
+                <a href="{{ route('contact') }}" class="btn btn-secondary">📞 Kontakti</a>
             </div>
         </div>
 

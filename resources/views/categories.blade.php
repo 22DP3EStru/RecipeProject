@@ -281,6 +281,10 @@
                 </p>
             </div>
 
+            <div class="pdf-actions">
+                <a href="{{ route('pdf.category.recipes', $category->id) }}" class="pdf-btn">Kategorijas PDF</a>
+            </div>
+
             <!-- Categories Grid -->
             @if($categories->count() > 0)
                 <div class="categories-grid">

@@ -291,6 +291,10 @@
                 <span style="color: #333; font-weight: 600;">⚙️ Profila iestatījumi</span>
             </div>
 
+            <div class="pdf-actions">
+                <a href="{{ route('pdf.user.profile', $user->id) }}" class="pdf-btn">Profila PDF</a>
+            </div>
+
             <!-- Success Messages -->
             @if (session('status') === 'profile-updated')
                 <div class="alert alert-success">

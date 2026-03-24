@@ -216,22 +216,30 @@
         .servings-hint{ font-size: 13px; color: #666; font-weight: 700; opacity: .9; }
         .meta-value-inline{ color:#666; font-weight: 600; }
 
-        /* ✅ PDF/PRINT ACTIONS */
-        .action-row{
-            display:flex;
-            justify-content:center;
-            gap:12px;
-            flex-wrap:wrap;
-            margin: 18px 0 0;
+        .pdf-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            margin-bottom: 16px;
         }
-        .btn-small{
-            padding: 10px 18px;
-            font-size: 14px;
+
+        .pdf-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            font-size: 12px;
+            line-height: 1.2;
+            text-decoration: none;
+            border: 1px solid #d6d6d6;
+            border-radius: 6px;
+            background: #fff;
+            color: #444;
+            transition: 0.2s ease;
         }
-        .btn-outline{
-            background: rgba(255,255,255,0.9);
-            color:#333;
-            border: 1px solid rgba(0,0,0,0.15);
+
+        .pdf-btn:hover {
+            background: #f5f5f5;
+            border-color: #bdbdbd;
         }
     </style>
 </head>
@@ -329,19 +337,11 @@
                 <span class="servings-hint">(oriģināli: {{ $origServings }})</span>
             </div>
 
-            {{-- ✅ PDF / BILDES PDF / DRUKA --}}
-            <div class="action-row">
-                <a href="{{ route('recipes.pdf', $recipe) }}" class="btn btn-primary btn-small">
-                    📄 Lejupielādēt PDF
-                </a>
-                <a href="{{ route('recipes.pdf.image', $recipe) }}" class="btn btn-success btn-small">
-                    🖼️ Bildi uz PDF
-                </a>
-                <a href="{{ route('recipes.print', $recipe) }}" class="btn btn-outline btn-small">
-                    🖨️ Drukāt (Ctrl+P)
-                </a>
+            <div class="pdf-actions">
+                <a href="{{ route('pdf.recipe.full', $recipe->id) }}" class="pdf-btn pdf-link" data-type="full">PDF pilns</a>
+                <a href="{{ route('pdf.recipe.ingredients', $recipe->id) }}" class="pdf-btn pdf-link" data-type="ingredients">Sastāvdaļas</a>
+                <a href="{{ route('pdf.recipe.steps', $recipe->id) }}" class="pdf-btn pdf-link" data-type="steps">Soļi</a>
             </div>
-
             <!-- ✅ MEDIA (faili + linki) -->
             @if($recipe->image_path || $recipe->image_url || $recipe->video_path || $recipe->video_url)
                 <div class="media-wrap">
@@ -730,28 +730,32 @@
     if (!input) return;
 
     const servingsDisplay = document.getElementById('servingsDisplay');
-
     const prepEl  = document.getElementById('prepTime');
     const cookEl  = document.getElementById('cookTime');
     const totalEl = document.getElementById('totalTime');
+    const pdfLinks = document.querySelectorAll('.pdf-link');
 
     const originalServings = Number(input.value) || 1;
 
-    function num(v){
+    function num(v) {
         const n = Number(v);
         return Number.isFinite(n) ? n : 0;
     }
 
-    function formatQty(n){
+    function formatQty(n) {
         const rounded = Math.round(n * 100) / 100;
-        return String(rounded).replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
+        return String(rounded)
+            .replace(/\.0+$/, '')
+            .replace(/(\.\d*[1-9])0+$/, '$1');
     }
 
-    function recalc(){
+    function recalc() {
         const newServings = Math.max(1, num(input.value) || 1);
         const k = newServings / originalServings;
 
-        if (servingsDisplay) servingsDisplay.textContent = String(newServings);
+        if (servingsDisplay) {
+            servingsDisplay.textContent = String(newServings);
+        }
 
         const origPrep = prepEl ? num(prepEl.dataset.original) : 0;
         const origCook = cookEl ? num(cookEl.dataset.original) : 0;
@@ -784,6 +788,19 @@
             el.textContent = formatQty(orig * k);
         });
     }
+
+    pdfLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const servings = Math.max(1, parseInt(input.value || 1, 10));
+            const url = new URL(this.href, window.location.origin);
+
+            url.searchParams.set('servings', servings);
+
+            window.open(url.toString(), '_blank');
+        });
+    });
 
     input.addEventListener('input', recalc);
     recalc();

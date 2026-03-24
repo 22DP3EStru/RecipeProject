@@ -7,6 +7,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\RecipeReviewController;
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 // Public (bez login)
@@ -78,5 +79,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
 });
+
+Route::prefix('pdf')->name('pdf.')->group(function () {
+    Route::get('/recipe/{recipe}/full', [PdfController::class, 'recipeFull'])->name('recipe.full');
+    Route::get('/recipe/{recipe}/ingredients', [PdfController::class, 'recipeIngredients'])->name('recipe.ingredients');
+    Route::get('/recipe/{recipe}/steps', [PdfController::class, 'recipeSteps'])->name('recipe.steps');
+
+    Route::get('/category/{category}/recipes', [PdfController::class, 'categoryRecipes'])->name('category.recipes');
+    Route::get('/user/{user}/profile', [PdfController::class, 'userProfile'])->name('user.profile');
+
+    Route::get('/popular-recipes', [PdfController::class, 'popularRecipes'])->name('popular.recipes');
+    Route::get('/admin-statistics', [PdfController::class, 'adminStatistics'])->name('admin.statistics');
+    Route::get('/filtered-recipes', [PdfController::class, 'filteredRecipes'])->name('filtered.recipes');
+});
+
 
 require __DIR__ . '/auth.php';

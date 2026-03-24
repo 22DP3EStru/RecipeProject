@@ -4,6 +4,11 @@
 <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
     <h2 class="text-3xl font-bold mb-6">Administrācijas panelis</h2>
 
+    <div class="pdf-actions">
+        <a href="{{ route('pdf.admin.statistics') }}" class="pdf-btn">Statistikas PDF</a>
+        <a href="{{ route('pdf.popular.recipes') }}" class="pdf-btn">Populārākās receptes PDF</a>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         <div class="bg-blue-100 border border-blue-300 shadow rounded-lg p-6">
             <h3 class="text-md font-medium text-blue-900">Receptes kopā</h3>
