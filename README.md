@@ -124,7 +124,9 @@ http://127.0.0.1:8000
 - **Skati:** `resources/views/`
 
 ---
+Dokumentācija: https://1drv.ms/w/c/e89a595db40b3546/IQAzKAeK-fvEQqDYZIph98acAV2lkiiDLd51d5KMupucvno?e=uFAdhY
 
+---
 # Autors
 
 Elīza Strūberga
