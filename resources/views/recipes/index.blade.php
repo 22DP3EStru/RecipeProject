@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pārlūkot receptes - Vecmāmiņas Receptes</title>
     <style>
-        /* Dashboard Style Design */
         * {
             margin: 0;
             padding: 0;
@@ -229,6 +228,33 @@
             color: white;
         }
 
+        .pdf-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pdf-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 13px;
+            line-height: 1.2;
+            text-decoration: none;
+            border: 1px solid #d6d6d6;
+            border-radius: 8px;
+            background: #fff;
+            color: #444;
+            transition: 0.2s ease;
+            font-weight: 600;
+        }
+
+        .pdf-btn:hover {
+            background: #f5f5f5;
+            border-color: #bdbdbd;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .header p { font-size: 1rem; }
@@ -240,13 +266,11 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>🔍 Pārlūkot receptes</h1>
             <p>Atklājiet brīnišķīgas receptes no mūsu kopienas</p>
         </div>
 
-        <!-- Navigation -->
         <nav class="nav-bar">
             <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
@@ -267,18 +291,21 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Search and Filter -->
             <div class="search-form">
                 <form method="GET" action="{{ route('recipes.index') }}">
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 15px; align-items: end;">
                         <div>
                             <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">🔍 Meklēt receptes</label>
-                            <input type="text" name="search" value="{{ request('search') }}" 
-                                   class="form-input" placeholder="Meklēt pēc nosaukuma, apraksta vai sastāvdaļām...">
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                class="form-input"
+                                placeholder="Meklēt pēc nosaukuma, apraksta vai sastāvdaļām..."
+                            >
                         </div>
-                        
+
                         <div>
                             <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">📂 Kategorija</label>
                             <select name="category" class="form-input">
@@ -290,7 +317,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div>
                             <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">⭐ Grūtība</label>
                             <select name="difficulty" class="form-input">
@@ -300,50 +327,54 @@
                                 <option value="Grūta" {{ request('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
                             </select>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary" style="padding: 12px 25px;">Meklēt</button>
                     </div>
-                    
-                    @if(request()->hasAny(['search', 'category', 'difficulty']))
-                        <div style="margin-top: 15px;">
+
+                    @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
+                        <div style="margin-top: 15px; display:flex; gap:10px; flex-wrap:wrap;">
                             <a href="{{ route('recipes.index') }}" class="btn btn-warning" style="padding: 8px 16px; font-size: 14px;">
                                 Notīrīt filtrus
+                            </a>
+
+                            <a href="{{ route('pdf.filtered.recipes', request()->query()) }}"
+                               class="pdf-btn"
+                               style="padding: 10px 16px; font-size: 14px;">
+                                Drukāt atlasīto
                             </a>
                         </div>
                     @endif
                 </form>
             </div>
 
-            <!-- Results Summary -->
             <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
                 <h3 style="color: #667eea; margin-bottom: 10px;">
                     📊 Atrasts {{ $recipes->total() }} recepšu rezultāts
                 </h3>
-                @if(request()->hasAny(['search', 'category', 'difficulty']))
+                @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
                     <p style="color: #666;">
-                        Filtrēti rezultāti: 
+                        Filtrēti rezultāti:
                         @if(request('search')) meklēšana "{{ request('search') }}" @endif
                         @if(request('category')) | kategorija "{{ request('category') }}" @endif
                         @if(request('difficulty')) | grūtība "{{ request('difficulty') }}" @endif
+                        @if(request('max_time')) | max laiks "{{ request('max_time') }} min" @endif
                     </p>
                 @endif
             </div>
 
-            <!-- Quick Action -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
                     📝 Pievienot jaunu recepti
                 </a>
             </div>
 
-            <!-- Recipes Grid -->
             @if($recipes->count() > 0)
                 <div class="recipe-grid">
                     @foreach($recipes as $recipe)
                         <div class="recipe-card">
                             <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.3rem;">{{ $recipe->title }}</h3>
                             <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">{{ Str::limit($recipe->description, 100) }}</p>
-                            
+
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #888;">
                                 <div>📂 {{ $recipe->category ?? 'Nav kategorijas' }}</div>
                                 <div>⭐ {{ $recipe->difficulty ?? 'Nav norādīta' }}</div>
@@ -355,7 +386,6 @@
                                 @endif
                             </div>
 
-                            {{-- ✅ Vērtējums (iekš kartītes) --}}
                             <div style="margin: 6px 0 14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                                 <span style="font-weight:700; color:#666;">
                                     {{ $recipe->reviews_avg_rating ? round($recipe->reviews_avg_rating, 1) : 'Nav vērtējumu' }} / 5
@@ -372,14 +402,14 @@
                                     @endfor
                                 </span>
                             </div>
-                            
+
                             <div style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; margin-bottom: 20px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #999;">
                                     <span>Autors: {{ $recipe->user->name }}</span>
                                     <span>{{ $recipe->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>
-                            
+
                             <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%; padding: 12px;">
                                 Skatīt recepti →
                             </a>
@@ -387,7 +417,6 @@
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
                 <div class="pagination">
                     {{ $recipes->links() }}
                 </div>

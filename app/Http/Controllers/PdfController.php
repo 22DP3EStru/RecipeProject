@@ -132,6 +132,26 @@ class PdfController extends Controller
     return $pdf->download('kategorija-' . $category->id . '-receptes.pdf');
 }
 
+    public function categoryRecipesByName($categoryName)
+{
+    $decodedCategoryName = urldecode($categoryName);
+
+    $recipes = \App\Models\Recipe::with('user', 'reviews')
+        ->where('category', $decodedCategoryName)
+        ->latest()
+        ->get();
+
+    $category = (object) [
+        'name' => $decodedCategoryName,
+        'slug' => \Illuminate\Support\Str::slug($decodedCategoryName),
+    ];
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.category-recipes', compact('category', 'recipes'))
+        ->setPaper('a4', 'portrait');
+
+    return $pdf->download('kategorija-' . $decodedCategoryName . '-receptes.pdf');
+}
+
 public function userProfile(User $user)
 {
     $recipes = $user->recipes()

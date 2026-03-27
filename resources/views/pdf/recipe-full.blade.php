@@ -6,6 +6,16 @@
     @include('pdf.styles')
 </head>
 <body>
+    @php
+        $imagePath = null;
+
+        if (!empty($recipe->image_path) && file_exists(public_path('storage/' . $recipe->image_path))) {
+            $imagePath = public_path('storage/' . $recipe->image_path);
+        } elseif (!empty($recipe->image_url)) {
+            $imagePath = $recipe->image_url;
+        }
+    @endphp
+
     <div class="header">
         <h1>{{ $recipe->title }}</h1>
 
@@ -16,8 +26,14 @@
             <p><strong>Sarežģītība:</strong> {{ $recipe->difficulty ?? '-' }}</p>
         </div>
 
-        @if(!empty($recipe->image_path))
-            <img src="{{ public_path('storage/' . $recipe->image_path) }}" class="cover-image" alt="Recepte">
+        @if($imagePath)
+            <div style="margin-top: 15px; text-align: center;">
+                <img
+                    src="{{ $imagePath }}"
+                    alt="Recepte"
+                    style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px;"
+                >
+            </div>
         @endif
     </div>
 

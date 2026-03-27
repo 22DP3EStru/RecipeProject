@@ -47,7 +47,17 @@
             <a class="btn btn-success" href="{{ route('admin.recipes') }}">Pārvaldīt receptes</a>
         </div>
     </div>
+    <div style="margin: 12px 0 20px 0; display:flex; gap:10px; flex-wrap:wrap;">
+    <a href="{{ route('pdf.admin.statistics') }}"
+       style="display:inline-block; padding:10px 14px; background:#fff; color:#333; border:1px solid #ccc; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600;">
+        Statistikas PDF
+    </a>
 
+    <a href="{{ route('pdf.popular.recipes') }}"
+       style="display:inline-block; padding:10px 14px; background:#fff; color:#333; border:1px solid #ccc; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600;">
+        Populārākās receptes PDF
+    </a>
+</div>
     {{-- Latest activity --}}
     <div class="grid grid-2">
         <div class="card">

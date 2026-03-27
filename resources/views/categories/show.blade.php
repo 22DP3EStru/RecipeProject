@@ -149,6 +149,8 @@
             .main-content { padding: 20px; }
             .recipes-grid { grid-template-columns: 1fr; }
         }
+
+        
     </style>
 </head>
 <body>

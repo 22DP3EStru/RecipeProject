@@ -85,7 +85,8 @@ Route::prefix('pdf')->name('pdf.')->group(function () {
     Route::get('/recipe/{recipe}/ingredients', [PdfController::class, 'recipeIngredients'])->name('recipe.ingredients');
     Route::get('/recipe/{recipe}/steps', [PdfController::class, 'recipeSteps'])->name('recipe.steps');
 
-    Route::get('/category/{category}/recipes', [PdfController::class, 'categoryRecipes'])->name('category.recipes');
+    Route::get('/category-name/{categoryName}/recipes', [PdfController::class, 'categoryRecipesByName'])
+    ->name('category.recipes.byname');
     Route::get('/user/{user}/profile', [PdfController::class, 'userProfile'])->name('user.profile');
 
     Route::get('/popular-recipes', [PdfController::class, 'popularRecipes'])->name('popular.recipes');

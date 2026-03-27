@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kategorijas - Vecmāmiņas Receptes</title>
     <style>
-        /* Dashboard Style Design */
         * {
             margin: 0;
             padding: 0;
@@ -219,6 +218,33 @@
             margin-bottom: 0;
         }
 
+        .pdf-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pdf-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            font-size: 12px;
+            line-height: 1.2;
+            text-decoration: none;
+            border: 1px solid #d6d6d6;
+            border-radius: 6px;
+            background: #fff;
+            color: #444;
+            transition: 0.2s ease;
+        }
+
+        .pdf-btn:hover {
+            background: #f5f5f5;
+            border-color: #bdbdbd;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .header p { font-size: 1rem; }
@@ -230,14 +256,34 @@
     </style>
 </head>
 <body>
+    @php
+        $categories = \App\Models\Recipe::query()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        $totalRecipes = \App\Models\Recipe::count();
+
+        $descriptions = [
+            'Brokastis' => 'Sāciet dienu ar garšīgām un barojošām brokastīm',
+            'Pusdienas' => 'Sātīgi ēdieni dienas vidum un enerģijas uzpildīšanai',
+            'Vakariņas' => 'Eleganti vakariņu ēdieni romantiski vai ģimenes vakariem',
+            'Deserti' => 'Saldi kārumi un deserti īpašiem brīžiem',
+            'Dzērieni' => 'Atspirdzinošie dzērieni un kokteiļi visām gaumēm',
+            'Uzkodas' => 'Ātri un garšīgi uzkožamie visos dzīves brīžos',
+            'Salāti' => 'Svaigi un veselīgi salāti pilni ar vitamīniem',
+            'Zupas' => 'Siltas un mājīgas zupas aukstajiem vakariem'
+        ];
+    @endphp
+
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>📂 Kategorijas</h1>
             <p>Atklājiet daudzveidīgo recepšu pasauli</p>
         </div>
 
-        <!-- Navigation -->
         <nav class="nav-bar">
             <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
             <div class="nav-links">
@@ -259,46 +305,42 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Breadcrumb -->
             <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a> 
+                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a>
                 <span style="color: #666;"> / </span>
                 <span style="color: #333; font-weight: 600;">📂 Kategorijas</span>
             </div>
 
-            <!-- Categories Overview -->
             <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); border-radius: 15px;">
-                @php
-                    $categories = \App\Models\Recipe::distinct('category')->pluck('category')->filter();
-                    $totalRecipes = \App\Models\Recipe::count();
-                @endphp
                 <h2 style="color: #56ab2f; margin-bottom: 15px;">{{ $categories->count() }} kategorijas pieejamas</h2>
                 <p style="color: #666; line-height: 1.6;">
-                    Kopā {{ $totalRecipes }} receptes sadalītas {{ $categories->count() }} dažādās kategorijās. 
+                    Kopā {{ $totalRecipes }} receptes sadalītas {{ $categories->count() }} dažādās kategorijās.
                     Izvēlieties kategoriju, lai atklātu garšīgas receptes!
                 </p>
             </div>
 
-            <div class="pdf-actions">
-                <a href="{{ route('pdf.category.recipes', $category->id) }}" class="pdf-btn">Kategorijas PDF</a>
-            </div>
-
-            <!-- Categories Grid -->
             @if($categories->count() > 0)
                 <div class="categories-grid">
                     @foreach($categories as $category)
                         @php
-                            $categoryRecipes = \App\Models\Recipe::where('category', $category);
-                            $totalCategoryRecipes = $categoryRecipes->count();
-                            $recentRecipes = $categoryRecipes->where('created_at', '>=', now()->subDays(7))->count();
-                            $popularAuthors = $categoryRecipes->with('user')->get()->groupBy('user_id')->count();
-                            
-                            // Determine category class
-                            $categoryClass = match(strtolower($category)) {
+                            $categoryName = $category;
+
+                            $totalCategoryRecipes = \App\Models\Recipe::where('category', $categoryName)->count();
+
+                            $recentRecipes = \App\Models\Recipe::where('category', $categoryName)
+                                ->where('created_at', '>=', now()->subDays(7))
+                                ->count();
+
+                            $popularAuthors = \App\Models\Recipe::where('category', $categoryName)
+                                ->with('user')
+                                ->get()
+                                ->groupBy('user_id')
+                                ->count();
+
+                            $categoryClass = match(mb_strtolower($categoryName)) {
                                 'brokastis' => 'category-breakfast',
-                                'pusdienas' => 'category-lunch', 
+                                'pusdienas' => 'category-lunch',
                                 'vakariņas' => 'category-dinner',
                                 'deserti' => 'category-dessert',
                                 'dzērieni' => 'category-drinks',
@@ -307,23 +349,11 @@
                                 'zupas' => 'category-soups',
                                 default => 'category-default'
                             };
-                            
-                            // Category descriptions
-                            $descriptions = [
-                                'Brokastis' => 'Sāciet dienu ar garšīgām un barojošām brokastīm',
-                                'Pusdienas' => 'Sātīgi ēdieni dienas vidum un enerģijas uzpildīšanai',
-                                'Vakariņas' => 'Eleganti vakariņu ēdieni romantiski vai ģimenes vakariem',
-                                'Deserti' => 'Saldi kārumi un deserti īpašiem brīžiem',
-                                'Dzērieni' => 'Atspirdzinošie dzērieni un kokteiļi visām gaumēm',
-                                'Uzkodas' => 'Ātri un garšīgi uzkožamie visos dzīves brīžos',
-                                'Salāti' => 'Svaigi un veselīgi salāti pilni ar vitamīniem',
-                                'Zupas' => 'Siltas un mājīgas zupas aukstajiem vakariem'
-                            ];
                         @endphp
-                        
+
                         <div class="category-card {{ $categoryClass }}">
                             <div class="category-icon">
-                                @switch($category)
+                                @switch($categoryName)
                                     @case('Brokastis')
                                         🍳
                                         @break
@@ -352,15 +382,15 @@
                                         🍴
                                 @endswitch
                             </div>
-                            
+
                             <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.4rem; font-weight: bold;">
-                                {{ $category }}
+                                {{ $categoryName }}
                             </h3>
-                            
+
                             <p class="category-description">
-                                {{ $descriptions[$category] ?? "Atklājiet garšīgas $category receptes šajā sadaļā" }}
+                                {{ $descriptions[$categoryName] ?? "Atklājiet garšīgas {$categoryName} receptes šajā sadaļā" }}
                             </p>
-                            
+
                             <div class="category-stats">
                                 <div class="stats-row">
                                     <span style="color: #666;">📊 Kopā recepšu:</span>
@@ -389,15 +419,20 @@
                                     </span>
                                 </div>
                             </div>
-                            
-                            <a href="{{ route('categories.show', urlencode($category)) }}" class="btn btn-primary" style="width: 100%; font-size: 15px;">
+
+                            <div class="pdf-actions">
+                                <a href="{{ route('pdf.category.recipes.byname', urlencode($categoryName)) }}" class="pdf-btn">
+                                    Kategorijas PDF
+                                </a>
+                            </div>
+
+                            <a href="{{ route('categories.show', urlencode($categoryName)) }}" class="btn btn-primary" style="width: 100%; font-size: 15px;">
                                 Skatīt {{ $totalCategoryRecipes }} {{ $totalCategoryRecipes == 1 ? 'recepti' : 'receptes' }} →
                             </a>
                         </div>
                     @endforeach
                 </div>
             @else
-                <!-- No Categories -->
                 <div style="text-align: center; padding: 60px 20px;">
                     <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">📂</div>
                     <h3 style="color: #666; margin-bottom: 15px;">Nav kategoriju</h3>
@@ -412,7 +447,6 @@
                 </div>
             @endif
 
-            <!-- Recent Recipes from All Categories -->
             @if($recipes->count() > 0)
                 <div style="margin-top: 50px;">
                     <h3 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 1.8rem;">🕒 Jaunākās receptes no visām kategorijām</h3>
@@ -427,18 +461,18 @@
                                         JAUNA
                                     </span>
                                 </div>
-                                
+
                                 <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">
                                     {{ Str::limit($recipe->description, 100) }}
                                 </p>
-                                
+
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; color: #999;">
                                     <span style="background: rgba(240, 147, 251, 0.1); color: #f093fb; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">
                                         📂 {{ $recipe->category ?? 'Nav norādīta' }}
                                     </span>
                                     <span>👨‍🍳 {{ $recipe->user->name }}</span>
                                 </div>
-                                
+
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                                     <span style="background: rgba(255, 65, 108, 0.1); color: #ff416c; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">
                                         {{ $recipe->difficulty ?? 'N/A' }}
@@ -447,14 +481,14 @@
                                         ✨ {{ $recipe->created_at->diffForHumans() }}
                                     </span>
                                 </div>
-                                
+
                                 <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%;">
                                     Skatīt recepti →
                                 </a>
                             </div>
                         @endforeach
                     </div>
-                    
+
                     <div style="text-align: center; margin-top: 30px;">
                         <a href="/recipes" class="btn btn-primary" style="padding: 15px 30px; font-size: 16px;">
                             🔍 Skatīt visas {{ $totalRecipes }} receptes →
@@ -463,7 +497,6 @@
                 </div>
             @endif
 
-            <!-- Category Statistics -->
             <div style="margin-top: 50px; padding: 30px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 15px;">
                 <h3 style="text-align: center; color: #f093fb; margin-bottom: 25px; font-size: 1.6rem;">📊 Kategoriju statistika</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
@@ -483,14 +516,14 @@
                         <div style="color: #666; font-size: 14px;">Populārākā kategorija</div>
                         <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">{{ $topCategory['count'] ?? 0 }} receptes</div>
                     </div>
-                    
+
                     <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">📈</div>
                         <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ $totalRecipes }}</div>
                         <div style="color: #666; font-size: 14px;">Kopā receptes</div>
                         <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">Visās kategorijās</div>
                     </div>
-                    
+
                     <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
                         <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ \App\Models\User::has('recipes')->count() }}</div>
