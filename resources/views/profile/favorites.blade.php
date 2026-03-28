@@ -5,107 +5,265 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mani favorīti - Vecmāmiņas Receptes</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height:100vh;
-            color:#333;
+            font-family: Arial, sans-serif;
+            background: #f6f1eb;
+            color: #5f4633;
+            min-height: 100vh;
         }
 
-        .container { max-width:1200px; margin:0 auto; padding:20px; }
-
-        .header {
-            text-align:center;
-            color:white;
-            margin-bottom:40px;
-            padding:40px 0;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
         }
 
-        .header h1 {
-            font-size:3rem;
-            margin-bottom:15px;
-            text-shadow:2px 2px 4px rgba(0,0,0,0.3);
+        .page-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 3.2rem;
+            font-weight: 400;
+            color: #7a5a43;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #8a6a54;
         }
 
         .nav-bar {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border-radius:15px;
-            padding:20px;
-            margin-bottom:30px;
-            box-shadow:0 8px 32px rgba(0,0,0,0.1);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            flex-wrap:wrap;
+            background: #fff;
+            border: 1px solid #d9c9ba;
+            padding: 16px 18px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.3rem;
+            color: #7a5a43;
+            white-space: nowrap;
         }
 
         .nav-links {
-            display:flex;
-            gap:20px;
-            flex-wrap:wrap;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .nav-links a {
-            color:#333;
-            text-decoration:none;
-            padding:8px 16px;
-            border-radius:8px;
-            transition:all .3s ease;
-            font-weight:500;
+            text-decoration: none;
+            color: #2f2f2f;
+            padding: 9px 14px;
+            font-size: 15px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
         }
 
         .nav-links a:hover {
-            background:#667eea;
-            color:white;
+            border-color: #d9c9ba;
+            background: #f8f4ef;
         }
 
-        .card {
-            background: rgba(255,255,255,0.9);
-            border-radius:15px;
-            padding:20px;
-            box-shadow:0 8px 25px rgba(0,0,0,0.1);
-            transition: transform .2s ease;
+        .nav-links a.active {
+            background: #7a5a43;
+            color: white;
+            border-color: #7a5a43;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
+        .content-box {
+            background: #fff;
+            border: 1px solid #d9c9ba;
+            padding: 28px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: #7a5a43;
+            margin-bottom: 24px;
+        }
+
+        .stats-box {
+            background: #f2e8dc;
+            border: 1px solid #dcc9b6;
+            padding: 18px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .stats-box strong {
+            display: block;
+            font-size: 2rem;
+            color: #7a5a43;
+            margin-bottom: 6px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 400;
+        }
+
+        .stats-box span {
+            color: #7d6755;
+            font-size: 15px;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .recipe-card {
+            background: #fcfaf7;
+            border: 1px solid #d9c9ba;
+            padding: 22px;
+        }
+
+        .recipe-card h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.7rem;
+            font-weight: 400;
+            color: #7a5a43;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .recipe-meta {
+            font-size: 14px;
+            color: #8a7767;
+            margin-bottom: 14px;
+            line-height: 1.7;
+        }
+
+        .recipe-description {
+            font-size: 15px;
+            color: #5d5249;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            min-height: 72px;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            display:inline-block;
-            padding:10px 18px;
-            border-radius:10px;
-            text-decoration:none;
-            font-weight:600;
-            border:none;
-            cursor:pointer;
+            display: inline-block;
+            padding: 10px 16px;
+            text-decoration: none;
+            border: 1px solid #cdb9a8;
+            background: #f8f4ef;
+            color: #5f4633;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #efe6dc;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg,#667eea,#764ba2);
-            color:white;
+            background: #7a5a43;
+            border-color: #7a5a43;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #684a36;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg,#ff416c,#ff4b2b);
-            color:white;
+            background: #f4d9d9;
+            border-color: #d9b3b3;
+            color: #8b4d4d;
         }
 
-        .grid {
-            display:grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap:25px;
+        .btn-danger:hover {
+            background: #ebcaca;
         }
 
         .empty-box {
-            background: rgba(255,255,255,0.9);
-            padding:40px;
-            border-radius:15px;
-            text-align:center;
-            box-shadow:0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 50px 20px;
+            background: #fcfaf7;
+            border: 1px solid #d9c9ba;
+        }
+
+        .empty-box h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: #7a5a43;
+            margin-bottom: 12px;
+        }
+
+        .empty-box p {
+            color: #7d6755;
+            margin-bottom: 22px;
+            line-height: 1.7;
+        }
+
+        .pagination-wrapper {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e3d6ca;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .nav-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .brand {
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .card-actions .btn,
+            .card-actions form,
+            .card-actions button {
+                width: 100%;
+            }
+
+            .content-box {
+                padding: 18px;
+            }
         }
     </style>
 </head>
@@ -113,70 +271,89 @@
 
 <div class="container">
 
-    <div class="header">
-        <h1>❤️ Mani favorīti</h1>
-        <p>Visas receptes, kas tev ir iepatikušās</p>
+    <div class="page-header">
+        <h1>Mani favorīti</h1>
+        <p>Šeit vari pārvaldīt savas iecienītākās receptes.</p>
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-links">
-            <a href="/dashboard">🏠 Vadības panelis</a>
-            <a href="/recipes">🍽️ Receptes</a>
-            <a href="/profile/recipes">📝 Manas receptes</a>
-            <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
-        </div>
+        <div class="brand">Vecmāmiņas Receptes</div>
 
-        <a href="/recipes" class="btn btn-primary">🔍 Atrast jaunas receptes</a>
+        <div class="nav-links">
+            <a href="/dashboard">Vadības panelis</a>
+            <a href="/recipes">Receptes</a>
+            <a href="/categories">Kategorijas</a>
+            <a href="/profile/recipes">Manas receptes</a>
+            <a href="/profile/favorites" class="active">Favorīti</a>
+            <a href="/admin">Admin</a>
+        </div>
     </nav>
 
-    @if($recipes->count() > 0)
+    <div class="content-box">
+        <h2 class="section-title">❤️ Saglabātās receptes</h2>
 
-        <div class="grid">
-            @foreach($recipes as $recipe)
-                <div class="card">
-                    <h3 style="color:#667eea; margin-bottom:10px;">
-                        {{ $recipe->title }}
-                    </h3>
+        @if($recipes->count() > 0)
 
-                    <p style="color:#666; font-size:14px; margin-bottom:15px;">
-                        {{ Str::limit($recipe->description, 100) }}
-                    </p>
+            <div class="stats-box">
+                <strong>{{ method_exists($recipes, 'total') ? $recipes->total() : $recipes->count() }}</strong>
+                <span>Kopā saglabātās receptes</span>
+            </div>
 
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
-                            Skatīt →
-                        </a>
+            <div class="recipes-grid">
+                @foreach($recipes as $recipe)
+                    <div class="recipe-card">
+                        <h3>{{ $recipe->title }}</h3>
 
-                        <form method="POST"
-                              action="{{ route('recipes.favorite.toggle', $recipe) }}">
-                            @csrf
-                            <button type="submit" class="btn btn-danger">
-                                💔 Noņemt
-                            </button>
-                        </form>
+                        <div class="recipe-meta">
+                            @if(!empty($recipe->user?->name))
+                                <div>Autors: {{ $recipe->user->name }}</div>
+                            @endif
+
+                            @if(!empty($recipe->category?->name))
+                                <div>Kategorija: {{ $recipe->category->name }}</div>
+                            @endif
+
+                            @if(!empty($recipe->created_at))
+                                <div>Datums: {{ $recipe->created_at->format('d.m.Y') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="recipe-description">
+                            {{ Str::limit($recipe->description, 130) }}
+                        </div>
+
+                        <div class="card-actions">
+                            <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
+                                Skatīt recepti
+                            </a>
+
+                            <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">
+                                    Noņemt no favorītiem
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
-        <div style="margin-top:30px;">
-            {{ $recipes->links() }}
-        </div>
+            <div class="pagination-wrapper">
+                {{ $recipes->links() }}
+            </div>
 
-    @else
+        @else
 
-        <div class="empty-box">
-            <h2 style="margin-bottom:15px;">Tev vēl nav favorītu</h2>
-            <p style="margin-bottom:20px; color:#666;">
-                Atver kādu recepti un nospied ❤️ sirsniņu.
-            </p>
+            <div class="empty-box">
+                <h2>Tev vēl nav favorītu</h2>
+                <p>
+                    Kad pie receptes nospiedīsi sirsniņu, tā parādīsies šeit.
+                </p>
+                <a href="/recipes" class="btn btn-primary">Pārlūkot receptes</a>
+            </div>
 
-            <a href="/recipes" class="btn btn-primary">
-                Pārlūkot receptes
-            </a>
-        </div>
-
-    @endif
+        @endif
+    </div>
 
 </div>
 

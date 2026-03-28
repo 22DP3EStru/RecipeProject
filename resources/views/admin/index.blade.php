@@ -6,204 +6,360 @@
     <title>Admin Dashboard - Vecmāmiņas Receptes</title>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        :root {
+            --bg: #ebe4da;
+            --bg-soft: #f6f1ea;
+            --card: #fffdf9;
+            --card-2: #f2e8dc;
+            --text: #2f241d;
+            --muted: #7a6b61;
+            --line: #dccfc1;
+            --accent: #9d7a5b;
+            --accent-dark: #6e5038;
+            --shadow: 0 18px 40px rgba(90, 69, 52, 0.08);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.45), transparent 30%),
+                linear-gradient(180deg, #ede6dc 0%, #e6ddd2 100%);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+        }
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 22px;
-            padding: 22px 0 8px;
+            padding: 18px 0 22px;
+            margin-bottom: 18px;
         }
 
         .header h1 {
-            font-size: 2.4rem;
+            font-size: 3rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
             margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
         }
-        .header p { font-size: 1.1rem; opacity: 0.92; }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--muted);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
 
         .nav-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 16px 18px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+            background: rgba(255, 253, 249, 0.92);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(220, 207, 193, 0.85);
+            border-radius: 999px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
         }
 
         .nav-brand {
-            font-size: 20px;
-            font-weight: 800;
-            color: #667eea;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.02em;
         }
 
-        .nav-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
         .nav-links a {
-            color: #333;
+            color: var(--text);
             text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 10px;
-            transition: all 0.25s ease;
+            padding: 10px 14px;
+            border-radius: 999px;
+            transition: 0.25s ease;
             font-weight: 600;
             font-size: 14px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            border: 1px solid transparent;
         }
 
         .nav-links a:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+            background: var(--card-2);
+            border-color: var(--line);
+            color: var(--accent-dark);
         }
 
         .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: rgba(255, 253, 249, 0.88);
+            border: 1px solid rgba(220, 207, 193, 0.85);
+            border-radius: 34px;
             padding: 34px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: var(--shadow);
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.86);
-            border-radius: 15px;
-            padding: 26px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 28px;
             margin-bottom: 22px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.09);
-            border: 1px solid rgba(255, 255, 255, 0.30);
+            box-shadow: 0 10px 30px rgba(90, 69, 52, 0.05);
         }
 
         .card-title {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 16px;
+            font-size: 1.6rem;
+            color: var(--text);
+            margin-bottom: 18px;
             text-align: center;
-            font-weight: 800;
+            font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
-        .text-center { text-align: center; }
+        .text-center {
+            text-align: center;
+        }
 
-        .grid { display: grid; gap: 18px; }
-        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 14px;
-            margin-top: 16px;
+            gap: 16px;
+            margin-top: 18px;
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 22px 18px;
-            border-radius: 14px;
+            background: linear-gradient(180deg, #f7f0e7 0%, #efe2d2 100%);
+            color: var(--text);
+            padding: 24px 16px;
+            border-radius: 24px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 24px rgba(90, 69, 52, 0.05);
         }
 
-        .stat-number { font-size: 2.2rem; font-weight: 900; display: block; margin-bottom: 6px; }
-        .stat-label { font-size: 0.95rem; opacity: 0.95; }
+        .stat-number {
+            font-size: 2.3rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-dark);
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
 
         .btn {
             display: inline-block;
-            padding: 12px 18px;
-            border-radius: 12px;
+            padding: 13px 18px;
+            border-radius: 999px;
             text-decoration: none;
-            font-weight: 800;
+            font-weight: 700;
             text-align: center;
-            transition: all 0.25s ease;
-            border: none;
+            transition: 0.25s ease;
+            border: 1px solid var(--line);
             cursor: pointer;
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+            transform: translateY(-1px);
         }
 
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-success { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; }
+        .btn-primary {
+            background: var(--accent-dark);
+            color: #fffaf5;
+            border-color: var(--accent-dark);
+        }
+
+        .btn-primary:hover {
+            background: #5f442f;
+        }
+
+        .btn-success {
+            background: #ede2d4;
+            color: var(--text);
+        }
+
+        .btn-success:hover {
+            background: #e6d8c8;
+        }
 
         .list-row {
-            display:flex;
-            justify-content:space-between;
+            display: flex;
+            justify-content: space-between;
             gap: 16px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding: 16px 0;
+            border-bottom: 1px solid var(--line);
         }
-        .list-row:last-child { border-bottom: 0; }
+
+        .list-row:last-child {
+            border-bottom: 0;
+        }
 
         .pill-admin {
-            display:inline-block;
+            display: inline-block;
             margin-top: 6px;
             font-size: 12px;
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 999px;
-            background: rgba(245,87,108,0.14);
-            color:#f5576c;
-            font-weight: 900;
+            background: #f1e2d3;
+            color: var(--accent-dark);
+            font-weight: 700;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .avatar {
-            height: 42px;
-            width: 42px;
-            border-radius: 50%;
-            background: rgba(102,126,234,0.15);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-weight: 900;
-            color:#667eea;
-            flex: 0 0 auto;
-        }
-
+        .avatar,
         .emoji-box {
-            height: 42px;
-            width: 42px;
-            border-radius: 12px;
-            background: rgba(240,147,251,0.18);
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            height: 48px;
+            width: 48px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #f6efe7 0%, #ecdfd0 100%);
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--accent-dark);
             flex: 0 0 auto;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .muted { opacity: 0.75; font-size: 14px; }
-        .nowrap { white-space: nowrap; }
-
-        @media (max-width: 900px) {
-            .main-content { padding: 22px; }
-            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .grid-2 { grid-template-columns: 1fr; }
-            .grid-3 { grid-template-columns: 1fr; }
+        .muted {
+            opacity: 1;
+            color: var(--muted);
+            font-size: 14px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        @media (max-width: 520px) {
-            .header h1 { font-size: 1.8rem; }
-            .header p { font-size: 1rem; }
-            .nav-bar { padding: 14px; }
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .hero-icon {
+            font-size: 3.7rem;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 720px;
+            margin: 0 auto;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .panel-title {
+            color: var(--accent-dark);
+            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .row-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        @media (max-width: 980px) {
+            .main-content {
+                padding: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-bar {
+                border-radius: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 18px 14px 28px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .main-content,
+            .card {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .list-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nowrap {
+                white-space: normal;
+            }
         }
     </style>
 </head>
@@ -226,10 +382,9 @@
             <a href="/profile/recipes">📝 Manas receptes</a>
             <a href="/profile/favorites">❤️ Favorīti</a>
 
-            {{-- Ja tev ir cits logout maršruts, nomaini action --}}
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
-                <button class="btn btn-primary" type="submit" style="padding: 8px 12px; font-size: 13px;">Iziet</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 14px; font-size: 13px;">Iziet</button>
             </form>
         </div>
     </div>
@@ -237,9 +392,9 @@
     <div class="main-content">
 
         <div class="card text-center">
-            <div style="font-size: 3.5rem; margin-bottom: 10px;">🛠️</div>
-            <h2 style="color: #667eea; margin-bottom: 10px; font-weight: 900;">Admin Dashboard</h2>
-            <p class="muted" style="line-height: 1.6;">
+            <div class="hero-icon">🛠️</div>
+            <h2 class="panel-title">Admin Dashboard</h2>
+            <p class="section-subtitle">
                 Šeit vari pārvaldīt lietotājus un receptes, kā arī redzēt pēdējās aktivitātes.
             </p>
         </div>
@@ -269,7 +424,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-2" style="margin-top: 16px;">
+            <div class="grid grid-2" style="margin-top: 18px;">
                 @if (Route::has('admin.users'))
                     <a class="btn btn-primary" href="{{ route('admin.users') }}">Pārvaldīt lietotājus</a>
                 @else
@@ -290,11 +445,11 @@
 
                 @forelse($recentUsers as $user)
                     <div class="list-row">
-                        <div style="display:flex; align-items:center; gap:12px;">
+                        <div class="row-left">
                             <div class="avatar">{{ strtoupper(substr($user->name ?? '—', 0, 1)) }}</div>
 
                             <div>
-                                <div style="font-weight: 900;">{{ $user->name ?? '—' }}</div>
+                                <div class="item-title">{{ $user->name ?? '—' }}</div>
                                 <div class="muted">{{ $user->email }}</div>
                             </div>
                         </div>
@@ -311,11 +466,11 @@
 
                 @forelse($recentRecipes as $recipe)
                     <div class="list-row">
-                        <div style="display:flex; align-items:center; gap:12px;">
+                        <div class="row-left">
                             <div class="emoji-box">🍽️</div>
 
                             <div>
-                                <div style="font-weight: 900;">{{ $recipe->title ?? $recipe->name ?? '—' }}</div>
+                                <div class="item-title">{{ $recipe->title ?? $recipe->name ?? '—' }}</div>
                                 <div class="muted">Autors: {{ $recipe->user->name ?? '—' }}</div>
                             </div>
                         </div>

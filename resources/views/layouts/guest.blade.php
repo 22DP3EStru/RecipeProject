@@ -5,41 +5,216 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'RecipeHub') }} - {{ $title ?? 'Authentication' }}</title>
+        <title>{{ config('app.name', 'Vecmāmiņas Receptes') }} - {{ $title ?? 'Autentifikācija' }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-50">
-            <div class="relative min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-6">
-                <!-- Logo/Brand -->
-                <div class="mb-8">
-                    <a href="/" wire:navigate class="flex items-center space-x-2">
-                        <!-- Recipe Icon -->
-                        <svg class="h-12 w-12 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                        </svg>
-                        <h1 class="text-3xl font-bold text-gray-900">RecipeHub</h1>
-                    </a>
-                </div>
 
-                <!-- Auth Card -->
-                <div class="w-full sm:max-w-md bg-white shadow-lg rounded-2xl border border-gray-200 overflow-hidden">
-                    <div class="px-8 py-8">
-                        {{ $slot }}
+        <style>
+            :root {
+                --page-bg: #eee5da;
+                --page-bg-2: #e8ddd0;
+                --surface: #fffdf9;
+                --surface-soft: #f6efe7;
+                --line: #ddcfc0;
+                --text: #2f241d;
+                --muted: #7b6d61;
+                --accent: #7a5a43;
+                --accent-dark: #634733;
+                --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html, body {
+                min-height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            body.auth-layout {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                color: var(--text);
+                background:
+                    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            .auth-shell {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 28px 16px;
+            }
+
+            .auth-wrap {
+                width: 100%;
+                max-width: 1080px;
+                display: grid;
+                grid-template-columns: 1fr 440px;
+                border: 1px solid var(--line);
+                background: rgba(255, 253, 249, 0.9);
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+
+            .auth-side {
+                background: linear-gradient(180deg, #f8f1e8 0%, #f0e4d5 100%);
+                padding: 48px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border-right: 1px solid var(--line);
+            }
+
+            .auth-eyebrow {
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.16em;
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 14px;
+            }
+
+            .auth-brand {
+                font-family: Georgia, "Times New Roman", serif;
+                font-size: 3rem;
+                line-height: 1.05;
+                color: var(--accent);
+                font-weight: 500;
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 18px;
+            }
+
+            .auth-side-text {
+                color: var(--muted);
+                font-size: 15px;
+                line-height: 1.9;
+                max-width: 500px;
+                margin-bottom: 28px;
+            }
+
+            .auth-feature-list {
+                display: grid;
+                gap: 18px;
+            }
+
+            .auth-feature {
+                padding-top: 18px;
+                border-top: 1px solid rgba(122, 90, 67, 0.14);
+            }
+
+            .auth-feature:first-child {
+                padding-top: 0;
+                border-top: none;
+            }
+
+            .auth-feature h4 {
+                margin: 0 0 6px;
+                font-size: 1rem;
+                color: var(--text);
+                font-weight: 700;
+            }
+
+            .auth-feature p {
+                margin: 0;
+                color: var(--muted);
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .auth-card {
+                background: var(--surface);
+                padding: 42px 34px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .auth-card-inner {
+                width: 100%;
+            }
+
+            .auth-back {
+                margin-top: 24px;
+                text-align: center;
+            }
+
+            .auth-back a {
+                color: var(--accent);
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .auth-back a:hover {
+                text-decoration: underline;
+            }
+
+            @media (max-width: 900px) {
+                .auth-wrap {
+                    grid-template-columns: 1fr;
+                    max-width: 560px;
+                }
+
+                .auth-side {
+                    border-right: none;
+                    border-bottom: 1px solid var(--line);
+                    padding: 30px 24px;
+                }
+
+                .auth-brand {
+                    font-size: 2.3rem;
+                }
+
+                .auth-card {
+                    padding: 28px 22px;
+                }
+            }
+        </style>
+    </head>
+    <body class="auth-layout">
+        <div class="auth-shell">
+            <div class="auth-wrap">
+                <div class="auth-side">
+                    <div class="auth-eyebrow">Vecmāmiņas Receptes</div>
+                    <a href="/" wire:navigate class="auth-brand">Garšas, kas paliek atmiņā</a>
+
+                    <p class="auth-side-text">
+                        Pievienojieties mājīgai recepšu videi, kur varat saglabāt favorītus, publicēt savas receptes un atrast iedvesmu ikdienai.
+                    </p>
+
+                    <div class="auth-feature-list">
+                        <div class="auth-feature">
+                            <h4>Saglabājiet savas receptes</h4>
+                            <p>Veidojiet savu personīgo recepšu kolekciju vienuviet.</p>
+                        </div>
+
+                        <div class="auth-feature">
+                            <h4>Atrodiet jaunas idejas</h4>
+                            <p>Pārlūkojiet kategorijas un atklājiet jaunas garšas.</p>
+                        </div>
+
+                        <div class="auth-feature">
+                            <h4>Glabājiet favorītus</h4>
+                            <p>Jūsu iecienītākās receptes vienmēr būs ātri sasniedzamas.</p>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Footer Link -->
-                <div class="mt-6 text-center">
-                    <a href="/" wire:navigate class="text-sm text-gray-600 hover:text-orange-600 transition duration-200">
-                        ← Back to Vecmāmiņas Receptes
-                    </a>
+
+                <div class="auth-card">
+                    <div class="auth-card-inner">
+                        {{ $slot }}
+                    </div>
+
+                    <div class="auth-back">
+                        <a href="/" wire:navigate>← Atpakaļ uz Vecmāmiņas Receptes</a>
+                    </div>
                 </div>
             </div>
         </div>

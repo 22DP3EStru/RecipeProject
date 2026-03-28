@@ -11,118 +11,187 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --success-bg: #e8eee2;
+            --success-text: #667652;
+            --info-bg: #f3ece3;
+            --info-text: #7a5a43;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-soft: #fbefec;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text);
         }
 
-        .container {
-            max-width: 1200px;
+        .page {
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 40px 0;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.3rem;
-            opacity: 0.9;
+            padding: 28px 20px 50px;
         }
 
         .nav-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 253, 249, 0.92);
+            border: 1px solid var(--line);
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 18px;
             flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
         }
 
         .nav-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
             text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .nav-links a {
-            color: #333;
+            color: var(--text);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .nav-links a:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+            background: var(--soft-bg);
+            border-color: var(--line);
+            color: var(--accent);
         }
 
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hero {
+            padding: 24px 20px 34px;
+            margin-bottom: 26px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 760px;
+            margin: 0 auto;
+        }
         .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 253, 249, 0.82);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .pdf-actions {
+            margin-bottom: 22px;
         }
 
         .profile-sections {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 24px;
         }
 
         .profile-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--line);
             padding: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
         }
 
         .card-header {
             display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e3d6c8;
         }
 
         .card-icon {
-            font-size: 2rem;
-            margin-right: 15px;
+            font-size: 1.8rem;
+            line-height: 1;
+            padding-top: 2px;
         }
 
         .card-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
         }
 
         .form-group {
@@ -132,191 +201,321 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: var(--text);
             font-size: 14px;
         }
 
         .form-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            font-size: 15px;
+            background: #fffdfa;
+            color: var(--text);
+            transition: 0.2s ease;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #bba692;
+            background: #fff;
         }
 
         .form-error {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
+            color: var(--danger-text);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .actions-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn {
             display: inline-block;
-            padding: 12px 25px;
-            border-radius: 10px;
+            padding: 12px 18px;
             text-decoration: none;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            filter: brightness(0.98);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            color: white;
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d7dfcc;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: #e3c9c2;
         }
 
         .btn-secondary {
-            background: #6c757d;
-            color: white;
+            background: var(--soft-bg);
+            color: var(--text);
+        }
+
+        .pdf-btn {
+            display: inline-block;
+            padding: 12px 18px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .pdf-btn:hover {
+            background: var(--soft-bg-2);
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            border: 1px solid var(--line);
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #f1f5ea;
+            border-color: #d7ddcc;
+            color: #607149;
+        }
+
+        .alert-info {
+            background: var(--info-bg);
+            border-color: #dfcfbf;
+            color: var(--info-text);
+        }
+
+        .delete-section {
+            background: var(--danger-soft);
+            border-color: #e7d0ca;
+        }
+
+        .danger-box {
+            background: rgba(255,255,255,0.4);
+            border: 1px solid #e7d0ca;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .danger-box h4 {
+            color: var(--danger-text);
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .danger-box p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            margin-top: 38px;
+            padding-top: 26px;
+            border-top: 1px solid var(--line);
+        }
+
+        .quick-title {
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
             margin-bottom: 20px;
             font-weight: 500;
         }
 
-        .alert-success {
-            background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%);
-            color: #56ab2f;
-            border: 1px solid rgba(86, 171, 47, 0.2);
-        }
-
-        .alert-info {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
-            border: 1px solid rgba(102, 126, 234, 0.2);
-        }
-
-        .delete-section {
-            background: linear-gradient(135deg, rgba(255, 65, 108, 0.05) 0%, rgba(255, 75, 43, 0.05) 100%);
-            border: 2px solid rgba(255, 65, 108, 0.1);
+        .quick-actions-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            inset: 0;
+            background: rgba(47, 36, 29, 0.38);
             z-index: 1000;
+            padding: 20px;
         }
 
         .modal-content {
-            background: white;
-            margin: 10% auto;
+            background: var(--card-bg);
+            margin: 8% auto 0;
             padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--line);
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
         }
 
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
-            .header p { font-size: 1rem; }
-            .nav-bar { flex-direction: column; gap: 15px; }
-            .main-content { padding: 20px; }
-            .profile-card { padding: 20px; }
+        .modal-head {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .modal-head h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--danger-text);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .modal-head p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                padding: 28px;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .profile-card {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .nav-bar {
+                padding: 16px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .main-content {
+                padding: 20px;
+        }
+
+            .hero {
+                padding: 10px 8px 24px;
+            }
+
+            .hero-title {
+                font-size: 2.6rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin-top: 20%;
+                padding: 22px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>⚙️ Profila iestatījumi</h1>
-            <p>Pārvaldiet savu kontu un personīgo informāciju</p>
-        </div>
 
-        <!-- Navigation -->
+    <div class="hero">
+        <h1 class="hero-title">Profila iestatījumi</h1>
+        <p class="hero-text">
+            Pārvaldiet sava konta informāciju, nomainiet paroli un kontrolējiet personīgos iestatījumus vienuviet.
+        </p>
+    </div>
+
+    <div class="page">
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
+            <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
+
             <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
+                <a href="/dashboard">Vadības panelis</a>
+                <a href="/recipes">Receptes</a>
+                <a href="{{ route('categories.index') }}">Kategorijas</a>
+                <a href="/profile/recipes">Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">Profils</a>
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
+                    <a href="{{ route('admin.index') }}">Administrācija</a>
                 @endif
             </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
+
+            <div class="nav-user">
+                <span>{{ Auth::user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
-                    <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
+                    <button type="submit" class="btn btn-danger">Iziet</button>
                 </form>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Breadcrumb -->
-            <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a> 
-                <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">⚙️ Profila iestatījumi</span>
+            <div class="breadcrumb">
+                <a href="/dashboard">Vadības panelis</a>
+                <span> / </span>
+                <span style="font-weight: 700; color: var(--text);">Profila iestatījumi</span>
             </div>
 
             <div class="pdf-actions">
                 <a href="{{ route('pdf.user.profile', $user->id) }}" class="pdf-btn">Profila PDF</a>
             </div>
 
-            <!-- Success Messages -->
             @if (session('status') === 'profile-updated')
                 <div class="alert alert-success">
-                    ✅ Profils veiksmīgi atjaunināts!
+                    Profils veiksmīgi atjaunināts.
                 </div>
             @endif
 
             @if (session('status') === 'password-updated')
                 <div class="alert alert-success">
-                    ✅ Parole veiksmīgi nomainīta!
+                    Parole veiksmīgi nomainīta.
                 </div>
             @endif
 
-            <!-- Profile Sections -->
             <div class="profile-sections">
-                <!-- Profile Information -->
                 <div class="profile-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #667eea;">👤</div>
+                        <div class="card-icon">👤</div>
                         <div>
                             <div class="card-title">Profila informācija</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Atjauniniet sava konta profila informāciju un e-pasta adresi</p>
+                            <p class="card-subtitle">
+                                Atjauniniet sava konta pamatinformāciju un e-pasta adresi.
+                            </p>
                         </div>
                     </div>
 
@@ -340,31 +539,35 @@
                             @enderror
 
                             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                                <div class="alert alert-info" style="margin-top: 10px;">
-                                    <p>Jūsu e-pasta adrese nav verificēta.</p>
+                                <div class="alert alert-info" style="margin-top: 12px;">
+                                    <p>Jūsu e-pasta adrese vēl nav verificēta.</p>
                                     <button form="send-verification" class="btn btn-secondary" style="margin-top: 10px;">
                                         Nosūtīt verificēšanas e-pastu atkārtoti
                                     </button>
+
                                     @if (session('status') === 'verification-link-sent')
-                                        <p style="margin-top: 10px; color: #56ab2f;">Jauna verificēšanas saite ir nosūtīta uz jūsu e-pasta adresi.</p>
+                                        <p style="margin-top: 10px; color: #667652;">
+                                            Jauna verificēšanas saite ir nosūtīta uz jūsu e-pasta adresi.
+                                        </p>
                                     @endif
                                 </div>
                             @endif
                         </div>
 
-                        <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="actions-row">
                             <button type="submit" class="btn btn-primary">Saglabāt izmaiņas</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Update Password -->
                 <div class="profile-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #56ab2f;">🔒</div>
+                        <div class="card-icon">🔒</div>
                         <div>
                             <div class="card-title">Nomainīt paroli</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Nodrošiniet, ka jūsu konts izmanto garu, nejauši ģenerētu paroli</p>
+                            <p class="card-subtitle">
+                                Izvēlieties drošu paroli, lai aizsargātu savu kontu.
+                            </p>
                         </div>
                     </div>
 
@@ -396,61 +599,54 @@
                             @enderror
                         </div>
 
-                        <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="actions-row">
                             <button type="submit" class="btn btn-success">Nomainīt paroli</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Delete Account -->
                 <div class="profile-card delete-section">
                     <div class="card-header">
-                        <div class="card-icon" style="color: #ff416c;">⚠️</div>
+                        <div class="card-icon">⚠️</div>
                         <div>
-                            <div class="card-title" style="color: #ff416c;">Dzēst kontu</div>
-                            <p style="color: #666; font-size: 14px; margin-top: 5px;">Kad jūsu konts tiks dzēsts, visi tā resursi un dati tiks neatgriezeniski dzēsti</p>
+                            <div class="card-title" style="color: var(--danger-text);">Dzēst kontu</div>
+                            <p class="card-subtitle">
+                                Konta dzēšana ir neatgriezeniska darbība.
+                            </p>
                         </div>
                     </div>
 
-                    <div style="background: rgba(255, 65, 108, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h4 style="color: #ff416c; margin-bottom: 10px;">⚠️ Brīdinājums</h4>
-                        <p style="color: #666; line-height: 1.5;">
-                            Kad jūsu konts tiks dzēsts, visas jūsu receptes un personīgie dati tiks neatgriezeniski dzēsti. 
-                            Pirms konta dzēšanas, lūdzu, lejupielādējiet visus datus vai informāciju, ko vēlaties saglabāt.
+                    <div class="danger-box">
+                        <h4>Brīdinājums</h4>
+                        <p>
+                            Kad jūsu konts tiks dzēsts, visas jūsu receptes un personīgie dati tiks neatgriezeniski dzēsti.
+                            Pirms konta dzēšanas lejupielādējiet visu informāciju, kuru vēlaties saglabāt.
                         </p>
                     </div>
 
                     <button onclick="openDeleteModal()" class="btn btn-danger">
-                        🗑️ Dzēst kontu
+                        Dzēst kontu
                     </button>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <a href="/profile/recipes" class="btn btn-primary">
-                        📝 Manas receptes
-                    </a>
-                    <a href="/recipes/create" class="btn btn-success">
-                        ➕ Izveidot jaunu recepti
-                    </a>
-                    <a href="/recipes" class="btn btn-secondary">
-                        🔍 Pārlūkot receptes
-                    </a>
+            <div class="quick-actions">
+                <h3 class="quick-title">Ātras darbības</h3>
+                <div class="quick-actions-row">
+                    <a href="/profile/recipes" class="btn btn-primary">Manas receptes</a>
+                    <a href="/recipes/create" class="btn btn-success">Izveidot jaunu recepti</a>
+                    <a href="/recipes" class="btn btn-secondary">Pārlūkot receptes</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Delete Account Modal -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <div style="text-align: center; margin-bottom: 25px;">
-                <div style="font-size: 4rem; color: #ff416c; margin-bottom: 15px;">⚠️</div>
-                <h3 style="color: #ff416c; margin-bottom: 10px;">Dzēst kontu</h3>
-                <p style="color: #666;">Vai tiešām vēlaties dzēst savu kontu? Šī darbība ir neatgriezeniska.</p>
+            <div class="modal-head">
+                <div class="modal-icon">⚠️</div>
+                <h3>Dzēst kontu</h3>
+                <p>Vai tiešām vēlaties dzēst savu kontu? Šī darbība ir neatgriezeniska.</p>
             </div>
 
             <form method="post" action="{{ route('profile.destroy') }}">
@@ -458,26 +654,25 @@
                 @method('delete')
 
                 <div class="form-group">
-                    <label for="password" class="form-label">Ievadiet savu paroli, lai apstiprinātu:</label>
+                    <label for="password" class="form-label">Ievadiet savu paroli, lai apstiprinātu</label>
                     <input id="password" name="password" type="password" class="form-input" placeholder="Jūsu parole" required>
                     @error('password', 'userDeletion')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                <div class="actions-row" style="justify-content: center; margin-top: 24px;">
                     <button type="button" onclick="closeDeleteModal()" class="btn btn-secondary">
                         Atcelt
                     </button>
                     <button type="submit" class="btn btn-danger">
-                        🗑️ Dzēst kontu
+                        Dzēst kontu
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Email Verification Form -->
     @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
         <form id="send-verification" method="post" action="{{ route('verification.send') }}" style="display: none;">
             @csrf
@@ -493,7 +688,6 @@
             document.getElementById('deleteModal').style.display = 'none';
         }
 
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('deleteModal');
             if (event.target === modal) {

@@ -5,257 +5,502 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sveicināti - Vecmāmiņas Receptes</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --success-bg: #edf3e7;
+            --success-text: #667652;
+            --warning-bg: #f3e8e3;
+            --warning-text: #9a6b56;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-border: #e3c9c2;
+            --info-bg: #f2e7da;
+            --info-text: #7a5a43;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+        }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text);
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
+        }
 
-        .header {
+        .hero {
+            padding: 18px 20px 32px;
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 40px 0;
         }
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
         }
 
-        .header p { font-size: 1.3rem; opacity: 0.9; }
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
+        }
 
         .nav-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 253, 249, 0.92);
+            border: 1px solid var(--line);
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 24px;
             flex-wrap: wrap;
-            gap: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
+        }
+
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 240px;
         }
 
         .nav-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
             text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
         }
 
-        .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .nav-right {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            flex-wrap: wrap;
+            min-width: 320px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
         .nav-links a {
-            color: #333;
+            color: var(--text);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .nav-links a:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+            background: var(--soft-bg);
+            border-color: var(--line);
+            color: var(--accent);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
         }
 
         .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 253, 249, 0.78);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 34px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease;
+        .section-block + .section-block {
+            margin-top: 28px;
         }
 
-        .card:hover { transform: translateY(-5px); }
+        .hero-box,
+        .stats-box,
+        .features-box,
+        .about-box,
+        .contact-box,
+        .cta-box {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            padding: 28px;
+        }
 
-        .card-title {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 20px;
+        .hero-box {
             text-align: center;
+            background: var(--soft-bg);
         }
 
-        .grid { display: grid; gap: 25px; }
+        .hero-box h2,
+        .section-title,
+        .feature-card h4,
+        .contact-card h4,
+        .cta-box h3,
+        .stat-number {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-weight: 500;
+        }
 
-        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .hero-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 18px;
+        }
+
+        .hero-box p,
+        .section-subtext,
+        .muted-text {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.9rem;
+        }
+
+        .section-subtext {
+            margin-bottom: 22px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 22px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
 
         .btn {
             display: inline-block;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 12px 18px;
             text-decoration: none;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: 0.2s ease;
+            text-align: center;
+            font-family: inherit;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            filter: brightness(0.98);
         }
 
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-success { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d8e1cf;
+        }
+
+        .btn-warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: #e2ccc1;
+        }
+
+        .btn-secondary {
+            background: var(--soft-bg);
+            color: var(--text);
+        }
+
+        .hero-actions,
+        .cta-actions {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-number { font-size: 3rem; font-weight: bold; display: block; margin-bottom: 10px; }
-        .stat-label { font-size: 1rem; opacity: 0.9; }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 26px 22px;
             text-align: center;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        .stat-number {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 10px;
+            line-height: 1;
         }
 
-        .text-center { text-align: center; }
+        .stat-label {
+            font-size: 15px;
+            color: var(--muted);
+            font-weight: 700;
+            line-height: 1.6;
+        }
 
-        .hero-section {
+        .feature-card,
+        .contact-card {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 24px;
+            transition: 0.2s ease;
             text-align: center;
-            padding: 60px 0;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-radius: 20px;
-            margin-bottom: 40px;
         }
 
-        .hero-section h2 { font-size: 2.5rem; color: #333; margin-bottom: 20px; }
-        .hero-section p { font-size: 1.2rem; color: #666; margin-bottom: 40px; line-height: 1.6; }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .feature-card:hover,
+        .contact-card:hover {
+            background: #fffaf5;
         }
 
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
-            .header p { font-size: 1rem; }
-            .hero-section h2 { font-size: 2rem; }
-            .nav-bar { flex-direction: column; gap: 15px; }
-            .main-content { padding: 20px; }
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        .feature-icon,
+        .contact-icon {
+            font-size: 3.5rem;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h4,
+        .contact-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+        }
+
+        .about-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-content p + p {
+            margin-top: 18px;
+        }
+
+        .contact-card {
+            text-align: left;
+        }
+
+        .contact-card h4 {
+            margin-bottom: 10px;
+        }
+
+        .contact-link-row {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+        .cta-box {
+            text-align: center;
+        }
+
+        .cta-box h3 {
+            margin-bottom: 18px;
+            font-size: 2.1rem;
+        }
+
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .hero-box h2 {
+                font-size: 2.1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .hero {
+                padding: 10px 8px 24px;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .nav-bar {
+                padding: 16px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-right {
+                min-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .main-content,
+            .hero-box,
+            .stats-box,
+            .features-box,
+            .about-box,
+            .contact-box,
+            .cta-box {
+                padding: 20px;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .stats-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-actions,
+            .cta-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions .btn,
+            .cta-actions .btn,
+            .contact-link-row .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-    <!-- Header -->
-    <div class="header">
-        <h1>🍽️ Vecmāmiņas Receptes</h1>
-        <p>Atklāj, dalies un izveido brīnišķīgas receptes</p>
+    <div class="hero">
+        <h1 class="hero-title">Vecmāmiņas Receptes</h1>
+        <p class="hero-text">
+            Atklāj, dalies un izveido brīnišķīgas receptes kopā ar citiem ēdiena mīļotājiem.
+        </p>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav-bar">
-        <a href="/" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
+        <div class="nav-left">
+            <a href="/" class="nav-brand">Vecmāmiņas Receptes</a>
+        </div>
 
-        <div class="nav-links">
-            <a href="/">🏠 Sākums</a>
-            <a href="#features">✨ Iespējas</a>
-            <a href="#about">📖 Par mums</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/" class="active">Sākums</a>
+                <a href="#features">Iespējas</a>
+                <a href="#about">Par mums</a>
+            </div>
 
-        <div style="display: flex; gap: 15px;">
-            @if (Route::has('login'))
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="btn btn-primary">Vadības panelis</a>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn btn-success">Reģistrēties</a>
-                    @endif
-                @endauth
-            @endif
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="btn btn-primary">Vadības panelis</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="btn btn-success">Reģistrēties</a>
+                        @endif
+                    @endauth
+                @endif
+            </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="main-content">
 
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <h2>Sveicināti kulinārijas pasaulē! 👨‍🍳</h2>
+        <div class="section-block hero-box">
+            <h2>Sveicināti kulinārijas pasaulē</h2>
             <p>
-                Pievienojieties ēdiena entuziastu kopienai, kas dalās ar savām mīļākajām receptēm.<br>
+                Pievienojieties ēdiena entuziastu kopienai, kas dalās ar savām mīļākajām receptēm.
                 Atklājiet jaunas garšas, apgūstiet gatavošanas paņēmienus un saglabājiet savus favorītus.
             </p>
 
             @auth
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <a href="{{ url('/dashboard') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                        🏠 Uz vadības paneli
-                    </a>
-                    <a href="/recipes/create" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                        📝 Izveidot recepti
-                    </a>
+                <div class="hero-actions">
+                    <a href="{{ url('/dashboard') }}" class="btn btn-primary">Uz vadības paneli</a>
+                    <a href="/recipes/create" class="btn btn-success">Izveidot recepti</a>
                 </div>
             @else
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                        🚀 Sākt bez maksas
-                    </a>
-                    <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                        🔐 Ielogoties
-                    </a>
+                <div class="hero-actions">
+                    <a href="{{ route('register') }}" class="btn btn-success">Sākt bez maksas</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
                 </div>
             @endauth
         </div>
 
-        <!-- Platform Statistics -->
-        <div class="card">
-            <h3 class="card-title">📊 Mūsu augošā kopiena</h3>
+        <div class="section-block stats-box">
+            <h3 class="section-title">📊 Mūsu augošā kopiena</h3>
+            <p class="section-subtext">
+                Īss pārskats par platformas saturu un kopienas aktivitāti.
+            </p>
+
             <div class="stats-grid">
                 <div class="stat-box">
                     <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
@@ -276,102 +521,101 @@
             </div>
         </div>
 
-        <!-- Features Section -->
-        <div id="features" class="card">
-            <h3 class="card-title">✨ Kāpēc izvēlēties Vecmāmiņas Receptes?</h3>
+        <div id="features" class="section-block features-box">
+            <h3 class="section-title">✨ Kāpēc izvēlēties Vecmāmiņas Receptes?</h3>
+            <p class="section-subtext">
+                Platforma radīta, lai recepšu glabāšana un atklāšana būtu vienkārša, pārskatāma un iedvesmojoša.
+            </p>
+
             <div class="grid grid-3">
                 <div class="feature-card">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
-                    <h4 style="color: #667eea; margin-bottom: 15px;">Vienkārša recepšu izveide</h4>
-                    <p style="color: #666; line-height: 1.6;">
+                    <div class="feature-icon">📝</div>
+                    <h4>Vienkārša recepšu izveide</h4>
+                    <p class="muted-text">
                         Izveido un dalies ar receptēm, pievienojot sastāvdaļas un gatavošanas soļus.
                     </p>
                 </div>
 
                 <div class="feature-card">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">🔍</div>
-                    <h4 style="color: #667eea; margin-bottom: 15px;">Viedā meklēšana</h4>
-                    <p style="color: #666; line-height: 1.6;">
-                        Atrodi receptes pēc nosaukuma un pārlūko pēc kategorijām.
+                    <div class="feature-icon">🔍</div>
+                    <h4>Viedā meklēšana</h4>
+                    <p class="muted-text">
+                        Atrodi receptes pēc nosaukuma un pārlūko tās pēc kategorijām.
                     </p>
                 </div>
 
                 <div class="feature-card">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">❤️</div>
-                    <h4 style="color: #667eea; margin-bottom: 15px;">Favorīti</h4>
-                    <p style="color: #666; line-height: 1.6;">
+                    <div class="feature-icon">❤️</div>
+                    <h4>Favorīti</h4>
+                    <p class="muted-text">
                         Saglabā receptes sirsniņā un ātri atrodi tās savā favorītu sarakstā.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- About Section -->
-        <div id="about" class="card">
-            <h3 class="card-title">📖 Par mums</h3>
-            <div style="text-align: center; max-width: 900px; margin: 0 auto;">
-                <p style="color: #666; font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+        <div id="about" class="section-block about-box">
+            <h3 class="section-title">📖 Par mums</h3>
+
+            <div class="about-content">
+                <p class="muted-text" style="font-size: 18px;">
                     Vecmāmiņas Receptes ir recepšu platforma, kur ēdiena mīlētāji var dalīties ar saviem atradumiem,
                     saglabāt iecienītākās receptes un atklāt jaunas idejas.
                 </p>
-                <p style="color: #666; font-size: 16px; line-height: 1.6;">
+                <p class="muted-text" style="font-size: 16px;">
                     Mūsu mērķis ir padarīt gatavošanu vienkāršu un iedvesmojošu — gan iesācējiem, gan pieredzējušiem pavāriem.
                 </p>
             </div>
 
-            <!-- ✅ Galvenie kontakti tieši zem "Par mums" (publiski) -->
-            <div style="margin-top: 30px;">
-                <h4 style="text-align:center; font-size: 1.3rem; margin-bottom: 15px;">📞 Galvenie kontakti</h4>
+            <div class="section-block contact-box" style="margin-top: 30px;">
+                <h3 class="section-title">📞 Galvenie kontakti</h3>
 
-                <div class="contact-grid">
-                    <div class="feature-card" style="text-align:left;">
-                        <h4 style="color:#667eea; margin-bottom:10px;">👤 Galvenais kontakts</h4>
-                        <p style="color:#666; line-height:1.7;">
+                <div class="grid grid-3 contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">👤</div>
+                        <h4>Galvenais kontakts</h4>
+                        <p class="muted-text">
                             E-pasts: <strong>info@vecmaminasreceptes.lv</strong><br>
                             Tālrunis: <strong>+371 20000000</strong><br>
                             Darba laiks: <strong>P–Pk 09:00–18:00</strong>
                         </p>
                     </div>
 
-                    <div class="feature-card" style="text-align:left;">
-                        <h4 style="color:#667eea; margin-bottom:10px;">🛠️ Tehniskais atbalsts</h4>
-                        <p style="color:#666; line-height:1.7;">
+                    <div class="contact-card">
+                        <div class="contact-icon">🛠️</div>
+                        <h4>Tehniskais atbalsts</h4>
+                        <p class="muted-text">
                             E-pasts: <strong>support@vecmaminasreceptes.lv</strong><br>
                             Atbildes laiks: <strong>24–48h</strong>
                         </p>
                     </div>
 
-                    <div class="feature-card" style="text-align:left;">
-                        <h4 style="color:#667eea; margin-bottom:10px;">💬 Ieteikumi</h4>
-                        <p style="color:#666; line-height:1.7;">
+                    <div class="contact-card">
+                        <div class="contact-icon">💬</div>
+                        <h4>Ieteikumi</h4>
+                        <p class="muted-text">
                             E-pasts: <strong>ieteikumi@vecmaminasreceptes.lv</strong><br>
                             Raksti, ja ir idejas uzlabojumiem vai jaunām funkcijām.
                         </p>
                     </div>
                 </div>
 
-                <div style="text-align:center; margin-top: 20px;">
+                <div class="contact-link-row">
                     <a href="{{ route('contact') }}" class="btn btn-primary">Atvērt kontaktu lapu</a>
                 </div>
             </div>
         </div>
 
-        <!-- Call to Action -->
         @guest
-            <div class="card text-center">
-                <div style="padding: 40px;">
-                    <h3 style="color: #667eea; margin-bottom: 20px; font-size: 2rem;">Gatavi sākt gatavot? 🍳</h3>
-                    <p style="color: #666; margin-bottom: 30px; font-size: 18px; line-height: 1.6;">
-                        Pievienojieties mūsu kopienai un sāciet saglabāt favorītus un dalīties ar receptēm!
-                    </p>
-                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                        <a href="{{ route('register') }}" class="btn btn-success" style="font-size: 18px; padding: 20px 40px;">
-                            🚀 Izveidot bezmaksas kontu
-                        </a>
-                        <a href="{{ route('login') }}" class="btn btn-primary" style="font-size: 18px; padding: 20px 40px;">
-                            🔐 Ielogoties tagad
-                        </a>
-                    </div>
+            <div class="section-block cta-box">
+                <h3>Gatavi sākt gatavot?</h3>
+                <p class="muted-text" style="font-size: 18px; margin-bottom: 28px;">
+                    Pievienojieties mūsu kopienai un sāciet saglabāt favorītus un dalīties ar receptēm.
+                </p>
+
+                <div class="cta-actions">
+                    <a href="{{ route('register') }}" class="btn btn-success">Izveidot bezmaksas kontu</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties tagad</a>
                 </div>
             </div>
         @endguest

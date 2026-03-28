@@ -11,104 +11,300 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --success-bg: #edf3e7;
+            --success-text: #667652;
+            --warning-bg: #f3e8e3;
+            --warning-text: #9a6b56;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-border: #e3c9c2;
+            --info-bg: #f2e7da;
+            --info-text: #7a5a43;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text);
         }
 
-        .container {
-            max-width: 1200px;
+        .page {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 28px 20px 50px;
         }
 
-        .header {
+        .hero {
+            padding: 18px 20px 32px;
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 40px 0;
         }
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
         }
 
-        .header p {
-            font-size: 1.3rem;
-            opacity: 0.9;
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
         }
 
         .nav-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 253, 249, 0.92);
+            border: 1px solid var(--line);
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 24px;
             flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
+        }
+
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 240px;
         }
 
         .nav-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
             text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: flex-start;
+            min-width: 320px;
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .nav-links a {
-            color: #333;
+            color: var(--text);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .nav-links a:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+            background: var(--soft-bg);
+            border-color: var(--line);
+            color: var(--accent);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            filter: brightness(0.98);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d8e1cf;
+        }
+
+        .btn-warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: #e2ccc1;
+        }
+
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
+        }
+
+        .btn-secondary {
+            background: var(--soft-bg);
+            color: var(--text);
         }
 
         .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 253, 249, 0.78);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .section-block + .section-block {
+            margin-top: 28px;
+        }
+
+        .intro-box,
+        .summary-box,
+        .category-card,
+        .recipe-card,
+        .stats-box,
+        .empty-box,
+        .breadcrumbs-box {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            padding: 28px;
+        }
+
+        .intro-box {
+            text-align: center;
+        }
+
+        .intro-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+        }
+
+        .intro-box h2,
+        .section-title,
+        .summary-box h2,
+        .stats-box h3,
+        .empty-box h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .intro-box h2 {
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+        }
+
+        .intro-box p,
+        .section-subtext,
+        .summary-box p,
+        .empty-box p {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.9rem;
+        }
+
+        .section-subtext {
+            margin-bottom: 22px;
+        }
+
+        .breadcrumbs-box {
+            padding: 16px 20px;
+            background: var(--soft-bg);
+        }
+
+        .breadcrumbs-box a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .breadcrumbs-box span {
+            color: var(--muted);
+        }
+
+        .summary-box {
+            text-align: center;
+            background: var(--soft-bg);
+        }
+
+        .summary-box h2 {
+            margin-bottom: 14px;
+            font-size: 2rem;
         }
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
         }
 
         .category-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
             text-align: center;
             position: relative;
             overflow: hidden;
+            transition: 0.2s ease;
         }
 
         .category-card::before {
@@ -118,140 +314,317 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--category-color, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+            background: var(--soft-bg-2);
         }
 
-        .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        .category-card:hover,
+        .recipe-card:hover,
+        .stat-item:hover {
+            background: #fffaf5;
         }
 
-        .category-breakfast { --category-color: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); }
-        .category-lunch { --category-color: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
-        .category-dinner { --category-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .category-dessert { --category-color: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .category-drinks { --category-color: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .category-snacks { --category-color: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-        .category-salads { --category-color: linear-gradient(135deg, #96e6a1 0%, #d4fc79 100%); }
-        .category-soups { --category-color: linear-gradient(135deg, #ffa751 0%, #ffe259 100%); }
-        .category-default { --category-color: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
-
-        .recipes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .recipe-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
-        }
+        .category-breakfast::before { background: linear-gradient(90deg, #d6a06d 0%, #c97a5c 100%); }
+        .category-lunch::before { background: linear-gradient(90deg, #88a78c 0%, #6e8f73 100%); }
+        .category-dinner::before { background: linear-gradient(90deg, #9b856f 0%, #7a5a43 100%); }
+        .category-dessert::before { background: linear-gradient(90deg, #c9a2a5 0%, #b97b82 100%); }
+        .category-drinks::before { background: linear-gradient(90deg, #8ea8b8 0%, #6f8fa6 100%); }
+        .category-snacks::before { background: linear-gradient(90deg, #a8b487 0%, #829364 100%); }
+        .category-salads::before { background: linear-gradient(90deg, #9fb58f 0%, #7e9b71 100%); }
+        .category-soups::before { background: linear-gradient(90deg, #c79a72 0%, #b98252 100%); }
+        .category-default::before { background: linear-gradient(90deg, #bfae9b 0%, #a18974 100%); }
 
         .category-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            font-size: 3.8rem;
+            margin-bottom: 18px;
+        }
+
+        .category-title {
+            color: var(--accent);
+            margin-bottom: 14px;
+            font-size: 1.7rem;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 500;
         }
 
         .category-description {
             font-size: 14px;
-            color: #666;
-            line-height: 1.5;
+            color: var(--muted);
+            line-height: 1.7;
             margin-bottom: 20px;
-            min-height: 60px;
+            min-height: 72px;
         }
 
         .category-stats {
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: left;
         }
 
         .stats-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 10px;
             font-size: 13px;
+            line-height: 1.5;
         }
 
         .stats-row:last-child {
             margin-bottom: 0;
         }
 
+        .stats-label {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .stats-value {
+            color: var(--text);
+            font-weight: 800;
+            text-align: right;
+        }
+
         .pdf-actions {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 12px;
+            margin-top: 8px;
             margin-bottom: 16px;
         }
 
         .pdf-btn {
             display: inline-block;
-            padding: 6px 10px;
-            font-size: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
             line-height: 1.2;
             text-decoration: none;
-            border: 1px solid #d6d6d6;
-            border-radius: 6px;
-            background: #fff;
-            color: #444;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--text);
             transition: 0.2s ease;
+            font-weight: 700;
         }
 
         .pdf-btn:hover {
-            background: #f5f5f5;
-            border-color: #bdbdbd;
+            background: var(--soft-bg-2);
         }
 
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
-            .header p { font-size: 1rem; }
-            .nav-bar { flex-direction: column; gap: 15px; }
-            .main-content { padding: 20px; }
-            .categories-grid { grid-template-columns: 1fr; }
-            .recipes-grid { grid-template-columns: 1fr; }
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+        }
+
+        .recipe-card {
+            transition: 0.2s ease;
+        }
+
+        .recipe-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .recipe-card h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .recipe-description {
+            color: var(--muted);
+            margin-bottom: 16px;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .recipe-meta-row,
+        .recipe-meta-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        .recipe-meta-pill {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            color: var(--accent);
+            padding: 6px 10px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .recipe-author,
+        .recipe-date {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .stats-box {
+            background: var(--soft-bg);
+        }
+
+        .stats-box h3 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 22px;
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            transition: 0.2s ease;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .stat-extra {
+            color: var(--success-text);
+            font-weight: 700;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+
+        .empty-box {
+            text-align: center;
+            padding: 60px 28px;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-box h3 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+
+        @media (max-width: 980px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .hero {
+                padding: 10px 8px 24px;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .nav-bar {
+                padding: 16px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-right {
+                min-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .main-content,
+            .intro-box,
+            .summary-box,
+            .category-card,
+            .recipe-card,
+            .stats-box,
+            .empty-box,
+            .breadcrumbs-box {
+                padding: 20px;
+            }
+
+            .categories-grid,
+            .recipes-grid,
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions,
+            .recipe-card-top,
+            .recipe-meta-row,
+            .recipe-meta-row-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .pdf-actions a,
+            .category-card .btn,
+            .recipe-card .btn {
+                width: 100%;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-value {
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -278,231 +651,247 @@
         ];
     @endphp
 
-    <div class="container">
-        <div class="header">
-            <h1>📂 Kategorijas</h1>
-            <p>Atklājiet daudzveidīgo recepšu pasauli</p>
+    <div class="page">
+        <div class="hero">
+            <h1 class="hero-title">Kategorijas</h1>
+            <p class="hero-text">
+                Atklājiet daudzveidīgo recepšu pasauli un pārlūkojiet ēdienus pēc sev interesējošajām kategorijām.
+            </p>
         </div>
 
         <nav class="nav-bar">
-            <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
-            <div class="nav-links">
-                <a href="/dashboard">🏠 Vadības panelis</a>
-                <a href="/recipes">🍽️ Receptes</a>
-                <a href="{{ route('categories.index') }}">📂 Kategorijas</a>
-                <a href="/profile/recipes">📝 Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">⚙️ Profils</a>
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">🔧 Administrācija</a>
-                @endif
+            <div class="nav-left">
+                <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
+
+                <div class="nav-user">
+                    <span>{{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Iziet</button>
+                    </form>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">Iziet</button>
-                </form>
+
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="/dashboard">Vadības panelis</a>
+                    <a href="/recipes">Receptes</a>
+                    <a href="{{ route('categories.index') }}" class="active">Kategorijas</a>
+                    <a href="/profile/recipes">Manas receptes</a>
+                    <a href="{{ route('profile.edit') }}">Profils</a>
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.index') }}">Administrācija</a>
+                    @endif
+                </div>
             </div>
         </nav>
 
         <div class="main-content">
-            <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
-                <a href="/dashboard" style="color: #667eea; text-decoration: none;">🏠 Vadības panelis</a>
-                <span style="color: #666;"> / </span>
-                <span style="color: #333; font-weight: 600;">📂 Kategorijas</span>
+            <div class="section-block breadcrumbs-box">
+                <a href="/dashboard">Vadības panelis</a>
+                <span> / </span>
+                <span>Kategorijas</span>
             </div>
 
-            <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); border-radius: 15px;">
-                <h2 style="color: #56ab2f; margin-bottom: 15px;">{{ $categories->count() }} kategorijas pieejamas</h2>
-                <p style="color: #666; line-height: 1.6;">
+            <div class="section-block intro-box">
+                <div class="intro-icon">📂</div>
+                <h2>Recepšu kategoriju pārskats</h2>
+                <p>
+                    Izvēlieties kategoriju, lai apskatītu tajā pieejamās receptes, autorus un aktualitātes. Šeit vienuviet redzams arī īss statistikas pārskats.
+                </p>
+            </div>
+
+            <div class="section-block summary-box">
+                <h2>{{ $categories->count() }} kategorijas pieejamas</h2>
+                <p>
                     Kopā {{ $totalRecipes }} receptes sadalītas {{ $categories->count() }} dažādās kategorijās.
-                    Izvēlieties kategoriju, lai atklātu garšīgas receptes!
+                    Izvēlieties kategoriju, lai atklātu sev piemērotākās receptes.
                 </p>
             </div>
 
             @if($categories->count() > 0)
-                <div class="categories-grid">
-                    @foreach($categories as $category)
-                        @php
-                            $categoryName = $category;
+                <div class="section-block">
+                    <h3 class="section-title">📋 Pieejamās kategorijas</h3>
+                    <p class="section-subtext">
+                        Katra kategorija ietver savu recepšu skaitu, aktivitāti un autoru daudzveidību.
+                    </p>
 
-                            $totalCategoryRecipes = \App\Models\Recipe::where('category', $categoryName)->count();
+                    <div class="categories-grid">
+                        @foreach($categories as $category)
+                            @php
+                                $categoryName = $category;
 
-                            $recentRecipes = \App\Models\Recipe::where('category', $categoryName)
-                                ->where('created_at', '>=', now()->subDays(7))
-                                ->count();
+                                $totalCategoryRecipes = \App\Models\Recipe::where('category', $categoryName)->count();
 
-                            $popularAuthors = \App\Models\Recipe::where('category', $categoryName)
-                                ->with('user')
-                                ->get()
-                                ->groupBy('user_id')
-                                ->count();
+                                $recentRecipes = \App\Models\Recipe::where('category', $categoryName)
+                                    ->where('created_at', '>=', now()->subDays(7))
+                                    ->count();
 
-                            $categoryClass = match(mb_strtolower($categoryName)) {
-                                'brokastis' => 'category-breakfast',
-                                'pusdienas' => 'category-lunch',
-                                'vakariņas' => 'category-dinner',
-                                'deserti' => 'category-dessert',
-                                'dzērieni' => 'category-drinks',
-                                'uzkodas' => 'category-snacks',
-                                'salāti' => 'category-salads',
-                                'zupas' => 'category-soups',
-                                default => 'category-default'
-                            };
-                        @endphp
+                                $popularAuthors = \App\Models\Recipe::where('category', $categoryName)
+                                    ->with('user')
+                                    ->get()
+                                    ->groupBy('user_id')
+                                    ->count();
 
-                        <div class="category-card {{ $categoryClass }}">
-                            <div class="category-icon">
-                                @switch($categoryName)
-                                    @case('Brokastis')
-                                        🍳
-                                        @break
-                                    @case('Pusdienas')
-                                        🍽️
-                                        @break
-                                    @case('Vakariņas')
-                                        🌙
-                                        @break
-                                    @case('Deserti')
-                                        🍰
-                                        @break
-                                    @case('Dzērieni')
-                                        🥤
-                                        @break
-                                    @case('Uzkodas')
-                                        🥨
-                                        @break
-                                    @case('Salāti')
-                                        🥗
-                                        @break
-                                    @case('Zupas')
-                                        🍲
-                                        @break
-                                    @default
-                                        🍴
-                                @endswitch
-                            </div>
+                                $categoryClass = match(mb_strtolower($categoryName)) {
+                                    'brokastis' => 'category-breakfast',
+                                    'pusdienas' => 'category-lunch',
+                                    'vakariņas' => 'category-dinner',
+                                    'deserti' => 'category-dessert',
+                                    'dzērieni' => 'category-drinks',
+                                    'uzkodas' => 'category-snacks',
+                                    'salāti' => 'category-salads',
+                                    'zupas' => 'category-soups',
+                                    default => 'category-default'
+                                };
+                            @endphp
 
-                            <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.4rem; font-weight: bold;">
-                                {{ $categoryName }}
-                            </h3>
-
-                            <p class="category-description">
-                                {{ $descriptions[$categoryName] ?? "Atklājiet garšīgas {$categoryName} receptes šajā sadaļā" }}
-                            </p>
-
-                            <div class="category-stats">
-                                <div class="stats-row">
-                                    <span style="color: #666;">📊 Kopā recepšu:</span>
-                                    <span style="font-weight: bold; color: #667eea;">{{ $totalCategoryRecipes }}</span>
+                            <div class="category-card {{ $categoryClass }}">
+                                <div class="category-icon">
+                                    @switch($categoryName)
+                                        @case('Brokastis')
+                                            🍳
+                                            @break
+                                        @case('Pusdienas')
+                                            🍽️
+                                            @break
+                                        @case('Vakariņas')
+                                            🌙
+                                            @break
+                                        @case('Deserti')
+                                            🍰
+                                            @break
+                                        @case('Dzērieni')
+                                            🥤
+                                            @break
+                                        @case('Uzkodas')
+                                            🥨
+                                            @break
+                                        @case('Salāti')
+                                            🥗
+                                            @break
+                                        @case('Zupas')
+                                            🍲
+                                            @break
+                                        @default
+                                            🍴
+                                    @endswitch
                                 </div>
-                                <div class="stats-row">
-                                    <span style="color: #666;">🆕 Jaunas šonedēļ:</span>
-                                    <span style="font-weight: bold; color: #56ab2f;">{{ $recentRecipes }}</span>
-                                </div>
-                                <div class="stats-row">
-                                    <span style="color: #666;">👥 Dažādi autori:</span>
-                                    <span style="font-weight: bold; color: #f093fb;">{{ $popularAuthors }}</span>
-                                </div>
-                                <div class="stats-row">
-                                    <span style="color: #666;">📈 Popularitāte:</span>
-                                    <span style="font-weight: bold;">
-                                        @if($totalCategoryRecipes >= 20)
-                                            🔥 Ļoti populāra
-                                        @elseif($totalCategoryRecipes >= 10)
-                                            ⭐ Populāra
-                                        @elseif($totalCategoryRecipes >= 5)
-                                            👍 Aktīva
-                                        @else
-                                            🌱 Augošā
-                                        @endif
-                                    </span>
-                                </div>
-                            </div>
 
-                            <div class="pdf-actions">
-                                <a href="{{ route('pdf.category.recipes.byname', urlencode($categoryName)) }}" class="pdf-btn">
-                                    Kategorijas PDF
+                                <h3 class="category-title">{{ $categoryName }}</h3>
+
+                                <p class="category-description">
+                                    {{ $descriptions[$categoryName] ?? "Atklājiet garšīgas {$categoryName} receptes šajā sadaļā" }}
+                                </p>
+
+                                <div class="category-stats">
+                                    <div class="stats-row">
+                                        <span class="stats-label">Kopā recepšu</span>
+                                        <span class="stats-value">{{ $totalCategoryRecipes }}</span>
+                                    </div>
+                                    <div class="stats-row">
+                                        <span class="stats-label">Jaunas šonedēļ</span>
+                                        <span class="stats-value">{{ $recentRecipes }}</span>
+                                    </div>
+                                    <div class="stats-row">
+                                        <span class="stats-label">Dažādi autori</span>
+                                        <span class="stats-value">{{ $popularAuthors }}</span>
+                                    </div>
+                                    <div class="stats-row">
+                                        <span class="stats-label">Popularitāte</span>
+                                        <span class="stats-value">
+                                            @if($totalCategoryRecipes >= 20)
+                                                Ļoti populāra
+                                            @elseif($totalCategoryRecipes >= 10)
+                                                Populāra
+                                            @elseif($totalCategoryRecipes >= 5)
+                                                Aktīva
+                                            @else
+                                                Augošā
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="pdf-actions">
+                                    <a href="{{ route('pdf.category.recipes.byname', urlencode($categoryName)) }}" class="pdf-btn">
+                                        Kategorijas PDF
+                                    </a>
+                                </div>
+
+                                <a href="{{ route('categories.show', urlencode($categoryName)) }}" class="btn btn-primary" style="width: 100%;">
+                                    Skatīt {{ $totalCategoryRecipes }} {{ $totalCategoryRecipes == 1 ? 'recepti' : 'receptes' }}
                                 </a>
                             </div>
-
-                            <a href="{{ route('categories.show', urlencode($categoryName)) }}" class="btn btn-primary" style="width: 100%; font-size: 15px;">
-                                Skatīt {{ $totalCategoryRecipes }} {{ $totalCategoryRecipes == 1 ? 'recepti' : 'receptes' }} →
-                            </a>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             @else
-                <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">📂</div>
-                    <h3 style="color: #666; margin-bottom: 15px;">Nav kategoriju</h3>
-                    <p style="color: #999; margin-bottom: 30px;">
+                <div class="section-block empty-box">
+                    <div class="empty-icon">📂</div>
+                    <h3>Nav kategoriju</h3>
+                    <p>
                         Vēl nav izveidota neviena recepte ar kategoriju.
                     </p>
-                    <div>
+                    <div style="margin-top: 24px;">
                         <a href="/recipes/create" class="btn btn-primary">
-                            📝 Izveidot pirmo recepti
+                            Izveidot pirmo recepti
                         </a>
                     </div>
                 </div>
             @endif
 
             @if($recipes->count() > 0)
-                <div style="margin-top: 50px;">
-                    <h3 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 1.8rem;">🕒 Jaunākās receptes no visām kategorijām</h3>
+                <div class="section-block">
+                    <h3 class="section-title">🕒 Jaunākās receptes no visām kategorijām</h3>
+                    <p class="section-subtext">
+                        Pēdējās pievienotās receptes, lai ātri apskatītu jaunāko saturu platformā.
+                    </p>
+
                     <div class="recipes-grid">
                         @foreach($recipes->sortByDesc('created_at')->take(6) as $recipe)
                             <div class="recipe-card">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                                    <h3 style="color: #667eea; font-size: 1.3rem;">
-                                        {{ $recipe->title }}
-                                    </h3>
-                                    <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">
-                                        JAUNA
-                                    </span>
+                                <div class="recipe-card-top">
+                                    <h3>{{ $recipe->title }}</h3>
+                                    <span class="badge">JAUNA</span>
                                 </div>
 
-                                <p style="color: #666; margin-bottom: 15px; line-height: 1.5;">
+                                <p class="recipe-description">
                                     {{ Str::limit($recipe->description, 100) }}
                                 </p>
 
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; color: #999;">
-                                    <span style="background: rgba(240, 147, 251, 0.1); color: #f093fb; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">
-                                        📂 {{ $recipe->category ?? 'Nav norādīta' }}
-                                    </span>
-                                    <span>👨‍🍳 {{ $recipe->user->name }}</span>
+                                <div class="recipe-meta-row">
+                                    <span class="recipe-meta-pill">{{ $recipe->category ?? 'Nav norādīta' }}</span>
+                                    <span class="recipe-author">{{ $recipe->user->name }}</span>
                                 </div>
 
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                    <span style="background: rgba(255, 65, 108, 0.1); color: #ff416c; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">
-                                        {{ $recipe->difficulty ?? 'N/A' }}
-                                    </span>
-                                    <span style="color: #56ab2f; font-size: 12px; font-weight: 600;">
-                                        ✨ {{ $recipe->created_at->diffForHumans() }}
-                                    </span>
+                                <div class="recipe-meta-row-bottom">
+                                    <span class="recipe-meta-pill">{{ $recipe->difficulty ?? 'N/A' }}</span>
+                                    <span class="recipe-date">{{ $recipe->created_at->diffForHumans() }}</span>
                                 </div>
 
                                 <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary" style="width: 100%;">
-                                    Skatīt recepti →
+                                    Skatīt recepti
                                 </a>
                             </div>
                         @endforeach
                     </div>
 
-                    <div style="text-align: center; margin-top: 30px;">
-                        <a href="/recipes" class="btn btn-primary" style="padding: 15px 30px; font-size: 16px;">
-                            🔍 Skatīt visas {{ $totalRecipes }} receptes →
+                    <div style="text-align: center; margin-top: 28px;">
+                        <a href="/recipes" class="btn btn-primary" style="min-width: 260px;">
+                            Skatīt visas {{ $totalRecipes }} receptes
                         </a>
                     </div>
                 </div>
             @endif
 
-            <div style="margin-top: 50px; padding: 30px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 15px;">
-                <h3 style="text-align: center; color: #f093fb; margin-bottom: 25px; font-size: 1.6rem;">📊 Kategoriju statistika</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🏆</div>
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">
+            <div class="section-block stats-box">
+                <h3>📊 Kategoriju statistika</h3>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value">
                             @php
                                 $topCategory = $categories->map(function($cat) {
                                     return [
@@ -513,22 +902,22 @@
                             @endphp
                             {{ $topCategory['name'] ?? 'Nav' }}
                         </div>
-                        <div style="color: #666; font-size: 14px;">Populārākā kategorija</div>
-                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">{{ $topCategory['count'] ?? 0 }} receptes</div>
+                        <div class="stat-label">Populārākā kategorija</div>
+                        <div class="stat-extra">{{ $topCategory['count'] ?? 0 }} receptes</div>
                     </div>
 
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📈</div>
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ $totalRecipes }}</div>
-                        <div style="color: #666; font-size: 14px;">Kopā receptes</div>
-                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">Visās kategorijās</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value">{{ $totalRecipes }}</div>
+                        <div class="stat-label">Kopā receptes</div>
+                        <div class="stat-extra">Visās kategorijās</div>
                     </div>
 
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">{{ \App\Models\User::has('recipes')->count() }}</div>
-                        <div style="color: #666; font-size: 14px;">Aktīvi autori</div>
-                        <div style="color: #56ab2f; font-weight: bold; margin-top: 5px;">Kopš sākuma</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value">{{ \App\Models\User::has('recipes')->count() }}</div>
+                        <div class="stat-label">Aktīvi autori</div>
+                        <div class="stat-extra">Kopš sākuma</div>
                     </div>
                 </div>
             </div>

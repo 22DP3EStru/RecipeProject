@@ -1,389 +1,505 @@
 @extends('layouts.app')
-@section('content') {{-- Izmanto aplikācijas pamata layout (Jetstream/Breeze) --}}
 
-    {{-- Iekšējie CSS stili šai lapai --}}
+@section('content')
     <style>
-        * { /* Attiecas uz visiem elementiem */
-            margin: 0; /* Noņem ārējās atstarpes */
-            padding: 0; /* Noņem iekšējās atstarpes */
-            box-sizing: border-box; /* Iekļauj padding/border elementa izmērā */
-        } /* Beidzas universālais selektors */
+        :root {
+            --page-bg: #efe7dc;
+            --section-bg: #f8f3ed;
+            --card-bg: #fffdf9;
+            --soft-bg: #f2ebe2;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-soft: #ebe0d2;
+            --success-bg: #e8eee2;
+            --success-text: #667652;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --warning-bg: #efe7dc;
+            --warning-text: #8a6545;
+            --shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
+        }
 
-        body { /* Lapas pamatstils */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonts */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Fona gradients */
-            min-height: 100vh; /* Minimālais augstums – pilns ekrāns */
-            color: #333; /* Teksta pamatkrāsa */
-        } /* Beidzas body stils */
+        .admin-users-page {
+            background: var(--page-bg);
+            min-height: 100vh;
+            padding: 36px 24px 60px;
+            color: var(--text);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        .container { /* Galvenais konteineris */
-            max-width: 1200px; /* Maksimālais platums */
-            margin: 0 auto; /* Centrē horizontāli */
-            padding: 20px; /* Iekšējā atstarpe */
-        } /* Beidzas container stils */
+        .admin-users-wrap {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
 
-        .header { /* Galvenes bloks */
-            text-align: center; /* Centrē tekstu */
-            color: blue; /* Balts teksts */
-            margin-bottom: 40px; /* Atstarpe zem galvenes */
-            padding: 40px 0; /* Vertikālais padding */
-        } /* Beidzas header stils */
+        .page-shell {
+            background: var(--section-bg);
+            border: 1px solid var(--line);
+            padding: 36px;
+            box-shadow: var(--shadow);
+        }
 
-        .header h1 { /* Galvenes virsraksts */
-            font-size: 3rem; /* Virsraksta izmērs */
-            margin-bottom: 15px; /* Atstarpe zem virsraksta */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Teksta ēna */
-        } /* Beidzas header h1 stils */
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
 
-        .header p { /* Galvenes apraksta teksts */
-            font-size: 1.3rem; /* Teksta izmērs */
-            opacity: 0.9; /* Nedaudz caurspīdīgs */
-        } /* Beidzas header p stils */
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-        .nav-bar { /* Navigācijas josla */
-            background: rgba(255, 255, 255, 0.95); /* Puscaurspīdīgs balts fons */
-            backdrop-filter: blur(10px); /* Blur efekts */
-            border-radius: 15px; /* Noapaļoti stūri */
-            padding: 20px; /* Iekšējā atstarpe */
-            margin-bottom: 30px; /* Atstarpe zem navigācijas */
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Ēna */
-            display: flex; /* Flex izkārtojums */
-            justify-content: space-between; /* Elementi abās pusēs */
-            align-items: center; /* Vertikāli centrē */
-            flex-wrap: wrap; /* Wrap uz jaunām rindām */
-        } /* Beidzas nav-bar stils */
+        .alert {
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            border: 1px solid #d7ddcc;
+            background: #f1f5ea;
+            color: #607149;
+            font-weight: 600;
+        }
 
-        .nav-brand { /* Logo/brand links */
-            font-size: 24px; /* Izmērs */
-            font-weight: bold; /* Trekns */
-            color: #667eea; /* Krāsa */
-            text-decoration: none; /* Noņem underline */
-        } /* Beidzas nav-brand stils */
+        .alert-error {
+            background: #f7ebe8;
+            border-color: #e5cbc3;
+            color: #a45f52;
+        }
 
-        .nav-links { /* Linku grupa */
-            display: flex; /* Flex */
-            gap: 20px; /* Atstarpe starp linkiem */
-            flex-wrap: wrap; /* Wrap */
-        } /* Beidzas nav-links stils */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 34px;
+        }
 
-        .nav-links a { /* Linki */
-            color: #333; /* Teksta krāsa */
-            text-decoration: none; /* No underline */
-            padding: 8px 16px; /* Iekšējā atstarpe */
-            border-radius: 8px; /* Noapaļoti stūri */
-            transition: all 0.3s ease; /* Animācija */
-            font-weight: 500; /* Pus-trekns */
-        } /* Beidzas nav-links a */
+        .stat-box {
+            background: var(--accent-soft);
+            border: 1px solid var(--line);
+            padding: 24px 18px;
+            text-align: center;
+        }
 
-        .nav-links a:hover { /* Hover efekts */
-            background: #667eea; /* Fons */
-            color: white; /* Teksts */
-            transform: translateY(-2px); /* Paceļ */
-        } /* Beidzas hover */
+        .stat-number {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.4rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
 
-        .main-content { /* Galvenā satura kartīte */
-            background: rgba(255, 255, 255, 0.95); /* Fons */
-            backdrop-filter: blur(10px); /* Blur */
-            border-radius: 20px; /* Noapaļoti stūri */
-            padding: 40px; /* Iekšējā atstarpe */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Ēna */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Border */
-        } /* Beidzas main-content */
+        .stat-label {
+            color: var(--muted);
+            font-size: 14px;
+        }
 
-        .users-grid { /* Lietotāju kartīšu režģis */
-            display: grid; /* Grid */
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Kolonnas pēc platuma */
-            gap: 25px; /* Atstarpe */
-            margin-top: 30px; /* Atstarpe virs */
-        } /* Beidzas users-grid */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 26px;
+        }
 
-        .user-card { /* Lietotāja kartīte */
-            background: white; /* Balts fons */
-            border-radius: 15px; /* Noapaļoti stūri */
-            padding: 25px; /* Iekšējā atstarpe */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Ēna */
-            transition: all 0.3s ease; /* Animācija */
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Viegls border */
-        } /* Beidzas user-card */
+        .user-card {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
-        .user-card:hover { /* Hover efekts kartītei */
-            transform: translateY(-5px); /* Paceļ */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Pastiprina ēnu */
-        } /* Beidzas user-card:hover */
+        .user-header {
+            padding: 22px 24px 16px;
+            border-bottom: 1px solid #e8ddd1;
+            background: #fcf9f4;
+        }
 
-        .admin-badge { /* Admin atzīme */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradients */
-            color: white; /* Balts teksts */
-            padding: 5px 12px; /* Iekšējā atstarpe */
-            border-radius: 15px; /* Noapaļoti stūri */
-            font-size: 12px; /* Teksta izmērs */
-            font-weight: 600; /* Trekns */
-            display: inline-block; /* Inline blokā */
-            margin-bottom: 10px; /* Atstarpe zem */
-        } /* Beidzas admin-badge */
+        .role-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border: 1px solid var(--line);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: #f4ece2;
+            color: var(--accent);
+        }
 
-        .user-badge { /* Parastā lietotāja atzīme */
-            background: rgba(86, 171, 47, 0.1); /* Gaiši zaļš fons */
-            color: #56ab2f; /* Zaļš teksts */
-            padding: 5px 12px; /* Iekšējā atstarpe */
-            border-radius: 15px; /* Noapaļoti stūri */
-            font-size: 12px; /* Teksta izmērs */
-            font-weight: 600; /* Trekns */
-            display: inline-block; /* Inline blokā */
-            margin-bottom: 10px; /* Atstarpe zem */
-        } /* Beidzas user-badge */
+        .role-badge.admin {
+            background: #efe4d8;
+            color: var(--accent);
+        }
 
-        .btn { /* Pogu pamatstils */
-            display: inline-block; /* Inline-block */
-            padding: 10px 20px; /* Iekšējā atstarpe */
-            border-radius: 8px; /* Noapaļoti stūri */
-            text-decoration: none; /* No underline */
-            font-weight: 600; /* Trekns */
-            text-align: center; /* Centrē tekstu */
-            transition: all 0.3s ease; /* Animācija */
-            border: none; /* No border */
-            cursor: pointer; /* Pointer */
-            font-size: 13px; /* Teksta izmērs */
-            margin: 2px; /* Atstarpe starp pogām */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ēna */
-        } /* Beidzas btn */
+        .role-badge.user {
+            background: #edf2e7;
+            color: #667652;
+            border-color: #d7dfcc;
+        }
 
-        .btn:hover { /* Hover efekts pogām */
-            transform: translateY(-2px); /* Paceļ */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Pastiprina ēnu */
-        } /* Beidzas btn:hover */
+        .user-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
 
-        .btn-primary { /* Primārā poga */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradients */
-            color: white; /* Balts teksts */
-        } /* Beidzas btn-primary */
+        .user-email {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
 
-        .btn-danger { /* Dzēšanas poga */
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Sarkans gradients */
-            color: white; /* Balts teksts */
-        } /* Beidzas btn-danger */
+        .user-meta-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: var(--muted);
+        }
 
-        .btn-warning { /* Brīdinājuma poga */
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); /* Rozā gradients */
-            color: white; /* Balts teksts */
-        } /* Beidzas btn-warning */
+        .user-body {
+            padding: 22px 24px 24px;
+        }
 
-        .btn-success { /* Pozitīvā poga */
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); /* Zaļš gradients */
-            color: white; /* Balts teksts */
-        } /* Beidzas btn-success */
+        .meta-table {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            margin-bottom: 18px;
+        }
 
-        .btn-secondary { /* Sekundārā poga */
-            background: #6c757d; /* Pelēks fons */
-            color: white; /* Balts teksts */
-        } /* Beidzas btn-secondary */
+        .meta-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2d6c9;
+            gap: 12px;
+            align-items: center;
+            font-size: 14px;
+        }
 
-        .alert { /* Paziņojuma bloks */
-            padding: 15px 20px; /* Iekšējā atstarpe */
-            border-radius: 10px; /* Noapaļoti stūri */
-            margin-bottom: 20px; /* Atstarpe zem */
-            font-weight: 500; /* Pus-trekns */
-        } /* Beidzas alert */
+        .meta-row:last-child {
+            border-bottom: none;
+        }
 
-        .alert-success { /* Success paziņojums */
-            background: linear-gradient(135deg, rgba(86, 171, 47, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%); /* Gaiši zaļš gradients */
-            color: #56ab2f; /* Zaļš teksts */
-            border: 1px solid rgba(86, 171, 47, 0.2); /* Border */
-        } /* Beidzas alert-success */
+        .meta-label {
+            color: var(--muted);
+        }
 
-        .alert-error { /* Error paziņojums */
-            background: linear-gradient(135deg, rgba(255, 65, 108, 0.1) 0%, rgba(255, 75, 43, 0.1) 100%); /* Gaiši sarkans gradients */
-            color: #ff416c; /* Sarkans teksts */
-            border: 1px solid rgba(255, 65, 108, 0.2); /* Border */
-        } /* Beidzas alert-error */
+        .meta-value {
+            color: var(--text);
+            font-weight: 600;
+            text-align: right;
+        }
 
-        .stats-bar { /* Statistikas josla */
-            display: flex; /* Flex */
-            justify-content: space-around; /* Izlīdzina */
-            background: rgba(102, 126, 234, 0.1); /* Gaiši violets fons */
-            padding: 20px; /* Iekšējā atstarpe */
-            border-radius: 15px; /* Noapaļoti stūri */
-            margin-bottom: 30px; /* Atstarpe zem */
-            flex-wrap: wrap; /* Wrap */
-        } /* Beidzas stats-bar */
+        .meta-value.success {
+            color: #667652;
+        }
 
-        .stat-item { /* Statistikas elements */
-            text-align: center; /* Centrē */
-            margin: 10px; /* Atstarpe */
-        } /* Beidzas stat-item */
+        .meta-value.danger {
+            color: #a45f52;
+        }
 
-        .stat-number { /* Statistikas skaitlis */
-            font-size: 2rem; /* Liels izmērs */
-            font-weight: bold; /* Trekns */
-            color: #667eea; /* Krāsa */
-        } /* Beidzas stat-number */
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-        .stat-label { /* Statistikas nosaukums */
-            color: #666; /* Pelēks */
-            font-size: 14px; /* Teksta izmērs */
-        } /* Beidzas stat-label */
+        .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
 
-        @media (max-width: 768px) { /* Responsīvs dizains */
-            .header h1 { font-size: 2rem; } /* Mazāks virsraksts */
-            .header p { font-size: 1rem; } /* Mazāks apraksts */
-            .nav-bar { flex-direction: column; gap: 15px; } /* Navigācija kolonnā */
-            .main-content { padding: 20px; } /* Mazāks padding */
-            .users-grid { grid-template-columns: 1fr; } /* Viena kolonna */
-            .stats-bar { flex-direction: column; } /* Statistika kolonnā */
-        } /* Beidzas media query */
-    </style> {{-- Beidzas CSS --}}
+        .btn:hover {
+            filter: brightness(0.98);
+        }
 
-    
-            <!-- Main Content --> {{-- Galvenais saturs --}}
-            <div class="main-content"> {{-- Satura kartīte --}}
-                <!-- Breadcrumb --> {{-- Maizes drupačas --}}
-                <div style="margin-bottom: 30px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;"> {{-- Breadcrumb konteineris --}}
-                    <a href="{{ route('admin.index') }}" style="color: #667eea; text-decoration: none;">🔧 Admin panelis</a> {{-- Links uz admin sākumu --}}
-                    <span style="color: #666;"> / </span> {{-- Atdalītājs --}}
-                    <span style="color: #333; font-weight: 600;">👥 Lietotāju pārvaldība</span> {{-- Aktīvā sadaļa --}}
-                </div> {{-- Beidzas breadcrumb --}}
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
+        }
 
-                <!-- Success/Error Messages --> {{-- Ziņojumi --}}
-                @if(session('success')) {{-- Ja success --}}
-                    <div class="alert alert-success"> {{-- Success alert --}}
-                        ✅ {{ session('success') }} {{-- Izvada tekstu --}}
-                    </div> {{-- Beidzas --}}
-                @endif {{-- Beidzas if --}}
+        .btn-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d7dfcc;
+        }
 
-                @if(session('error')) {{-- Ja error --}}
-                    <div class="alert alert-error"> {{-- Error alert --}}
-                        ❌ {{ session('error') }} {{-- Izvada tekstu --}}
-                    </div> {{-- Beidzas --}}
-                @endif {{-- Beidzas if --}}
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: #e3c9c2;
+        }
 
-                <!-- Statistics --> {{-- Statistika --}}
-                <div class="stats-bar"> {{-- Statistikas josla --}}
-                    <div class="stat-item"> {{-- Stat: kopā --}}
-                        <div class="stat-number">{{ $users->total() }}</div> {{-- Kopējais lietotāju skaits (paginācijai) --}}
-                        <div class="stat-label">Kopā lietotāju</div> {{-- Apraksts --}}
-                    </div> {{-- Beidzas --}}
-                    <div class="stat-item"> {{-- Stat: admini --}}
-                        <div class="stat-number">{{ $users->where('is_admin', true)->count() }}</div> {{-- Adminu skaits (piezīme: tikai pašreizējā lapa) --}}
-                        <div class="stat-label">Administratori</div> {{-- Apraksts --}}
-                    </div> {{-- Beidzas --}}
-                    <div class="stat-item"> {{-- Stat: parastie --}}
-                        <div class="stat-number">{{ $users->where('is_admin', false)->count() }}</div> {{-- Parasto lietotāju skaits (piezīme: tikai pašreizējā lapa) --}}
-                        <div class="stat-label">Parastie lietotāji</div> {{-- Apraksts --}}
-                    </div> {{-- Beidzas --}}
-                    <div class="stat-item"> {{-- Stat: jauni šonedēļ --}}
-                        <div class="stat-number">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</div> {{-- Jauni (piezīme: tikai pašreizējā lapa) --}}
-                        <div class="stat-label">Jauni šonedēļ</div> {{-- Apraksts --}}
-                    </div> {{-- Beidzas --}}
-                </div> {{-- Beidzas stats-bar --}}
+        .btn-warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: #deccb8;
+        }
 
-                <!-- Users Grid --> {{-- Lietotāju saraksts --}}
-                @if($users->count() > 0) {{-- Ja ir lietotāji --}}
-                    <div class="users-grid"> {{-- Grid --}}
-                        @foreach($users as $user) {{-- Cikls caur lietotājiem --}}
-                            <div class="user-card"> {{-- Lietotāja kartīte --}}
-                                <!-- User Badge --> {{-- Loma badge --}}
-                                @if($user->is_admin) {{-- Ja admins --}}
-                                    <div class="admin-badge">🔧 Administrators</div> {{-- Admin atzīme --}}
-                                @else {{-- Citādi --}}
-                                    <div class="user-badge">👤 Lietotājs</div> {{-- Lietotāja atzīme --}}
-                                @endif {{-- Beidzas if badge --}}
+        .btn-secondary {
+            background: #f5eee5;
+            color: var(--text);
+        }
 
-                                <!-- User Info --> {{-- Lietotāja pamatinfo --}}
-                                <div style="margin-bottom: 20px;"> {{-- Atstarpe zem info --}}
-                                    <h3 style="color: #667eea; margin-bottom: 8px; font-size: 1.3rem;"> {{-- Vārda stils --}}
-                                        {{ $user->name }} {{-- Lietotāja vārds --}}
-                                    </h3> {{-- Aizver h3 --}}
-                                    <p style="color: #666; margin-bottom: 8px;"> {{-- E-pasta stils --}}
-                                        📧 {{ $user->email }} {{-- Lietotāja e-pasts --}}
-                                    </p> {{-- Aizver p --}}
-                                    <div style="display: flex; justify-content: space-between; font-size: 14px; color: #999;"> {{-- Meta rinda --}}
-                                        <span>📅 Reģ: {{ $user->created_at->format('d.m.Y') }}</span> {{-- Reģistrācijas datums --}}
-                                        <span>🍽️ {{ $user->recipes->count() }} receptes</span> {{-- Recepšu skaits (attiecības count) --}}
-                                    </div> {{-- Aizver meta rindu --}}
-                                </div> {{-- Beidzas user info --}}
+        .btn-disabled {
+            background: #ebe4da;
+            color: #8f8378;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
 
-                                <!-- User Stats --> {{-- Papildu statistika --}}
-                                <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;"> {{-- Stats bloks --}}
-                                    <div style="display: flex; justify-content: space-between; font-size: 13px;"> {{-- Rinda: email verified --}}
-                                        <span>📧 E-pasts apstiprināts:</span> {{-- Etiķete --}}
-                                        <span style="color: {{ $user->email_verified_at ? '#56ab2f' : '#ff416c' }};"> {{-- Krāsa atkarībā no statusa --}}
-                                            {{ $user->email_verified_at ? '✅ Jā' : '❌ Nē' }} {{-- Jā/Nē --}}
-                                        </span> {{-- Aizver statusu --}}
-                                    </div> {{-- Beidzas email verified rinda --}}
-                                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 8px;"> {{-- Rinda: pēdējā aktivitāte --}}
-                                        <span>🕒 Pēdējā aktivitāte:</span> {{-- Etiķete --}}
-                                        <span>{{ $user->updated_at->diffForHumans() }}</span> {{-- Relatīvais laiks --}}
-                                    </div> {{-- Beidzas aktivitātes rinda --}}
-                                </div> {{-- Beidzas user stats --}}
+        .pagination-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line);
+        }
 
-                                <!-- Action Buttons --> {{-- Darbības pogas --}}
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap;"> {{-- Pogas flex režīmā --}}
-                                    <!-- Toggle Admin Status --> {{-- Mainīt admin statusu --}}
-                                    @if($user->id !== Auth::id()) {{-- Ja tas nav pašreizējais lietotājs --}}
-                                        <form method="POST" action="{{ route('admin.users.toggle-admin', $user) }}" style="display: inline;"> {{-- Forma statusa maiņai --}}
-                                            @csrf {{-- CSRF --}}
-                                            @method('PATCH') {{-- PATCH metode --}}
-                                            <button type="submit" class="btn {{ $user->is_admin ? 'btn-warning' : 'btn-success' }}" onclick="return confirm('Vai tiešām mainīt lietotāja statusu?')"> {{-- Poga ar apstiprinājumu --}}
-                                                {{ $user->is_admin ? '🔻 Noņemt admin' : '🔺 Padarīt par admin' }} {{-- Teksts atkarīgs no statusa --}}
-                                            </button> {{-- Aizver pogu --}}
-                                        </form> {{-- Aizver formu --}}
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+        }
 
-                                        <!-- Delete User --> {{-- Dzēst lietotāju --}}
-                                        @if(!$user->is_admin) {{-- Dzēst drīkst tikai ne-adminus --}}
-                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" style="display: inline;"> {{-- Dzēšanas forma --}}
-                                                @csrf {{-- CSRF --}}
-                                                @method('DELETE') {{-- DELETE metode --}}
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Vai tiešām dzēst šo lietotāju? Šī darbība ir neatgriezeniska!')"> {{-- Poga ar confirm --}}
-                                                    🗑️ Dzēst {{-- Teksts --}}
-                                                </button> {{-- Aizver pogu --}}
-                                            </form> {{-- Aizver formu --}}
-                                        @endif {{-- Beidzas if delete --}}
-                                    @else {{-- Ja tas ir pats lietotājs --}}
-                                        <span class="btn btn-secondary" style="cursor: not-allowed; opacity: 0.6;"> {{-- Nespējama poga --}}
-                                            👑 Jūs pats {{-- Norāda ka pats sevi nevar mainīt --}}
-                                        </span> {{-- Aizver span --}}
-                                    @endif {{-- Beidzas if self check --}}
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 18px;
+        }
 
-                                    <!-- View User Recipes --> {{-- Skatīt lietotāja receptes --}}
-                                    @if($user->recipes->count() > 0) {{-- Ja ir receptes --}}
-                                        <a href="/recipes?user={{ $user->id }}" class="btn btn-primary"> {{-- Links uz receptēm pēc lietotāja --}}
-                                            👁️ Skatīt receptes ({{ $user->recipes->count() }}) {{-- Teksts ar skaitu --}}
-                                        </a> {{-- Aizver linku --}}
-                                    @endif {{-- Beidzas if recipes count --}}
-                                </div> {{-- Beidzas action buttons --}}
-                            </div> {{-- Beidzas user-card --}}
-                        @endforeach {{-- Beidzas foreach --}}
-                    </div> {{-- Beidzas users-grid --}}
+        .empty-state h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
 
-                    <!-- Pagination --> {{-- Lapu šķirošana --}}
-                    <div style="margin-top: 40px; display: flex; justify-content: center;"> {{-- Centrē pagināciju --}}
-                        {{ $users->links() }} {{-- Laravel paginācijas linki --}}
-                    </div> {{-- Beidzas paginācijas bloks --}}
-                @else {{-- Ja nav lietotāju --}}
-                    <!-- No Users --> {{-- Tukšuma stāvoklis --}}
-                    <div style="text-align: center; padding: 60px 20px;"> {{-- Tukšuma konteineris --}}
-                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">👥</div> {{-- Ikona --}}
-                        <h3 style="color: #666; margin-bottom: 15px;">Nav lietotāju</h3> {{-- Virsraksts --}}
-                        <p style="color: #999;">Nav atrasts neviens lietotājs sistēmā.</p> {{-- Teksts --}}
-                    </div> {{-- Beidzas tukšuma bloks --}}
-                @endif {{-- Beidzas if users count --}}
+        .empty-state p {
+            color: var(--muted);
+        }
 
-                <!-- Quick Actions --> {{-- Ātrās darbības --}}
-                <div style="margin-top: 40px; padding: 30px; background: rgba(102, 126, 234, 0.05); border-radius: 15px;"> {{-- Quick actions konteineris --}}
-                    <h3 style="text-align: center; color: #667eea; margin-bottom: 25px;">🚀 Ātras darbības</h3> {{-- Virsraksts --}}
-                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;"> {{-- Pogas --}}
-                        <a href="{{ route('admin.index') }}" class="btn btn-primary"> {{-- Links uz admin paneli --}}
-                            🔧 Admin panelis {{-- Teksts --}}
-                        </a> {{-- Beidzas link --}}
-                        <a href="{{ route('admin.recipes') }}" class="btn btn-success"> {{-- Links uz recepšu pārvaldību --}}
-                            🍽️ Pārvaldīt receptes {{-- Teksts --}}
-                        </a> {{-- Beidzas link --}}
-                        <a href="/dashboard" class="btn btn-secondary"> {{-- Links uz dashboard --}}
-                            🏠 Vadības panelis {{-- Teksts --}}
-                        </a> {{-- Beidzas link --}}
-                    </div> {{-- Beidzas pogu rinda --}}
-                </div> {{-- Beidzas quick actions --}}
-            </div> {{-- Beidzas main-content --}}
-        </div> {{-- Beidzas container --}}
-    </div> {{-- Beidzas py-12 --}}
-@endsection {{-- Aizver layout --}}
+        .quick-actions {
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--line);
+        }
+
+        .quick-actions h3 {
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 22px;
+        }
+
+        .quick-actions-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 1100px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .admin-users-page {
+                padding: 20px 12px 40px;
+            }
+
+            .page-shell {
+                padding: 20px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .meta-row {
+                grid-template-columns: 1fr;
+            }
+
+            .meta-value {
+                text-align: left;
+            }
+
+            .user-meta-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+    <div class="admin-users-page">
+        <div class="admin-users-wrap">
+            <div class="page-shell">
+                <div class="breadcrumb">
+                    <a href="{{ route('admin.index') }}">Admin panelis</a>
+                    <span> / </span>
+                    <span style="font-weight: 700; color: var(--text);">Lietotāju pārvaldība</span>
+                </div>
+
+                @if(session('success'))
+                    <div class="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-error">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-number">{{ $users->total() }}</div>
+                        <div class="stat-label">Kopā lietotāju</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">{{ $users->where('is_admin', true)->count() }}</div>
+                        <div class="stat-label">Administratori</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">{{ $users->where('is_admin', false)->count() }}</div>
+                        <div class="stat-label">Parastie lietotāji</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</div>
+                        <div class="stat-label">Jauni šonedēļ</div>
+                    </div>
+                </div>
+
+                @if($users->count() > 0)
+                    <div class="users-grid">
+                        @foreach($users as $user)
+                            <div class="user-card">
+                                <div class="user-header">
+                                    @if($user->is_admin)
+                                        <div class="role-badge admin">Administrators</div>
+                                    @else
+                                        <div class="role-badge user">Lietotājs</div>
+                                    @endif
+
+                                    <h3 class="user-name">{{ $user->name }}</h3>
+                                    <p class="user-email">{{ $user->email }}</p>
+
+                                    <div class="user-meta-top">
+                                        <span>Reģ.: {{ $user->created_at->format('d.m.Y') }}</span>
+                                        <span>{{ $user->recipes->count() }} receptes</span>
+                                    </div>
+                                </div>
+
+                                <div class="user-body">
+                                    <div class="meta-table">
+                                        <div class="meta-row">
+                                            <div class="meta-label">E-pasts apstiprināts</div>
+                                            <div class="meta-value {{ $user->email_verified_at ? 'success' : 'danger' }}">
+                                                {{ $user->email_verified_at ? 'Jā' : 'Nē' }}
+                                            </div>
+                                        </div>
+                                        <div class="meta-row">
+                                            <div class="meta-label">Pēdējā aktivitāte</div>
+                                            <div class="meta-value">
+                                                {{ $user->updated_at->diffForHumans() }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="actions">
+                                        @if($user->id !== Auth::id())
+                                            <form method="POST" action="{{ route('admin.users.toggle-admin', $user) }}" style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button
+                                                    type="submit"
+                                                    class="btn {{ $user->is_admin ? 'btn-warning' : 'btn-success' }}"
+                                                    onclick="return confirm('Vai tiešām mainīt lietotāja statusu?')">
+                                                    {{ $user->is_admin ? 'Noņemt admin' : 'Padarīt par admin' }}
+                                                </button>
+                                            </form>
+
+                                            @if(!$user->is_admin)
+                                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-danger"
+                                                        onclick="return confirm('Vai tiešām dzēst šo lietotāju? Šī darbība ir neatgriezeniska!')">
+                                                        Dzēst
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        @else
+                                            <span class="btn btn-disabled">
+                                                Jūs pats
+                                            </span>
+                                        @endif
+
+                                        @if($user->recipes->count() > 0)
+                                            <a href="/recipes?user={{ $user->id }}" class="btn btn-primary">
+                                                Skatīt receptes ({{ $user->recipes->count() }})
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="pagination-wrap">
+                        {{ $users->links() }}
+                    </div>
+                @else
+                    <div class="empty-state">
+                        <div class="icon">👥</div>
+                        <h3>Nav lietotāju</h3>
+                        <p>Nav atrasts neviens lietotājs sistēmā.</p>
+                    </div>
+                @endif
+
+                <div class="quick-actions">
+                    <h3>Ātras darbības</h3>
+                    <div class="quick-actions-row">
+                        <a href="{{ route('admin.index') }}" class="btn btn-primary">
+                            Admin panelis
+                        </a>
+                        <a href="{{ route('admin.recipes') }}" class="btn btn-success">
+                            Pārvaldīt receptes
+                        </a>
+                        <a href="/dashboard" class="btn btn-secondary">
+                            Vadības panelis
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

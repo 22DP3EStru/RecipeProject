@@ -5,241 +5,806 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $recipe->title }} - Vecmāmiņas Receptes</title>
     <style>
-        /* Dashboard Style Design */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --success-bg: #edf3e7;
+            --success-text: #667652;
+            --warning-bg: #f3e8e3;
+            --warning-text: #9a6b56;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-border: #e3c9c2;
+            --info-bg: #f2e7da;
+            --info-text: #7a5a43;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+            --star: #b9872f;
+            --star-soft: rgba(47, 36, 29, 0.2);
+        }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text);
         }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
+        }
 
-        .header {
+        .hero {
+            padding: 18px 20px 32px;
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 40px 0;
         }
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
         }
 
-        .header p { font-size: 1.3rem; opacity: 0.9; }
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
+        }
 
         .nav-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 253, 249, 0.92);
+            border: 1px solid var(--line);
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 24px;
             flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
         }
 
-        .nav-brand { font-size: 24px; font-weight: bold; color: #667eea; text-decoration: none; }
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 240px;
+        }
 
-        .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .nav-brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: flex-start;
+            min-width: 320px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
 
         .nav-links a {
-            color: #333;
+            color: var(--text);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .nav-links a:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+            background: var(--soft-bg);
+            border-color: var(--line);
+            color: var(--accent);
         }
 
-        .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
         }
 
         .btn {
             display: inline-block;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 12px 18px;
             text-decoration: none;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: 0.2s ease;
+            text-align: center;
+            font-family: inherit;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            filter: brightness(0.98);
         }
 
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-success { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
-        .btn-danger  { background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); color: white; }
-
-        .recipe-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
         }
 
-        .meta-item {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            padding: 20px;
-            border-radius: 15px;
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d8e1cf;
+        }
+
+        .btn-warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: #e2ccc1;
+        }
+
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
+        }
+
+        .btn-secondary {
+            background: var(--soft-bg);
+            color: var(--text);
+        }
+
+        .main-content {
+            background: rgba(255, 253, 249, 0.78);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .section-block + .section-block {
+            margin-top: 28px;
+        }
+
+        .intro-box,
+        .hero-card,
+        .meta-card,
+        .content-card,
+        .author-card,
+        .review-card-box,
+        .related-card,
+        .flash-success {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            padding: 28px;
+        }
+
+        .intro-box {
             text-align: center;
         }
 
-        .ingredients-list { background: rgba(86, 171, 47, 0.1); padding: 25px; border-radius: 15px; margin: 20px 0; }
-        .instructions-list { background: rgba(255, 193, 7, 0.1); padding: 25px; border-radius: 15px; margin: 20px 0; }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
-            .header p { font-size: 1rem; }
-            .nav-bar { flex-direction: column; gap: 15px; }
-            .main-content { padding: 20px; }
-            .recipe-meta { grid-template-columns: 1fr; }
-        }
-
-        .review-card {
-            background: rgba(255,255,255,0.8);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.3);
-            margin-bottom: 20px;
-        }
-
-        .stars { display: inline-flex; flex-direction: row-reverse; gap: 6px; }
-        .stars input { display: none; }
-        .stars label { cursor: pointer; font-size: 26px; color: rgba(0,0,0,0.25); transition: transform .15s ease; }
-        .stars label:hover { transform: translateY(-2px); }
-        .stars input:checked ~ label,
-        .stars label:hover,
-        .stars label:hover ~ label { color: #ffc107; }
-
-        .flash-success {
-            background: rgba(86,171,47,0.12);
-            border-left: 4px solid #56ab2f;
-            padding: 12px 15px;
-            border-radius: 12px;
+        .intro-icon {
+            font-size: 3.5rem;
             margin-bottom: 16px;
-            color: #2f6b1b;
-            font-weight: 700;
         }
 
-        /* FAVORITES (HEART) */
-        .heart-btn{
+        .intro-box h2,
+        .section-title,
+        .hero-card-title,
+        .empty-title {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .intro-box h2 {
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+        }
+
+        .intro-box p,
+        .section-subtext,
+        .hero-card p,
+        .muted-text {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.9rem;
+        }
+
+        .section-subtext {
+            margin-bottom: 22px;
+        }
+
+        .hero-card {
+            text-align: center;
+        }
+
+        .hero-card-head {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .hero-card-title {
+            font-size: 2.6rem;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        .recipe-description {
+            font-size: 17px;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .heart-btn {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
             font-size: 28px;
             line-height: 1;
             padding: 8px 10px;
-            border-radius: 12px;
-            transition: transform .15s ease, background .15s ease;
+            transition: 0.2s ease;
         }
-        .heart-btn:hover{ transform: translateY(-2px); background: rgba(102,126,234,0.12); }
-        .heart-wrap{ display:flex; justify-content:center; align-items:center; gap:10px; margin-top: 12px; flex-wrap:wrap; }
 
-        /* ✅ MEDIA BLOCK */
-        .media-wrap{ max-width: 820px; margin: 0 auto 10px; padding-top: 18px; }
-        .media-card{
-            background: rgba(255,255,255,0.85);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.35);
-            margin-top: 14px;
+        .heart-btn:hover {
+            background: var(--soft-bg);
+            border-color: var(--line);
         }
-        .media-img{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 14px; display:block; }
-        .media-video{ width: 100%; border-radius: 14px; display:block; }
-        .media-link{
-            display:inline-block;
-            padding: 10px 14px;
-            border-radius: 12px;
-            background: rgba(102,126,234,0.12);
-            color:#667eea;
-            font-weight: 800;
-            text-decoration:none;
-        }
-        .media-link:hover{ background: rgba(102,126,234,0.18); }
 
-        /* ✅ PORCIJU KALKULATORS */
-        .servings-control{
-            margin: 18px auto 0;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            gap:10px;
-            flex-wrap:wrap;
+        .servings-control {
+            margin: 22px auto 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .servings-input{
+
+        .servings-input {
             width: 90px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.15);
+            padding: 12px 14px;
+            border: 1px solid var(--line);
             outline: none;
             font-weight: 800;
-            text-align:center;
+            text-align: center;
+            background: #fffdfa;
+            color: var(--text);
+            font-family: inherit;
         }
-        .servings-hint{ font-size: 13px; color: #666; font-weight: 700; opacity: .9; }
-        .meta-value-inline{ color:#666; font-weight: 600; }
+
+        .servings-input:focus {
+            border-color: #bba692;
+            background: #fff;
+        }
+
+        .servings-hint {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 700;
+        }
 
         .pdf-actions {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 12px;
-            margin-bottom: 16px;
+            margin-top: 18px;
+            justify-content: center;
         }
 
         .pdf-btn {
             display: inline-block;
-            padding: 6px 10px;
-            font-size: 12px;
-            line-height: 1.2;
+            padding: 10px 14px;
             text-decoration: none;
-            border: 1px solid #d6d6d6;
-            border-radius: 6px;
-            background: #fff;
-            color: #444;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
             transition: 0.2s ease;
         }
 
         .pdf-btn:hover {
-            background: #f5f5f5;
-            border-color: #bdbdbd;
+            background: var(--soft-bg-2);
+        }
+
+        .media-wrap {
+            max-width: 820px;
+            margin: 24px auto 0;
+        }
+
+        .media-card {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 16px;
+            margin-top: 14px;
+        }
+
+        .media-img,
+        .media-video {
+            width: 100%;
+            display: block;
+            border: 1px solid var(--line);
+        }
+
+        .media-img {
+            max-height: 420px;
+            object-fit: cover;
+        }
+
+        .media-link {
+            display: inline-block;
+            padding: 12px 16px;
+            background: var(--soft-bg-2);
+            border: 1px solid var(--line);
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .media-link:hover {
+            background: var(--soft-bg);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+        }
+
+        .meta-item {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 22px;
+            text-align: center;
+        }
+
+        .meta-icon {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+        }
+
+        .meta-item h4 {
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .meta-item p {
+            color: var(--muted);
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .content-inner {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 24px;
+        }
+
+        .ingredient-list,
+        .instruction-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredient-list li,
+        .instruction-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .ingredient-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ingredient-check {
+            color: var(--success-text);
+            font-weight: 800;
+        }
+
+        .ingredientQty {
+            color: var(--text);
+            font-weight: 900;
+        }
+
+        .ingredient-unit {
+            color: var(--muted);
+            font-weight: 800;
+        }
+
+        .ingredient-name {
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .old-format-note {
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .instruction-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .step-badge {
+            background: var(--accent);
+            color: #fffaf4;
+            min-width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .instruction-text {
+            color: var(--text);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .author-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            text-align: center;
+        }
+
+        .author-box {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 20px;
+        }
+
+        .author-box h4 {
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .author-box p {
+            color: var(--muted);
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .flash-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d8e1cf;
+            font-weight: 700;
+            margin-bottom: 18px;
+            padding: 18px 20px;
+        }
+
+        .review-summary {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .review-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .review-card {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 22px;
+        }
+
+        .review-card + .review-card {
+            margin-top: 18px;
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .review-user {
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .review-date {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .review-text {
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .stars {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            gap: 6px;
+        }
+
+        .stars input {
+            display: none;
+        }
+
+        .stars label {
+            cursor: pointer;
+            font-size: 26px;
+            color: rgba(0,0,0,0.25);
+            transition: 0.15s ease;
+        }
+
+        .stars label:hover {
+            transform: translateY(-2px);
+        }
+
+        .stars input:checked ~ label,
+        .stars label:hover,
+        .stars label:hover ~ label {
+            color: var(--star);
+        }
+
+        .static-stars {
+            margin-left: 10px;
+        }
+
+        .static-stars .filled {
+            color: var(--star);
+        }
+
+        .static-stars .empty {
+            color: var(--star-soft);
+        }
+
+        .review-form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            background: #fffdfa;
+            color: var(--text);
+            font-family: inherit;
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .review-form-textarea:focus {
+            outline: none;
+            border-color: #bba692;
+            background: #fff;
+        }
+
+        .error-text {
+            color: var(--danger-text);
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .review-actions,
+        .page-actions,
+        .related-grid {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .page-actions {
+            justify-content: center;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        }
+
+        .related-item {
+            background: var(--soft-bg);
+            border: 1px solid var(--line);
+            padding: 20px;
+            transition: 0.2s ease;
+        }
+
+        .related-item:hover {
+            background: #fffaf5;
+        }
+
+        .related-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+
+        .related-item p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .related-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .empty-review {
+            text-align: center;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .hero {
+                padding: 10px 8px 24px;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .nav-bar {
+                padding: 16px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-right {
+                min-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .main-content,
+            .intro-box,
+            .hero-card,
+            .meta-card,
+            .content-card,
+            .author-card,
+            .review-card-box,
+            .related-card,
+            .flash-success {
+                padding: 20px;
+            }
+
+            .hero-card-title {
+                font-size: 2rem;
+            }
+
+            .hero-card-head,
+            .servings-control,
+            .pdf-actions,
+            .review-actions,
+            .page-actions {
+                flex-direction: column;
+            }
+
+            .hero-card-head form,
+            .pdf-actions a,
+            .review-actions .btn,
+            .page-actions .btn,
+            .page-actions form,
+            .page-actions form button {
+                width: 100%;
+            }
+
+            .ingredient-row,
+            .instruction-row,
+            .review-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .author-grid,
+            .meta-grid,
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .static-stars {
+                margin-left: 0;
+                display: block;
+                margin-top: 6px;
+            }
         }
     </style>
 </head>
@@ -253,7 +818,6 @@
             ->exists();
     }
 
-    // ✅ ORIĢINĀLIE DATI KALKULATORAM
     $origServings = (int)($recipe->servings ?? 1);
     if($origServings <= 0) { $origServings = 1; }
 
@@ -261,7 +825,6 @@
     $origCook = (int)($recipe->cook_time ?? 0);
     $origTotal = $origPrep + $origCook;
 
-    // ✅ DROŠI: JAUNĀS TABULAS KOLEKCIJA
     $ingredientsRel = collect();
     try {
         $ingredientsRel = $recipe->ingredientsItems;
@@ -270,40 +833,53 @@
     }
 @endphp
 
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <h1>🍽️ {{ $recipe->title }}</h1>
-        <p>Autors: {{ $recipe->user->name }}</p>
+<div class="page">
+
+    <div class="hero">
+        <h1 class="hero-title">{{ $recipe->title }}</h1>
+        <p class="hero-text">
+            Autors: {{ $recipe->user->name }}
+        </p>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav-bar">
-        <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
-        <div class="nav-links">
-            <a href="/dashboard">🏠 Vadības panelis</a>
-            <a href="/recipes">🍽️ Receptes</a>
-            <a href="/categories">📂 Kategorijas</a>
-            <a href="/profile/recipes">📝 Manas receptes</a>
-            @auth
-                <a href="{{ route('profile.favorites') }}">❤️ Favorīti</a>
-            @endauth
+        <div class="nav-left">
+            <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
+
+            <div class="nav-user">
+                @auth
+                    <span>{{ Auth::user()->name }}</span>
+                @endauth
+                <a href="/recipes" class="btn btn-warning">Atpakaļ uz receptēm</a>
+            </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            @auth
-                <span style="color: #666; font-weight: 500;">👤 {{ Auth::user()->name }}</span>
-            @endauth
-            <a href="/recipes" class="btn btn-warning" style="padding: 10px 20px; font-size: 14px;">← Atpakaļ uz receptēm</a>
+
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/dashboard">Vadības panelis</a>
+                <a href="/recipes" class="active">Receptes</a>
+                <a href="/categories">Kategorijas</a>
+                <a href="/profile/recipes">Manas receptes</a>
+                @auth
+                    <a href="{{ route('profile.favorites') }}">Favorīti</a>
+                @endauth
+            </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Recipe Header -->
-        <div style="text-align: center; margin-bottom: 30px; padding: 30px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 15px;">
 
-            <div class="heart-wrap">
-                <h1 style="color: #667eea; margin: 0; font-size: 2.5rem;">{{ $recipe->title }}</h1>
+        <div class="section-block intro-box">
+            <div class="intro-icon">🍽️</div>
+            <h2>Receptes apskats</h2>
+            <p>
+                Šeit varat pārskatīt receptes aprakstu, sastāvdaļas, gatavošanas soļus, atsauksmes un saistītās receptes vienuviet.
+            </p>
+        </div>
+
+        <div class="section-block hero-card">
+            <div class="hero-card-head">
+                <h2 class="hero-card-title">{{ $recipe->title }}</h2>
 
                 @auth
                     <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
@@ -319,13 +895,12 @@
                 @endguest
             </div>
 
-            <p style="color: #666; font-size: 18px; line-height: 1.6; max-width: 800px; margin: 10px auto 0;">
+            <p class="recipe-description">
                 {{ $recipe->description }}
             </p>
 
-            {{-- ✅ PORCIJU IZVĒLE --}}
             <div class="servings-control">
-                <span style="font-weight:900; color:#667eea;">Porcijas:</span>
+                <span style="font-weight: 900; color: var(--accent);">Porcijas:</span>
                 <input
                     id="servingsInput"
                     class="servings-input"
@@ -342,7 +917,7 @@
                 <a href="{{ route('pdf.recipe.ingredients', $recipe->id) }}" class="pdf-btn pdf-link" data-type="ingredients">Sastāvdaļas</a>
                 <a href="{{ route('pdf.recipe.steps', $recipe->id) }}" class="pdf-btn pdf-link" data-type="steps">Soļi</a>
             </div>
-            <!-- ✅ MEDIA (faili + linki) -->
+
             @if($recipe->image_path || $recipe->image_url || $recipe->video_path || $recipe->video_url)
                 <div class="media-wrap">
                     @if($recipe->image_path)
@@ -365,7 +940,7 @@
                     @elseif($recipe->video_url)
                         <div class="media-card" style="text-align:center;">
                             <a href="{{ $recipe->video_url }}" target="_blank" rel="noopener" class="media-link">
-                                ▶ Skatīties video
+                                Skatīties video
                             </a>
                         </div>
                     @endif
@@ -373,197 +948,185 @@
             @endif
         </div>
 
-        <!-- Recipe Meta Information -->
-        <div class="recipe-meta">
-            <div class="meta-item">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">📂</div>
-                <h4 style="color: #667eea; margin-bottom: 5px;">Kategorija</h4>
-                <p style="color: #666; font-weight: 600;">{{ $recipe->category ?? 'Nav norādīta' }}</p>
-            </div>
+        <div class="section-block meta-card">
+            <h3 class="section-title">📋 Receptes informācija</h3>
 
-            <div class="meta-item">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">⭐</div>
-                <h4 style="color: #667eea; margin-bottom: 5px;">Grūtība</h4>
-                <p style="color: #666; font-weight: 600;">{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
-            </div>
-
-            @if(!is_null($recipe->prep_time))
+            <div class="meta-grid">
                 <div class="meta-item">
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🔪</div>
-                    <h4 style="color: #667eea; margin-bottom: 5px;">Sagatavošana</h4>
-                    <p class="meta-value-inline">
-                        <span id="prepTime" data-original="{{ $origPrep }}">{{ $origPrep }}</span> minūtes
+                    <div class="meta-icon">📂</div>
+                    <h4>Kategorija</h4>
+                    <p>{{ $recipe->category ?? 'Nav norādīta' }}</p>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-icon">⭐</div>
+                    <h4>Grūtība</h4>
+                    <p>{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
+                </div>
+
+                @if(!is_null($recipe->prep_time))
+                    <div class="meta-item">
+                        <div class="meta-icon">🔪</div>
+                        <h4>Sagatavošana</h4>
+                        <p>
+                            <span id="prepTime" data-original="{{ $origPrep }}">{{ $origPrep }}</span> minūtes
+                        </p>
+                    </div>
+                @endif
+
+                @if(!is_null($recipe->cook_time))
+                    <div class="meta-item">
+                        <div class="meta-icon">🔥</div>
+                        <h4>Gatavošana</h4>
+                        <p>
+                            <span id="cookTime" data-original="{{ $origCook }}">{{ $origCook }}</span> minūtes
+                        </p>
+                    </div>
+                @endif
+
+                <div class="meta-item">
+                    <div class="meta-icon">⏱️</div>
+                    <h4>Kopā laiks</h4>
+                    <p>
+                        <span id="totalTime" data-original="{{ $origTotal }}">{{ $origTotal }}</span> minūtes
                     </p>
                 </div>
-            @endif
 
-            @if(!is_null($recipe->cook_time))
                 <div class="meta-item">
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🔥</div>
-                    <h4 style="color: #667eea; margin-bottom: 5px;">Gatavošana</h4>
-                    <p class="meta-value-inline">
-                        <span id="cookTime" data-original="{{ $origCook }}">{{ $origCook }}</span> minūtes
+                    <div class="meta-icon">👥</div>
+                    <h4>Porcijas</h4>
+                    <p>
+                        <span id="servingsDisplay" data-original="{{ $origServings }}">{{ $origServings }}</span> porcijas
                     </p>
                 </div>
-            @endif
-
-            <div class="meta-item">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">⏱️</div>
-                <h4 style="color: #667eea; margin-bottom: 5px;">Kopā laiks</h4>
-                <p class="meta-value-inline">
-                    <span id="totalTime" data-original="{{ $origTotal }}">{{ $origTotal }}</span> minūtes
-                </p>
-            </div>
-
-            <div class="meta-item">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
-                <h4 style="color: #667eea; margin-bottom: 5px;">Porcijas</h4>
-                <p class="meta-value-inline">
-                    <span id="servingsDisplay" data-original="{{ $origServings }}">{{ $origServings }}</span> porcijas
-                </p>
             </div>
         </div>
 
-        <!-- Ingredients -->
-        <div class="card">
-            <div class="ingredients-list">
-                <h3 style="color: #56ab2f; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.8rem;">
-                    <span style="margin-right: 15px;">🥕</span>
-                    Sastāvdaļas
-                </h3>
+        <div class="section-block content-card">
+            <h3 class="section-title">🥕 Sastāvdaļas</h3>
 
-                <div style="background: rgba(255, 255, 255, 0.7); padding: 25px; border-radius: 12px; border-left: 4px solid #56ab2f;">
-                    {{-- ✅ JA IR JAUNĀ TABULA (recipe_ingredients) --}}
-                    @if($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
-                        <ul style="list-style: none; padding: 0;">
-                            @foreach($ingredientsRel as $ing)
-                                <li style="padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; gap:10px;">
-                                    <span style="color: #56ab2f; margin-right: 6px; font-weight: bold;">✓</span>
+            <div class="content-inner">
+                @if($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
+                    <ul class="ingredient-list">
+                        @foreach($ingredientsRel as $ing)
+                            <li>
+                                <div class="ingredient-row">
+                                    <span class="ingredient-check">✓</span>
 
                                     @php
                                         $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? (isset($ing->pivot) ? ($ing->pivot->quantity ?? null) : null);
                                     @endphp
 
-                                    {{-- daudzums (pārrēķināms) --}}
                                     @if(!is_null($q))
-                                        <span class="ingredientQty"
-                                            data-original="{{ (float)$q }}"
-                                            style="color:#333; font-weight:900;">
+                                        <span class="ingredientQty" data-original="{{ (float)$q }}">
                                             {{ rtrim(rtrim(number_format((float)$q, 2, '.', ''), '0'), '.') }}
                                         </span>
                                     @else
-                                        <span class="ingredientQty"
-                                            data-original=""
-                                            style="color:#333; font-weight:900;"></span>
+                                        <span class="ingredientQty" data-original=""></span>
                                     @endif
 
-                                    {{-- mērvienība --}}
                                     @if($ing->unit)
-                                        <span style="color:#555; font-weight:800;">{{ $ing->unit }}</span>
+                                        <span class="ingredient-unit">{{ $ing->unit }}</span>
                                     @endif
 
-                                    {{-- nosaukums --}}
-                                    <span style="color: #333; font-size: 16px;">{{ $ing->name }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-
-                    {{-- 🟡 FALLBACK: vecais text lauks --}}
-                    @else
-                        @php
-                            $ingredients = explode("\n", (string)$recipe->ingredients);
-                        @endphp
-                        <div style="margin-bottom:10px; color:#666; font-weight:800;">
-                            (Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana var nebūt precīza.)
-                        </div>
-                        <ul style="list-style: none; padding: 0;">
-                            @foreach($ingredients as $ingredient)
-                                @if(trim($ingredient))
-                                    <li style="padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center;">
-                                        <span style="color: #56ab2f; margin-right: 10px; font-weight: bold;">✓</span>
-                                        <span style="color: #333; font-size: 16px;">{{ trim($ingredient) }}</span>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Instructions -->
-        <div class="card">
-            <div class="instructions-list">
-                <h3 style="color: #ffc107; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.8rem;">
-                    <span style="margin-right: 15px;">👩‍🍳</span>
-                    Gatavošanas instrukcijas
-                </h3>
-                <div style="background: rgba(255, 255, 255, 0.7); padding: 25px; border-radius: 12px; border-left: 4px solid #ffc107;">
+                                    <span class="ingredient-name">{{ $ing->name }}</span>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
                     @php
-                        $instructions = explode("\n", (string)$recipe->instructions);
-                        $stepNumber = 1;
+                        $ingredients = explode("\n", (string)$recipe->ingredients);
                     @endphp
-                    <ol style="padding-left: 0; counter-reset: step-counter;">
-                        @foreach($instructions as $instruction)
-                            @if(trim($instruction))
-                                <li style="padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: flex-start; counter-increment: step-counter;">
-                                    <span style="background: #ffc107; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; flex-shrink: 0; margin-top: 2px;">
-                                        {{ $stepNumber++ }}
-                                    </span>
-                                    <span style="color: #333; font-size: 16px; line-height: 1.6;">{{ trim($instruction) }}</span>
+
+                    <div class="old-format-note">
+                        Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana var nebūt precīza.
+                    </div>
+
+                    <ul class="ingredient-list">
+                        @foreach($ingredients as $ingredient)
+                            @if(trim($ingredient))
+                                <li>
+                                    <div class="ingredient-row">
+                                        <span class="ingredient-check">✓</span>
+                                        <span class="ingredient-name">{{ trim($ingredient) }}</span>
+                                    </div>
                                 </li>
                             @endif
                         @endforeach
-                    </ol>
+                    </ul>
+                @endif
+            </div>
+        </div>
+
+        <div class="section-block content-card">
+            <h3 class="section-title">👩‍🍳 Gatavošanas instrukcijas</h3>
+
+            <div class="content-inner">
+                @php
+                    $instructions = explode("\n", (string)$recipe->instructions);
+                    $stepNumber = 1;
+                @endphp
+
+                <ol class="instruction-list">
+                    @foreach($instructions as $instruction)
+                        @if(trim($instruction))
+                            <li>
+                                <div class="instruction-row">
+                                    <span class="step-badge">{{ $stepNumber++ }}</span>
+                                    <span class="instruction-text">{{ trim($instruction) }}</span>
+                                </div>
+                            </li>
+                        @endif
+                    @endforeach
+                </ol>
+            </div>
+        </div>
+
+        <div class="section-block author-card">
+            <h3 class="section-title">👨‍🍳 Par šo recepti</h3>
+
+            <div class="author-grid">
+                <div class="author-box">
+                    <h4>Receptes autors</h4>
+                    <p>{{ $recipe->user->name }}</p>
+                </div>
+
+                <div class="author-box">
+                    <h4>Publicēts</h4>
+                    <p>{{ $recipe->created_at->format('d.m.Y') }}</p>
+                </div>
+
+                <div class="author-box">
+                    <h4>Pēdējās izmaiņas</h4>
+                    <p>{{ $recipe->updated_at->diffForHumans() }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Recipe Author & Date -->
-        <div class="card">
-            <h3 style="color: #333; margin-bottom: 20px; text-align: center;">👨‍🍳 Par šo recepti</h3>
-            <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; text-align: center;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                    <div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">Receptes autors</h4>
-                        <p style="color: #666; font-size: 18px; font-weight: 600;">{{ $recipe->user->name }}</p>
-                    </div>
-                    <div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">Publicēts</h4>
-                        <p style="color: #666; font-size: 16px;">{{ $recipe->created_at->format('d.m.Y') }}</p>
-                    </div>
-                    <div>
-                        <h4 style="color: #667eea; margin-bottom: 5px;">Pēdējās izmaiņas</h4>
-                        <p style="color: #666; font-size: 16px;">{{ $recipe->updated_at->diffForHumans() }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Reviews Section -->
         @php
             $avg = $recipe->reviews->avg('rating');
             $avgRounded = $avg ? round($avg, 1) : null;
             $count = $recipe->reviews->count();
         @endphp
 
-        <div class="card">
-            <h3 style="color: #333; margin-bottom: 20px; text-align: center;">⭐ Atsauksmes</h3>
+        <div class="section-block review-card-box">
+            <h3 class="section-title">⭐ Atsauksmes</h3>
 
             @if(session('success'))
                 <div class="flash-success">{{ session('success') }}</div>
             @endif
 
-            <div style="text-align:center; margin-bottom: 15px;">
-                <span style="display:inline-block; padding:6px 10px; border-radius:999px; background: rgba(102,126,234,0.12); color:#667eea; font-weight:800;">
+            <div class="review-summary">
+                <span class="review-badge">
                     Vidējais: {{ $avgRounded ?? 'Nav' }}@if($avgRounded) / 5 @endif ({{ $count }})
                 </span>
             </div>
 
             @auth
-                <div class="review-card">
+                <div class="review-card" style="margin-bottom: 18px;">
                     @if(!$myReview)
-                        <div style="font-weight:800; margin-bottom:10px;">Tava atsauksme</div>
+                        <div style="font-weight:800; margin-bottom:12px;">Tava atsauksme</div>
 
                         <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
                             @csrf
@@ -575,36 +1138,45 @@
                                         <label for="star{{ $i }}">★</label>
                                     @endfor
                                 </div>
-                                @error('rating') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
+                                @error('rating')
+                                    <div class="error-text">{{ $message }}</div>
+                                @enderror
                             </div>
 
-                            <textarea name="comment" rows="4" maxlength="2000"
-                                      style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);"
-                                      placeholder="Uzraksti savu viedokli..."></textarea>
-                            @error('comment') <div style="color:#ff4b2b; font-weight:800; margin-top:8px;">{{ $message }}</div> @enderror
+                            <textarea
+                                name="comment"
+                                rows="4"
+                                maxlength="2000"
+                                class="review-form-textarea"
+                                placeholder="Uzraksti savu viedokli..."
+                            ></textarea>
+                            @error('comment')
+                                <div class="error-text">{{ $message }}</div>
+                            @enderror
 
-                            <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
-                                ✅ Pievienot atsauksmi
+                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                                Pievienot atsauksmi
                             </button>
                         </form>
                     @else
                         <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
                             <div>
                                 <div style="font-weight:800;">Tava atsauksme</div>
-                                <div style="margin-top:5px;">
+                                <div class="static-stars" style="margin-top:5px; margin-left:0;">
                                     @for($s=1; $s<=5; $s++)
                                         {!! $s <= $myReview->rating
-                                            ? '<span style="color:#ffc107;">★</span>'
-                                            : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
+                                            ? '<span class="filled">★</span>'
+                                            : '<span class="empty">★</span>' !!}
                                     @endfor
                                 </div>
                             </div>
 
-                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                <button class="btn btn-warning"
-                                        type="button"
-                                        onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
-                                    ✏️ Rediģēt manu atsauksmi
+                            <div class="review-actions">
+                                <button
+                                    class="btn btn-warning"
+                                    type="button"
+                                    onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
+                                    Rediģēt manu atsauksmi
                                 </button>
 
                                 <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
@@ -612,23 +1184,24 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">
-                                        🗑️ Dzēst manu atsauksmi
+                                        Dzēst manu atsauksmi
                                     </button>
                                 </form>
                             </div>
                         </div>
 
                         @if($myReview->comment)
-                            <div style="margin-top:10px; color:#555;">{{ $myReview->comment }}</div>
+                            <div class="review-text" style="margin-top:12px;">{{ $myReview->comment }}</div>
                         @endif
 
-                        <form id="edit-review-form"
-                              method="POST"
-                              action="{{ route('recipes.reviews.store', $recipe) }}"
-                              style="display:none; margin-top:15px;">
+                        <form
+                            id="edit-review-form"
+                            method="POST"
+                            action="{{ route('recipes.reviews.store', $recipe) }}"
+                            style="display:none; margin-top:18px;">
                             @csrf
 
-                            <div class="stars" style="margin-bottom:10px;">
+                            <div class="stars" style="margin-bottom:12px;">
                                 @for($i=5; $i>=1; $i--)
                                     <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
                                            @checked((int)$myReview->rating === $i) required>
@@ -636,11 +1209,10 @@
                                 @endfor
                             </div>
 
-                            <textarea name="comment" rows="4" maxlength="2000"
-                                      style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.15);">{{ $myReview->comment }}</textarea>
+                            <textarea name="comment" rows="4" maxlength="2000" class="review-form-textarea">{{ $myReview->comment }}</textarea>
 
-                            <button type="submit" class="btn btn-success" style="margin-top:10px; padding:12px 22px; font-size:14px;">
-                                💾 Saglabāt izmaiņas
+                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                                Saglabāt izmaiņas
                             </button>
                         </form>
                     @endif
@@ -649,81 +1221,85 @@
 
             @forelse($recipe->reviews as $review)
                 <div class="review-card">
-                    <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
-                        <div style="font-weight:800;">
+                    <div class="review-top">
+                        <div class="review-user">
                             {{ $review->user->name }}
-                            <span style="margin-left:10px;">
+                            <span class="static-stars">
                                 @for($s=1; $s<=5; $s++)
-                                    {!! $s <= $review->rating ? '<span style="color:#ffc107;">★</span>' : '<span style="color:rgba(0,0,0,0.2);">★</span>' !!}
+                                    {!! $s <= $review->rating
+                                        ? '<span class="filled">★</span>'
+                                        : '<span class="empty">★</span>' !!}
                                 @endfor
                             </span>
                         </div>
-                        <div style="color:#888; font-size:13px;">{{ $review->created_at->format('d.m.Y H:i') }}</div>
+                        <div class="review-date">{{ $review->created_at->format('d.m.Y H:i') }}</div>
                     </div>
 
                     @if($review->comment)
-                        <div style="line-height:1.6;">{{ $review->comment }}</div>
+                        <div class="review-text">{{ $review->comment }}</div>
                     @endif
                 </div>
             @empty
-                <div class="review-card" style="text-align:center;">
+                <div class="review-card empty-review">
                     Šai receptei vēl nav atsauksmju.
                 </div>
             @endforelse
         </div>
 
-        <!-- Action Buttons -->
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
-            @if(Auth::id() === $recipe->user_id)
-                <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning" style="font-size: 16px; padding: 15px 30px;">
-                    ✏️ Rediģēt recepti
+        <div class="section-block">
+            <div class="page-actions">
+                @if(Auth::id() === $recipe->user_id)
+                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning">
+                        Rediģēt recepti
+                    </a>
+
+                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
+                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            Dzēst recepti
+                        </button>
+                    </form>
+                @endif
+
+                <a href="/recipes" class="btn btn-primary">
+                    Pārlūkot citas receptes
                 </a>
-                <form method="POST" action="{{ route('recipes.destroy', $recipe) }}" style="display: inline;"
-                      onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" style="font-size: 16px; padding: 15px 30px;">
-                        🗑️ Dzēst recepti
-                    </button>
-                </form>
-            @endif
 
-            <a href="/recipes" class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;">
-                🔍 Pārlūkot citas receptes
-            </a>
-
-            <a href="{{ route('recipes.create') }}" class="btn btn-success" style="font-size: 16px; padding: 15px 30px;">
-                📝 Izveidot jaunu recepti
-            </a>
+                <a href="{{ route('recipes.create') }}" class="btn btn-success">
+                    Izveidot jaunu recepti
+                </a>
+            </div>
         </div>
 
-        <!-- Related Recipes -->
         @if(isset($relatedRecipes) && $relatedRecipes->count() > 0)
-            <div class="card" style="margin-top: 40px;">
-                <h3 style="color: #333; margin-bottom: 25px; text-align: center;">🔍 Līdzīgas receptes</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div class="section-block related-card">
+                <h3 class="section-title">🔍 Līdzīgas receptes</h3>
+
+                <div class="related-grid">
                     @foreach($relatedRecipes as $relatedRecipe)
-                        <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-5px)'"
-                             onmouseout="this.style.transform='translateY(0)'">
-                            <h4 style="color: #667eea; margin-bottom: 10px;">{{ $relatedRecipe->title }}</h4>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888; margin-bottom: 15px;">
+                        <div class="related-item">
+                            <h4>{{ $relatedRecipe->title }}</h4>
+                            <p>{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
+
+                            <div class="related-meta">
                                 <span>{{ $relatedRecipe->category }}</span>
                                 <span>{{ $relatedRecipe->user->name }}</span>
                             </div>
-                            <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 14px;">
-                                Skatīt recepti →
+
+                            <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%;">
+                                Skatīt recepti
                             </a>
                         </div>
                     @endforeach
                 </div>
             </div>
         @endif
+
     </div>
 </div>
 
-{{-- ✅ JS PORCIJU + LAIKU + SASTĀVDAĻU PĀRRĒĶINS --}}
 <script>
 (() => {
     const input = document.getElementById('servingsInput');

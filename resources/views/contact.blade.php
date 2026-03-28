@@ -5,146 +5,454 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontakti - Vecmāmiņas Receptes</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{
-            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-            background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-            min-height:100vh;
-            color:#333
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container{max-width:1000px;margin:0 auto;padding:20px}
-        .header{text-align:center;color:white;margin-bottom:30px;padding:40px 0}
-        .header h1{font-size:3rem;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
-        .header p{font-size:1.2rem;opacity:.9}
 
-        .nav-bar{
-            background:rgba(255,255,255,0.95);
-            backdrop-filter:blur(10px);
-            border-radius:15px;
-            padding:20px;
-            margin-bottom:30px;
-            box-shadow:0 8px 32px rgba(0,0,0,0.1);
-            display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px
+        :root {
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
+            --text: #2f241d;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --success-bg: #edf3e7;
+            --success-text: #667652;
+            --warning-bg: #f3e8e3;
+            --warning-text: #9a6b56;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-border: #e3c9c2;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
         }
-        .nav-brand{font-size:24px;font-weight:800;color:#667eea;text-decoration:none}
-        .nav-links{display:flex;gap:20px;flex-wrap:wrap}
-        .nav-links a{
-            color:#333;text-decoration:none;padding:8px 16px;border-radius:8px;
-            transition:.3s;font-weight:500
-        }
-        .nav-links a:hover{background:#667eea;color:#fff;transform:translateY(-2px)}
 
-        .main{
-            background:rgba(255,255,255,0.95);
-            backdrop-filter:blur(10px);
-            border-radius:20px;
-            padding:40px;
-            box-shadow:0 15px 35px rgba(0,0,0,0.1);
-            border:1px solid rgba(255,255,255,0.2)
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
+            min-height: 100vh;
+            color: var(--text);
         }
-        .card{
-            background:rgba(255,255,255,0.85);
-            border-radius:15px;
-            padding:25px;
-            box-shadow:0 8px 25px rgba(0,0,0,0.08);
-            border:1px solid rgba(255,255,255,0.3);
-            margin-bottom:20px
-        }
-        .row{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-            gap:20px;
-            margin-top:20px
-        }
-        .muted{color:#666;line-height:1.7}
 
-        .btn{
-            display:inline-block;
-            padding:12px 18px;
-            border-radius:12px;
-            text-decoration:none;
-            font-weight:700;
-            border:none;
-            cursor:pointer;
-            background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-            color:#fff;
-            box-shadow:0 4px 15px rgba(0,0,0,0.1);
-            transition:.3s
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
         }
-        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.15)}
 
-        @media(max-width:768px){
-            .header h1{font-size:2rem}
-            .main{padding:20px}
+        .hero {
+            padding: 18px 20px 32px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .nav-bar {
+            background: rgba(255, 253, 249, 0.92);
+            border: 1px solid var(--line);
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
+        }
+
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 240px;
+        }
+
+        .nav-brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: flex-start;
+            min-width: 320px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            background: var(--soft-bg);
+            border-color: var(--line);
+            color: var(--accent);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            filter: brightness(0.98);
+        }
+
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
+        }
+
+        .main-content {
+            background: rgba(255, 253, 249, 0.78);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .section-block + .section-block {
+            margin-top: 28px;
+        }
+
+        .intro-box,
+        .contact-card,
+        .tip-box {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            padding: 28px;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .intro-box {
+            text-align: center;
+        }
+
+        .intro-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+        }
+
+        .intro-box h2,
+        .section-title,
+        .contact-card h3,
+        .tip-box h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .intro-box h2 {
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+        }
+
+        .intro-box p,
+        .muted {
+            color: var(--muted);
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.9rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .section-subtext {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 22px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: var(--soft-bg);
+            transition: 0.2s ease;
+        }
+
+        .contact-card:hover {
+            background: #fffaf5;
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 14px;
+        }
+
+        .contact-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .contact-card p,
+        .contact-card div,
+        .contact-card span,
+        .contact-card strong,
+        .tip-box p {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .contact-card strong {
+            color: var(--text);
+        }
+
+        .contact-line {
+            margin-bottom: 8px;
+        }
+
+        .contact-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-value {
+            display: inline;
+            font-weight: 700;
+            color: var(--text);
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .tip-box {
+            background: var(--soft-bg);
+        }
+
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .hero {
+                padding: 10px 8px 24px;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .nav-bar {
+                padding: 16px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-right {
+                min-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .main-content,
+            .intro-box,
+            .contact-card,
+            .tip-box {
+                padding: 20px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-right,
+            .nav-links {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-    <div class="header">
-        <h1>📞 Kontakti</h1>
-        <p>Vecmāmiņas Receptes — sazinies ar mums, ja ir jautājumi vai ieteikumi</p>
+    <div class="hero">
+        <h1 class="hero-title">Kontakti</h1>
+        <p class="hero-text">
+            Vecmāmiņas Receptes — sazinies ar mums, ja ir jautājumi, ieteikumi vai nepieciešama palīdzība.
+        </p>
     </div>
 
     <nav class="nav-bar">
-        <a href="/dashboard" class="nav-brand">🍽️ Vecmāmiņas Receptes</a>
+        <div class="nav-left">
+            <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
 
-        <div class="nav-links">
-            <a href="/dashboard">🏠 Vadības panelis</a>
-            <a href="/recipes">🍽️ Receptes</a>
-            <a href="/categories">📂 Kategorijas</a>
-            <a href="/profile/recipes">📝 Manas receptes</a>
-            @auth
-                <a href="{{ route('profile.favorites') }}">❤️ Favorīti</a>
-            @endauth
-            <a href="{{ route('contact') }}">📞 Kontakti</a>
+            <div class="nav-user">
+                <span>{{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Iziet</button>
+                </form>
+            </div>
         </div>
 
-        <a href="/dashboard" class="btn">← Atpakaļ</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/dashboard">Vadības panelis</a>
+                <a href="/recipes">Receptes</a>
+                <a href="/categories">Kategorijas</a>
+                <a href="/profile/recipes">Manas receptes</a>
+                <a href="{{ route('profile.edit') }}">Profils</a>
+                @if(Auth::user()->is_admin)
+                    <a href="{{ route('admin.index') }}">Administrācija</a>
+                @endif
+            </div>
+        </div>
     </nav>
 
-    <div class="main">
-        <div class="card">
-            <h2 style="margin-bottom:10px;">Kā ar mums sazināties</h2>
-            <p class="muted">
-                Ja pamanīji kļūdu, vēlies ieteikt uzlabojumu vai ir jautājums par “Vecmāmiņas Receptes”,
-                izmanto kādu no kontaktiem zemāk.
+    <div class="main-content">
+        <div class="section-block intro-box">
+            <div class="intro-icon">📞</div>
+            <h2>Kā ar mums sazināties</h2>
+            <p>
+                Ja pamanīji kļūdu, vēlies ieteikt uzlabojumu vai ir jautājums par “Vecmāmiņas Receptes”, izmanto kādu no zemāk redzamajiem kontaktiem.
             </p>
         </div>
 
-        <div class="row">
-            <div class="card">
-                <h3>👤 Galvenais kontakts</h3>
-                <p class="muted">
-                    E-pasts: <strong>info@vecmaminasreceptes.lv</strong><br>
-                    Tālrunis: <strong>+371 20000000</strong><br>
-                    Darba laiks: <strong>P–Pk 09:00–18:00</strong>
-                </p>
-            </div>
+        <div class="section-block">
+            <h3 class="section-title">📋 Kontaktinformācija</h3>
+            <p class="section-subtext">
+                Izvēlies atbilstošāko saziņas veidu atkarībā no jautājuma vai situācijas.
+            </p>
 
-            <div class="card">
-                <h3>🛠️ Tehniskais atbalsts</h3>
-                <p class="muted">
-                    E-pasts: <strong>support@vecmaminasreceptes.lv</strong><br>
-                    Atbildes laiks: <strong>24–48h</strong><br>
-                    Iekļauj: lietotājvārdu + īsu problēmas aprakstu
-                </p>
-            </div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">👤</div>
+                    <h3>Galvenais kontakts</h3>
+                    <div class="muted">
+                        <div class="contact-line">E-pasts: <span class="contact-value">info@vecmaminasreceptes.lv</span></div>
+                        <div class="contact-line">Tālrunis: <span class="contact-value">+371 20000000</span></div>
+                        <div class="contact-line">Darba laiks: <span class="contact-value">P–Pk 09:00–18:00</span></div>
+                    </div>
+                </div>
 
-            <div class="card">
-                <h3>💬 Ieteikumi / sadarbība</h3>
-                <p class="muted">
-                    E-pasts: <strong>sadarbiba@vecmaminasreceptes.lv</strong><br>
-                    Raksti, ja ir idejas jaunām funkcijām vai saturam.
-                </p>
+                <div class="contact-card">
+                    <div class="contact-icon">🛠️</div>
+                    <h3>Tehniskais atbalsts</h3>
+                    <div class="muted">
+                        <div class="contact-line">E-pasts: <span class="contact-value">support@vecmaminasreceptes.lv</span></div>
+                        <div class="contact-line">Atbildes laiks: <span class="contact-value">24–48h</span></div>
+                        <div class="contact-line">Iekļauj: <span class="contact-value">lietotājvārdu + īsu problēmas aprakstu</span></div>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">💬</div>
+                    <h3>Ieteikumi / sadarbība</h3>
+                    <div class="muted">
+                        <div class="contact-line">E-pasts: <span class="contact-value">sadarbiba@vecmaminasreceptes.lv</span></div>
+                        <div class="contact-line">Raksti, ja ir idejas jaunām funkcijām vai saturam.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="card" style="margin-top:10px;">
-            <h3 style="margin-bottom:10px;">📌 Ātrais jautājums</h3>
-            <p class="muted">
-                Ja jautājums ir par konkrētu recepti, pievieno receptes nosaukumu un (ja vari) saiti uz to.
+        <div class="section-block tip-box">
+            <h3>📌 Ātrais jautājums</h3>
+            <p class="muted" style="margin-top: 10px;">
+                Ja jautājums ir par konkrētu recepti, pievieno receptes nosaukumu un, ja iespējams, arī saiti uz to. Tas palīdzēs ātrāk saprast situāciju un sniegt precīzāku atbildi.
             </p>
         </div>
     </div>
