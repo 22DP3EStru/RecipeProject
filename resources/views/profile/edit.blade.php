@@ -42,48 +42,81 @@
         }
 
         .page {
-            max-width: 1240px;
+            max-width: 1450px;
             margin: 0 auto;
             padding: 28px 20px 50px;
         }
 
+        .hero {
+            padding: 18px 20px 32px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
         .nav-bar {
-            background: rgba(255, 253, 249, 0.92);
+            background: rgba(255, 253, 249, 0.95);
             border: 1px solid var(--line);
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
+            padding: 16px 22px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
+            gap: 20px;
             box-shadow: var(--shadow);
             margin-bottom: 34px;
         }
 
         .nav-brand {
             font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
+            font-size: 1.9rem;
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
             letter-spacing: 0.02em;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+
+        .nav-center {
+            min-width: 0;
+            display: flex;
+            justify-content: center;
         }
 
         .nav-links {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
             align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            min-width: 0;
         }
 
         .nav-links a {
             color: var(--text);
             text-decoration: none;
-            padding: 10px 14px;
+            padding: 9px 11px;
             border: 1px solid transparent;
             transition: 0.2s ease;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13.5px;
+            white-space: nowrap;
+            line-height: 1.2;
         }
 
         .nav-links a:hover {
@@ -92,41 +125,30 @@
             color: var(--accent);
         }
 
-        .nav-user {
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
+        }
+
+        .nav-right {
             display: flex;
             align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .nav-user-name {
             color: var(--muted);
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13.5px;
+            font-weight: 700;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .hero {
-            padding: 24px 20px 34px;
-            margin-bottom: 26px;
-            text-align: center;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-        }
-
-        .hero-title {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 4rem;
-            line-height: 1.1;
-            color: var(--accent);
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-
-        .hero-text {
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.7;
-            max-width: 760px;
-            margin: 0 auto;
-        }
         .main-content {
             background: rgba(255, 253, 249, 0.82);
             border: 1px solid var(--line);
@@ -246,6 +268,8 @@
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .btn:hover {
@@ -401,9 +425,34 @@
             line-height: 1.7;
         }
 
+        @media (max-width: 1280px) {
+            .nav-bar {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+
+            .nav-center {
+                width: 100%;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .nav-right {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-user-name {
+                max-width: none;
+            }
+        }
+
         @media (max-width: 900px) {
-            .hero {
-                padding: 28px;
+            .hero-title {
+                font-size: 2.8rem;
             }
 
             .main-content {
@@ -413,6 +462,15 @@
             .profile-card {
                 padding: 22px;
             }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
         }
 
         @media (max-width: 640px) {
@@ -420,24 +478,21 @@
                 padding: 16px 12px 32px;
             }
 
-            .nav-bar {
-                padding: 16px;
-            }
-
-            .nav-brand {
-                font-size: 1.7rem;
-            }
-
-            .main-content {
-                padding: 20px;
-        }
-
             .hero {
                 padding: 10px 8px 24px;
             }
 
             .hero-title {
-                font-size: 2.6rem;
+                font-size: 2.3rem;
+            }
+
+            .nav-bar {
+                padding: 16px;
+                gap: 14px;
+            }
+
+            .main-content {
+                padding: 20px;
             }
 
             .card-header {
@@ -452,31 +507,36 @@
     </style>
 </head>
 <body>
-
-    <div class="hero">
-        <h1 class="hero-title">Profila iestatījumi</h1>
-        <p class="hero-text">
-            Pārvaldiet sava konta informāciju, nomainiet paroli un kontrolējiet personīgos iestatījumus vienuviet.
-        </p>
-    </div>
-
     <div class="page">
+
+        <div class="hero">
+            <h1 class="hero-title">Profila iestatījumi</h1>
+            <p class="hero-text">
+                Pārvaldiet sava konta informāciju, nomainiet paroli un kontrolējiet personīgos iestatījumus vienuviet.
+            </p>
+        </div>
+
         <nav class="nav-bar">
             <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
 
-            <div class="nav-links">
-                <a href="/dashboard">Vadības panelis</a>
-                <a href="/recipes">Receptes</a>
-                <a href="{{ route('categories.index') }}">Kategorijas</a>
-                <a href="/profile/recipes">Manas receptes</a>
-                <a href="{{ route('profile.edit') }}">Profils</a>
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">Administrācija</a>
-                @endif
+            <div class="nav-center">
+                <div class="nav-links">
+                    <a href="/dashboard">Vadības panelis</a>
+                    <a href="/recipes">Receptes</a>
+                    <a href="{{ route('categories.index') }}">Kategorijas</a>
+                    <a href="/profile/recipes">Manas receptes</a>
+                    <a href="/profile/favorites">Favorīti</a>
+                    <a href="/contact">Kontakti</a>
+                    <a href="{{ route('profile.edit') }}" class="active">Profils</a>
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.index') }}">Administrācija</a>
+                    @endif
+                </div>
             </div>
 
-            <div class="nav-user">
-                <span>{{ Auth::user()->name }}</span>
+            <div class="nav-right">
+                <span class="nav-user-name">{{ Auth::user()->name }}</span>
+
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger">Iziet</button>

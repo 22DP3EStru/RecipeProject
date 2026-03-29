@@ -13,129 +13,160 @@
         }
 
         :root {
-            --bg: #ebe4da;
-            --bg-soft: #f6f1ea;
-            --card: #fffdf9;
-            --card-2: #f2e8dc;
+            --page-bg: #eee5da;
+            --page-bg-2: #e8ddd0;
+            --card-bg: #fffdf9;
+            --soft-bg: #f6efe7;
+            --soft-bg-2: #efe4d6;
+            --line: #ddcfc0;
             --text: #2f241d;
-            --muted: #7a6b61;
-            --line: #dccfc1;
-            --accent: #9d7a5b;
-            --accent-dark: #6e5038;
-            --shadow: 0 18px 40px rgba(90, 69, 52, 0.08);
-            --radius-lg: 28px;
-            --radius-md: 18px;
-            --radius-sm: 12px;
+            --muted: #7b6d61;
+            --accent: #7a5a43;
+            --accent-dark: #634733;
+            --tag-bg: #f2e7da;
+            --tag-text: #7a5a43;
+            --danger-bg: #f3e2de;
+            --danger-text: #a45f52;
+            --danger-border: #e3c9c2;
+            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
         }
 
         body {
-            font-family: Georgia, "Times New Roman", serif;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(255,255,255,0.45), transparent 30%),
-                linear-gradient(180deg, #ede6dc 0%, #e6ddd2 100%);
+                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
             min-height: 100vh;
             color: var(--text);
         }
 
-        .container {
-            max-width: 1240px;
+        .page {
+            max-width: 1450px;
             margin: 0 auto;
-            padding: 28px 20px 40px;
+            padding: 28px 20px 50px;
         }
 
-        .header {
+        .hero {
+            padding: 18px 20px 32px;
             text-align: center;
-            padding: 18px 0 22px;
-            margin-bottom: 18px;
         }
 
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            color: var(--text);
-            margin-bottom: 8px;
+        .hero-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 12px;
         }
 
-        .header p {
-            font-size: 1rem;
+        .hero-text {
             color: var(--muted);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
         }
 
         .nav-bar {
-            background: rgba(255, 253, 249, 0.92);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(220, 207, 193, 0.85);
-            border-radius: 999px;
-            padding: 14px 20px;
-            margin-bottom: 28px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
+            background: rgba(255, 253, 249, 0.95);
+            border: 1px solid var(--line);
+            padding: 16px 22px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 14px;
+            gap: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 34px;
         }
 
         .nav-brand {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.9rem;
+            color: var(--accent);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 500;
             letter-spacing: 0.02em;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+
+        .nav-center {
+            min-width: 0;
+            display: flex;
+            justify-content: center;
         }
 
         .nav-links {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
             align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            min-width: 0;
         }
 
         .nav-links a {
             color: var(--text);
             text-decoration: none;
-            padding: 10px 14px;
-            border-radius: 999px;
-            transition: 0.25s ease;
-            font-weight: 600;
-            font-size: 14px;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            padding: 9px 11px;
             border: 1px solid transparent;
+            transition: 0.2s ease;
+            font-weight: 600;
+            font-size: 13.5px;
+            white-space: nowrap;
+            line-height: 1.2;
         }
 
         .nav-links a:hover {
-            background: var(--card-2);
+            background: var(--soft-bg);
             border-color: var(--line);
-            color: var(--accent-dark);
+            color: var(--accent);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--soft-bg);
+            border-color: var(--line);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .nav-user-name {
+            color: var(--muted);
+            font-size: 13.5px;
+            font-weight: 700;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .main-content {
             background: rgba(255, 253, 249, 0.88);
             border: 1px solid rgba(220, 207, 193, 0.85);
-            border-radius: 34px;
-            padding: 34px;
             box-shadow: var(--shadow);
+            padding: 34px;
         }
 
         .card {
-            background: var(--card);
+            background: var(--card-bg);
             border: 1px solid var(--line);
-            border-radius: var(--radius-lg);
             padding: 28px;
             margin-bottom: 22px;
             box-shadow: 0 10px 30px rgba(90, 69, 52, 0.05);
         }
 
         .card-title {
-            font-size: 1.6rem;
-            color: var(--text);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.9rem;
+            color: var(--accent);
             margin-bottom: 18px;
             text-align: center;
             font-weight: 500;
@@ -155,10 +186,6 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .grid-3 {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -170,13 +197,13 @@
             background: linear-gradient(180deg, #f7f0e7 0%, #efe2d2 100%);
             color: var(--text);
             padding: 24px 16px;
-            border-radius: 24px;
             text-align: center;
             border: 1px solid var(--line);
             box-shadow: 0 8px 24px rgba(90, 69, 52, 0.05);
         }
 
         .stat-number {
+            font-family: Georgia, "Times New Roman", serif;
             font-size: 2.3rem;
             font-weight: 700;
             display: block;
@@ -187,44 +214,50 @@
         .stat-label {
             font-size: 0.95rem;
             color: var(--muted);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .btn {
             display: inline-block;
-            padding: 13px 18px;
-            border-radius: 999px;
+            padding: 12px 18px;
             text-decoration: none;
-            font-weight: 700;
-            text-align: center;
-            transition: 0.25s ease;
             border: 1px solid var(--line);
-            cursor: pointer;
+            background: #fff;
+            color: var(--text);
             font-size: 14px;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .btn:hover {
-            transform: translateY(-1px);
+            filter: brightness(0.98);
         }
 
         .btn-primary {
-            background: var(--accent-dark);
-            color: #fffaf5;
-            border-color: var(--accent-dark);
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf4;
         }
 
         .btn-primary:hover {
-            background: #5f442f;
+            background: var(--accent-dark);
         }
 
         .btn-success {
-            background: #ede2d4;
+            background: var(--soft-bg);
             color: var(--text);
         }
 
         .btn-success:hover {
-            background: #e6d8c8;
+            background: var(--soft-bg-2);
+        }
+
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
         }
 
         .list-row {
@@ -239,23 +272,10 @@
             border-bottom: 0;
         }
 
-        .pill-admin {
-            display: inline-block;
-            margin-top: 6px;
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            background: #f1e2d3;
-            color: var(--accent-dark);
-            font-weight: 700;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         .avatar,
         .emoji-box {
             height: 48px;
             width: 48px;
-            border-radius: 16px;
             background: linear-gradient(180deg, #f6efe7 0%, #ecdfd0 100%);
             border: 1px solid var(--line);
             display: flex;
@@ -264,14 +284,11 @@
             font-weight: 700;
             color: var(--accent-dark);
             flex: 0 0 auto;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .muted {
-            opacity: 1;
             color: var(--muted);
             font-size: 14px;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .nowrap {
@@ -288,13 +305,13 @@
             line-height: 1.7;
             max-width: 720px;
             margin: 0 auto;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .panel-title {
+            font-family: Georgia, "Times New Roman", serif;
             color: var(--accent-dark);
             margin-bottom: 10px;
-            font-size: 2rem;
+            font-size: 2.3rem;
             font-weight: 500;
         }
 
@@ -308,7 +325,31 @@
             font-weight: 700;
             color: var(--text);
             margin-bottom: 4px;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        @media (max-width: 1280px) {
+            .nav-bar {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+
+            .nav-center {
+                width: 100%;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .nav-right {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-user-name {
+                max-width: none;
+            }
         }
 
         @media (max-width: 980px) {
@@ -320,32 +361,45 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            .grid-2,
-            .grid-3 {
+            .grid-2 {
                 grid-template-columns: 1fr;
             }
 
-            .nav-bar {
-                border-radius: 24px;
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 8px 10px;
             }
         }
 
         @media (max-width: 640px) {
-            .container {
-                padding: 18px 14px 28px;
+            .page {
+                padding: 16px 12px 32px;
             }
 
-            .header h1 {
-                font-size: 2.2rem;
+            .hero {
+                padding: 10px 8px 24px;
             }
 
-            .header p {
-                font-size: 0.9rem;
+            .hero-title {
+                font-size: 2.3rem;
             }
 
             .main-content,
             .card {
                 padding: 20px;
+            }
+
+            .nav-bar {
+                padding: 16px;
+                gap: 14px;
             }
 
             .stats-grid {
@@ -365,29 +419,40 @@
 </head>
 
 <body>
-<div class="container">
+<div class="page">
 
-    <div class="header">
-        <h1>Vecmāmiņas Receptes</h1>
-        <p>Administrēšana</p>
+    <div class="hero">
+        <h1 class="hero-title">Administrācijas panelis</h1>
+        <p class="hero-text">
+            Šeit vari pārvaldīt lietotājus un receptes, kā arī redzēt jaunākās aktivitātes sistēmā.
+        </p>
     </div>
 
-    <div class="nav-bar">
-        <a class="nav-brand" href="/dashboard">🍽️ Vecmāmiņas Receptes</a>
+    <nav class="nav-bar">
+        <a class="nav-brand" href="/dashboard">Vecmāmiņas Receptes</a>
 
-        <div class="nav-links">
-            <a href="/dashboard">🏠 Vadības panelis</a>
-            <a href="/recipes">🍽️ Receptes</a>
-            <a href="/categories">📂 Kategorijas</a>
-            <a href="/profile/recipes">📝 Manas receptes</a>
-            <a href="/profile/favorites">❤️ Favorīti</a>
+        <div class="nav-center">
+            <div class="nav-links">
+                <a href="/dashboard">Vadības panelis</a>
+                <a href="/recipes">Receptes</a>
+                <a href="/categories">Kategorijas</a>
+                <a href="/profile/recipes">Manas receptes</a>
+                <a href="/profile/favorites">Favorīti</a>
+                <a href="/contact">Kontakti</a>
+                <a href="{{ route('profile.edit') }}">Profils</a>
+                <a href="/admin" class="active">Administrācija</a>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <span class="nav-user-name">{{ Auth::user()->name }}</span>
 
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
-                <button class="btn btn-primary" type="submit" style="padding: 10px 14px; font-size: 13px;">Iziet</button>
+                <button class="btn btn-danger" type="submit">Iziet</button>
             </form>
         </div>
-    </div>
+    </nav>
 
     <div class="main-content">
 
@@ -400,7 +465,7 @@
         </div>
 
         <div class="card">
-            <h3 class="card-title">📊 Kopsavilkums</h3>
+            <h3 class="card-title">Kopsavilkums</h3>
 
             <div class="stats-grid">
                 <div class="stat-box">
@@ -441,7 +506,7 @@
 
         <div class="grid grid-2">
             <div class="card">
-                <h3 class="card-title">👤 Jaunākie lietotāji</h3>
+                <h3 class="card-title">Jaunākie lietotāji</h3>
 
                 @forelse($recentUsers as $user)
                     <div class="list-row">
@@ -462,7 +527,7 @@
             </div>
 
             <div class="card">
-                <h3 class="card-title">🍽️ Jaunākās receptes</h3>
+                <h3 class="card-title">Jaunākās receptes</h3>
 
                 @forelse($recentRecipes as $recipe)
                     <div class="list-row">

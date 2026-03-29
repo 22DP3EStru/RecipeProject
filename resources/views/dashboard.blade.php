@@ -29,8 +29,6 @@
             --danger-bg: #f3e2de;
             --danger-text: #a45f52;
             --danger-border: #e3c9c2;
-            --info-bg: #f2e7da;
-            --info-text: #7a5a43;
             --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
         }
 
@@ -44,7 +42,7 @@
         }
 
         .page {
-            max-width: 1200px;
+            max-width: 1450px;
             margin: 0 auto;
             padding: 28px 20px 50px;
         }
@@ -72,70 +70,53 @@
         }
 
         .nav-bar {
-            background: rgba(255, 253, 249, 0.92);
+            background: rgba(255, 253, 249, 0.95);
             border: 1px solid var(--line);
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 24px;
-            flex-wrap: wrap;
+            padding: 16px 22px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 20px;
             box-shadow: var(--shadow);
             margin-bottom: 34px;
         }
 
-        .nav-left {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-            min-width: 240px;
-        }
-
         .nav-brand {
             font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
+            font-size: 1.9rem;
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
             letter-spacing: 0.02em;
             line-height: 1.1;
+            white-space: nowrap;
         }
 
-        .nav-user {
+        .nav-center {
+            min-width: 0;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .nav-right {
-            display: flex;
-            flex: 1;
-            justify-content: flex-end;
-            align-items: flex-start;
-            min-width: 320px;
+            justify-content: center;
         }
 
         .nav-links {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            min-width: 0;
         }
 
         .nav-links a {
             color: var(--text);
             text-decoration: none;
-            padding: 10px 14px;
+            padding: 9px 11px;
             border: 1px solid transparent;
             transition: 0.2s ease;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13.5px;
+            white-space: nowrap;
+            line-height: 1.2;
         }
 
         .nav-links a:hover {
@@ -148,6 +129,24 @@
             color: var(--accent);
             background: var(--soft-bg);
             border-color: var(--line);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .nav-user-name {
+            color: var(--muted);
+            font-size: 13.5px;
+            font-weight: 700;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .main-content {
@@ -229,10 +228,6 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         }
 
-        .grid-4 {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-
         .btn {
             display: inline-block;
             padding: 12px 18px;
@@ -246,6 +241,7 @@
             transition: 0.2s ease;
             text-align: center;
             font-family: inherit;
+            white-space: nowrap;
         }
 
         .btn:hover {
@@ -408,6 +404,31 @@
             height: 100%;
         }
 
+        @media (max-width: 1280px) {
+            .nav-bar {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+
+            .nav-center {
+                width: 100%;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .nav-right {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-user-name {
+                max-width: none;
+            }
+        }
+
         @media (max-width: 900px) {
             .hero-title {
                 font-size: 2.8rem;
@@ -415,6 +436,15 @@
 
             .main-content {
                 padding: 24px;
+            }
+
+            .nav-brand {
+                font-size: 1.7rem;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 8px 10px;
             }
         }
 
@@ -433,19 +463,7 @@
 
             .nav-bar {
                 padding: 16px;
-            }
-
-            .nav-brand {
-                font-size: 1.7rem;
-            }
-
-            .nav-right {
-                min-width: 100%;
-                justify-content: flex-start;
-            }
-
-            .nav-links {
-                justify-content: flex-start;
+                gap: 14px;
             }
 
             .main-content,
@@ -460,7 +478,6 @@
 
             .grid-2,
             .grid-3,
-            .grid-4,
             .stats-grid,
             .actions-grid,
             .recipe-grid {
@@ -489,19 +506,9 @@
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-left">
-            <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
+        <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
 
-            <div class="nav-user">
-                <span>{{ Auth::user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Iziet</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="nav-right">
+        <div class="nav-center">
             <div class="nav-links">
                 <a href="/dashboard" class="active">Vadības panelis</a>
                 <a href="/recipes">Receptes</a>
@@ -515,6 +522,15 @@
                 @endif
             </div>
         </div>
+
+        <div class="nav-right">
+            <span class="nav-user-name">{{ Auth::user()->name }}</span>
+
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn btn-danger">Iziet</button>
+            </form>
+        </div>
     </nav>
 
     <div class="main-content">
@@ -525,6 +541,19 @@
                 Esiet gatavi radīt, dalīties un atklāt brīnišķīgas receptes. Jūsu nākamā iecienītākā recepte ir tikai dažu klikšķu attālumā.
             </p>
         </div>
+
+        @if(Auth::user()->is_admin)
+            <div class="section-block actions-box">
+                <h3 class="section-title">🛠 Administrācija</h3>
+                <p class="section-subtext">
+                    Piekļuve administrācijas panelim un platformas pārvaldības statistikām.
+                </p>
+
+                <div class="actions-grid">
+                    <a href="{{ route('admin.index') }}" class="btn btn-primary">Atvērt administrācijas paneli</a>
+                </div>
+            </div>
+        @endif
 
         <div class="section-block stats-box">
             <h3 class="section-title">📊 Jūsu kulinārijas statistika</h3>

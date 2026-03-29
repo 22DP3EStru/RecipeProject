@@ -119,14 +119,4 @@
         </div>
     </div>
 
-    {{-- Quick actions --}}
-    <div class="card">
-        <h3 class="card-title">⚡ Ātrās darbības</h3>
-
-        <div class="grid grid-2" style="margin-top: 10px;">
-            <a class="btn btn-primary" href="{{ route('admin.users') }}">Manage Users</a>
-            <a class="btn btn-success" href="{{ route('admin.recipes') }}">Manage Recipes</a>
-        </div>
-    </div>
-
 @endsection
