@@ -791,33 +791,21 @@
                 <h3 class="section-title">📸 Attēls / Video</h3>
 
                 <div class="current-media">
-                    <div style="font-weight: 700; color: var(--text);">Esošie faili / linki</div>
+                    <div style="font-weight: 700; color: var(--text);">Esošie faili</div>
 
                     @if($recipe->image_path)
-                        <span class="pill">Attēls (fails)</span>
+                        <span class="pill">Attēls</span>
                         <img src="{{ asset('storage/' . $recipe->image_path) }}" class="media-preview-img" alt="Pašreizējais attēls">
-                    @elseif($recipe->image_url)
-                        <span class="pill">Attēls (links)</span>
-                        <img src="{{ $recipe->image_url }}" class="media-preview-img" alt="Pašreizējais attēls">
                     @else
                         <div style="margin-top: 8px; color: var(--muted);">Nav attēla</div>
                     @endif
 
                     @if($recipe->video_path)
                         <div style="margin-top: 14px;">
-                            <span class="pill">Video (fails)</span>
+                            <span class="pill">Video</span>
                             <video controls class="media-preview-video">
                                 <source src="{{ asset('storage/' . $recipe->video_path) }}">
                             </video>
-                        </div>
-                    @elseif($recipe->video_url)
-                        <div style="margin-top: 14px;">
-                            <span class="pill">Video (links)</span>
-                            <div style="margin-top: 8px;">
-                                <a href="{{ $recipe->video_url }}" target="_blank" rel="noopener" style="color: var(--accent); font-weight: 700; text-decoration: underline;">
-                                    Atvērt video linku
-                                </a>
-                            </div>
                         </div>
                     @else
                         <div style="margin-top: 14px; color: var(--muted);">Nav video</div>
@@ -825,44 +813,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="image">Nomainīt attēlu (fails)</label>
+                    <label class="form-label" for="image">Nomainīt attēlu</label>
                     <input id="image" type="file" name="image" accept="image/*" class="form-input">
-                    <small class="help-text">Ja izvēlies failu, tas aizstās esošo attēlu un ignorēs attēla linku.</small>
+                    <small class="help-text">Ja izvēlies jaunu failu, tas aizstās esošo attēlu.</small>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="image_url">Nomainīt attēlu (links)</label>
-                    <input
-                        id="image_url"
-                        type="url"
-                        name="image_url"
-                        value="{{ old('image_url', $recipe->image_url) }}"
-                        class="form-input"
-                        placeholder="https://...jpg / .png"
-                    >
-                    <small class="help-text">Ja augšupielādē failu, links netiks izmantots.</small>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="video">Nomainīt video (fails)</label>
+                    <label class="form-label" for="video">Nomainīt video</label>
                     <input id="video" type="file" name="video" accept="video/*" class="form-input">
-                    <small class="help-text">Ja izvēlies video failu, tas aizstās esošo video un notīrīs video linku.</small>
+                    <small class="help-text">Ja izvēlies jaunu video failu, tas aizstās esošo video.</small>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="video_url">Nomainīt video (links)</label>
-                    <input
-                        id="video_url"
-                        type="url"
-                        name="video_url"
-                        value="{{ old('video_url', $recipe->video_url) }}"
-                        class="form-input"
-                        placeholder="https://youtube.com/..."
-                    >
-                    <small class="help-text">Ja augšupielādē video failu, links netiks izmantots.</small>
-                </div>
-
-                <span class="pill">Vari atstāt laukus tukšus, ja negribi mainīt media.</span>
+                <span class="pill">Vari atstāt laukus tukšus, ja negribi mainīt attēlu vai video.</span>
             </div>
 
             <div class="section-block meta-box">

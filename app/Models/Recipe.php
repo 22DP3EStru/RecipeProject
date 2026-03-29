@@ -1,15 +1,15 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace App\Models; // Definē nosaukumvietu (namespace), kurā atrodas šis modelis
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Iekļauj HasFactory trait fabriku izmantošanai
-use Illuminate\Database\Eloquent\Model; // Iekļauj Eloquent bāzes Model klasi
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Model
+class Recipe extends Model
 {
-    use HasFactory; // Pievieno HasFactory funkcionalitāti šim modelim
+    use HasFactory;
 
-    protected $fillable = [ // Norāda laukus, kurus drīkst masveidā aizpildīt (mass assignment)
+    protected $fillable = [
         'title',
         'description',
         'ingredients',
@@ -20,15 +20,11 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
         'difficulty',
         'category',
         'user_id',
-
-        // ✅ MEDIA (JAUNIE LAUKI)
         'image_path',
-        'image_url',
         'video_path',
-        'video_url',
     ];
 
-    protected $casts = [ // Nosaka automātisko datu tipu pārveidi (type casting)
+    protected $casts = [
         'prep_time' => 'integer',
         'cook_time' => 'integer',
         'servings' => 'integer',
@@ -36,7 +32,7 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
         'updated_at' => 'datetime',
     ];
 
-    public function user() // Definē attiecību ar User modeli (receptes autors)
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -51,21 +47,15 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
         return $this->ingredientsItems();
     }
 
-    public function favoritedByUsers() // Definē many-to-many attiecību ar lietotājiem caur favorites tabulu
+    public function favoritedByUsers()
     {
         return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps();
     }
 
-    public function reviews() // Definē attiecību ar RecipeReview modeli
+    public function reviews()
     {
         return $this->hasMany(\App\Models\RecipeReview::class)->latest();
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | MEDIA HELPER METHODS (optional but useful)
-    |--------------------------------------------------------------------------
-    */
 
     public function getImageUrlAttribute()
     {
@@ -76,10 +66,8 @@ class Recipe extends Model // Definē Recipe modeli, kas paplašina Eloquent Mod
 
     public function getVideoUrlAttribute()
     {
-        if ($this->video_path) {
-            return asset('storage/' . $this->video_path);
-        }
-
-        return $this->attributes['video_url'] ?? null;
+        return $this->video_path
+            ? asset('storage/' . $this->video_path)
+            : null;
     }
 }

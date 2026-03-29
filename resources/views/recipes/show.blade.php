@@ -391,20 +391,6 @@
             object-fit: cover;
         }
 
-        .media-link {
-            display: inline-block;
-            padding: 12px 16px;
-            background: var(--soft-bg-2);
-            border: 1px solid var(--line);
-            color: var(--accent);
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .media-link:hover {
-            background: var(--soft-bg);
-        }
-
         .meta-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -811,7 +797,7 @@
 <body>
 @php
     $isFav = false;
-    if(Auth::check()){
+    if (Auth::check()) {
         $isFav = Auth::user()
             ->favoriteRecipes()
             ->where('recipe_id', $recipe->id)
@@ -819,7 +805,7 @@
     }
 
     $origServings = (int)($recipe->servings ?? 1);
-    if($origServings <= 0) { $origServings = 1; }
+    if ($origServings <= 0) { $origServings = 1; }
 
     $origPrep = (int)($recipe->prep_time ?? 0);
     $origCook = (int)($recipe->cook_time ?? 0);
@@ -918,15 +904,11 @@
                 <a href="{{ route('pdf.recipe.steps', $recipe->id) }}" class="pdf-btn pdf-link" data-type="steps">Soļi</a>
             </div>
 
-            @if($recipe->image_path || $recipe->image_url || $recipe->video_path || $recipe->video_url)
+            @if($recipe->image_path || $recipe->video_path)
                 <div class="media-wrap">
                     @if($recipe->image_path)
                         <div class="media-card">
                             <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="Receptes attēls" class="media-img">
-                        </div>
-                    @elseif($recipe->image_url)
-                        <div class="media-card">
-                            <img src="{{ $recipe->image_url }}" alt="Receptes attēls (links)" class="media-img">
                         </div>
                     @endif
 
@@ -936,12 +918,6 @@
                                 <source src="{{ asset('storage/' . $recipe->video_path) }}">
                                 Jūsu pārlūks neatbalsta video.
                             </video>
-                        </div>
-                    @elseif($recipe->video_url)
-                        <div class="media-card" style="text-align:center;">
-                            <a href="{{ $recipe->video_url }}" target="_blank" rel="noopener" class="media-link">
-                                Skatīties video
-                            </a>
                         </div>
                     @endif
                 </div>
@@ -1340,8 +1316,8 @@
         const newCook = Math.max(0, Math.round(origCook * k));
         const newTotal = newPrep + newCook;
 
-        if (prepEl)  prepEl.textContent = String(newPrep);
-        if (cookEl)  cookEl.textContent = String(newCook);
+        if (prepEl) prepEl.textContent = String(newPrep);
+        if (cookEl) cookEl.textContent = String(newCook);
         if (totalEl) totalEl.textContent = String(newTotal);
 
         document.querySelectorAll('.ingredientQty').forEach(el => {

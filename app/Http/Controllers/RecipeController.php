@@ -98,7 +98,7 @@ class RecipeController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('ingredients', 'like', "%{$search}%"); // legacy field
+                    ->orWhere('ingredients', 'like', "%{$search}%");
             });
         }
 
@@ -117,7 +117,6 @@ class RecipeController extends Controller
     }
 
     /**
-     * ✅ Backfill vecajiem ierakstiem:
      * Ja recipe_ingredients.quantity ir NULL, bet name ir "200 g Milti",
      * tad sadala un ieliek quantity/unit/name pareizajās kolonnās.
      */
@@ -128,13 +127,17 @@ class RecipeController extends Controller
             : $recipe->ingredientsItems()->get();
 
         foreach ($items as $item) {
-            if (!is_null($item->quantity)) continue;
+            if (!is_null($item->quantity)) {
+                continue;
+            }
 
-            $line = trim((string)$item->name);
-            if ($line === '') continue;
+            $line = trim((string) $item->name);
+            if ($line === '') {
+                continue;
+            }
 
             if (preg_match('/^(\d+(?:[.,]\d+)?)\s*([^\d\s]+)?\s+(.+)$/u', $line, $m)) {
-                $qty = (float)str_replace(',', '.', $m[1]);
+                $qty = (float) str_replace(',', '.', $m[1]);
                 $unit = isset($m[2]) ? trim($m[2]) : null;
                 $name = trim($m[3]);
 
@@ -180,9 +183,9 @@ class RecipeController extends Controller
     }
 
     /**
-     * ✅ No ingredient_*[] masīviem:
+     * No ingredient_*[] masīviem:
      *  - izveido recipe_ingredients ierakstus
-     *  - uzģenerē legacy text lauku recipes.ingredients (meklēšanai + backward-compat)
+     *  - uzģenerē legacy text lauku recipes.ingredients
      */
     private function syncIngredientsFromArrays(Recipe $recipe, Request $request): void
     {
@@ -196,17 +199,19 @@ class RecipeController extends Controller
 
         $count = max(count($names), count($qtys), count($units));
         for ($i = 0; $i < $count; $i++) {
-            $name = trim((string)($names[$i] ?? ''));
+            $name = trim((string) ($names[$i] ?? ''));
             $qtyRaw = $qtys[$i] ?? null;
-            $unit = trim((string)($units[$i] ?? ''));
+            $unit = trim((string) ($units[$i] ?? ''));
 
-            if ($name === '') continue;
+            if ($name === '') {
+                continue;
+            }
 
             $quantity = null;
             if ($qtyRaw !== null && $qtyRaw !== '') {
-                $qtyNorm = str_replace(',', '.', (string)$qtyRaw);
+                $qtyNorm = str_replace(',', '.', (string) $qtyRaw);
                 if (is_numeric($qtyNorm)) {
-                    $quantity = (float)$qtyNorm;
+                    $quantity = (float) $qtyNorm;
                 }
             }
 
@@ -217,9 +222,9 @@ class RecipeController extends Controller
             ]);
 
             if ($quantity !== null && $unit !== '') {
-                $legacyLines[] = rtrim(rtrim((string)$quantity, '0'), '.') . ' ' . $unit . ' ' . $name;
+                $legacyLines[] = rtrim(rtrim((string) $quantity, '0'), '.') . ' ' . $unit . ' ' . $name;
             } elseif ($quantity !== null) {
-                $legacyLines[] = rtrim(rtrim((string)$quantity, '0'), '.') . ' ' . $name;
+                $legacyLines[] = rtrim(rtrim((string) $quantity, '0'), '.') . ' ' . $name;
             } else {
                 $legacyLines[] = $name . ($unit !== '' ? ' (' . $unit . ')' : '');
             }
@@ -249,26 +254,17 @@ class RecipeController extends Controller
             'ingredient_unit.*' => 'nullable|string|max:30',
 
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
-            'image_url' => 'nullable|url|max:2048',
             'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
-            'video_url' => 'nullable|url|max:2048',
         ]);
 
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('image')) {
             $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
-            $validated['image_url'] = null;
-        } elseif ($request->filled('image_url')) {
-            $validated['image_url'] = $request->input('image_url');
-            $validated['image_path'] = null;
         }
 
         if ($request->hasFile('video')) {
             $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
-            $validated['video_url'] = null;
-        } elseif ($request->filled('video_url')) {
-            $validated['video_url'] = $request->input('video_url');
         }
 
         $validated['ingredients'] = '';
@@ -276,19 +272,27 @@ class RecipeController extends Controller
         try {
             $recipe = Recipe::create($validated);
             $this->syncIngredientsFromArrays($recipe, $request);
-            return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte publicēta.');
+
+            return redirect()
+                ->route('recipes.show', $recipe)
+                ->with('success', 'Recepte publicēta.');
         } catch (\Exception $e) {
             Log::error('Recipe store error', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-            return back()->withInput()->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
+
+            return back()
+                ->withInput()
+                ->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
         }
     }
 
     public function edit(Recipe $recipe)
     {
-        if ($recipe->user_id !== Auth::id()) abort(403);
+        if ($recipe->user_id !== Auth::id()) {
+            abort(403);
+        }
 
         $recipe->load('ingredientsItems');
         $this->tryBackfillIngredientQuantity($recipe);
@@ -299,7 +303,9 @@ class RecipeController extends Controller
 
     public function update(Request $request, Recipe $recipe)
     {
-        if ($recipe->user_id !== Auth::id()) abort(403);
+        if ($recipe->user_id !== Auth::id()) {
+            abort(403);
+        }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -319,27 +325,23 @@ class RecipeController extends Controller
             'ingredient_unit.*' => 'nullable|string|max:30',
 
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
-            'image_url' => 'nullable|url|max:2048',
             'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
-            'video_url' => 'nullable|url|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
-            if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
+            if ($recipe->image_path) {
+                Storage::disk('public')->delete($recipe->image_path);
+            }
+
             $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
-            $validated['image_url'] = null;
-        } elseif ($request->filled('image_url')) {
-            if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
-            $validated['image_path'] = null;
-            $validated['image_url'] = $request->input('image_url');
         }
 
         if ($request->hasFile('video')) {
-            if ($recipe->video_path) Storage::disk('public')->delete($recipe->video_path);
+            if ($recipe->video_path) {
+                Storage::disk('public')->delete($recipe->video_path);
+            }
+
             $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
-            $validated['video_url'] = null;
-        } elseif ($request->filled('video_url')) {
-            $validated['video_url'] = $request->input('video_url');
         }
 
         $validated['ingredients'] = $recipe->ingredients ?? '';
@@ -347,20 +349,31 @@ class RecipeController extends Controller
 
         $this->syncIngredientsFromArrays($recipe, $request);
 
-        return redirect()->route('recipes.show', $recipe)->with('success', 'Recepte veiksmīgi atjaunināta!');
+        return redirect()
+            ->route('recipes.show', $recipe)
+            ->with('success', 'Recepte veiksmīgi atjaunināta!');
     }
 
     public function destroy(Recipe $recipe)
     {
-        if ($recipe->user_id !== Auth::id() && !Auth::user()->is_admin) abort(403);
+        if ($recipe->user_id !== Auth::id() && !Auth::user()->is_admin) {
+            abort(403);
+        }
 
-        if ($recipe->image_path) Storage::disk('public')->delete($recipe->image_path);
-        if ($recipe->video_path) Storage::disk('public')->delete($recipe->video_path);
+        if ($recipe->image_path) {
+            Storage::disk('public')->delete($recipe->image_path);
+        }
+
+        if ($recipe->video_path) {
+            Storage::disk('public')->delete($recipe->video_path);
+        }
 
         $recipe->ingredientsItems()->delete();
         $recipe->delete();
 
-        return redirect()->route('profile.recipes')->with('success', 'Recepte veiksmīgi dzēsta!');
+        return redirect()
+            ->route('profile.recipes')
+            ->with('success', 'Recepte veiksmīgi dzēsta!');
     }
 
     public function userRecipes()

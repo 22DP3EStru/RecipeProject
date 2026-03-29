@@ -754,39 +754,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="image_url">Attēla links</label>
-                    <input
-                        id="image_url"
-                        type="url"
-                        name="image_url"
-                        value="{{ old('image_url') }}"
-                        class="form-input"
-                        placeholder="https://...jpg / .png"
-                    >
-                    <small class="help-text">
-                        Ielīmē tiešu bildes linku. Ja augšupielādē failu, links netiks izmantots.
-                    </small>
-                </div>
-
-                <div class="form-group">
                     <label class="form-label" for="video">Video fails (nav obligāts)</label>
                     <input id="video" type="file" name="video" accept="video/*" class="form-input">
                     <small class="help-text">Atļauts: mp4, webm, mov.</small>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="video_url">Video links</label>
-                    <input
-                        id="video_url"
-                        type="url"
-                        name="video_url"
-                        value="{{ old('video_url') }}"
-                        class="form-input"
-                        placeholder="https://youtube.com/..."
-                    >
-                    <small class="help-text">
-                        Ielīmē pilnu video linku. Ja pievienosi video failu, šo var atstāt tukšu.
-                    </small>
                 </div>
 
                 <span class="note-pill">Vari pievienot tikai attēlu, tikai video, vai abus.</span>

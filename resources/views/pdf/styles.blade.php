@@ -2,50 +2,53 @@
     body {
         font-family: DejaVu Sans, sans-serif;
         font-size: 12px;
-        color: #2f241d;
-        line-height: 1.65;
-        background: #f7f1ea;
+        color: #1f1f1f;
+        line-height: 1.68;
+        background: #f7f7f7;
         margin: 28px;
     }
 
     h1, h2, h3 {
         margin: 0 0 10px 0;
         font-weight: bold;
-        color: #7a5a43;
+        color: #111111;
     }
 
     h1 {
         font-size: 26px;
-        border-bottom: 2px solid #d8c7b6;
         padding-bottom: 10px;
         margin-bottom: 18px;
+        border-bottom: 2px solid #d6d6d6;
+        letter-spacing: 0.3px;
     }
 
     h2 {
         font-size: 18px;
         margin-top: 22px;
         padding-bottom: 6px;
-        border-bottom: 1px solid #e5d8ca;
+        border-bottom: 1px solid #e0e0e0;
     }
 
     h3 {
         font-size: 14px;
         margin-top: 16px;
-        color: #5f4634;
+        color: #2f2f2f;
     }
 
     .header {
-        background: #efe4d6;
-        border: 1px solid #dccbbb;
+        background: #f0f0f0;
+        border: 1px solid #dddddd;
         padding: 18px 20px;
         margin-bottom: 22px;
+        border-radius: 14px;
     }
 
     .meta {
-        background: #fffaf5;
-        border: 1px solid #e2d5c7;
+        background: #fcfcfc;
+        border: 1px solid #e3e3e3;
         padding: 14px 16px;
         margin-bottom: 18px;
+        border-radius: 12px;
     }
 
     .meta p {
@@ -54,24 +57,26 @@
 
     .label {
         font-weight: bold;
-        color: #7a5a43;
+        color: #111111;
     }
 
     .section-box {
-        background: #fffdf9;
-        border: 1px solid #e4d8cb;
+        background: #ffffff;
+        border: 1px solid #e3e3e3;
         padding: 16px 18px;
         margin-bottom: 18px;
+        border-radius: 14px;
     }
 
     .cover-image,
     .profile-image {
         max-width: 220px;
         max-height: 180px;
-        border: 1px solid #d8cabb;
-        padding: 4px;
-        background: #fff;
+        border: 1px solid #d7d7d7;
+        padding: 5px;
+        background: #ffffff;
         margin-top: 12px;
+        border-radius: 10px;
     }
 
     .image-wrap {
@@ -84,24 +89,26 @@
         width: 100%;
         border-collapse: collapse;
         margin-top: 12px;
-        background: #fffdf9;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
     }
 
     th, td {
-        border: 1px solid #ddcfc0;
-        padding: 9px 10px;
+        border: 1px solid #e1e1e1;
+        padding: 10px 11px;
         vertical-align: top;
         text-align: left;
     }
 
     th {
-        background: #efe4d6;
-        color: #5f4634;
+        background: #f2f2f2;
+        color: #111111;
         font-weight: bold;
     }
 
     tr:nth-child(even) td {
-        background: #fbf7f2;
+        background: #fafafa;
     }
 
     .center {
@@ -110,42 +117,44 @@
 
     .small {
         font-size: 10.5px;
-        color: #7b6d61;
+        color: #666666;
     }
 
     .step-block {
         margin-bottom: 14px;
         page-break-inside: avoid;
-        background: #fffdf9;
-        border-left: 4px solid #c9aa8f;
-        border: 1px solid #e6d9cc;
+        background: #ffffff;
+        border: 1px solid #e2e2e2;
+        border-left: 4px solid #9c9c9c;
         padding: 12px 14px;
+        border-radius: 12px;
     }
 
     .step-title {
         font-weight: bold;
-        color: #7a5a43;
+        color: #111111;
         margin-bottom: 6px;
     }
 
     .badge {
         display: inline-block;
-        padding: 4px 8px;
+        padding: 4px 9px;
         font-size: 10px;
         font-weight: bold;
-        color: #7a5a43;
-        background: #f1e5d7;
-        border: 1px solid #dbc8b5;
+        color: #111111;
+        background: #f1f1f1;
+        border: 1px solid #d9d9d9;
         margin-right: 6px;
         margin-bottom: 6px;
+        border-radius: 999px;
     }
 
     .footer-note {
         margin-top: 24px;
         padding-top: 10px;
-        border-top: 1px solid #ddd0c2;
+        border-top: 1px solid #dddddd;
         font-size: 10.5px;
-        color: #7b6d61;
+        color: #666666;
         text-align: center;
     }
 
@@ -160,15 +169,16 @@
     }
 
     .highlight-box {
-        background: #f3eadf;
-        border: 1px solid #dfcfbf;
+        background: #f4f4f4;
+        border: 1px solid #dfdfdf;
         padding: 12px 14px;
         margin: 14px 0;
+        border-radius: 12px;
     }
 
     .divider {
         height: 1px;
-        background: #e3d6c8;
+        background: #e2e2e2;
         margin: 18px 0;
     }
 </style>
