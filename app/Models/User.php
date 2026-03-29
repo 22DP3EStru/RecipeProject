@@ -1,44 +1,50 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace App\Models; // Definē nosaukumvietu (namespace), kurā atrodas šis modelis
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Iekļauj HasFactory trait fabriku izmantošanai
-use Illuminate\Foundation\Auth\User as Authenticatable; // Iekļauj autentificējamu lietotāja bāzes klasi
-use Illuminate\Notifications\Notifiable; // Iekļauj Notifiable trait paziņojumu (notifications) atbalstam
+use App\Notifications\CustomVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable // Definē User modeli, kas paplašina Authenticatable klasi (paredzēts autentifikācijai)
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable; // Pievieno fabriku un paziņojumu funkcionalitāti
+    use HasFactory, Notifiable;
 
-    protected $fillable = [ // Norāda laukus, kurus drīkst masveidā aizpildīt (mass assignment)
-        'name', // Lietotāja vārds
-        'email', // Lietotāja e-pasts
-        'password', // Lietotāja parole
-        'is_admin', // Norāda, vai lietotājs ir administrators
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'is_admin',
     ];
 
-    protected $hidden = [ // Norāda laukus, kas netiks iekļauti serializācijā (piem., JSON atbildēs)
-        'password', // Slēpj paroli
-        'remember_token', // Slēpj atcerēšanās tokenu
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
-    protected function casts(): array // Definē automātisko datu tipu pārveidi (type casting)
+    protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime', // Pārvērš e-pasta apstiprināšanas laiku par datetime objektu
-            'password' => 'hashed', // Automātiski hešo paroli saglabāšanas brīdī
-            'is_admin' => 'boolean', // Pārvērš is_admin lauku par boolean tipu
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
-    public function recipes() // Definē attiecību ar Recipe modeli
+    public function recipes()
     {
-        return $this->hasMany(Recipe::class); // Norāda, ka lietotājam var būt vairākas receptes (one-to-many)
+        return $this->hasMany(Recipe::class);
     }
 
-    public function favoriteRecipes() // Definē many-to-many attiecību ar Recipe modeli caur favorites tabulu
+    public function favoriteRecipes()
     {
-        return $this->belongsToMany(\App\Models\Recipe::class, 'favorites')->withTimestamps(); // Norāda starptabulu 'favorites' un pievieno timestamp laukus pivot tabulai
+        return $this->belongsToMany(\App\Models\Recipe::class, 'favorites')->withTimestamps();
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new CustomVerifyEmail());
     }
 }
-
