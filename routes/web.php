@@ -4,10 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\RecipeReviewController;
-use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 // Public (bez login)
@@ -23,24 +23,25 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
 
+// PDF / Print - tikai ielogotiem, bet ne obligāti verificētiem
 Route::get('/recipes/{recipe}/pdf', [RecipeController::class, 'downloadPdf'])
-    ->middleware(['auth','verified']) // ja gribi tikai ielogotiem
+    ->middleware(['auth'])
     ->name('recipes.pdf');
 
 Route::get('/recipes/{recipe}/pdf/image', [RecipeController::class, 'downloadImagePdf'])
-    ->middleware(['auth','verified'])
+    ->middleware(['auth'])
     ->name('recipes.pdf.image');
 
 Route::get('/recipes/{recipe}/print', [RecipeController::class, 'printView'])
-    ->middleware(['auth','verified'])
+    ->middleware(['auth'])
     ->name('recipes.print');
-    
+
 // Dashboard (tikai ielogotiem)
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
@@ -54,19 +55,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile/recipes', [RecipeController::class, 'userRecipes'])->name('profile.recipes');
 
-    // Recipes
+    // Recipes - skatīties var ielogots lietotājs, bet veidot/labot/dzēst tikai verificēts
     Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
-    Route::resource('recipes', RecipeController::class);
+    Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+    Route::get('/recipes/create', [RecipeController::class, 'create'])->middleware('verified')->name('recipes.create');
+    Route::post('/recipes', [RecipeController::class, 'store'])->middleware('verified')->name('recipes.store');
+    Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
+    Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->middleware('verified')->name('recipes.edit');
+    Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.update');
+    Route::patch('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.patch');
+    Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->middleware('verified')->name('recipes.destroy');
 
-    // Favorites
-    Route::post('/recipes/{recipe}/favorite', [FavoriteController::class, 'toggle'])->name('recipes.favorite.toggle');
-    Route::get('/profile/favorites', [FavoriteController::class, 'index'])->name('profile.favorites');
+    // Favorites - tikai verificētiem
+    Route::post('/recipes/{recipe}/favorite', [FavoriteController::class, 'toggle'])
+        ->middleware('verified')
+        ->name('recipes.favorite.toggle');
 
-    // Reviews
-    Route::post('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'store'])->name('recipes.reviews.store');
-    Route::delete('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'destroy'])->name('recipes.reviews.destroy');
+    Route::get('/profile/favorites', [FavoriteController::class, 'index'])
+        ->middleware('verified')
+        ->name('profile.favorites');
 
-    // Admin
+    // Reviews - tikai verificētiem
+    Route::post('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'store'])
+        ->middleware('verified')
+        ->name('recipes.reviews.store');
+
+    Route::delete('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'destroy'])
+        ->middleware('verified')
+        ->name('recipes.reviews.destroy');
+
+    // Admin - tikai adminiem; ieteicams esošajiem admin DB ielikt email_verified_at
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -77,22 +95,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::delete('/recipes/{recipe}', [AdminController::class, 'deleteRecipe'])->name('recipes.destroy');
     });
-
 });
 
+// PDF sekcija - publiska, jo te iepriekš middleware nebija
 Route::prefix('pdf')->name('pdf.')->group(function () {
     Route::get('/recipe/{recipe}/full', [PdfController::class, 'recipeFull'])->name('recipe.full');
     Route::get('/recipe/{recipe}/ingredients', [PdfController::class, 'recipeIngredients'])->name('recipe.ingredients');
     Route::get('/recipe/{recipe}/steps', [PdfController::class, 'recipeSteps'])->name('recipe.steps');
 
     Route::get('/category-name/{categoryName}/recipes', [PdfController::class, 'categoryRecipesByName'])
-    ->name('category.recipes.byname');
+        ->name('category.recipes.byname');
+
     Route::get('/user/{user}/profile', [PdfController::class, 'userProfile'])->name('user.profile');
 
     Route::get('/popular-recipes', [PdfController::class, 'popularRecipes'])->name('popular.recipes');
     Route::get('/admin-statistics', [PdfController::class, 'adminStatistics'])->name('admin.statistics');
     Route::get('/filtered-recipes', [PdfController::class, 'filteredRecipes'])->name('filtered.recipes');
 });
-
 
 require __DIR__ . '/auth.php';

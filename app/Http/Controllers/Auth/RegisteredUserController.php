@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Throwable;
 
 class RegisteredUserController extends Controller
 {
@@ -32,9 +33,15 @@ class RegisteredUserController extends Controller
             'password' => $request->password,
         ]);
 
-        event(new Registered($user));
-
         Auth::login($user);
+
+        try {
+            event(new Registered($user));
+        } catch (Throwable $e) {
+            return redirect()
+                ->route('verification.notice')
+                ->with('status', 'Konts izveidots, bet verifikācijas e-pastu šobrīd neizdevās nosūtīt. Mēģini vēlreiz no verifikācijas lapas.');
+        }
 
         return redirect()->route('verification.notice');
     }
