@@ -298,6 +298,25 @@
             margin: 0 auto;
         }
 
+        .recipe-top-meta {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-top-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border: 1px solid var(--line);
+            background: var(--soft-bg);
+            color: var(--accent);
+            font-weight: 800;
+        }
+
         .heart-btn {
             background: transparent;
             border: 1px solid transparent;
@@ -817,6 +836,7 @@
             }
         }
     </style>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
 </head>
 <body>
 @php
@@ -848,7 +868,7 @@
     <div class="hero">
         <h1 class="hero-title">{{ $recipe->title }}</h1>
         <p class="hero-text">
-            Autors: {{ $recipe->user->name }}
+            Autors: {{ $recipe->user->name }} · Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}
         </p>
     </div>
 
@@ -868,9 +888,11 @@
                 @auth
                     <a href="{{ route('profile.edit') }}">Profils</a>
                 @endauth
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.index') }}">Administrācija</a>
-                @endif
+                @auth
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.index') }}">Administrācija</a>
+                    @endif
+                @endauth
             </div>
         </div>
 
@@ -919,6 +941,11 @@
             <p class="recipe-description">
                 {{ $recipe->description }}
             </p>
+
+            <div class="recipe-top-meta">
+                <span class="recipe-top-badge">👁️ Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</span>
+                <span class="recipe-top-badge">📅 Publicēta: {{ $recipe->created_at->format('d.m.Y') }}</span>
+            </div>
 
             <div class="servings-control">
                 <span style="font-weight: 900; color: var(--accent);">Porcijas:</span>
@@ -973,6 +1000,12 @@
                     <div class="meta-icon">⭐</div>
                     <h4>Grūtība</h4>
                     <p>{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-icon">👁️</div>
+                    <h4>Skatījumi</h4>
+                    <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
                 </div>
 
                 @if(!is_null($recipe->prep_time))
@@ -1111,6 +1144,11 @@
                 <div class="author-box">
                     <h4>Pēdējās izmaiņas</h4>
                     <p>{{ $recipe->updated_at->diffForHumans() }}</p>
+                </div>
+
+                <div class="author-box">
+                    <h4>Skatījumu skaits</h4>
+                    <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
                 </div>
             </div>
         </div>
@@ -1297,6 +1335,7 @@
                             <div class="related-meta">
                                 <span>{{ $relatedRecipe->category }}</span>
                                 <span>{{ $relatedRecipe->user->name }}</span>
+                                <span>👁️ {{ number_format((int)($relatedRecipe->views ?? 0), 0, ',', ' ') }}</span>
                             </div>
 
                             <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%;">

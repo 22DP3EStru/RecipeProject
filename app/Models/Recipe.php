@@ -22,12 +22,14 @@ class Recipe extends Model
         'user_id',
         'image_path',
         'video_path',
+        'views',
     ];
 
     protected $casts = [
         'prep_time' => 'integer',
         'cook_time' => 'integer',
         'servings' => 'integer',
+        'views' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

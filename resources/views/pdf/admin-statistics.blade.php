@@ -29,6 +29,24 @@
                 <th>Vidējais vērtējums</th>
                 <td>{{ number_format($averageRating ?? 0, 1) }}</td>
             </tr>
+            <tr>
+                <th>Kopējais skatījumu skaits</th>
+                <td>{{ number_format($totalViews ?? 0, 0, ',', ' ') }}</td>
+            </tr>
+            <tr>
+                <th>Vidējais skatījumu skaits uz recepti</th>
+                <td>{{ number_format($averageViewsPerRecipe ?? 0, 2, ',', ' ') }}</td>
+            </tr>
+            <tr>
+                <th>Populārākā recepte</th>
+                <td>
+                    @if(!empty($mostViewedRecipe))
+                        {{ $mostViewedRecipe->title }} ({{ number_format((int)($mostViewedRecipe->views ?? 0), 0, ',', ' ') }} skatījumi)
+                    @else
+                        -
+                    @endif
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -39,20 +57,26 @@
             <tr>
                 <th>Nosaukums</th>
                 <th>Autors</th>
+                <th>Skatījumi</th>
                 <th>Vērtējums</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($popularRecipes as $recipe)
+            @forelse($popularRecipes as $recipe)
                 @php
                     $avg = $recipe->reviews->avg('rating');
                 @endphp
                 <tr>
                     <td>{{ $recipe->title }}</td>
                     <td>{{ $recipe->user->name ?? '-' }}</td>
+                    <td>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</td>
                     <td>{{ $avg ? number_format($avg, 1) : '-' }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4">Nav pieejamu datu.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </body>

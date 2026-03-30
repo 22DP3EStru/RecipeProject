@@ -153,11 +153,20 @@ class RecipeController extends Controller
 
     public function show(Recipe $recipe)
     {
+        $sessionKey = 'recipe_viewed_' . $recipe->id;
+
+        if (!session()->has($sessionKey)) {
+            $recipe->increment('views');
+            session()->put($sessionKey, true);
+        }
+
         $recipe->load([
             'user',
             'reviews.user',
             'ingredientsItems',
         ]);
+
+        $recipe->refresh();
 
         $this->tryBackfillIngredientQuantity($recipe);
         $recipe->load('ingredientsItems');
@@ -258,6 +267,7 @@ class RecipeController extends Controller
         ]);
 
         $validated['user_id'] = Auth::id();
+        $validated['views'] = 0;
 
         if ($request->hasFile('image')) {
             $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');

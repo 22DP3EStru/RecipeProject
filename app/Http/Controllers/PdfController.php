@@ -120,156 +120,170 @@ class PdfController extends Controller
     }
 
     public function categoryRecipes(Category $category)
-{
-    $recipes = Recipe::with('user', 'reviews')
-        ->where('category', $category->name)
-        ->latest()
-        ->get();
+    {
+        $recipes = Recipe::with('user', 'reviews')
+            ->where('category', $category->name)
+            ->latest()
+            ->get();
 
-    $pdf = Pdf::loadView('pdf.category-recipes', compact('category', 'recipes'))
-        ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('pdf.category-recipes', compact('category', 'recipes'))
+            ->setPaper('a4', 'portrait');
 
-    return $pdf->download('kategorija-' . $category->id . '-receptes.pdf');
-}
+        return $pdf->download('kategorija-' . $category->id . '-receptes.pdf');
+    }
 
     public function categoryRecipesByName($categoryName)
-{
-    $decodedCategoryName = urldecode($categoryName);
+    {
+        $decodedCategoryName = urldecode($categoryName);
 
-    $recipes = \App\Models\Recipe::with('user', 'reviews')
-        ->where('category', $decodedCategoryName)
-        ->latest()
-        ->get();
-
-    $category = (object) [
-        'name' => $decodedCategoryName,
-        'slug' => \Illuminate\Support\Str::slug($decodedCategoryName),
-    ];
-
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.category-recipes', compact('category', 'recipes'))
-        ->setPaper('a4', 'portrait');
-
-    return $pdf->download('kategorija-' . $decodedCategoryName . '-receptes.pdf');
-}
-
-public function userProfile(User $user)
-{
-    $recipes = $user->recipes()
-        ->with('reviews')
-        ->latest()
-        ->get();
-
-    $pdf = Pdf::loadView('pdf.user-profile', compact('user', 'recipes'))
-        ->setPaper('a4', 'portrait');
-
-    return $pdf->download('lietotajs-' . $user->id . '-profils.pdf');
-}
-
-public function popularRecipes(Request $request)
-{
-    $days = (int) $request->get('days', 30);
-
-    $recipes = Recipe::with('user', 'reviews')
-        ->latest()
-        ->take(10)
-        ->get();
-
-    $totalViews = 0;
-
-    if (Schema::hasColumn('recipes', 'views_count')) {
         $recipes = Recipe::with('user', 'reviews')
-            ->orderByDesc('views_count')
-            ->take(10)
+            ->where('category', $decodedCategoryName)
+            ->latest()
             ->get();
 
-        $totalViews = $recipes->sum('views_count');
+        $category = (object) [
+            'name' => $decodedCategoryName,
+            'slug' => \Illuminate\Support\Str::slug($decodedCategoryName),
+        ];
+
+        $pdf = Pdf::loadView('pdf.category-recipes', compact('category', 'recipes'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('kategorija-' . $decodedCategoryName . '-receptes.pdf');
     }
 
-    $pdf = Pdf::loadView('pdf.popular-recipes', compact('recipes', 'days', 'totalViews'))
-        ->setPaper('a4', 'portrait');
+    public function userProfile(User $user)
+    {
+        $recipes = $user->recipes()
+            ->with('reviews')
+            ->latest()
+            ->get();
 
-    return $pdf->download('popularakas-receptes.pdf');
-}
+        $pdf = Pdf::loadView('pdf.user-profile', compact('user', 'recipes'))
+            ->setPaper('a4', 'portrait');
 
-public function adminStatistics()
-{
-    $usersCount = User::count();
-    $recipesCount = Recipe::count();
-
-    $commentsCount = 0;
-    if (Schema::hasTable('comments')) {
-        $commentsCount = DB::table('comments')->count();
+        return $pdf->download('lietotajs-' . $user->id . '-profils.pdf');
     }
 
-    $averageRating = 0;
-    $allRecipes = Recipe::with('reviews', 'user')->get();
+    public function popularRecipes(Request $request)
+    {
+        $days = (int) $request->get('days', 30);
 
-    $ratings = [];
-    foreach ($allRecipes as $recipe) {
-        foreach ($recipe->reviews as $review) {
-            if (isset($review->rating)) {
-                $ratings[] = $review->rating;
+        $query = Recipe::with('user', 'reviews');
+
+        if (Schema::hasColumn('recipes', 'views')) {
+            $query->orderByDesc('views');
+        } else {
+            $query->latest();
+        }
+
+        $recipes = $query->take(10)->get();
+
+        $totalViews = Schema::hasColumn('recipes', 'views')
+            ? Recipe::sum('views')
+            : 0;
+
+        $pdf = Pdf::loadView('pdf.popular-recipes', compact('recipes', 'days', 'totalViews'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('popularakas-receptes.pdf');
+    }
+
+    public function adminStatistics()
+    {
+        $usersCount = User::count();
+        $recipesCount = Recipe::count();
+
+        $commentsCount = 0;
+        if (Schema::hasTable('comments')) {
+            $commentsCount = DB::table('comments')->count();
+        }
+
+        $averageRating = 0;
+        $allRecipes = Recipe::with('reviews', 'user')->get();
+
+        $ratings = [];
+        foreach ($allRecipes as $recipe) {
+            foreach ($recipe->reviews as $review) {
+                if (isset($review->rating)) {
+                    $ratings[] = $review->rating;
+                }
             }
         }
+
+        if (count($ratings) > 0) {
+            $averageRating = array_sum($ratings) / count($ratings);
+        }
+
+        $totalViews = Schema::hasColumn('recipes', 'views')
+            ? Recipe::sum('views')
+            : 0;
+
+        $averageViewsPerRecipe = $recipesCount > 0
+            ? round($totalViews / $recipesCount, 2)
+            : 0;
+
+        $mostViewedRecipe = null;
+        if (Schema::hasColumn('recipes', 'views')) {
+            $mostViewedRecipe = Recipe::with('user', 'reviews')
+                ->orderByDesc('views')
+                ->first();
+        }
+
+        $popularRecipesQuery = Recipe::with('user', 'reviews');
+
+        if (Schema::hasColumn('recipes', 'views')) {
+            $popularRecipesQuery->orderByDesc('views');
+        } else {
+            $popularRecipesQuery->latest();
+        }
+
+        $popularRecipes = $popularRecipesQuery->take(10)->get();
+
+        $generatedAt = now();
+
+        $pdf = Pdf::loadView('pdf.admin-statistics', compact(
+            'usersCount',
+            'recipesCount',
+            'commentsCount',
+            'averageRating',
+            'popularRecipes',
+            'generatedAt',
+            'totalViews',
+            'averageViewsPerRecipe',
+            'mostViewedRecipe'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download('sistemas-statistika.pdf');
     }
 
-    if (count($ratings) > 0) {
-        $averageRating = array_sum($ratings) / count($ratings);
+    public function filteredRecipes(Request $request)
+    {
+        $query = Recipe::with('user', 'reviews');
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('difficulty')) {
+            $query->where('difficulty', $request->difficulty);
+        }
+
+        if ($request->filled('max_time')) {
+            $query->whereRaw('(COALESCE(prep_time,0) + COALESCE(cook_time,0)) <= ?', [$request->max_time]);
+        }
+
+        $recipes = $query->latest()->get();
+
+        $filters = [
+            'category' => $request->category,
+            'difficulty' => $request->difficulty,
+            'max_time' => $request->max_time,
+        ];
+
+        $pdf = Pdf::loadView('pdf.filtered-recipes', compact('recipes', 'filters'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('filtretas-receptes.pdf');
     }
-
-    $popularRecipes = Recipe::with('user', 'reviews')
-        ->latest()
-        ->take(10)
-        ->get();
-
-    if (Schema::hasColumn('recipes', 'views_count')) {
-        $popularRecipes = Recipe::with('user', 'reviews')
-            ->orderByDesc('views_count')
-            ->take(10)
-            ->get();
-    }
-
-    $generatedAt = now();
-
-    $pdf = Pdf::loadView('pdf.admin-statistics', compact(
-        'usersCount',
-        'recipesCount',
-        'commentsCount',
-        'averageRating',
-        'popularRecipes',
-        'generatedAt'
-    ))->setPaper('a4', 'portrait');
-
-    return $pdf->download('sistemas-statistika.pdf');
-}
-
-public function filteredRecipes(Request $request)
-{
-    $query = Recipe::with('user', 'reviews');
-
-    if ($request->filled('category')) {
-        $query->where('category', $request->category);
-    }
-
-    if ($request->filled('difficulty')) {
-        $query->where('difficulty', $request->difficulty);
-    }
-
-    if ($request->filled('max_time')) {
-        $query->whereRaw('(COALESCE(prep_time,0) + COALESCE(cook_time,0)) <= ?', [$request->max_time]);
-    }
-
-    $recipes = $query->latest()->get();
-
-    $filters = [
-        'category' => $request->category,
-        'difficulty' => $request->difficulty,
-        'max_time' => $request->max_time,
-    ];
-
-    $pdf = Pdf::loadView('pdf.filtered-recipes', compact('recipes', 'filters'))
-        ->setPaper('a4', 'portrait');
-
-    return $pdf->download('filtretas-receptes.pdf');
-}
 }

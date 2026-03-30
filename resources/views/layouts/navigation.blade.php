@@ -178,7 +178,7 @@
             }
         }
     </style>
-
+<link rel="icon" href="{{ asset('favicon.ico') }}">
     <div class="site-nav-inner">
         <div class="site-nav-row">
             <div class="site-nav-left">

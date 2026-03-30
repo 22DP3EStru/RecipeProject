@@ -214,7 +214,7 @@
         }
     }
 </style>
-
+<link rel="icon" href="{{ asset('favicon.ico') }}">
 <div class="home-page">
     <section class="home-hero">
         <div class="home-hero-left">

@@ -381,6 +381,7 @@
             }
         }
     </style>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
 </head>
 <body>
 <div class="page">

@@ -177,6 +177,7 @@
                 }
             }
         </style>
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
     </head>
     <body class="auth-layout">
         <div class="auth-shell">
