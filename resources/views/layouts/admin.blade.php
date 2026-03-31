@@ -138,7 +138,8 @@
             }
         }
     </style>
-    <link rel="icon" href="{{ asset('favicon.ico') }}?v=2">
+        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 </head>
 <body class="admin-layout">
 
