@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield("title", "Admin - Vecmāmiņas Receptes")</title>
-    @vite(["resources/css/app.css", "resources/js/app.js"])
+    <title>@yield('title', 'Admin - Vecmāmiņas Receptes')</title>
+    <meta name="description" content="@yield('meta_description', 'Vecmāmiņas Receptes administrācijas panelis - lietotāju, recepšu un satura pārvaldība.')">
+
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         :root {
@@ -31,8 +36,6 @@
             background:
                 linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
                 linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .admin-shell {
@@ -68,11 +71,9 @@
         .admin-brand {
             font-family: Georgia, "Times New Roman", serif;
             font-size: 1.9rem;
-            line-height: 1;
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
-            letter-spacing: 0.02em;
         }
 
         .admin-link {
@@ -95,23 +96,15 @@
             color: var(--muted);
             font-size: 14px;
             font-weight: 600;
-            padding: 10px 0;
         }
 
         .admin-logout-btn {
-            appearance: none;
             border: 1px solid var(--line);
             background: #f3e2de;
             color: #a45f52;
             padding: 11px 16px;
-            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s ease;
-        }
-
-        .admin-logout-btn:hover {
-            filter: brightness(0.98);
         }
 
         .admin-main-wrap {
@@ -120,41 +113,46 @@
             padding: 24px 20px 42px;
         }
 
-        @media (max-width: 700px) {
-            .admin-topbar-wrap {
-                padding: 14px 12px 0;
-            }
+        .flash-messages {
+            margin-bottom: 20px;
+        }
 
-            .admin-main-wrap {
-                padding: 18px 12px 28px;
-            }
+        .flash-message {
+            padding: 12px 16px;
+            border: 1px solid;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
 
-            .admin-topbar {
-                padding: 16px;
-            }
+        .flash-message.success {
+            background: #e8eee2;
+            color: #667652;
+            border-color: #d7dfcc;
+        }
 
-            .admin-brand {
-                font-size: 1.6rem;
-            }
+        .flash-message.error {
+            background: #f7ebe8;
+            color: #a45f52;
+            border-color: #e3c9c2;
         }
     </style>
-        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 </head>
 <body class="admin-layout">
 
 <div class="admin-shell">
+
     <header class="admin-topbar-wrap">
         <div class="admin-topbar">
             <div class="admin-topbar-left">
-                <a href="{{ route("admin.index") }}" class="admin-brand">Vecmāmiņas Receptes</a>
-                <a href="{{ route("admin.index") }}" class="admin-link">Admin panelis</a>
-                <a href="{{ route("dashboard") }}" class="admin-link">Uz sākumlapu</a>
+                <a href="{{ route('admin.index') }}" class="admin-brand">Vecmāmiņas Receptes</a>
+                <a href="{{ route('admin.index') }}" class="admin-link">Admin panelis</a>
+                <a href="{{ route('dashboard') }}" class="admin-link">Uz sākumlapu</a>
             </div>
 
             <div class="admin-topbar-right">
                 <span class="admin-user">{{ auth()->user()?->email }}</span>
-                <form method="POST" action="{{ route("logout") }}">
+
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="admin-logout-btn">Iziet</button>
                 </form>
@@ -163,8 +161,11 @@
     </header>
 
     <main class="admin-main-wrap">
-        @yield("content")
+        @include('components.flash-messages')
+
+        @yield('content')
     </main>
+
 </div>
 
 </body>

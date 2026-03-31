@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Vecmāmiņas Receptes')</title>
+    <meta name="description" content="@yield('meta_description', 'Vecmāmiņas Receptes - garšīgas mājās gatavotas receptes, favorīti, kategorijas un iedvesma katrai dienai.')">
+
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 
     <style>
         * {
@@ -28,6 +32,12 @@
             --danger-border: #e3c9c2;
             --success-bg: #e8eee2;
             --success-text: #667652;
+            --warning-bg: #f6eddc;
+            --warning-text: #8a6a2f;
+            --warning-border: #e3d3ae;
+            --info-bg: #e7eff6;
+            --info-text: #4d667d;
+            --info-border: #c9d9e8;
             --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
         }
 
@@ -162,8 +172,91 @@
             padding: 34px;
         }
 
+        .section-block + .section-block {
+            margin-top: 28px;
+        }
+
+        .section-title {
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.9rem;
+            font-weight: 500;
+        }
+
+        .section-subtext {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 700;
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            font-size: 15px;
+            background: #fffdfa;
+            color: var(--text);
+            transition: 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-input,
+        .form-select {
+            min-height: 48px;
+        }
+
+        .form-textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #bba692;
+            background: #fff;
+        }
+
+        .help-text {
+            color: var(--muted);
+            margin-top: 7px;
+            display: block;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
             padding: 12px 18px;
             text-decoration: none;
             border: 1px solid var(--line);
@@ -175,6 +268,7 @@
             transition: 0.2s ease;
             text-align: center;
             white-space: nowrap;
+            font-family: inherit;
         }
 
         .btn:hover {
@@ -208,6 +302,16 @@
 
         .btn-secondary:hover {
             background: var(--surface-soft-2);
+        }
+
+        .btn-warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: var(--warning-border);
+        }
+
+        .btn-warning:hover {
+            background: #f0e3cc;
         }
 
         .btn-danger {
@@ -351,6 +455,52 @@
             margin-bottom: 4px;
         }
 
+        .flash-messages {
+            margin-bottom: 24px;
+        }
+
+        .flash-message {
+            padding: 14px 18px;
+            border: 1px solid;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .flash-message.success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #d7dfcc;
+        }
+
+        .flash-message.error {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
+        }
+
+        .flash-message.warning {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: var(--warning-border);
+        }
+
+        .flash-message.info {
+            background: var(--info-bg);
+            color: var(--info-text);
+            border-color: var(--info-border);
+        }
+
+        .flash-message ul {
+            margin: 8px 0 0 18px;
+            padding: 0;
+        }
+
+        .flash-message li {
+            margin-bottom: 4px;
+        }
+
         @media (max-width: 1280px) {
             .nav-bar {
                 grid-template-columns: 1fr;
@@ -386,7 +536,8 @@
             }
 
             .grid-2,
-            .grid-3 {
+            .grid-3,
+            .form-row {
                 grid-template-columns: 1fr;
             }
 
@@ -443,60 +594,76 @@
             .nowrap {
                 white-space: normal;
             }
+
+            .btn {
+                width: 100%;
+            }
         }
     </style>
-        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 </head>
-
-<body><link rel="icon" href="{{ asset('favicon.ico') }}?v=2">
+<body>
 <div class="site-shell">
     <div class="page">
 
-        @if(request()->is('admin*'))
-            <div class="hero">
-                <h1 class="hero-title">Administrācijas panelis</h1>
-                <p class="hero-text">Šeit vari pārvaldīt lietotājus, receptes un sistēmas saturu.</p>
-            </div>
-        @else
-            <div class="hero">
-                <h1 class="hero-title">Vecmāmiņas Receptes</h1>
-                <p class="hero-text">Garšas, kas paliek atmiņā</p>
-            </div>
-        @endif
+        @php
+            $hideMainNavigation = request()->routeIs('login')
+                || request()->routeIs('register')
+                || request()->routeIs('password.request')
+                || request()->routeIs('password.reset');
+        @endphp
 
-        <nav class="nav-bar">
-            <a href="{{ url('/dashboard') }}" class="nav-brand">Vecmāmiņas Receptes</a>
-
-            <div class="nav-center">
-                <div class="nav-links">
-                    <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
-                    <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
-                    <a href="{{ url('/categories') }}" class="{{ request()->is('categories') || request()->is('categories/*') ? 'active' : '' }}">Kategorijas</a>
-                    <a href="{{ url('/profile/recipes') }}" class="{{ request()->is('profile/recipes') ? 'active' : '' }}">Manas receptes</a>
-                    <a href="{{ url('/profile/favorites') }}" class="{{ request()->is('profile/favorites') ? 'active' : '' }}">Favorīti</a>
-                    <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
-                    <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
-
-                    @if(Auth::check() && Auth::user()->is_admin)
-                        <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
-                    @endif
+        @unless($hideMainNavigation)
+            @if(request()->is('admin*'))
+                <div class="hero">
+                    <h1 class="hero-title">Administrācijas panelis</h1>
+                    <p class="hero-text">Šeit vari pārvaldīt lietotājus, receptes un sistēmas saturu.</p>
                 </div>
-            </div>
+            @else
+                <div class="hero">
+                    <h1 class="hero-title">
+                        @yield('hero_title', 'Vecmāmiņas Receptes')
+                    </h1>
 
-            <div class="nav-right">
-                @auth
-                    <span class="nav-user-name">{{ Auth::user()->name }}</span>
+                    <p class="hero-text">
+                        @yield('hero_text', 'Garšas, kas paliek atmiņā')
+                    </p>
+                </div>
+            @endif
 
-                    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Iziet</button>
-                    </form>
-                @endauth
-            </div>
-        </nav>
+            <nav class="nav-bar">
+                <a href="{{ url('/dashboard') }}" class="nav-brand">Vecmāmiņas Receptes</a>
+
+                <div class="nav-center">
+                    <div class="nav-links">
+                        <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
+                        <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
+                        <a href="{{ url('/categories') }}" class="{{ request()->is('categories') || request()->is('categories/*') ? 'active' : '' }}">Kategorijas</a>
+                        <a href="{{ url('/profile/recipes') }}" class="{{ request()->is('profile/recipes') ? 'active' : '' }}">Manas receptes</a>
+                        <a href="{{ url('/profile/favorites') }}" class="{{ request()->is('profile/favorites') ? 'active' : '' }}">Favorīti</a>
+                        <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
+                        <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
+
+                        @if(Auth::check() && Auth::user()->is_admin)
+                            <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="nav-right">
+                    @auth
+                        <span class="nav-user-name">{{ Auth::user()->name }}</span>
+
+                        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Iziet</button>
+                        </form>
+                    @endauth
+                </div>
+            </nav>
+        @endunless
 
         <div class="main-content">
+            @include('components.flash-messages')
             @yield('content')
         </div>
 

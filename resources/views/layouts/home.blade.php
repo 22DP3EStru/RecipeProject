@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Vecmāmiņas Receptes - Garšas, kas paliek atmiņā')
+@section('meta_description', 'Atklāj gardas receptes ikvienai dienai, pārlūko kategorijas, saglabā favorītus un atrodi iedvesmu savai virtuvei.')
 
 @section('content')
 <style>
@@ -214,8 +215,7 @@
         }
     }
 </style>
-    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+
 <div class="home-page">
     <section class="home-hero">
         <div class="home-hero-left">

@@ -1,845 +1,12 @@
-<!DOCTYPE html>
-<html lang="lv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $recipe->title }} - Vecmāmiņas Receptes</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@extends('layouts.app')
 
-        :root {
-            --page-bg: #eee5da;
-            --page-bg-2: #e8ddd0;
-            --card-bg: #fffdf9;
-            --soft-bg: #f6efe7;
-            --soft-bg-2: #efe4d6;
-            --line: #ddcfc0;
-            --text: #2f241d;
-            --muted: #7b6d61;
-            --accent: #7a5a43;
-            --accent-dark: #634733;
-            --success-bg: #edf3e7;
-            --success-text: #667652;
-            --warning-bg: #f3e8e3;
-            --warning-text: #9a6b56;
-            --danger-bg: #f3e2de;
-            --danger-text: #a45f52;
-            --danger-border: #e3c9c2;
-            --info-bg: #f2e7da;
-            --info-text: #7a5a43;
-            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
-            --star: #b9872f;
-            --star-soft: rgba(47, 36, 29, 0.2);
-        }
+@section('title', $recipe->title . ' - Vecmāmiņas Receptes')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($recipe->description ?? 'Apskatiet recepti Vecmāmiņas Receptes platformā.'), 160))
 
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
-                linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
-            min-height: 100vh;
-            color: var(--text);
-        }
+@section('hero_title', $recipe->title)
+@section('hero_text', 'Autors: ' . $recipe->user->name . ' · Skatījumi: ' . number_format((int)($recipe->views ?? 0), 0, ',', ' '))
 
-        .page {
-            max-width: 1450px;
-            margin: 0 auto;
-            padding: 28px 20px 50px;
-        }
-
-        .hero {
-            padding: 18px 20px 32px;
-            text-align: center;
-        }
-
-        .hero-title {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 4rem;
-            line-height: 1.08;
-            color: var(--accent);
-            font-weight: 400;
-            margin-bottom: 12px;
-        }
-
-        .hero-text {
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.7;
-            max-width: 820px;
-            margin: 0 auto;
-        }
-
-        .nav-bar {
-            background: rgba(255, 253, 249, 0.95);
-            border: 1px solid var(--line);
-            padding: 16px 22px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 34px;
-        }
-
-        .nav-brand {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.9rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            line-height: 1.1;
-            white-space: nowrap;
-        }
-
-        .nav-center {
-            min-width: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            flex-wrap: nowrap;
-            min-width: 0;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            padding: 9px 11px;
-            border: 1px solid transparent;
-            transition: 0.2s ease;
-            font-weight: 600;
-            font-size: 13.5px;
-            white-space: nowrap;
-            line-height: 1.2;
-        }
-
-        .nav-links a:hover {
-            background: var(--soft-bg);
-            border-color: var(--line);
-            color: var(--accent);
-        }
-
-        .nav-links a.active {
-            color: var(--accent);
-            background: var(--soft-bg);
-            border-color: var(--line);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 10px;
-            white-space: nowrap;
-        }
-
-        .nav-user-name {
-            color: var(--muted);
-            font-size: 13.5px;
-            font-weight: 700;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 18px;
-            text-decoration: none;
-            border: 1px solid var(--line);
-            background: #fff;
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s ease;
-            text-align: center;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-
-        .btn:hover {
-            filter: brightness(0.98);
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fffaf4;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-dark);
-        }
-
-        .btn-success {
-            background: var(--success-bg);
-            color: var(--success-text);
-            border-color: #d8e1cf;
-        }
-
-        .btn-warning {
-            background: var(--warning-bg);
-            color: var(--warning-text);
-            border-color: #e2ccc1;
-        }
-
-        .btn-danger {
-            background: var(--danger-bg);
-            color: var(--danger-text);
-            border-color: var(--danger-border);
-        }
-
-        .btn-secondary {
-            background: var(--soft-bg);
-            color: var(--text);
-        }
-
-        .main-content {
-            background: rgba(255, 253, 249, 0.78);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
-            padding: 34px;
-        }
-
-        .section-block + .section-block {
-            margin-top: 28px;
-        }
-
-        .intro-box,
-        .hero-card,
-        .meta-card,
-        .content-card,
-        .author-card,
-        .review-card-box,
-        .related-card,
-        .flash-success {
-            background: var(--card-bg);
-            border: 1px solid var(--line);
-            padding: 28px;
-        }
-
-        .intro-box {
-            text-align: center;
-        }
-
-        .intro-icon {
-            font-size: 3.5rem;
-            margin-bottom: 16px;
-        }
-
-        .intro-box h2,
-        .section-title,
-        .hero-card-title,
-        .empty-title {
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .intro-box h2 {
-            font-size: 2.3rem;
-            margin-bottom: 12px;
-        }
-
-        .intro-box p,
-        .section-subtext,
-        .hero-card p,
-        .muted-text {
-            color: var(--muted);
-            line-height: 1.8;
-        }
-
-        .section-title {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.9rem;
-        }
-
-        .section-subtext {
-            margin-bottom: 22px;
-        }
-
-        .hero-card {
-            text-align: center;
-        }
-
-        .hero-card-head {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .hero-card-title {
-            font-size: 2.6rem;
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        .recipe-description {
-            font-size: 17px;
-            max-width: 820px;
-            margin: 0 auto;
-        }
-
-        .recipe-top-meta {
-            margin-top: 16px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .recipe-top-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            border: 1px solid var(--line);
-            background: var(--soft-bg);
-            color: var(--accent);
-            font-weight: 800;
-        }
-
-        .heart-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            cursor: pointer;
-            font-size: 28px;
-            line-height: 1;
-            padding: 8px 10px;
-            transition: 0.2s ease;
-        }
-
-        .heart-btn:hover {
-            background: var(--soft-bg);
-            border-color: var(--line);
-        }
-
-        .servings-control {
-            margin: 22px auto 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .servings-input {
-            width: 90px;
-            padding: 12px 14px;
-            border: 1px solid var(--line);
-            outline: none;
-            font-weight: 800;
-            text-align: center;
-            background: #fffdfa;
-            color: var(--text);
-            font-family: inherit;
-        }
-
-        .servings-input:focus {
-            border-color: #bba692;
-            background: #fff;
-        }
-
-        .servings-hint {
-            font-size: 13px;
-            color: var(--muted);
-            font-weight: 700;
-        }
-
-        .pdf-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 18px;
-            justify-content: center;
-        }
-
-        .pdf-btn {
-            display: inline-block;
-            padding: 10px 14px;
-            text-decoration: none;
-            border: 1px solid var(--line);
-            background: var(--soft-bg);
-            color: var(--text);
-            font-size: 13px;
-            font-weight: 700;
-            transition: 0.2s ease;
-        }
-
-        .pdf-btn:hover {
-            background: var(--soft-bg-2);
-        }
-
-        .media-wrap {
-            max-width: 820px;
-            margin: 24px auto 0;
-        }
-
-        .media-card {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 16px;
-            margin-top: 14px;
-        }
-
-        .media-img,
-        .media-video {
-            width: 100%;
-            display: block;
-            border: 1px solid var(--line);
-        }
-
-        .media-img {
-            max-height: 420px;
-            object-fit: cover;
-        }
-
-        .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 18px;
-        }
-
-        .meta-item {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 22px;
-            text-align: center;
-        }
-
-        .meta-icon {
-            font-size: 2.3rem;
-            margin-bottom: 10px;
-        }
-
-        .meta-item h4 {
-            color: var(--accent);
-            margin-bottom: 6px;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .meta-item p {
-            color: var(--muted);
-            font-weight: 600;
-            line-height: 1.6;
-        }
-
-        .content-inner {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 24px;
-        }
-
-        .ingredient-list,
-        .instruction-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .ingredient-list li,
-        .instruction-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .ingredient-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .ingredient-check {
-            color: var(--success-text);
-            font-weight: 800;
-        }
-
-        .ingredientQty {
-            color: var(--text);
-            font-weight: 900;
-        }
-
-        .ingredient-unit {
-            color: var(--muted);
-            font-weight: 800;
-        }
-
-        .ingredient-name {
-            color: var(--text);
-            font-size: 16px;
-        }
-
-        .old-format-note {
-            margin-bottom: 12px;
-            color: var(--muted);
-            font-weight: 700;
-        }
-
-        .instruction-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-
-        .step-badge {
-            background: var(--accent);
-            color: #fffaf4;
-            min-width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .instruction-text {
-            color: var(--text);
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        .author-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 18px;
-            text-align: center;
-        }
-
-        .author-box {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 20px;
-        }
-
-        .author-box h4 {
-            color: var(--accent);
-            margin-bottom: 6px;
-            font-size: 15px;
-        }
-
-        .author-box p {
-            color: var(--muted);
-            font-weight: 600;
-            line-height: 1.6;
-        }
-
-        .flash-success {
-            background: var(--success-bg);
-            color: var(--success-text);
-            border-color: #d8e1cf;
-            font-weight: 700;
-            margin-bottom: 18px;
-            padding: 18px 20px;
-        }
-
-        .review-summary {
-            text-align: center;
-            margin-bottom: 18px;
-        }
-
-        .review-badge {
-            display: inline-block;
-            padding: 8px 14px;
-            border: 1px solid var(--line);
-            background: var(--soft-bg);
-            color: var(--accent);
-            font-weight: 800;
-        }
-
-        .review-card {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 22px;
-        }
-
-        .review-card + .review-card {
-            margin-top: 18px;
-        }
-
-        .review-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        .review-user {
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .review-date {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .review-text {
-            color: var(--text);
-            line-height: 1.7;
-        }
-
-        .stars {
-            display: inline-flex;
-            flex-direction: row-reverse;
-            gap: 6px;
-        }
-
-        .stars input {
-            display: none;
-        }
-
-        .stars label {
-            cursor: pointer;
-            font-size: 26px;
-            color: rgba(0,0,0,0.25);
-            transition: 0.15s ease;
-        }
-
-        .stars label:hover {
-            transform: translateY(-2px);
-        }
-
-        .stars input:checked ~ label,
-        .stars label:hover,
-        .stars label:hover ~ label {
-            color: var(--star);
-        }
-
-        .static-stars {
-            margin-left: 10px;
-        }
-
-        .static-stars .filled {
-            color: var(--star);
-        }
-
-        .static-stars .empty {
-            color: var(--star-soft);
-        }
-
-        .review-form-textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--line);
-            background: #fffdfa;
-            color: var(--text);
-            font-family: inherit;
-            resize: vertical;
-            min-height: 110px;
-        }
-
-        .review-form-textarea:focus {
-            outline: none;
-            border-color: #bba692;
-            background: #fff;
-        }
-
-        .error-text {
-            color: var(--danger-text);
-            font-weight: 700;
-            margin-top: 8px;
-        }
-
-        .review-actions,
-        .page-actions,
-        .related-grid {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-
-        .page-actions {
-            justify-content: center;
-        }
-
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        }
-
-        .related-item {
-            background: var(--soft-bg);
-            border: 1px solid var(--line);
-            padding: 20px;
-            transition: 0.2s ease;
-        }
-
-        .related-item:hover {
-            background: #fffaf5;
-        }
-
-        .related-item h4 {
-            color: var(--accent);
-            margin-bottom: 10px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.4rem;
-            font-weight: 500;
-        }
-
-        .related-item p {
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.7;
-            margin-bottom: 15px;
-        }
-
-        .related-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 14px;
-        }
-
-        .empty-review {
-            text-align: center;
-            color: var(--muted);
-        }
-
-        @media (max-width: 1280px) {
-            .nav-bar {
-                grid-template-columns: 1fr;
-                justify-items: center;
-                text-align: center;
-            }
-
-            .nav-center {
-                width: 100%;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-            }
-
-            .nav-right {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .nav-user-name {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .hero-title {
-                font-size: 2.8rem;
-            }
-
-            .main-content {
-                padding: 24px;
-            }
-
-            .nav-brand {
-                font-size: 1.7rem;
-            }
-
-            .nav-links a {
-                font-size: 13px;
-                padding: 8px 10px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .page {
-                padding: 16px 12px 32px;
-            }
-
-            .hero {
-                padding: 10px 8px 24px;
-            }
-
-            .hero-title {
-                font-size: 2.3rem;
-            }
-
-            .nav-bar {
-                padding: 16px;
-                gap: 14px;
-            }
-
-            .main-content,
-            .intro-box,
-            .hero-card,
-            .meta-card,
-            .content-card,
-            .author-card,
-            .review-card-box,
-            .related-card,
-            .flash-success {
-                padding: 20px;
-            }
-
-            .hero-card-title {
-                font-size: 2rem;
-            }
-
-            .hero-card-head,
-            .servings-control,
-            .pdf-actions,
-            .review-actions,
-            .page-actions {
-                flex-direction: column;
-            }
-
-            .hero-card-head form,
-            .pdf-actions a,
-            .review-actions .btn,
-            .page-actions .btn,
-            .page-actions form,
-            .page-actions form button {
-                width: 100%;
-            }
-
-            .ingredient-row,
-            .instruction-row,
-            .review-top {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .author-grid,
-            .meta-grid,
-            .related-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .static-stars {
-                margin-left: 0;
-                display: block;
-                margin-top: 6px;
-            }
-        }
-    </style>
-        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
-</head>
-<body>
+@section('content')
 @php
     $isFav = false;
     if (Auth::check()) {
@@ -864,491 +31,1032 @@
     }
 @endphp
 
-<div class="page">
+<style>
+    .recipe-show-page {
+        color: var(--text);
+    }
 
-    <div class="hero">
-        <h1 class="hero-title">{{ $recipe->title }}</h1>
-        <p class="hero-text">
-            Autors: {{ $recipe->user->name }} · Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}
+    .hero {
+        padding: 18px 20px 32px;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 4rem;
+        line-height: 1.08;
+        color: var(--accent);
+        font-weight: 400;
+        margin-bottom: 12px;
+    }
+
+    .hero-text {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.7;
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .section-block + .section-block {
+        margin-top: 28px;
+    }
+
+    .intro-box,
+    .hero-card,
+    .meta-card,
+    .content-card,
+    .author-card,
+    .review-card-box,
+    .related-card,
+    .flash-success {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        padding: 28px;
+    }
+
+    .intro-box {
+        text-align: center;
+    }
+
+    .intro-icon {
+        font-size: 3.5rem;
+        margin-bottom: 16px;
+    }
+
+    .intro-box h2,
+    .hero-card-title,
+    .empty-title {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--accent);
+        font-weight: 500;
+    }
+
+    .intro-box h2 {
+        font-size: 2.3rem;
+        margin-bottom: 12px;
+    }
+
+    .intro-box p,
+    .hero-card p,
+    .muted-text {
+        color: var(--muted);
+        line-height: 1.8;
+    }
+
+    .hero-card {
+        text-align: center;
+    }
+
+    .hero-card-head {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+
+    .hero-card-title {
+        font-size: 2.6rem;
+        line-height: 1.15;
+        margin: 0;
+    }
+
+    .recipe-description {
+        font-size: 17px;
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .recipe-top-meta {
+        margin-top: 16px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .recipe-top-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border: 1px solid var(--line);
+        background: var(--surface-soft);
+        color: var(--accent);
+        font-weight: 800;
+    }
+
+    .heart-btn {
+        background: transparent;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-size: 28px;
+        line-height: 1;
+        padding: 8px 10px;
+        transition: 0.2s ease;
+    }
+
+    .heart-btn:hover {
+        background: var(--surface-soft);
+        border-color: var(--line);
+    }
+
+    .servings-control {
+        margin: 22px auto 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .servings-input {
+        width: 90px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        outline: none;
+        font-weight: 800;
+        text-align: center;
+        background: #fffdfa;
+        color: var(--text);
+        font-family: inherit;
+    }
+
+    .servings-input:focus {
+        border-color: #bba692;
+        background: #fff;
+    }
+
+    .servings-hint {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 700;
+    }
+
+    .pdf-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+        justify-content: center;
+    }
+
+    .pdf-btn {
+        display: inline-block;
+        padding: 10px 14px;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: var(--surface-soft);
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .pdf-btn:hover {
+        background: var(--surface-soft-2);
+    }
+
+    .media-wrap {
+        max-width: 820px;
+        margin: 24px auto 0;
+    }
+
+    .media-card {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 16px;
+        margin-top: 14px;
+    }
+
+    .media-img,
+    .media-video {
+        width: 100%;
+        display: block;
+        border: 1px solid var(--line);
+    }
+
+    .media-img {
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 18px;
+    }
+
+    .meta-item {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 22px;
+        text-align: center;
+    }
+
+    .meta-icon {
+        font-size: 2.3rem;
+        margin-bottom: 10px;
+    }
+
+    .meta-item h4 {
+        color: var(--accent);
+        margin-bottom: 6px;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .meta-item p {
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.6;
+    }
+
+    .content-inner {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 24px;
+    }
+
+    .ingredient-list,
+    .instruction-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .ingredient-list li,
+    .instruction-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .ingredient-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .ingredient-check {
+        color: var(--success-text);
+        font-weight: 800;
+    }
+
+    .ingredientQty {
+        color: var(--text);
+        font-weight: 900;
+    }
+
+    .ingredient-unit {
+        color: var(--muted);
+        font-weight: 800;
+    }
+
+    .ingredient-name {
+        color: var(--text);
+        font-size: 16px;
+    }
+
+    .old-format-note {
+        margin-bottom: 12px;
+        color: var(--muted);
+        font-weight: 700;
+    }
+
+    .instruction-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .step-badge {
+        background: var(--accent);
+        color: #fffaf4;
+        min-width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .instruction-text {
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .author-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+        text-align: center;
+    }
+
+    .author-box {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 20px;
+    }
+
+    .author-box h4 {
+        color: var(--accent);
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+    .author-box p {
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.6;
+    }
+
+    .flash-success {
+        background: var(--success-bg);
+        color: var(--success-text);
+        border-color: #d8e1cf;
+        font-weight: 700;
+        margin-bottom: 18px;
+        padding: 18px 20px;
+    }
+
+    .review-summary {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+
+    .review-badge {
+        display: inline-block;
+        padding: 8px 14px;
+        border: 1px solid var(--line);
+        background: var(--surface-soft);
+        color: var(--accent);
+        font-weight: 800;
+    }
+
+    .review-card {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 22px;
+    }
+
+    .review-card + .review-card {
+        margin-top: 18px;
+    }
+
+    .review-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .review-user {
+        font-weight: 800;
+        color: var(--text);
+    }
+
+    .review-date {
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .review-text {
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    .stars {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        gap: 6px;
+    }
+
+    .stars input {
+        display: none;
+    }
+
+    .stars label {
+        cursor: pointer;
+        font-size: 26px;
+        color: rgba(0,0,0,0.25);
+        transition: 0.15s ease;
+    }
+
+    .stars label:hover {
+        transform: translateY(-2px);
+    }
+
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+        color: #b9872f;
+    }
+
+    .static-stars {
+        margin-left: 10px;
+    }
+
+    .static-stars .filled {
+        color: #b9872f;
+    }
+
+    .static-stars .empty {
+        color: rgba(185, 135, 47, 0.3);
+    }
+
+    .review-form-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+        color: var(--text);
+        font-family: inherit;
+        resize: vertical;
+        min-height: 110px;
+    }
+
+    .review-form-textarea:focus {
+        outline: none;
+        border-color: #bba692;
+        background: #fff;
+    }
+
+    .error-text {
+        color: var(--danger-text);
+        font-weight: 700;
+        margin-top: 8px;
+    }
+
+    .review-actions,
+    .page-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .page-actions {
+        justify-content: center;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+    }
+
+    .related-item {
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        padding: 20px;
+        transition: 0.2s ease;
+    }
+
+    .related-item:hover {
+        background: #fffaf5;
+    }
+
+    .related-item h4 {
+        color: var(--accent);
+        margin-bottom: 10px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+
+    .related-item p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .related-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 14px;
+    }
+
+    .empty-review {
+        text-align: center;
+        color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+        .hero-title {
+            font-size: 2.8rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .hero {
+            padding: 10px 8px 24px;
+        }
+
+        .hero-title {
+            font-size: 2.3rem;
+        }
+
+        .intro-box,
+        .hero-card,
+        .meta-card,
+        .content-card,
+        .author-card,
+        .review-card-box,
+        .related-card,
+        .flash-success {
+            padding: 20px;
+        }
+
+        .hero-card-title {
+            font-size: 2rem;
+        }
+
+        .hero-card-head,
+        .servings-control,
+        .pdf-actions,
+        .review-actions,
+        .page-actions {
+            flex-direction: column;
+        }
+
+        .hero-card-head form,
+        .pdf-actions a,
+        .review-actions .btn,
+        .page-actions .btn,
+        .page-actions form,
+        .page-actions form button {
+            width: 100%;
+        }
+
+        .ingredient-row,
+        .instruction-row,
+        .review-top {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .author-grid,
+        .meta-grid,
+        .related-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .static-stars {
+            margin-left: 0;
+            display: block;
+            margin-top: 6px;
+        }
+    }
+</style>
+
+<div class="recipe-show-page">
+
+    <div class="section-block intro-box">
+        <div class="intro-icon">🍽️</div>
+        <h2>Receptes apskats</h2>
+        <p>
+            Šeit varat pārskatīt receptes aprakstu, sastāvdaļas, gatavošanas soļus, atsauksmes un saistītās receptes vienuviet.
         </p>
     </div>
 
-    <nav class="nav-bar">
-        <a href="/dashboard" class="nav-brand">Vecmāmiņas Receptes</a>
+    <div class="section-block hero-card">
+        <div class="hero-card-head">
+            <h2 class="hero-card-title">{{ $recipe->title }}</h2>
 
-        <div class="nav-center">
-            <div class="nav-links">
-                <a href="/dashboard">Vadības panelis</a>
-                <a href="/recipes" class="active">Receptes</a>
-                <a href="/categories">Kategorijas</a>
-                <a href="/profile/recipes">Manas receptes</a>
-                @auth
-                    <a href="{{ route('profile.favorites') }}">Favorīti</a>
-                @endauth
-                <a href="/contact">Kontakti</a>
-                @auth
-                    <a href="{{ route('profile.edit') }}">Profils</a>
-                @endauth
-                @auth
-                    @if(Auth::user()->is_admin)
-                        <a href="{{ route('admin.index') }}">Administrācija</a>
-                    @endif
-                @endauth
-            </div>
-        </div>
-
-        <div class="nav-right">
             @auth
-                <span class="nav-user-name">{{ Auth::user()->name }}</span>
-
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
                     @csrf
-                    <button type="submit" class="btn btn-danger">Iziet</button>
+                    <button type="submit" class="heart-btn" aria-label="Pievienot favorītiem">
+                        {!! $isFav ? '❤️' : '🤍' !!}
+                    </button>
                 </form>
-            @else
-                <a href="/recipes" class="btn btn-warning">Atpakaļ uz receptēm</a>
             @endauth
-        </div>
-    </nav>
 
-    <div class="main-content">
-
-        <div class="section-block intro-box">
-            <div class="intro-icon">🍽️</div>
-            <h2>Receptes apskats</h2>
-            <p>
-                Šeit varat pārskatīt receptes aprakstu, sastāvdaļas, gatavošanas soļus, atsauksmes un saistītās receptes vienuviet.
-            </p>
+            @guest
+                <span title="Pieslēdzies, lai pievienotu favorītiem" style="font-size:28px; opacity:.6;">🤍</span>
+            @endguest
         </div>
 
-        <div class="section-block hero-card">
-            <div class="hero-card-head">
-                <h2 class="hero-card-title">{{ $recipe->title }}</h2>
+        <p class="recipe-description">
+            {{ $recipe->description }}
+        </p>
 
-                @auth
-                    <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
-                        @csrf
-                        <button type="submit" class="heart-btn" aria-label="Pievienot favorītiem">
-                            {!! $isFav ? '❤️' : '🤍' !!}
-                        </button>
-                    </form>
-                @endauth
+        <div class="recipe-top-meta">
+            <span class="recipe-top-badge">👁️ Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</span>
+            <span class="recipe-top-badge">📅 Publicēta: {{ $recipe->created_at->format('d.m.Y') }}</span>
+        </div>
 
-                @guest
-                    <span title="Pieslēdzies, lai pievienotu favorītiem" style="font-size:28px; opacity:.6;">🤍</span>
-                @endguest
+        <div class="servings-control">
+            <span style="font-weight: 900; color: var(--accent);">Porcijas:</span>
+            <input
+                id="servingsInput"
+                class="servings-input"
+                type="number"
+                min="1"
+                value="{{ $origServings }}"
+                aria-label="Porciju skaits"
+            >
+            <span class="servings-hint">(oriģināli: {{ $origServings }})</span>
+        </div>
+
+        <div class="pdf-actions">
+            <a href="{{ route('pdf.recipe.full', $recipe->id) }}" class="pdf-btn pdf-link" data-type="full">PDF pilns</a>
+            <a href="{{ route('pdf.recipe.ingredients', $recipe->id) }}" class="pdf-btn pdf-link" data-type="ingredients">Sastāvdaļas</a>
+            <a href="{{ route('pdf.recipe.steps', $recipe->id) }}" class="pdf-btn pdf-link" data-type="steps">Soļi</a>
+        </div>
+
+        @if($recipe->image_path || $recipe->video_path)
+            <div class="media-wrap">
+                @if($recipe->image_path)
+                    <div class="media-card">
+                        <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="Receptes attēls" class="media-img">
+                    </div>
+                @endif
+
+                @if($recipe->video_path)
+                    <div class="media-card">
+                        <video controls class="media-video">
+                            <source src="{{ asset('storage/' . $recipe->video_path) }}">
+                            Jūsu pārlūks neatbalsta video.
+                        </video>
+                    </div>
+                @endif
+            </div>
+        @endif
+    </div>
+
+    <div class="section-block meta-card">
+        <h3 class="section-title">📋 Receptes informācija</h3>
+
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="meta-icon">📂</div>
+                <h4>Kategorija</h4>
+                <p>{{ $recipe->category ?? 'Nav norādīta' }}</p>
             </div>
 
-            <p class="recipe-description">
-                {{ $recipe->description }}
-            </p>
-
-            <div class="recipe-top-meta">
-                <span class="recipe-top-badge">👁️ Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</span>
-                <span class="recipe-top-badge">📅 Publicēta: {{ $recipe->created_at->format('d.m.Y') }}</span>
+            <div class="meta-item">
+                <div class="meta-icon">⭐</div>
+                <h4>Grūtība</h4>
+                <p>{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
             </div>
 
-            <div class="servings-control">
-                <span style="font-weight: 900; color: var(--accent);">Porcijas:</span>
-                <input
-                    id="servingsInput"
-                    class="servings-input"
-                    type="number"
-                    min="1"
-                    value="{{ $origServings }}"
-                    aria-label="Porciju skaits"
-                >
-                <span class="servings-hint">(oriģināli: {{ $origServings }})</span>
+            <div class="meta-item">
+                <div class="meta-icon">👁️</div>
+                <h4>Skatījumi</h4>
+                <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
             </div>
 
-            <div class="pdf-actions">
-                <a href="{{ route('pdf.recipe.full', $recipe->id) }}" class="pdf-btn pdf-link" data-type="full">PDF pilns</a>
-                <a href="{{ route('pdf.recipe.ingredients', $recipe->id) }}" class="pdf-btn pdf-link" data-type="ingredients">Sastāvdaļas</a>
-                <a href="{{ route('pdf.recipe.steps', $recipe->id) }}" class="pdf-btn pdf-link" data-type="steps">Soļi</a>
-            </div>
-
-            @if($recipe->image_path || $recipe->video_path)
-                <div class="media-wrap">
-                    @if($recipe->image_path)
-                        <div class="media-card">
-                            <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="Receptes attēls" class="media-img">
-                        </div>
-                    @endif
-
-                    @if($recipe->video_path)
-                        <div class="media-card">
-                            <video controls class="media-video">
-                                <source src="{{ asset('storage/' . $recipe->video_path) }}">
-                                Jūsu pārlūks neatbalsta video.
-                            </video>
-                        </div>
-                    @endif
+            @if(!is_null($recipe->prep_time))
+                <div class="meta-item">
+                    <div class="meta-icon">🔪</div>
+                    <h4>Sagatavošana</h4>
+                    <p>
+                        <span id="prepTime" data-original="{{ $origPrep }}">{{ $origPrep }}</span> minūtes
+                    </p>
                 </div>
             @endif
-        </div>
 
-        <div class="section-block meta-card">
-            <h3 class="section-title">📋 Receptes informācija</h3>
-
-            <div class="meta-grid">
+            @if(!is_null($recipe->cook_time))
                 <div class="meta-item">
-                    <div class="meta-icon">📂</div>
-                    <h4>Kategorija</h4>
-                    <p>{{ $recipe->category ?? 'Nav norādīta' }}</p>
-                </div>
-
-                <div class="meta-item">
-                    <div class="meta-icon">⭐</div>
-                    <h4>Grūtība</h4>
-                    <p>{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
-                </div>
-
-                <div class="meta-item">
-                    <div class="meta-icon">👁️</div>
-                    <h4>Skatījumi</h4>
-                    <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
-                </div>
-
-                @if(!is_null($recipe->prep_time))
-                    <div class="meta-item">
-                        <div class="meta-icon">🔪</div>
-                        <h4>Sagatavošana</h4>
-                        <p>
-                            <span id="prepTime" data-original="{{ $origPrep }}">{{ $origPrep }}</span> minūtes
-                        </p>
-                    </div>
-                @endif
-
-                @if(!is_null($recipe->cook_time))
-                    <div class="meta-item">
-                        <div class="meta-icon">🔥</div>
-                        <h4>Gatavošana</h4>
-                        <p>
-                            <span id="cookTime" data-original="{{ $origCook }}">{{ $origCook }}</span> minūtes
-                        </p>
-                    </div>
-                @endif
-
-                <div class="meta-item">
-                    <div class="meta-icon">⏱️</div>
-                    <h4>Kopā laiks</h4>
+                    <div class="meta-icon">🔥</div>
+                    <h4>Gatavošana</h4>
                     <p>
-                        <span id="totalTime" data-original="{{ $origTotal }}">{{ $origTotal }}</span> minūtes
+                        <span id="cookTime" data-original="{{ $origCook }}">{{ $origCook }}</span> minūtes
                     </p>
                 </div>
+            @endif
 
-                <div class="meta-item">
-                    <div class="meta-icon">👥</div>
-                    <h4>Porcijas</h4>
-                    <p>
-                        <span id="servingsDisplay" data-original="{{ $origServings }}">{{ $origServings }}</span> porcijas
-                    </p>
-                </div>
+            <div class="meta-item">
+                <div class="meta-icon">⏱️</div>
+                <h4>Kopā laiks</h4>
+                <p>
+                    <span id="totalTime" data-original="{{ $origTotal }}">{{ $origTotal }}</span> minūtes
+                </p>
+            </div>
+
+            <div class="meta-item">
+                <div class="meta-icon">👥</div>
+                <h4>Porcijas</h4>
+                <p>
+                    <span id="servingsDisplay" data-original="{{ $origServings }}">{{ $origServings }}</span> porcijas
+                </p>
             </div>
         </div>
+    </div>
 
-        <div class="section-block content-card">
-            <h3 class="section-title">🥕 Sastāvdaļas</h3>
+    <div class="section-block content-card">
+        <h3 class="section-title">🥕 Sastāvdaļas</h3>
 
-            <div class="content-inner">
-                @if($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
-                    <ul class="ingredient-list">
-                        @foreach($ingredientsRel as $ing)
+        <div class="content-inner">
+            @if($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
+                <ul class="ingredient-list">
+                    @foreach($ingredientsRel as $ing)
+                        <li>
+                            <div class="ingredient-row">
+                                <span class="ingredient-check">✓</span>
+
+                                @php
+                                    $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? (isset($ing->pivot) ? ($ing->pivot->quantity ?? null) : null);
+                                @endphp
+
+                                @if(!is_null($q))
+                                    <span class="ingredientQty" data-original="{{ (float)$q }}">
+                                        {{ rtrim(rtrim(number_format((float)$q, 2, '.', ''), '0'), '.') }}
+                                    </span>
+                                @else
+                                    <span class="ingredientQty" data-original=""></span>
+                                @endif
+
+                                @if($ing->unit)
+                                    <span class="ingredient-unit">{{ $ing->unit }}</span>
+                                @endif
+
+                                <span class="ingredient-name">{{ $ing->name }}</span>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                @php
+                    $ingredients = explode("\n", (string)$recipe->ingredients);
+                @endphp
+
+                <div class="old-format-note">
+                    Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana var nebūt precīza.
+                </div>
+
+                <ul class="ingredient-list">
+                    @foreach($ingredients as $ingredient)
+                        @if(trim($ingredient))
                             <li>
                                 <div class="ingredient-row">
                                     <span class="ingredient-check">✓</span>
-
-                                    @php
-                                        $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? (isset($ing->pivot) ? ($ing->pivot->quantity ?? null) : null);
-                                    @endphp
-
-                                    @if(!is_null($q))
-                                        <span class="ingredientQty" data-original="{{ (float)$q }}">
-                                            {{ rtrim(rtrim(number_format((float)$q, 2, '.', ''), '0'), '.') }}
-                                        </span>
-                                    @else
-                                        <span class="ingredientQty" data-original=""></span>
-                                    @endif
-
-                                    @if($ing->unit)
-                                        <span class="ingredient-unit">{{ $ing->unit }}</span>
-                                    @endif
-
-                                    <span class="ingredient-name">{{ $ing->name }}</span>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    @php
-                        $ingredients = explode("\n", (string)$recipe->ingredients);
-                    @endphp
-
-                    <div class="old-format-note">
-                        Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana var nebūt precīza.
-                    </div>
-
-                    <ul class="ingredient-list">
-                        @foreach($ingredients as $ingredient)
-                            @if(trim($ingredient))
-                                <li>
-                                    <div class="ingredient-row">
-                                        <span class="ingredient-check">✓</span>
-                                        <span class="ingredient-name">{{ trim($ingredient) }}</span>
-                                    </div>
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        </div>
-
-        <div class="section-block content-card">
-            <h3 class="section-title">👩‍🍳 Gatavošanas instrukcijas</h3>
-
-            <div class="content-inner">
-                @php
-                    $instructions = explode("\n", (string)$recipe->instructions);
-                    $stepNumber = 1;
-                @endphp
-
-                <ol class="instruction-list">
-                    @foreach($instructions as $instruction)
-                        @if(trim($instruction))
-                            <li>
-                                <div class="instruction-row">
-                                    <span class="step-badge">{{ $stepNumber++ }}</span>
-                                    <span class="instruction-text">{{ trim($instruction) }}</span>
+                                    <span class="ingredient-name">{{ trim($ingredient) }}</span>
                                 </div>
                             </li>
                         @endif
                     @endforeach
-                </ol>
-            </div>
-        </div>
-
-        <div class="section-block author-card">
-            <h3 class="section-title">👨‍🍳 Par šo recepti</h3>
-
-            <div class="author-grid">
-                <div class="author-box">
-                    <h4>Receptes autors</h4>
-                    <p>{{ $recipe->user->name }}</p>
-                </div>
-
-                <div class="author-box">
-                    <h4>Publicēts</h4>
-                    <p>{{ $recipe->created_at->format('d.m.Y') }}</p>
-                </div>
-
-                <div class="author-box">
-                    <h4>Pēdējās izmaiņas</h4>
-                    <p>{{ $recipe->updated_at->diffForHumans() }}</p>
-                </div>
-
-                <div class="author-box">
-                    <h4>Skatījumu skaits</h4>
-                    <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
-                </div>
-            </div>
-        </div>
-
-        @php
-            $avg = $recipe->reviews->avg('rating');
-            $avgRounded = $avg ? round($avg, 1) : null;
-            $count = $recipe->reviews->count();
-        @endphp
-
-        <div class="section-block review-card-box">
-            <h3 class="section-title">⭐ Atsauksmes</h3>
-
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
+                </ul>
             @endif
+        </div>
+    </div>
 
-            <div class="review-summary">
-                <span class="review-badge">
-                    Vidējais: {{ $avgRounded ?? 'Nav' }}@if($avgRounded) / 5 @endif ({{ $count }})
-                </span>
+    <div class="section-block content-card">
+        <h3 class="section-title">👩‍🍳 Gatavošanas instrukcijas</h3>
+
+        <div class="content-inner">
+            @php
+                $instructions = explode("\n", (string)$recipe->instructions);
+                $stepNumber = 1;
+            @endphp
+
+            <ol class="instruction-list">
+                @foreach($instructions as $instruction)
+                    @if(trim($instruction))
+                        <li>
+                            <div class="instruction-row">
+                                <span class="step-badge">{{ $stepNumber++ }}</span>
+                                <span class="instruction-text">{{ trim($instruction) }}</span>
+                            </div>
+                        </li>
+                    @endif
+                @endforeach
+            </ol>
+        </div>
+    </div>
+
+    <div class="section-block author-card">
+        <h3 class="section-title">👨‍🍳 Par šo recepti</h3>
+
+        <div class="author-grid">
+            <div class="author-box">
+                <h4>Receptes autors</h4>
+                <p>{{ $recipe->user->name }}</p>
             </div>
 
-            @auth
-                <div class="review-card" style="margin-bottom: 18px;">
-                    @if(!$myReview)
-                        <div style="font-weight:800; margin-bottom:12px;">Tava atsauksme</div>
+            <div class="author-box">
+                <h4>Publicēts</h4>
+                <p>{{ $recipe->created_at->format('d.m.Y') }}</p>
+            </div>
 
-                        <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
-                            @csrf
+            <div class="author-box">
+                <h4>Pēdējās izmaiņas</h4>
+                <p>{{ $recipe->updated_at->diffForHumans() }}</p>
+            </div>
 
-                            <div style="margin-bottom:10px;">
-                                <div class="stars">
-                                    @for($i=5; $i>=1; $i--)
-                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
-                                        <label for="star{{ $i }}">★</label>
-                                    @endfor
-                                </div>
-                                @error('rating')
-                                    <div class="error-text">{{ $message }}</div>
-                                @enderror
-                            </div>
+            <div class="author-box">
+                <h4>Skatījumu skaits</h4>
+                <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
+            </div>
+        </div>
+    </div>
 
-                            <textarea
-                                name="comment"
-                                rows="4"
-                                maxlength="2000"
-                                class="review-form-textarea"
-                                placeholder="Uzraksti savu viedokli..."
-                            ></textarea>
-                            @error('comment')
-                                <div class="error-text">{{ $message }}</div>
-                            @enderror
+    @php
+        $avg = $recipe->reviews->avg('rating');
+        $avgRounded = $avg ? round($avg, 1) : null;
+        $count = $recipe->reviews->count();
+    @endphp
 
-                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
-                                Pievienot atsauksmi
-                            </button>
-                        </form>
-                    @else
-                        <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
-                            <div>
-                                <div style="font-weight:800;">Tava atsauksme</div>
-                                <div class="static-stars" style="margin-top:5px; margin-left:0;">
-                                    @for($s=1; $s<=5; $s++)
-                                        {!! $s <= $myReview->rating
-                                            ? '<span class="filled">★</span>'
-                                            : '<span class="empty">★</span>' !!}
-                                    @endfor
-                                </div>
-                            </div>
+    <div class="section-block review-card-box">
+        <h3 class="section-title">⭐ Atsauksmes</h3>
 
-                            <div class="review-actions">
-                                <button
-                                    class="btn btn-warning"
-                                    type="button"
-                                    onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
-                                    Rediģēt manu atsauksmi
-                                </button>
+        @if(session('success'))
+            <div class="flash-success">{{ session('success') }}</div>
+        @endif
 
-                                <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
-                                      onsubmit="return confirm('Dzēst savu atsauksmi?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">
-                                        Dzēst manu atsauksmi
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+        <div class="review-summary">
+            <span class="review-badge">
+                Vidējais: {{ $avgRounded ?? 'Nav' }}@if($avgRounded) / 5 @endif ({{ $count }})
+            </span>
+        </div>
 
-                        @if($myReview->comment)
-                            <div class="review-text" style="margin-top:12px;">{{ $myReview->comment }}</div>
-                        @endif
+        @auth
+            <div class="review-card" style="margin-bottom: 18px;">
+                @if(!$myReview)
+                    <div style="font-weight:800; margin-bottom:12px;">Tava atsauksme</div>
 
-                        <form
-                            id="edit-review-form"
-                            method="POST"
-                            action="{{ route('recipes.reviews.store', $recipe) }}"
-                            style="display:none; margin-top:18px;">
-                            @csrf
+                    <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
+                        @csrf
 
-                            <div class="stars" style="margin-bottom:12px;">
+                        <div style="margin-bottom:10px;">
+                            <div class="stars">
                                 @for($i=5; $i>=1; $i--)
-                                    <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
-                                           @checked((int)$myReview->rating === $i) required>
-                                    <label for="editStar{{ $i }}">★</label>
+                                    <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
+                                    <label for="star{{ $i }}">★</label>
                                 @endfor
                             </div>
+                            @error('rating')
+                                <div class="error-text">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                            <textarea name="comment" rows="4" maxlength="2000" class="review-form-textarea">{{ $myReview->comment }}</textarea>
+                        <textarea
+                            name="comment"
+                            rows="4"
+                            maxlength="2000"
+                            class="review-form-textarea"
+                            placeholder="Uzraksti savu viedokli..."
+                        ></textarea>
+                        @error('comment')
+                            <div class="error-text">{{ $message }}</div>
+                        @enderror
 
-                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
-                                Saglabāt izmaiņas
-                            </button>
-                        </form>
-                    @endif
-                </div>
-            @endauth
-
-            @forelse($recipe->reviews as $review)
-                <div class="review-card">
-                    <div class="review-top">
-                        <div class="review-user">
-                            {{ $review->user->name }}
-                            <span class="static-stars">
+                        <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                            Pievienot atsauksmi
+                        </button>
+                    </form>
+                @else
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
+                        <div>
+                            <div style="font-weight:800;">Tava atsauksme</div>
+                            <div class="static-stars" style="margin-top:5px; margin-left:0;">
                                 @for($s=1; $s<=5; $s++)
-                                    {!! $s <= $review->rating
+                                    {!! $s <= $myReview->rating
                                         ? '<span class="filled">★</span>'
                                         : '<span class="empty">★</span>' !!}
                                 @endfor
-                            </span>
+                            </div>
                         </div>
-                        <div class="review-date">{{ $review->created_at->format('d.m.Y H:i') }}</div>
+
+                        <div class="review-actions">
+                            <button
+                                class="btn btn-warning"
+                                type="button"
+                                onclick="document.getElementById('edit-review-form').style.display='block'; this.style.display='none';">
+                                Rediģēt manu atsauksmi
+                            </button>
+
+                            <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
+                                  onsubmit="return confirm('Dzēst savu atsauksmi?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    Dzēst manu atsauksmi
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
-                    @if($review->comment)
-                        <div class="review-text">{{ $review->comment }}</div>
+                    @if($myReview->comment)
+                        <div class="review-text" style="margin-top:12px;">{{ $myReview->comment }}</div>
                     @endif
-                </div>
-            @empty
-                <div class="review-card empty-review">
-                    Šai receptei vēl nav atsauksmju.
-                </div>
-            @endforelse
-        </div>
 
-        <div class="section-block">
-            <div class="page-actions">
-                @if(Auth::id() === $recipe->user_id)
-                    <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning">
-                        Rediģēt recepti
-                    </a>
-
-                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
-                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
+                    <form
+                        id="edit-review-form"
+                        method="POST"
+                        action="{{ route('recipes.reviews.store', $recipe) }}"
+                        style="display:none; margin-top:18px;">
                         @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            Dzēst recepti
+
+                        <div class="stars" style="margin-bottom:12px;">
+                            @for($i=5; $i>=1; $i--)
+                                <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
+                                       @checked((int)$myReview->rating === $i) required>
+                                <label for="editStar{{ $i }}">★</label>
+                            @endfor
+                        </div>
+
+                        <textarea name="comment" rows="4" maxlength="2000" class="review-form-textarea">{{ $myReview->comment }}</textarea>
+
+                        <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                            Saglabāt izmaiņas
                         </button>
                     </form>
                 @endif
+            </div>
+        @endauth
 
-                <a href="/recipes" class="btn btn-primary">
-                    Pārlūkot citas receptes
+        @forelse($recipe->reviews as $review)
+            <div class="review-card">
+                <div class="review-top">
+                    <div class="review-user">
+                        {{ $review->user->name }}
+                        <span class="static-stars">
+                            @for($s=1; $s<=5; $s++)
+                                {!! $s <= $review->rating
+                                    ? '<span class="filled">★</span>'
+                                    : '<span class="empty">★</span>' !!}
+                            @endfor
+                        </span>
+                    </div>
+                    <div class="review-date">{{ $review->created_at->format('d.m.Y H:i') }}</div>
+                </div>
+
+                @if($review->comment)
+                    <div class="review-text">{{ $review->comment }}</div>
+                @endif
+            </div>
+        @empty
+            <div class="review-card empty-review">
+                Šai receptei vēl nav atsauksmju.
+            </div>
+        @endforelse
+    </div>
+
+    <div class="section-block">
+        <div class="page-actions">
+            @if(Auth::id() === $recipe->user_id)
+                <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-warning">
+                    Rediģēt recepti
                 </a>
 
-                <a href="{{ route('recipes.create') }}" class="btn btn-success">
-                    Izveidot jaunu recepti
-                </a>
+                <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
+                      onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        Dzēst recepti
+                    </button>
+                </form>
+            @endif
+
+            <a href="/recipes" class="btn btn-primary">
+                Pārlūkot citas receptes
+            </a>
+
+            <a href="{{ route('recipes.create') }}" class="btn btn-success">
+                Izveidot jaunu recepti
+            </a>
+        </div>
+    </div>
+
+    @if(isset($relatedRecipes) && $relatedRecipes->count() > 0)
+        <div class="section-block related-card">
+            <h3 class="section-title">🔍 Līdzīgas receptes</h3>
+
+            <div class="related-grid">
+                @foreach($relatedRecipes as $relatedRecipe)
+                    <div class="related-item">
+                        <h4>{{ $relatedRecipe->title }}</h4>
+                        <p>{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
+
+                        <div class="related-meta">
+                            <span>{{ $relatedRecipe->category }}</span>
+                            <span>{{ $relatedRecipe->user->name }}</span>
+                            <span>👁️ {{ number_format((int)($relatedRecipe->views ?? 0), 0, ',', ' ') }}</span>
+                        </div>
+
+                        <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%;">
+                            Skatīt recepti
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
+    @endif
 
-        @if(isset($relatedRecipes) && $relatedRecipes->count() > 0)
-            <div class="section-block related-card">
-                <h3 class="section-title">🔍 Līdzīgas receptes</h3>
-
-                <div class="related-grid">
-                    @foreach($relatedRecipes as $relatedRecipe)
-                        <div class="related-item">
-                            <h4>{{ $relatedRecipe->title }}</h4>
-                            <p>{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
-
-                            <div class="related-meta">
-                                <span>{{ $relatedRecipe->category }}</span>
-                                <span>{{ $relatedRecipe->user->name }}</span>
-                                <span>👁️ {{ number_format((int)($relatedRecipe->views ?? 0), 0, ',', ' ') }}</span>
-                            </div>
-
-                            <a href="{{ route('recipes.show', $relatedRecipe) }}" class="btn btn-primary" style="width: 100%;">
-                                Skatīt recepti
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
-    </div>
 </div>
 
 <script>
@@ -1433,5 +1141,4 @@
     recalc();
 })();
 </script>
-</body>
-</html>
+@endsection
