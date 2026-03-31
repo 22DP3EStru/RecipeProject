@@ -214,7 +214,8 @@
         }
     }
 </style>
-<link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 <div class="home-page">
     <section class="home-hero">
         <div class="home-hero-left">

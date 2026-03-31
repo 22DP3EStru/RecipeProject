@@ -138,7 +138,7 @@
             }
         }
     </style>
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=2">
 </head>
 <body class="admin-layout">
 

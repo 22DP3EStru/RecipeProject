@@ -287,7 +287,8 @@
         }
     }
 </style>
-
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
 <div class="admin-page">
     <div class="hero">
         <h1 class="hero-title">Administrācijas panelis</h1>

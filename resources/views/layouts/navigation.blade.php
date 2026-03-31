@@ -178,7 +178,8 @@
             }
         }
     </style>
-<link rel="icon" href="{{ asset('favicon.ico') }}">
+        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
     <div class="site-nav-inner">
         <div class="site-nav-row">
             <div class="site-nav-left">

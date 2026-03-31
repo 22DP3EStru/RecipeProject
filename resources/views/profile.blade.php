@@ -188,7 +188,8 @@
             }
         }
     </style>
-
+        <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
     <div class="profile-page-wrap">
         <div class="profile-page">
             <div class="hero">
