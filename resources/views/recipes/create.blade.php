@@ -142,6 +142,21 @@
         line-height: 1.7;
     }
 
+    .field-error {
+        margin-top: 7px;
+        color: var(--danger-text);
+        font-size: 13px;
+        line-height: 1.5;
+        font-weight: 600;
+    }
+
+    .form-input.is-invalid,
+    .form-textarea.is-invalid,
+    .form-select.is-invalid {
+        border-color: var(--danger-border);
+        background: #fff7f6;
+    }
+
     .note-pill {
         display: inline-block;
         padding: 6px 10px;
@@ -161,6 +176,12 @@
         margin-bottom: 10px;
     }
 
+    .ing-row.has-error {
+        padding: 10px;
+        border: 1px solid var(--danger-border);
+        background: #fff8f7;
+    }
+
     .ing-qty {
         width: 130px;
     }
@@ -172,6 +193,15 @@
     .ing-name {
         flex: 1;
         min-width: 220px;
+    }
+
+    .ing-errors {
+        margin-top: -2px;
+        margin-bottom: 10px;
+    }
+
+    .ing-errors .field-error {
+        margin-top: 4px;
     }
 
     .actions-row {
@@ -270,7 +300,7 @@
 
     @if($errors->any())
         <div class="section-block alert">
-            <h4>Izlabojiet šādas kļūdas:</h4>
+            <h4>Lūdzu, izlabojiet šādas kļūdas:</h4>
             <ul>
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -279,7 +309,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
 
         <div class="section-block form-section">
@@ -292,10 +322,13 @@
                     id="title"
                     name="title"
                     value="{{ old('title') }}"
-                    class="form-input"
+                    class="form-input @error('title') is-invalid @enderror"
                     placeholder="Piemēram: Mājas biezpiens ar ievārījumu"
                     required
                 >
+                @error('title')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">
@@ -303,16 +336,19 @@
                 <textarea
                     id="description"
                     name="description"
-                    class="form-textarea"
+                    class="form-textarea @error('description') is-invalid @enderror"
                     placeholder="Īss apraksts par recepti - kas padara to īpašu?"
                     required
                 >{{ old('description') }}</textarea>
+                @error('description')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="category">Kategorija</label>
-                    <select id="category" name="category" class="form-select" required>
+                    <select id="category" name="category" class="form-select @error('category') is-invalid @enderror" required>
                         <option value="">Izvēlieties kategoriju</option>
                         <option value="Brokastis" {{ old('category') == 'Brokastis' ? 'selected' : '' }}>Brokastis</option>
                         <option value="Pusdienas" {{ old('category') == 'Pusdienas' ? 'selected' : '' }}>Pusdienas</option>
@@ -327,16 +363,22 @@
                         <option value="Bezglutēna" {{ old('category') == 'Bezglutēna' ? 'selected' : '' }}>Bezglutēna</option>
                         <option value="Ātras receptes" {{ old('category') == 'Ātras receptes' ? 'selected' : '' }}>Ātras receptes</option>
                     </select>
+                    @error('category')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="difficulty">Grūtības līmenis</label>
-                    <select id="difficulty" name="difficulty" class="form-select" required>
+                    <select id="difficulty" name="difficulty" class="form-select @error('difficulty') is-invalid @enderror" required>
                         <option value="">Izvēlieties grūtību</option>
                         <option value="Viegla" {{ old('difficulty') == 'Viegla' ? 'selected' : '' }}>Viegla</option>
                         <option value="Vidēja" {{ old('difficulty') == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
                         <option value="Grūta" {{ old('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
                     </select>
+                    @error('difficulty')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
         </div>
@@ -352,10 +394,13 @@
                         id="prep_time"
                         name="prep_time"
                         value="{{ old('prep_time') }}"
-                        class="form-input"
+                        class="form-input @error('prep_time') is-invalid @enderror"
                         placeholder="15"
                         min="0"
                     >
+                    @error('prep_time')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
@@ -365,10 +410,13 @@
                         id="cook_time"
                         name="cook_time"
                         value="{{ old('cook_time') }}"
-                        class="form-input"
+                        class="form-input @error('cook_time') is-invalid @enderror"
                         placeholder="30"
                         min="0"
                     >
+                    @error('cook_time')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
@@ -379,10 +427,13 @@
                     id="servings"
                     name="servings"
                     value="{{ old('servings') }}"
-                    class="form-input"
+                    class="form-input @error('servings') is-invalid @enderror"
                     placeholder="4"
                     min="1"
                 >
+                @error('servings')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group" style="margin-top:10px;">
@@ -421,29 +472,65 @@
                             if($rows < 1) $rows = 1;
                         @endphp
 
-                        @for($i=0; $i<$rows; $i++)
-                            <div class="ing-row">
-                                <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                       value="{{ $qtys[$i] ?? '' }}" placeholder="Daudzums">
-                                <input class="form-input ing-unit" name="ingredient_unit[]" type="text"
-                                       value="{{ $units[$i] ?? '' }}" placeholder="Mērv. (g, ml, gab)">
-                                <input class="form-input ing-name" name="ingredient_name[]" type="text" required
-                                       value="{{ $names[$i] ?? '' }}" placeholder="Sastāvdaļa">
-                                <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+                        @for($i = 0; $i < $rows; $i++)
+                            <div class="ingredient-item">
+                                <div class="ing-row {{ $errors->has('ingredient_name.' . $i) || $errors->has('ingredient_qty.' . $i) || $errors->has('ingredient_unit.' . $i) ? 'has-error' : '' }}">
+                                    <input class="form-input ing-qty @error('ingredient_qty.' . $i) is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
+                                           value="{{ $qtys[$i] ?? '' }}" placeholder="Daudzums">
+                                    <input class="form-input ing-unit @error('ingredient_unit.' . $i) is-invalid @enderror" name="ingredient_unit[]" type="text"
+                                           value="{{ $units[$i] ?? '' }}" placeholder="Mērv. (g, ml, gab)">
+                                    <input class="form-input ing-name @error('ingredient_name.' . $i) is-invalid @enderror" name="ingredient_name[]" type="text" required
+                                           value="{{ $names[$i] ?? '' }}" placeholder="Sastāvdaļa">
+                                    <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+                                </div>
+
+                                <div class="ing-errors">
+                                    @error('ingredient_qty.' . $i)
+                                        <div class="field-error">{{ $message }}</div>
+                                    @enderror
+
+                                    @error('ingredient_unit.' . $i)
+                                        <div class="field-error">{{ $message }}</div>
+                                    @enderror
+
+                                    @error('ingredient_name.' . $i)
+                                        <div class="field-error">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         @endfor
                     @else
-                        <div class="ing-row">
-                            <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                   value="" placeholder="Daudzums">
-                            <input class="form-input ing-unit" name="ingredient_unit[]" type="text"
-                                   value="" placeholder="Mērv. (g, ml, gab)">
-                            <input class="form-input ing-name" name="ingredient_name[]" type="text" required
-                                   value="" placeholder="Sastāvdaļa">
-                            <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+                        <div class="ingredient-item">
+                            <div class="ing-row {{ $errors->has('ingredient_name.0') || $errors->has('ingredient_qty.0') || $errors->has('ingredient_unit.0') ? 'has-error' : '' }}">
+                                <input class="form-input ing-qty @error('ingredient_qty.0') is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
+                                       value="" placeholder="Daudzums">
+                                <input class="form-input ing-unit @error('ingredient_unit.0') is-invalid @enderror" name="ingredient_unit[]" type="text"
+                                       value="" placeholder="Mērv. (g, ml, gab)">
+                                <input class="form-input ing-name @error('ingredient_name.0') is-invalid @enderror" name="ingredient_name[]" type="text" required
+                                       value="" placeholder="Sastāvdaļa">
+                                <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+                            </div>
+
+                            <div class="ing-errors">
+                                @error('ingredient_qty.0')
+                                    <div class="field-error">{{ $message }}</div>
+                                @enderror
+
+                                @error('ingredient_unit.0')
+                                    <div class="field-error">{{ $message }}</div>
+                                @enderror
+
+                                @error('ingredient_name.0')
+                                    <div class="field-error">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     @endif
                 </div>
+
+                @error('ingredient_name')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
 
                 <button type="button" class="btn btn-success" onclick="addIngRow()" style="margin-top: 10px;">
                     Pievienot sastāvdaļu
@@ -453,8 +540,6 @@
                     Ja nav jēgas daudzumu norādīt, piemēram “pēc garšas”, atstāj daudzumu tukšu.
                 </small>
             </div>
-
-            <textarea name="ingredients" style="display:none;">{{ old('ingredients') }}</textarea>
         </div>
 
         <div class="section-block form-section">
@@ -465,7 +550,7 @@
                 <textarea
                     id="instructions"
                     name="instructions"
-                    class="form-textarea"
+                    class="form-textarea @error('instructions') is-invalid @enderror"
                     style="min-height: 300px;"
                     placeholder="Aprakstiet gatavošanas procesu soli pa solim..."
                     required
@@ -473,6 +558,9 @@
                 <small class="help-text">
                     Būt skaidram un precīzam. Iekļaujiet temperatūras, laikus un īpašus paņēmienus.
                 </small>
+                @error('instructions')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
@@ -481,14 +569,20 @@
 
             <div class="form-group">
                 <label class="form-label" for="image">Receptes attēls (nav obligāts)</label>
-                <input id="image" type="file" name="image" accept="image/*" class="form-input">
+                <input id="image" type="file" name="image" accept="image/*" class="form-input @error('image') is-invalid @enderror">
                 <small class="help-text">Atļauts: JPG, PNG, WEBP, GIF. Max ~4MB.</small>
+                @error('image')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="video">Video fails (nav obligāts)</label>
-                <input id="video" type="file" name="video" accept="video/*" class="form-input">
+                <input id="video" type="file" name="video" accept="video/*" class="form-input @error('video') is-invalid @enderror">
                 <small class="help-text">Atļauts: mp4, webm, mov.</small>
+                @error('video')
+                    <div class="field-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <span class="note-pill">Vari pievienot tikai attēlu, tikai video, vai abus.</span>
@@ -560,22 +654,27 @@ document.addEventListener('DOMContentLoaded', updateTotalTime);
 
 function addIngRow() {
     const wrap = document.getElementById('ingredientsWrap');
-    const row = document.createElement('div');
-    row.className = 'ing-row';
-    row.innerHTML = `
-        <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0" value="" placeholder="Daudzums">
-        <input class="form-input ing-unit" name="ingredient_unit[]" type="text" value="" placeholder="Mērv. (g, ml, gab)">
-        <input class="form-input ing-name" name="ingredient_name[]" type="text" required value="" placeholder="Sastāvdaļa">
-        <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+    const rowIndex = wrap.querySelectorAll('.ingredient-item').length;
+
+    const item = document.createElement('div');
+    item.className = 'ingredient-item';
+    item.innerHTML = `
+        <div class="ing-row">
+            <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0" value="" placeholder="Daudzums">
+            <input class="form-input ing-unit" name="ingredient_unit[]" type="text" value="" placeholder="Mērv. (g, ml, gab)">
+            <input class="form-input ing-name" name="ingredient_name[]" type="text" required value="" placeholder="Sastāvdaļa">
+            <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+        </div>
+        <div class="ing-errors" data-index="${rowIndex}"></div>
     `;
-    wrap.appendChild(row);
+    wrap.appendChild(item);
 }
 
 function removeIngRow(btn) {
     const wrap = document.getElementById('ingredientsWrap');
-    const rows = wrap.querySelectorAll('.ing-row');
+    const rows = wrap.querySelectorAll('.ingredient-item');
     if (rows.length <= 1) return;
-    const row = btn.closest('.ing-row');
+    const row = btn.closest('.ingredient-item');
     if (row) row.remove();
 }
 </script>

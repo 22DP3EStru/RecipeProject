@@ -17,6 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'is_admin',
+        'profile_photo',
     ];
 
     protected $hidden = [
@@ -40,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function favoriteRecipes()
     {
-        return $this->belongsToMany(\App\Models\Recipe::class, 'favorites')->withTimestamps();
+        return $this->belongsToMany(Recipe::class, 'favorites')->withTimestamps();
     }
 
     public function sendEmailVerificationNotification(): void

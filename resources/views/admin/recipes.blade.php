@@ -227,11 +227,70 @@
         }
 
         .pagination-wrap {
-            display: flex;
-            justify-content: center;
             margin-top: 36px;
             padding-top: 24px;
             border-top: 1px solid var(--line);
+            text-align: center;
+        }
+
+        .pagination-summary {
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .pagination-wrap nav {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination-wrap nav > div:first-child {
+            display: none;
+        }
+
+        .pagination-wrap svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .pagination-wrap .relative.z-0.inline-flex.shadow-sm.rounded-md,
+        .pagination-wrap .inline-flex.-space-x-px.rounded-md.shadow-sm {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: none !important;
+        }
+
+        .pagination-wrap .relative.inline-flex.items-center,
+        .pagination-wrap .inline-flex.items-center {
+            padding: 10px 14px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-weight: 700;
+            transition: 0.2s ease;
+            min-width: 44px;
+            justify-content: center;
+        }
+
+        .pagination-wrap a.relative.inline-flex.items-center:hover,
+        .pagination-wrap a.inline-flex.items-center:hover {
+            background: var(--soft-bg);
+            color: var(--accent);
+        }
+
+        .pagination-wrap span[aria-current="page"] > span,
+        .pagination-wrap .text-white {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fffaf4 !important;
+        }
+
+        .pagination-wrap .text-gray-500,
+        .pagination-wrap .text-gray-400 {
+            color: var(--muted) !important;
         }
 
         .empty-state {
@@ -322,26 +381,21 @@
                     <span style="font-weight: 700; color: var(--text);">Recepšu pārvaldība</span>
                 </div>
 
-                @php
-                    $categories = \App\Models\Recipe::distinct('category')->pluck('category')->filter();
-                    $difficulties = \App\Models\Recipe::distinct('difficulty')->pluck('difficulty')->filter();
-                @endphp
-
                 <div class="stats-row">
                     <div class="stat-box">
-                        <div class="stat-number">{{ $recipes->total() }}</div>
+                        <div class="stat-number">{{ $recipesCount }}</div>
                         <div class="stat-label">Kopā recepšu</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ $categories->count() }}</div>
+                        <div class="stat-number">{{ $categoriesCount }}</div>
                         <div class="stat-label">Kategorijas</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ $recipes->where('created_at', '>=', now()->subDays(7))->count() }}</div>
+                        <div class="stat-number">{{ $newRecipesThisWeekCount }}</div>
                         <div class="stat-label">Jaunas šonedēļ</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ \App\Models\User::has('recipes')->count() }}</div>
+                        <div class="stat-number">{{ $activeAuthorsCount }}</div>
                         <div class="stat-label">Aktīvi autori</div>
                     </div>
                 </div>
@@ -353,7 +407,7 @@
                                 <div class="recipe-header">
                                     <h3 class="recipe-title">{{ $recipe->title }}</h3>
                                     <p class="recipe-description">
-                                        {{ Str::limit($recipe->description, 100) }}
+                                        {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
                                     </p>
                                 </div>
 
@@ -361,7 +415,7 @@
                                     <div class="meta-table">
                                         <div class="meta-row">
                                             <div class="meta-label">Autors</div>
-                                            <div class="meta-value">{{ $recipe->user->name }}</div>
+                                            <div class="meta-value">{{ $recipe->user->name ?? 'Nav norādīts' }}</div>
                                         </div>
                                         <div class="meta-row">
                                             <div class="meta-label">Kategorija</div>
@@ -382,8 +436,8 @@
                                     </div>
 
                                     <div class="recipe-stats">
-                                        <span>{{ $recipe->prep_time ?? 'N/A' }} min</span>
-                                        <span>{{ $recipe->servings ?? 'N/A' }} porcijas</span>
+                                        <span>Sagatavošana: {{ $recipe->prep_time ?? 'N/A' }} min</span>
+                                        <span>Porcijas: {{ $recipe->servings ?? 'N/A' }}</span>
                                         <span>{{ $recipe->created_at->diffForHumans() }}</span>
                                     </div>
 
@@ -409,7 +463,7 @@
                                             </button>
                                         </form>
 
-                                        <a href="/recipes?user={{ $recipe->user->id }}" class="btn btn-secondary">
+                                        <a href="{{ route('recipes.index', ['user' => $recipe->user->id]) }}" class="btn btn-secondary">
                                             Autora receptes
                                         </a>
                                     </div>
@@ -418,9 +472,15 @@
                         @endforeach
                     </div>
 
-                    <div class="pagination-wrap">
-                        {{ $recipes->links() }}
-                    </div>
+                    @if($recipes->hasPages())
+                        <div class="pagination-wrap">
+                            <div class="pagination-summary">
+                                Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
+                            </div>
+
+                            {{ $recipes->links() }}
+                        </div>
+                    @endif
                 @else
                     <div class="empty-state">
                         <div class="icon">🍽️</div>
@@ -434,8 +494,8 @@
                     <div class="quick-actions-row">
                         <a href="{{ route('admin.index') }}" class="btn btn-primary">Admin panelis</a>
                         <a href="{{ route('admin.users') }}" class="btn btn-success">Pārvaldīt lietotājus</a>
-                        <a href="/recipes" class="btn btn-secondary">Skatīt visas receptes</a>
-                        <a href="/dashboard" class="btn btn-secondary">Vadības panelis</a>
+                        <a href="{{ route('recipes.index') }}" class="btn btn-secondary">Skatīt visas receptes</a>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Vadības panelis</a>
                     </div>
                 </div>
             </div>

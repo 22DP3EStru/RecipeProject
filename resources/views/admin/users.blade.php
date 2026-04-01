@@ -250,11 +250,70 @@
         }
 
         .pagination-wrap {
-            display: flex;
-            justify-content: center;
             margin-top: 36px;
             padding-top: 24px;
             border-top: 1px solid var(--line);
+            text-align: center;
+        }
+
+        .pagination-summary {
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .pagination-wrap nav {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination-wrap nav > div:first-child {
+            display: none;
+        }
+
+        .pagination-wrap svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .pagination-wrap .relative.z-0.inline-flex.shadow-sm.rounded-md,
+        .pagination-wrap .inline-flex.-space-x-px.rounded-md.shadow-sm {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: none !important;
+        }
+
+        .pagination-wrap .relative.inline-flex.items-center,
+        .pagination-wrap .inline-flex.items-center {
+            padding: 10px 14px;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-weight: 700;
+            transition: 0.2s ease;
+            min-width: 44px;
+            justify-content: center;
+        }
+
+        .pagination-wrap a.relative.inline-flex.items-center:hover,
+        .pagination-wrap a.inline-flex.items-center:hover {
+            background: var(--soft-bg);
+            color: var(--accent);
+        }
+
+        .pagination-wrap span[aria-current="page"] > span,
+        .pagination-wrap .text-white {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fffaf4 !important;
+        }
+
+        .pagination-wrap .text-gray-500,
+        .pagination-wrap .text-gray-400 {
+            color: var(--muted) !important;
         }
 
         .empty-state {
@@ -352,19 +411,19 @@
 
                 <div class="stats-row">
                     <div class="stat-box">
-                        <div class="stat-number">{{ $users->total() }}</div>
+                        <div class="stat-number">{{ $usersCount }}</div>
                         <div class="stat-label">Kopā lietotāju</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ $users->where('is_admin', true)->count() }}</div>
+                        <div class="stat-number">{{ $adminsCount }}</div>
                         <div class="stat-label">Administratori</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ $users->where('is_admin', false)->count() }}</div>
+                        <div class="stat-number">{{ $regularUsersCount }}</div>
                         <div class="stat-label">Parastie lietotāji</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</div>
+                        <div class="stat-number">{{ $newUsersThisWeekCount }}</div>
                         <div class="stat-label">Jauni šonedēļ</div>
                     </div>
                 </div>
@@ -447,9 +506,15 @@
                         @endforeach
                     </div>
 
-                    <div class="pagination-wrap">
-                        {{ $users->links() }}
-                    </div>
+                    @if($users->hasPages())
+                        <div class="pagination-wrap">
+                            <div class="pagination-summary">
+                                Rāda {{ $users->firstItem() }}–{{ $users->lastItem() }} no {{ $users->total() }} lietotājiem
+                            </div>
+
+                            {{ $users->links() }}
+                        </div>
+                    @endif
                 @else
                     <div class="empty-state">
                         <div class="icon">👥</div>
@@ -467,7 +532,7 @@
                         <a href="{{ route('admin.recipes') }}" class="btn btn-success">
                             Pārvaldīt receptes
                         </a>
-                        <a href="/dashboard" class="btn btn-secondary">
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">
                             Vadības panelis
                         </a>
                     </div>

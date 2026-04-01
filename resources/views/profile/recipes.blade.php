@@ -165,8 +165,67 @@
         margin-top: 36px;
         padding-top: 24px;
         border-top: 1px solid var(--line);
+        text-align: center;
+    }
+
+    .pagination-summary {
+        margin-bottom: 18px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .pagination-wrap nav {
         display: flex;
         justify-content: center;
+    }
+
+    .pagination-wrap nav > div:first-child {
+        display: none;
+    }
+
+    .pagination-wrap svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .pagination-wrap .relative.z-0.inline-flex.shadow-sm.rounded-md,
+    .pagination-wrap .inline-flex.-space-x-px.rounded-md.shadow-sm {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: none !important;
+    }
+
+    .pagination-wrap .relative.inline-flex.items-center,
+    .pagination-wrap .inline-flex.items-center {
+        padding: 10px 14px;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+        font-weight: 700;
+        transition: 0.2s ease;
+        min-width: 44px;
+        justify-content: center;
+    }
+
+    .pagination-wrap a.relative.inline-flex.items-center:hover,
+    .pagination-wrap a.inline-flex.items-center:hover {
+        background: var(--soft-bg);
+        color: var(--accent);
+    }
+
+    .pagination-wrap span[aria-current="page"] > span,
+    .pagination-wrap .text-white {
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+        color: #fffaf4 !important;
+    }
+
+    .pagination-wrap .text-gray-500,
+    .pagination-wrap .text-gray-400 {
+        color: var(--muted) !important;
     }
 
     .empty-state {
@@ -276,7 +335,7 @@
 
         <div class="section-block stats-grid">
             <div class="stat-card">
-                <div class="stat-number">{{ method_exists($recipes, 'total') ? $recipes->total() : $recipes->count() }}</div>
+                <div class="stat-number">{{ $recipes->total() }}</div>
                 <div class="stat-label">Kopā receptes</div>
             </div>
 
@@ -284,14 +343,14 @@
                 <div class="stat-number">
                     {{ $recipes->filter(function($recipe) { return $recipe->created_at && $recipe->created_at >= now()->subDays(30); })->count() }}
                 </div>
-                <div class="stat-label">Šajā mēnesī</div>
+                <div class="stat-label">Šajā lapā pēdējās 30 dienās</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-number">
-                    {{ $recipes->filter(function($recipe) { return !empty($recipe->category_id) || !empty($recipe->category); })->unique('category_id')->count() }}
+                    {{ $recipes->filter(function($recipe) { return !empty($recipe->category_id) || !empty($recipe->category); })->pluck('category')->filter()->unique()->count() }}
                 </div>
-                <div class="stat-label">Kategorijas</div>
+                <div class="stat-label">Kategorijas šajā lapā</div>
             </div>
         </div>
 
@@ -300,7 +359,7 @@
                 <a href="{{ route('recipes.create') }}" class="btn btn-success">
                     Izveidot jaunu recepti
                 </a>
-                <a href="/recipes" class="btn btn-primary">
+                <a href="{{ route('recipes.index') }}" class="btn btn-primary">
                     Pārlūkot visas receptes
                 </a>
             </div>
@@ -313,7 +372,7 @@
                         <div class="recipe-card">
                             <div class="recipe-top">
                                 <h3 class="recipe-title">{{ $recipe->title }}</h3>
-                                <p class="recipe-desc">{{ Str::limit($recipe->description, 100) }}</p>
+                                <p class="recipe-desc">{{ \Illuminate\Support\Str::limit($recipe->description, 100) }}</p>
                             </div>
 
                             <div class="recipe-body">
@@ -357,9 +416,15 @@
                     @endforeach
                 </div>
 
-                <div class="pagination-wrap">
-                    {{ $recipes->links() }}
-                </div>
+                @if($recipes->hasPages())
+                    <div class="pagination-wrap">
+                        <div class="pagination-summary">
+                            Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
+                        </div>
+
+                        {{ $recipes->links() }}
+                    </div>
+                @endif
             </div>
         @else
             <div class="section-block empty-state">
@@ -374,7 +439,7 @@
             </div>
         @endif
 
-        @if((method_exists($recipes, 'total') ? $recipes->total() : $recipes->count()) < 5)
+        @if($recipes->total() < 5)
             <div class="section-block tips-box">
                 <h3>Padomi recepšu izveidošanai</h3>
                 <div class="tips-grid">

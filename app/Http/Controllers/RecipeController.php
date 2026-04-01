@@ -87,14 +87,89 @@ class RecipeController extends Controller
         }
     }
 
+    private function validationRules(bool $isUpdate = false): array
+    {
+        return [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|min:10',
+            'instructions' => 'required|string|min:10',
+            'prep_time' => 'nullable|integer|min:0',
+            'cook_time' => 'nullable|integer|min:0',
+            'servings' => 'nullable|integer|min:1',
+            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
+            'category' => 'required|string|max:100',
+
+            'ingredient_name' => 'required|array|min:1',
+            'ingredient_name.*' => 'required|string|max:255',
+            'ingredient_qty' => 'nullable|array',
+            'ingredient_qty.*' => 'nullable|numeric|min:0',
+            'ingredient_unit' => 'nullable|array',
+            'ingredient_unit.*' => 'nullable|string|max:30',
+
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
+            'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
+        ];
+    }
+
+    private function validationMessages(): array
+    {
+        return [
+            'title.required' => 'Lūdzu, ievadiet receptes nosaukumu.',
+            'title.max' => 'Receptes nosaukums nedrīkst būt garāks par 255 rakstzīmēm.',
+
+            'description.required' => 'Lūdzu, ievadiet receptes aprakstu.',
+            'description.min' => 'Receptes aprakstam jābūt vismaz 10 rakstzīmes garam.',
+
+            'instructions.required' => 'Lūdzu, ievadiet gatavošanas instrukcijas.',
+            'instructions.min' => 'Gatavošanas instrukcijām jābūt vismaz 10 rakstzīmes garām.',
+
+            'prep_time.integer' => 'Sagatavošanas laikam jābūt veselam skaitlim.',
+            'prep_time.min' => 'Sagatavošanas laiks nedrīkst būt negatīvs.',
+
+            'cook_time.integer' => 'Gatavošanas laikam jābūt veselam skaitlim.',
+            'cook_time.min' => 'Gatavošanas laiks nedrīkst būt negatīvs.',
+
+            'servings.integer' => 'Porciju skaitam jābūt veselam skaitlim.',
+            'servings.min' => 'Porciju skaitam jābūt vismaz 1.',
+
+            'difficulty.required' => 'Lūdzu, izvēlieties grūtības līmeni.',
+            'difficulty.in' => 'Izvēlieties derīgu grūtības līmeni.',
+
+            'category.required' => 'Lūdzu, izvēlieties kategoriju.',
+            'category.max' => 'Kategorijas nosaukums ir pārāk garš.',
+
+            'ingredient_name.required' => 'Pievienojiet vismaz vienu sastāvdaļu.',
+            'ingredient_name.array' => 'Sastāvdaļu formāts nav derīgs.',
+            'ingredient_name.min' => 'Pievienojiet vismaz vienu sastāvdaļu.',
+            'ingredient_name.*.required' => 'Katras sastāvdaļas nosaukums ir obligāts.',
+            'ingredient_name.*.max' => 'Sastāvdaļas nosaukums nedrīkst būt garāks par 255 rakstzīmēm.',
+
+            'ingredient_qty.*.numeric' => 'Sastāvdaļas daudzumam jābūt skaitlim.',
+            'ingredient_qty.*.min' => 'Sastāvdaļas daudzums nedrīkst būt negatīvs.',
+
+            'ingredient_unit.*.max' => 'Mērvienība nedrīkst būt garāka par 30 rakstzīmēm.',
+
+            'image.image' => 'Augšupielādētajam failam jābūt attēlam.',
+            'image.mimes' => 'Attēlam jābūt JPG, JPEG, PNG, WEBP vai GIF formātā.',
+            'image.max' => 'Attēls nedrīkst pārsniegt 4 MB.',
+
+            'video.file' => 'Augšupielādētajam failam jābūt video failam.',
+            'video.mimetypes' => 'Video failam jābūt MP4, WEBM vai MOV formātā.',
+            'video.max' => 'Video fails nedrīkst pārsniegt 50 MB.',
+        ];
+    }
+
     public function index(Request $request)
     {
+        $search = trim((string) $request->input('search', ''));
+        $category = trim((string) $request->input('category', ''));
+        $difficulty = trim((string) $request->input('difficulty', ''));
+
         $query = Recipe::with('user')
             ->withAvg('reviews', 'rating')
             ->withCount('reviews');
 
-        if ($request->has('search') && $request->search) {
-            $search = $request->search;
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
@@ -102,18 +177,30 @@ class RecipeController extends Controller
             });
         }
 
-        if ($request->has('category') && $request->category) {
-            $query->where('category', $request->category);
+        if ($category !== '') {
+            $query->where('category', $category);
         }
 
-        if ($request->has('difficulty') && $request->difficulty) {
-            $query->where('difficulty', $request->difficulty);
+        if ($difficulty !== '') {
+            $query->where('difficulty', $difficulty);
         }
 
-        $recipes = $query->latest()->paginate(12);
-        $categories = Recipe::distinct('category')->pluck('category')->filter();
+        $recipes = $query->latest()->paginate(12)->withQueryString();
 
-        return view('recipes.index', compact('recipes', 'categories'));
+        $categories = Recipe::query()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('recipes.index', compact(
+            'recipes',
+            'categories',
+            'search',
+            'category',
+            'difficulty'
+        ));
     }
 
     /**
@@ -169,21 +256,38 @@ class RecipeController extends Controller
         $recipe->refresh();
 
         $this->tryBackfillIngredientQuantity($recipe);
-        $recipe->load('ingredientsItems');
+
+        $recipe->load([
+            'user',
+            'reviews.user',
+            'ingredientsItems',
+        ]);
+
+        $comments = $recipe->comments()
+            ->with(['user', 'replies.user'])
+            ->paginate(8)
+            ->withQueryString();
 
         $relatedRecipes = Recipe::with('user')
-            ->where('category', $recipe->category)
             ->where('id', '!=', $recipe->id)
+            ->when($recipe->category, function ($query) use ($recipe) {
+                $query->where('category', $recipe->category);
+            })
             ->inRandomOrder()
             ->take(4)
             ->get();
 
         $myReview = null;
         if (Auth::check()) {
-            $myReview = $recipe->reviews->firstWhere('user_id', Auth::id());
+            $myReview = $recipe->reviews()->where('user_id', Auth::id())->first();
         }
 
-        return view('recipes.show', compact('recipe', 'relatedRecipes', 'myReview'));
+        return view('recipes.show', compact(
+            'recipe',
+            'relatedRecipes',
+            'myReview',
+            'comments'
+        ));
     }
 
     public function create()
@@ -245,26 +349,10 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'instructions' => 'required|string',
-            'prep_time' => 'nullable|integer|min:0',
-            'cook_time' => 'nullable|integer|min:0',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'nullable|string|max:50',
-            'category' => 'nullable|string|max:100',
-
-            'ingredient_name' => 'required|array|min:1',
-            'ingredient_name.*' => 'nullable|string|max:255',
-            'ingredient_qty' => 'nullable|array',
-            'ingredient_qty.*' => 'nullable',
-            'ingredient_unit' => 'nullable|array',
-            'ingredient_unit.*' => 'nullable|string|max:30',
-
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
-            'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
-        ]);
+        $validated = $request->validate(
+            $this->validationRules(),
+            $this->validationMessages()
+        );
 
         $validated['user_id'] = Auth::id();
         $validated['views'] = 0;
@@ -285,7 +373,7 @@ class RecipeController extends Controller
 
             return redirect()
                 ->route('recipes.show', $recipe)
-                ->with('success', 'Recepte publicēta.');
+                ->with('success', 'Recepte veiksmīgi publicēta.');
         } catch (\Exception $e) {
             Log::error('Recipe store error', [
                 'error' => $e->getMessage(),
@@ -294,7 +382,7 @@ class RecipeController extends Controller
 
             return back()
                 ->withInput()
-                ->with('error', 'Kļūda saglabājot recepti. Skatiet storage/logs/laravel.log');
+                ->with('error', 'Neizdevās saglabāt recepti. Lūdzu, mēģiniet vēlreiz.');
         }
     }
 
@@ -317,51 +405,47 @@ class RecipeController extends Controller
             abort(403);
         }
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'instructions' => 'required|string',
-            'prep_time' => 'nullable|integer|min:0',
-            'cook_time' => 'nullable|integer|min:0',
-            'servings' => 'nullable|integer|min:1',
-            'difficulty' => 'required|string|in:Viegla,Vidēja,Grūta',
-            'category' => 'required|string',
+        $validated = $request->validate(
+            $this->validationRules(true),
+            $this->validationMessages()
+        );
 
-            'ingredient_name' => 'required|array|min:1',
-            'ingredient_name.*' => 'nullable|string|max:255',
-            'ingredient_qty' => 'nullable|array',
-            'ingredient_qty.*' => 'nullable|numeric|min:0',
-            'ingredient_unit' => 'nullable|array',
-            'ingredient_unit.*' => 'nullable|string|max:30',
+        try {
+            if ($request->hasFile('image')) {
+                if ($recipe->image_path) {
+                    Storage::disk('public')->delete($recipe->image_path);
+                }
 
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
-            'video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime|max:51200',
-        ]);
-
-        if ($request->hasFile('image')) {
-            if ($recipe->image_path) {
-                Storage::disk('public')->delete($recipe->image_path);
+                $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
             }
 
-            $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
-        }
+            if ($request->hasFile('video')) {
+                if ($recipe->video_path) {
+                    Storage::disk('public')->delete($recipe->video_path);
+                }
 
-        if ($request->hasFile('video')) {
-            if ($recipe->video_path) {
-                Storage::disk('public')->delete($recipe->video_path);
+                $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
             }
 
-            $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
+            $validated['ingredients'] = $recipe->ingredients ?? '';
+            $recipe->update($validated);
+
+            $this->syncIngredientsFromArrays($recipe, $request);
+
+            return redirect()
+                ->route('recipes.show', $recipe)
+                ->with('success', 'Recepte veiksmīgi atjaunināta.');
+        } catch (\Exception $e) {
+            Log::error('Recipe update error', [
+                'recipe_id' => $recipe->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Neizdevās atjaunināt recepti. Lūdzu, mēģiniet vēlreiz.');
         }
-
-        $validated['ingredients'] = $recipe->ingredients ?? '';
-        $recipe->update($validated);
-
-        $this->syncIngredientsFromArrays($recipe, $request);
-
-        return redirect()
-            ->route('recipes.show', $recipe)
-            ->with('success', 'Recepte veiksmīgi atjaunināta!');
     }
 
     public function destroy(Recipe $recipe)
@@ -390,7 +474,8 @@ class RecipeController extends Controller
     {
         $recipes = Recipe::where('user_id', Auth::id())
             ->latest()
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         return view('profile.recipes', compact('recipes'));
     }

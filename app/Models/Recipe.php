@@ -56,7 +56,15 @@ class Recipe extends Model
 
     public function reviews()
     {
-        return $this->hasMany(\App\Models\RecipeReview::class)->latest();
+        return $this->hasMany(\App\Models\RecipeReview::class)->with('user')->latest();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\Comment::class)
+            ->whereNull('parent_id')
+            ->with(['user', 'replies.user'])
+            ->latest();
     }
 
     public function getImageUrlAttribute()

@@ -43,6 +43,10 @@
         padding: 34px;
     }
 
+    .section-block + .section-block {
+        margin-top: 24px;
+    }
+
     .intro-box,
     .search-box,
     .result-box,
@@ -221,16 +225,41 @@
         color: var(--muted);
     }
 
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
+    .pagination-box {
+        text-align: center;
     }
 
-    .pagination a,
-    .pagination span {
+    .pagination-summary {
+        margin-bottom: 18px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .pagination-box nav {
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination-box nav > div:first-child {
+        display: none;
+    }
+
+    .pagination-box svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .pagination-box .relative.z-0.inline-flex.shadow-sm.rounded-md,
+    .pagination-box .inline-flex.-space-x-px.rounded-md.shadow-sm {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: none !important;
+    }
+
+    .pagination-box .relative.inline-flex.items-center,
+    .pagination-box .inline-flex.items-center {
         padding: 10px 14px;
         text-decoration: none;
         border: 1px solid var(--line);
@@ -238,18 +267,26 @@
         color: var(--text);
         font-weight: 700;
         transition: 0.2s ease;
+        min-width: 44px;
+        justify-content: center;
     }
 
-    .pagination a:hover {
+    .pagination-box a.relative.inline-flex.items-center:hover,
+    .pagination-box a.inline-flex.items-center:hover {
         background: var(--soft-bg);
         color: var(--accent);
     }
 
-    .pagination .current,
-    .pagination .active span {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #fffaf4;
+    .pagination-box span[aria-current="page"] > span,
+    .pagination-box .text-white {
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+        color: #fffaf4 !important;
+    }
+
+    .pagination-box .text-gray-500,
+    .pagination-box .text-gray-400 {
+        color: var(--muted) !important;
     }
 
     .empty-box {
@@ -348,7 +385,6 @@
 </style>
 
 <div class="page">
-
     <div class="main-content">
 
         <div class="section-block intro-box">
@@ -372,7 +408,7 @@
                         <input
                             type="text"
                             name="search"
-                            value="{{ request('search') }}"
+                            value="{{ $search ?? request('search') }}"
                             class="form-input"
                             placeholder="Meklēt pēc nosaukuma, apraksta vai sastāvdaļām..."
                         >
@@ -382,9 +418,9 @@
                         <label class="form-label">Kategorija</label>
                         <select name="category" class="form-select">
                             <option value="">Visas kategorijas</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category }}" {{ request('category') == $category ? 'selected' : '' }}>
-                                    {{ $category }}
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat }}" {{ ($category ?? request('category')) == $cat ? 'selected' : '' }}>
+                                    {{ $cat }}
                                 </option>
                             @endforeach
                         </select>
@@ -394,9 +430,9 @@
                         <label class="form-label">Grūtība</label>
                         <select name="difficulty" class="form-select">
                             <option value="">Jebkura</option>
-                            <option value="Viegla" {{ request('difficulty') == 'Viegla' ? 'selected' : '' }}>Viegla</option>
-                            <option value="Vidēja" {{ request('difficulty') == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
-                            <option value="Grūta" {{ request('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
+                            <option value="Viegla" {{ ($difficulty ?? request('difficulty')) == 'Viegla' ? 'selected' : '' }}>Viegla</option>
+                            <option value="Vidēja" {{ ($difficulty ?? request('difficulty')) == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
+                            <option value="Grūta" {{ ($difficulty ?? request('difficulty')) == 'Grūta' ? 'selected' : '' }}>Grūta</option>
                         </select>
                     </div>
 
@@ -418,7 +454,7 @@
         </div>
 
         <div class="section-block result-box">
-            <h3>📊 Atrasts {{ $recipes->total() }} recepšu rezultāts</h3>
+            <h3>📊 Atrastas {{ $recipes->total() }} receptes</h3>
 
             @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
                 <p>
@@ -449,15 +485,17 @@
                             <h3 class="recipe-title">{{ $recipe->title }}</h3>
 
                             <p class="recipe-description">
-                                {{ Str::limit($recipe->description, 100) }}
+                                {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
                             </p>
 
                             <div class="recipe-meta">
                                 <div>📂 {{ $recipe->category ?? 'Nav kategorijas' }}</div>
                                 <div>⭐ {{ $recipe->difficulty ?? 'Nav norādīta' }}</div>
+
                                 @if($recipe->prep_time || $recipe->cook_time)
                                     <div>⏱️ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
                                 @endif
+
                                 @if($recipe->servings)
                                     <div>👥 {{ $recipe->servings }} porcijas</div>
                                 @endif
@@ -482,7 +520,7 @@
 
                             <div class="author-row">
                                 <div class="author-meta">
-                                    <span>Autors: {{ $recipe->user->name }}</span>
+                                    <span>Autors: {{ $recipe->user->name ?? 'Nezināms autors' }}</span>
                                     <span>{{ $recipe->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>
@@ -495,11 +533,15 @@
                 </div>
             </div>
 
-            <div class="section-block pagination-box">
-                <div class="pagination">
+            @if($recipes->hasPages())
+                <div class="section-block pagination-box">
+                    <div class="pagination-summary">
+                        Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
+                    </div>
+
                     {{ $recipes->links() }}
                 </div>
-            </div>
+            @endif
         @else
             <div class="section-block empty-box">
                 <div class="empty-icon">🔎</div>

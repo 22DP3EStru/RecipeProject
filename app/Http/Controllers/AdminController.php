@@ -18,11 +18,11 @@ class AdminController extends Controller
 
     public function index()
     {
-        $usersCount   = User::count();
+        $usersCount = User::count();
         $recipesCount = Recipe::count();
-        $adminsCount  = User::where('is_admin', true)->count();
+        $adminsCount = User::where('is_admin', true)->count();
 
-        $latestUsers   = User::latest()->take(5)->get();
+        $latestUsers = User::latest()->take(5)->get();
         $latestRecipes = Recipe::with('user')->latest()->take(5)->get();
 
         $todayRecipesCount = Recipe::whereDate('created_at', now()->toDateString())->count();
@@ -41,9 +41,23 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::with('recipes')->latest()->paginate(15);
+        $users = User::with('recipes')
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.users', compact('users'));
+        $usersCount = User::count();
+        $adminsCount = User::where('is_admin', true)->count();
+        $regularUsersCount = User::where('is_admin', false)->count();
+        $newUsersThisWeekCount = User::where('created_at', '>=', now()->subDays(7))->count();
+
+        return view('admin.users', compact(
+            'users',
+            'usersCount',
+            'adminsCount',
+            'regularUsersCount',
+            'newUsersThisWeekCount'
+        ));
     }
 
     public function destroyUser(User $user)
@@ -53,7 +67,7 @@ class AdminController extends Controller
             return back()->with('error', 'Admin lietotāju nevar dzēst.');
         }
 
-        // dzēš arī lietotāja receptes (ja vajag)
+        // dzēš arī lietotāja receptes
         foreach ($user->recipes as $recipe) {
             if ($recipe->image_path) {
                 Storage::disk('public')->delete($recipe->image_path);
@@ -91,9 +105,26 @@ class AdminController extends Controller
 
     public function recipes()
     {
-        $recipes = Recipe::with('user')->latest()->paginate(15);
+        $recipes = Recipe::with('user')
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.recipes', compact('recipes'));
+        $recipesCount = Recipe::count();
+        $categoriesCount = Recipe::whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->count('category');
+        $newRecipesThisWeekCount = Recipe::where('created_at', '>=', now()->subDays(7))->count();
+        $activeAuthorsCount = User::has('recipes')->count();
+
+        return view('admin.recipes', compact(
+            'recipes',
+            'recipesCount',
+            'categoriesCount',
+            'newRecipesThisWeekCount',
+            'activeAuthorsCount'
+        ));
     }
 
     public function destroyRecipe(Recipe $recipe)

@@ -1,21 +1,38 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace App\Models; // Definē nosaukumvietu (namespace), kurā atrodas šis modelis
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Iekļauj HasFactory trait, lai varētu izmantot modeļa fabriku (factory)
-use Illuminate\Database\Eloquent\Model; // Iekļauj bāzes Model klasi no Eloquent ORM
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model // Definē Comment modeli, kas paplašina Eloquent Model klasi
+class Comment extends Model
 {
-    use HasFactory; // Pievieno HasFactory funkcionalitāti šim modelim
+    use HasFactory;
 
-    protected $fillable = ['body', 'user_id', 'recipe_id']; // Norāda laukus, kurus drīkst masveidā aizpildīt (mass assignment)
+    protected $fillable = [
+        'body',
+        'user_id',
+        'recipe_id',
+        'parent_id',
+    ];
 
-    public function user() { // Definē attiecību ar User modeli
-        return $this->belongsTo(User::class); // Norāda, ka komentārs pieder vienam lietotājam (many-to-one)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
-    public function recipe() { // Definē attiecību ar Recipe modeli
-        return $this->belongsTo(Recipe::class); // Norāda, ka komentārs pieder vienai receptei (many-to-one)
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->with('user')->latest();
     }
 }

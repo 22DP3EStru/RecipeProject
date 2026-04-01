@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfileController;
@@ -65,6 +66,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.update');
     Route::patch('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.patch');
     Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->middleware('verified')->name('recipes.destroy');
+
+    // Comments - tikai verificētiem
+    Route::post('/comments', [CommentController::class, 'store'])
+        ->middleware('verified')
+        ->name('comments.store');
 
     // Favorites - tikai verificētiem
     Route::post('/recipes/{recipe}/favorite', [FavoriteController::class, 'toggle'])

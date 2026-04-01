@@ -7,6 +7,15 @@
 @section('hero_text', 'Pārvaldiet sava konta informāciju, drošību un iestatījumus')
 
 @section('content')
+@php
+    $recipesCount = $user->recipes_count ?? 0;
+    $favoritesCount = $user->favorite_recipes_count ?? 0;
+    $commentsCount = 0;
+
+    $profilePhoto = $user->profile_photo ?? null;
+    $userInitial = strtoupper(mb_substr($user->name ?? 'U', 0, 1));
+@endphp
+
 <style>
     .profile-page {
         color: var(--text);
@@ -43,6 +52,136 @@
         box-shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
     }
 
+    .profile-hero-card {
+        background: linear-gradient(180deg, #fffdf9 0%, #fbf6ef 100%);
+        border: 1px solid var(--line);
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        overflow: hidden;
+    }
+
+    .profile-hero-inner {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 28px;
+        align-items: center;
+    }
+
+    .profile-avatar-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .profile-avatar {
+        width: 124px;
+        height: 124px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #f0e5d8;
+        box-shadow: 0 10px 24px rgba(122, 90, 67, 0.12);
+        background: linear-gradient(135deg, #efe3d5 0%, #e7d5c3 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 2.8rem;
+        font-weight: 700;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .avatar-note {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.6;
+        max-width: 160px;
+    }
+
+    .profile-hero-content {
+        min-width: 0;
+    }
+
+    .profile-badge {
+        display: inline-block;
+        padding: 7px 12px;
+        border: 1px solid #eadbcb;
+        background: #f8efe5;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+
+    .profile-main-name {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2.6rem;
+        font-weight: 500;
+        color: var(--accent);
+        margin: 0 0 8px;
+        line-height: 1.1;
+    }
+
+    .profile-main-email {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .profile-main-text {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.8;
+        max-width: 700px;
+    }
+
+    .profile-stats {
+        margin-top: 26px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .stat-card {
+        background: #fffdfa;
+        border: 1px solid #eadbcb;
+        padding: 18px 16px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(79, 59, 42, 0.06);
+    }
+
+    .stat-icon {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+    }
+
     .card-header {
         display: flex;
         align-items: flex-start;
@@ -72,6 +211,49 @@
         line-height: 1.7;
     }
 
+    .profile-edit-layout {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .photo-preview-box {
+        background: #fcf7f1;
+        border: 1px solid #eadbcb;
+        padding: 18px;
+        text-align: center;
+    }
+
+    .photo-preview-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 14px;
+        border: 4px solid #f0e5d8;
+        background: linear-gradient(135deg, #efe3d5 0%, #e7d5c3 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 2.5rem;
+        font-weight: 700;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .photo-preview-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .photo-preview-text {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
     .form-group {
         margin-bottom: 20px;
     }
@@ -98,6 +280,22 @@
         outline: none;
         border-color: #bba692;
         background: #fff;
+    }
+
+    .form-file {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+        color: var(--text);
+        font-size: 14px;
+    }
+
+    .form-help {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 8px;
+        line-height: 1.6;
     }
 
     .form-error {
@@ -133,12 +331,6 @@
         margin-bottom: 18px;
         border: 1px solid var(--line);
         font-weight: 600;
-    }
-
-    .alert-success {
-        background: #f1f5ea;
-        border-color: #d7ddcc;
-        color: #607149;
     }
 
     .alert-info {
@@ -239,11 +431,28 @@
         .profile-card {
             padding: 22px;
         }
+
+        .profile-hero-inner,
+        .profile-edit-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-avatar-wrap {
+            align-items: flex-start;
+        }
     }
 
     @media (max-width: 640px) {
         .card-header {
             flex-direction: column;
+        }
+
+        .profile-main-name {
+            font-size: 2rem;
+        }
+
+        .profile-stats {
+            grid-template-columns: 1fr;
         }
 
         .modal-content {
@@ -264,67 +473,139 @@
         <a href="{{ route('pdf.user.profile', $user->id) }}" class="pdf-btn">Profila PDF</a>
     </div>
 
-    @if (session('status') === 'profile-updated')
-        <div class="alert alert-success">
-            Profils veiksmīgi atjaunināts.
-        </div>
-    @endif
-
-    @if (session('status') === 'password-updated')
-        <div class="alert alert-success">
-            Parole veiksmīgi nomainīta.
-        </div>
-    @endif
-
     <div class="profile-sections">
+        <div class="profile-card profile-hero-card">
+            <div class="profile-hero-inner">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar">
+                        @if ($profilePhoto)
+                            <img src="{{ asset('storage/' . $profilePhoto) }}" alt="Profila bilde">
+                        @else
+                            <span>{{ $userInitial }}</span>
+                        @endif
+                    </div>
+                    <div class="avatar-note">
+                        Tavs profils un konta iestatījumi vienuviet.
+                    </div>
+                </div>
+
+                <div class="profile-hero-content">
+                    <div class="profile-badge">Mans profils</div>
+                    <h2 class="profile-main-name">{{ $user->name }}</h2>
+                    <div class="profile-main-email">{{ $user->email }}</div>
+                    <p class="profile-main-text">
+                        Šeit vari pārvaldīt savu konta informāciju, atjaunināt profila attēlu un uzturēt savu profilu sakārtotu.
+                    </p>
+
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🍲</div>
+                            <div class="stat-number">{{ $recipesCount }}</div>
+                            <div class="stat-label">Receptes</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">❤️</div>
+                            <div class="stat-number">{{ $favoritesCount }}</div>
+                            <div class="stat-label">Favorīti</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">💬</div>
+                            <div class="stat-number">{{ $commentsCount }}</div>
+                            <div class="stat-label">Komentāri</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="profile-card">
             <div class="card-header">
                 <div class="card-icon">👤</div>
                 <div>
                     <div class="card-title">Profila informācija</div>
                     <p class="card-subtitle">
-                        Atjauniniet sava konta pamatinformāciju un e-pasta adresi.
+                        Atjauniniet sava konta pamatinformāciju, e-pasta adresi un profila attēlu.
                     </p>
                 </div>
             </div>
 
-            <form method="post" action="{{ route('profile.update') }}">
+            <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
 
-                <div class="form-group">
-                    <label for="name" class="form-label">Vārds</label>
-                    <input id="name" name="name" type="text" class="form-input" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
-                    @error('name')
-                        <div class="form-error">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="email" class="form-label">E-pasta adrese</label>
-                    <input id="email" name="email" type="email" class="form-input" value="{{ old('email', $user->email) }}" required autocomplete="username">
-                    @error('email')
-                        <div class="form-error">{{ $message }}</div>
-                    @enderror
-
-                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                        <div class="alert alert-info" style="margin-top: 12px;">
-                            <p>Jūsu e-pasta adrese vēl nav verificēta.</p>
-                            <button form="send-verification" class="btn btn-secondary" style="margin-top: 10px;">
-                                Nosūtīt verificēšanas e-pastu atkārtoti
-                            </button>
-
-                            @if (session('status') === 'verification-link-sent')
-                                <p style="margin-top: 10px; color: #667652;">
-                                    Jauna verificēšanas saite ir nosūtīta uz jūsu e-pasta adresi.
-                                </p>
+                <div class="profile-edit-layout">
+                    <div class="photo-preview-box">
+                        <div class="photo-preview-avatar" id="photoPreviewAvatar">
+                            @if ($profilePhoto)
+                                <img id="photoPreviewImage" src="{{ asset('storage/' . $profilePhoto) }}" alt="Profila bilde">
+                            @else
+                                <span id="photoPreviewInitial">{{ $userInitial }}</span>
+                                <img id="photoPreviewImage" src="" alt="Profila bilde" style="display: none;">
                             @endif
                         </div>
-                    @endif
-                </div>
+                        <div class="photo-preview-text">
+                            Rekomendēts kvadrātveida attēls labākam rezultātam.
+                        </div>
+                    </div>
 
-                <div class="actions-row">
-                    <button type="submit" class="btn btn-primary">Saglabāt izmaiņas</button>
+                    <div>
+                        <div class="form-group">
+                            <label for="profile_photo" class="form-label">Profila bilde</label>
+                            <input id="profile_photo" name="profile_photo" type="file" class="form-file" accept="image/*">
+                            <div class="form-help">
+                                Atbalstītie formāti: JPG, PNG, WEBP. Maksimālais izmērs: 2 MB.
+                            </div>
+                            @error('profile_photo')
+                                <div class="form-error">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        @if ($profilePhoto)
+                            <div class="form-group">
+                                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted);">
+                                    <input type="checkbox" name="remove_profile_photo" value="1" id="removeProfilePhoto">
+                                    Dzēst esošo bildi
+                                </label>
+                            </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label for="name" class="form-label">Vārds</label>
+                            <input id="name" name="name" type="text" class="form-input" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
+                            @error('name')
+                                <div class="form-error">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">E-pasta adrese</label>
+                            <input id="email" name="email" type="email" class="form-input" value="{{ old('email', $user->email) }}" required autocomplete="username">
+                            @error('email')
+                                <div class="form-error">{{ $message }}</div>
+                            @enderror
+
+                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                                <div class="alert alert-info" style="margin-top: 12px;">
+                                    <p>Jūsu e-pasta adrese vēl nav verificēta.</p>
+                                    <button form="send-verification" class="btn btn-secondary" style="margin-top: 10px;">
+                                        Nosūtīt verificēšanas e-pastu atkārtoti
+                                    </button>
+
+                                    @if (session('status') === 'verification-link-sent')
+                                        <p style="margin-top: 10px; color: #667652;">
+                                            Jauna verificēšanas saite ir nosūtīta uz jūsu e-pasta adresi.
+                                        </p>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="actions-row">
+                            <button type="submit" class="btn btn-primary">Saglabāt izmaiņas</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -402,9 +683,9 @@
     <div class="quick-actions">
         <h3 class="quick-title">Ātras darbības</h3>
         <div class="quick-actions-row">
-            <a href="/profile/recipes" class="btn btn-primary">Manas receptes</a>
             <a href="/recipes/create" class="btn btn-success">Izveidot jaunu recepti</a>
             <a href="/recipes" class="btn btn-secondary">Pārlūkot receptes</a>
+            <a href="/" class="btn btn-primary">Sākumlapa</a>
         </div>
     </div>
 </div>
@@ -461,6 +742,57 @@
         if (event.target === modal) {
             modal.style.display = 'none';
         }
+    }
+
+    const profilePhotoInput = document.getElementById('profile_photo');
+    const photoPreviewImage = document.getElementById('photoPreviewImage');
+    const photoPreviewInitial = document.getElementById('photoPreviewInitial');
+    const removeProfilePhoto = document.getElementById('removeProfilePhoto');
+
+    if (profilePhotoInput) {
+        profilePhotoInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    if (photoPreviewImage) {
+                        photoPreviewImage.src = e.target.result;
+                        photoPreviewImage.style.display = 'block';
+                    }
+
+                    if (photoPreviewInitial) {
+                        photoPreviewInitial.style.display = 'none';
+                    }
+
+                    if (removeProfilePhoto) {
+                        removeProfilePhoto.checked = false;
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (removeProfilePhoto) {
+        removeProfilePhoto.addEventListener('change', function () {
+            if (this.checked) {
+                if (photoPreviewImage) {
+                    photoPreviewImage.style.display = 'none';
+                    photoPreviewImage.src = '';
+                }
+
+                if (photoPreviewInitial) {
+                    photoPreviewInitial.style.display = 'flex';
+                }
+
+                if (profilePhotoInput) {
+                    profilePhotoInput.value = '';
+                }
+            }
+        });
     }
 </script>
 @endsection
