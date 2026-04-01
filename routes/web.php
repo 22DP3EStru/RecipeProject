@@ -84,20 +84,20 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('verified')
         ->name('recipes.reviews.destroy');
 
-    // Admin - tikai adminiem; ieteicams esošajiem admin DB ielikt email_verified_at
+    // Admin - tikai adminiem
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
+
         Route::get('/users', [AdminController::class, 'users'])->name('users');
-        Route::get('/recipes', [AdminController::class, 'recipes'])->name('recipes');
-
-        Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.destroy');
         Route::patch('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggle-admin');
+        Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
-        Route::delete('/recipes/{recipe}', [AdminController::class, 'deleteRecipe'])->name('recipes.destroy');
+        Route::get('/recipes', [AdminController::class, 'recipes'])->name('recipes');
+        Route::delete('/recipes/{recipe}', [AdminController::class, 'destroyRecipe'])->name('recipes.destroy');
     });
 });
 
-// PDF sekcija - publiska, jo te iepriekš middleware nebija
+// PDF sekcija - publiska
 Route::prefix('pdf')->name('pdf.')->group(function () {
     Route::get('/recipe/{recipe}/full', [PdfController::class, 'recipeFull'])->name('recipe.full');
     Route::get('/recipe/{recipe}/ingredients', [PdfController::class, 'recipeIngredients'])->name('recipe.ingredients');

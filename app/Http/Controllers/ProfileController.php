@@ -1,77 +1,65 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Controllers; // Kontrolieris atrodas Controllers mapē
+namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest; // Speciāla validācijas klase profila atjaunināšanai
-use Illuminate\Http\RedirectResponse; // Metodes atgriezīs pāradresāciju
-use Illuminate\Http\Request; // HTTP pieprasījums
-use Illuminate\Support\Facades\Auth; // Autentifikācijas sistēma
-use Illuminate\Support\Facades\Redirect; // Pāradresācijas klase
-use Illuminate\View\View; // Norāda, ka metode var atgriezt skatu
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
-class ProfileController extends Controller // Kontrolieris lietotāja profilam
+class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View // Parāda profila rediģēšanas lapu
+    public function edit(Request $request): View
     {
         return view('profile.edit', [
-            'user' => $request->user(), // Padod skatam pašreiz ielogoto lietotāju
+            'user' => $request->user(),
         ]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse 
-    // Atjaunina lietotāja profila informāciju
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated()); 
-        // Aizpilda lietotāja laukus ar validētajiem datiem no formas
+        $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) { 
-        // Pārbauda, vai e-pasts tika mainīts
-
-            $request->user()->email_verified_at = null; 
-            // Ja e-pasts mainīts → noņem e-pasta apstiprinājumu
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
 
-        $request->user()->save(); 
-        // Saglabā izmaiņas datubāzē
+        $request->user()->save();
 
         return Redirect::route('profile.edit')
-            ->with('status', 'profile-updated'); 
-        // Pārsūta atpakaļ uz profila lapu ar paziņojumu
+            ->with('success', 'Profils veiksmīgi atjaunināts.');
     }
 
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse 
-    // Dzēš lietotāja kontu
+    public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'], 
-            // Parole obligāta un tai jāsakrīt ar īsto paroli
+            'password' => ['required', 'current_password'],
         ], [
             'password.required' => 'Parole ir obligāta.',
             'password.current_password' => 'Nepareiza parole.',
         ]);
 
-        $user = $request->user(); // Saglabā pašreiz ielogoto lietotāju
+        $user = $request->user();
 
-        Auth::logout(); // Izraksta lietotāju no sistēmas
+        Auth::logout();
 
-        $user->delete(); // Dzēš lietotāju no datubāzes
+        $user->delete();
 
-        $request->session()->invalidate(); 
-        // Dzēš visus sesijas datus
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        $request->session()->regenerateToken(); 
-        // Izveido jaunu drošības tokenu
-
-        return Redirect::to('/'); 
-        // Pārsūta uz sākumlapu
+        return redirect('/')
+            ->with('success', 'Konts veiksmīgi dzēsts.');
     }
 }

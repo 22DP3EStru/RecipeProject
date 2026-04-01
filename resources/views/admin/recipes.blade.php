@@ -59,15 +59,6 @@
             font-weight: 600;
         }
 
-        .alert {
-            padding: 14px 18px;
-            margin-bottom: 24px;
-            border: 1px solid #d7ddcc;
-            background: #f1f5ea;
-            color: #607149;
-            font-weight: 600;
-        }
-
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -330,12 +321,6 @@
                     <span> / </span>
                     <span style="font-weight: 700; color: var(--text);">Recepšu pārvaldība</span>
                 </div>
-
-                @if(session('success'))
-                    <div class="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
 
                 @php
                     $categories = \App\Models\Recipe::distinct('category')->pluck('category')->filter();

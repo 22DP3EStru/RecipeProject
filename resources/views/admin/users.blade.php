@@ -55,21 +55,6 @@
             font-weight: 600;
         }
 
-        .alert {
-            padding: 14px 18px;
-            margin-bottom: 24px;
-            border: 1px solid #d7ddcc;
-            background: #f1f5ea;
-            color: #607149;
-            font-weight: 600;
-        }
-
-        .alert-error {
-            background: #f7ebe8;
-            border-color: #e5cbc3;
-            color: #a45f52;
-        }
-
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -364,18 +349,6 @@
                     <span> / </span>
                     <span style="font-weight: 700; color: var(--text);">Lietotāju pārvaldība</span>
                 </div>
-
-                @if(session('success'))
-                    <div class="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="alert alert-error">
-                        {{ session('error') }}
-                    </div>
-                @endif
 
                 <div class="stats-row">
                     <div class="stat-box">
