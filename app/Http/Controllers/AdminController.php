@@ -26,6 +26,29 @@ class AdminController extends Controller
         $latestRecipes = Recipe::with('user')->latest()->take(5)->get();
 
         $todayRecipesCount = Recipe::whereDate('created_at', now()->toDateString())->count();
+        $newUsersThisWeekCount = User::where('created_at', '>=', now()->subDays(7))->count();
+        $newRecipesThisWeekCount = Recipe::where('created_at', '>=', now()->subDays(7))->count();
+        $activeAuthorsCount = User::has('recipes')->count();
+
+        $categoriesCount = Recipe::whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->count('category');
+
+        $recipesWithoutImageCount = Recipe::where(function ($query) {
+            $query->whereNull('image_path')
+                  ->orWhere('image_path', '');
+        })->count();
+
+        $recipesWithoutCategoryCount = Recipe::where(function ($query) {
+            $query->whereNull('category')
+                  ->orWhere('category', '');
+        })->count();
+
+        $topRecipes = Recipe::with('user')
+            ->orderByDesc('views')
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', compact(
             'usersCount',
@@ -33,7 +56,14 @@ class AdminController extends Controller
             'adminsCount',
             'latestUsers',
             'latestRecipes',
-            'todayRecipesCount'
+            'todayRecipesCount',
+            'newUsersThisWeekCount',
+            'newRecipesThisWeekCount',
+            'activeAuthorsCount',
+            'categoriesCount',
+            'recipesWithoutImageCount',
+            'recipesWithoutCategoryCount',
+            'topRecipes'
         ));
     }
 

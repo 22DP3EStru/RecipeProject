@@ -21,41 +21,75 @@
         color: var(--text);
     }
 
-    .breadcrumb {
-        font-size: 14px;
-        color: var(--muted);
-        margin-bottom: 24px;
-        padding-bottom: 14px;
-        border-bottom: 1px solid var(--line);
-    }
-
-    .breadcrumb a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .pdf-actions {
-        margin-bottom: 22px;
-    }
-
-    .profile-sections {
-        display: grid;
-        grid-template-columns: 1fr;
+    .profile-stack {
+        display: flex;
+        flex-direction: column;
         gap: 24px;
     }
 
-    .profile-card {
-        background: var(--surface);
-        border: 1px solid var(--line);
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
+    .profile-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 16px 18px;
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 18px;
+        color: var(--muted);
+        font-size: 14px;
+        box-shadow: 0 10px 24px rgba(79, 59, 42, 0.04);
+    }
+
+    .profile-breadcrumb a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .profile-breadcrumb-current {
+        color: var(--text);
+        font-weight: 800;
+    }
+
+    .profile-top-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .profile-outline-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 18px;
+        border-radius: 14px;
+        text-decoration: none;
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        background: linear-gradient(180deg, #faf6f0 0%, #f6efe7 100%);
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.2s ease;
+        box-shadow: 0 6px 18px rgba(79, 59, 42, 0.04);
+    }
+
+    .profile-outline-btn:hover {
+        transform: translateY(-1px);
+        background: #efe4d6;
+    }
+
+    .profile-section-card {
+        background: rgba(255, 253, 249, 0.97);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
     .profile-hero-card {
-        background: linear-gradient(180deg, #fffdf9 0%, #fbf6ef 100%);
-        border: 1px solid var(--line);
-        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
@@ -74,8 +108,8 @@
     }
 
     .profile-avatar {
-        width: 124px;
-        height: 124px;
+        width: 130px;
+        height: 130px;
         border-radius: 50%;
         overflow: hidden;
         border: 4px solid #f0e5d8;
@@ -85,7 +119,7 @@
         align-items: center;
         justify-content: center;
         color: var(--accent);
-        font-size: 2.8rem;
+        font-size: 2.9rem;
         font-weight: 700;
         font-family: Georgia, "Times New Roman", serif;
     }
@@ -102,33 +136,32 @@
         color: var(--muted);
         text-align: center;
         line-height: 1.6;
-        max-width: 160px;
-    }
-
-    .profile-hero-content {
-        min-width: 0;
+        max-width: 170px;
     }
 
     .profile-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         padding: 7px 12px;
-        border: 1px solid #eadbcb;
-        background: #f8efe5;
+        border-radius: 999px;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        background: #f5ece2;
         color: var(--accent);
         font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
+        font-weight: 800;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
         margin-bottom: 14px;
     }
 
     .profile-main-name {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 2.6rem;
+        font-size: 2.7rem;
         font-weight: 500;
         color: var(--accent);
         margin: 0 0 8px;
-        line-height: 1.1;
+        line-height: 1.08;
     }
 
     .profile-main-email {
@@ -152,15 +185,26 @@
     }
 
     .stat-card {
-        background: #fffdfa;
-        border: 1px solid #eadbcb;
+        background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 18px;
         padding: 18px 16px;
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        transition: 0.18s ease;
+        box-shadow: 0 8px 20px rgba(79, 59, 42, 0.04);
+        text-align: center;
     }
 
     .stat-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(79, 59, 42, 0.06);
+        box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
+    }
+
+    .stat-card.soft-green {
+        background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
+    }
+
+    .stat-card.soft-pink {
+        background: linear-gradient(180deg, #faf0f3 0%, #f6e8ed 100%);
     }
 
     .stat-icon {
@@ -169,17 +213,18 @@
     }
 
     .stat-number {
-        font-size: 1.8rem;
+        font-size: 1.95rem;
         font-weight: 700;
-        color: var(--accent);
+        color: #6f472c;
         line-height: 1;
         margin-bottom: 8px;
+        font-family: Georgia, "Times New Roman", serif;
     }
 
     .stat-label {
         font-size: 13px;
         color: var(--muted);
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .card-header {
@@ -188,7 +233,7 @@
         gap: 14px;
         margin-bottom: 24px;
         padding-bottom: 14px;
-        border-bottom: 1px solid #e3d6c8;
+        border-bottom: 1px solid rgba(221, 207, 192, 0.9);
     }
 
     .card-icon {
@@ -203,6 +248,7 @@
         font-weight: 500;
         color: var(--accent);
         margin-bottom: 4px;
+        line-height: 1.1;
     }
 
     .card-subtitle {
@@ -213,21 +259,22 @@
 
     .profile-edit-layout {
         display: grid;
-        grid-template-columns: 180px 1fr;
+        grid-template-columns: 200px 1fr;
         gap: 24px;
         align-items: start;
     }
 
     .photo-preview-box {
-        background: #fcf7f1;
-        border: 1px solid #eadbcb;
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        border-radius: 20px;
         padding: 18px;
         text-align: center;
     }
 
     .photo-preview-avatar {
-        width: 120px;
-        height: 120px;
+        width: 122px;
+        height: 122px;
         border-radius: 50%;
         overflow: hidden;
         margin: 0 auto 14px;
@@ -240,6 +287,7 @@
         font-size: 2.5rem;
         font-weight: 700;
         font-family: Georgia, "Times New Roman", serif;
+        box-shadow: 0 10px 24px rgba(122, 90, 67, 0.10);
     }
 
     .photo-preview-avatar img {
@@ -266,29 +314,25 @@
         font-size: 14px;
     }
 
-    .form-input {
+    .form-input,
+    .form-file {
         width: 100%;
         padding: 14px 16px;
         border: 1px solid var(--line);
+        border-radius: 14px;
         font-size: 15px;
         background: #fffdfa;
         color: var(--text);
         transition: 0.2s ease;
+        box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
     }
 
-    .form-input:focus {
+    .form-input:focus,
+    .form-file:focus {
         outline: none;
-        border-color: #bba692;
+        border-color: #b79d84;
         background: #fff;
-    }
-
-    .form-file {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid var(--line);
-        background: #fffdfa;
-        color: var(--text);
-        font-size: 14px;
+        box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
     .form-help {
@@ -302,6 +346,23 @@
         color: var(--danger-text);
         font-size: 13px;
         margin-top: 6px;
+        font-weight: 600;
+    }
+
+    .checkbox-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--muted);
+        background: #faf4ed;
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 14px;
+        padding: 10px 12px;
+    }
+
+    .checkbox-label input {
+        accent-color: var(--accent);
     }
 
     .actions-row {
@@ -311,26 +372,13 @@
         flex-wrap: wrap;
     }
 
-    .pdf-btn {
-        display: inline-block;
-        padding: 12px 18px;
-        text-decoration: none;
-        border: 1px solid var(--line);
-        background: var(--surface-soft);
-        color: var(--accent);
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .pdf-btn:hover {
-        background: var(--surface-soft-2);
-    }
-
     .alert {
         padding: 14px 18px;
         margin-bottom: 18px;
         border: 1px solid var(--line);
+        border-radius: 16px;
         font-weight: 600;
+        line-height: 1.7;
     }
 
     .alert-info {
@@ -340,13 +388,14 @@
     }
 
     .delete-section {
-        background: #fbefec;
+        background: linear-gradient(180deg, #fcf2ef 0%, #f8ebe7 100%);
         border-color: #e7d0ca;
     }
 
     .danger-box {
-        background: rgba(255,255,255,0.4);
+        background: rgba(255,255,255,0.5);
         border: 1px solid #e7d0ca;
+        border-radius: 18px;
         padding: 18px;
         margin-bottom: 20px;
     }
@@ -363,10 +412,12 @@
         font-size: 14px;
     }
 
-    .quick-actions {
-        margin-top: 38px;
-        padding-top: 26px;
-        border-top: 1px solid var(--line);
+    .quick-actions-card {
+        background: rgba(255, 253, 249, 0.96);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
     .quick-title {
@@ -374,31 +425,77 @@
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2rem;
         color: var(--accent);
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-weight: 500;
     }
 
-    .quick-actions-row {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
+    .quick-subtitle {
+        text-align: center;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 22px;
+        font-size: 14px;
+    }
+
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .quick-action-card {
+        display: block;
+        text-decoration: none;
+        padding: 18px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        color: var(--text);
+        transition: 0.2s ease;
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
+    }
+
+    .quick-action-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px rgba(79, 59, 42, 0.08);
+    }
+
+    .quick-action-icon {
+        font-size: 24px;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .quick-action-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 6px;
+    }
+
+    .quick-action-text {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
     }
 
     .modal {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(47, 36, 29, 0.38);
+        background: rgba(47, 36, 29, 0.42);
         z-index: 1000;
         padding: 20px;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
     }
 
     .modal-content {
-        background: var(--surface);
+        background: rgba(255, 253, 249, 0.98);
         margin: 8% auto 0;
         padding: 30px;
-        border: 1px solid var(--line);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
         width: 100%;
         max-width: 520px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
@@ -428,7 +525,8 @@
     }
 
     @media (max-width: 900px) {
-        .profile-card {
+        .profile-section-card,
+        .quick-actions-card {
             padding: 22px;
         }
 
@@ -442,6 +540,13 @@
         }
     }
 
+    @media (max-width: 760px) {
+        .profile-stats,
+        .quick-actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     @media (max-width: 640px) {
         .card-header {
             flex-direction: column;
@@ -449,10 +554,6 @@
 
         .profile-main-name {
             font-size: 2rem;
-        }
-
-        .profile-stats {
-            grid-template-columns: 1fr;
         }
 
         .modal-content {
@@ -463,18 +564,19 @@
 </style>
 
 <div class="profile-page">
-    <div class="breadcrumb">
-        <a href="/dashboard">Vadības panelis</a>
-        <span> / </span>
-        <span style="font-weight: 700; color: var(--text);">Profila iestatījumi</span>
-    </div>
+    <div class="profile-stack">
 
-    <div class="pdf-actions">
-        <a href="{{ route('pdf.user.profile', $user->id) }}" class="pdf-btn">Profila PDF</a>
-    </div>
+        <div class="profile-breadcrumb">
+            <a href="/dashboard">Vadības panelis</a>
+            <span>/</span>
+            <span class="profile-breadcrumb-current">Profila iestatījumi</span>
+        </div>
 
-    <div class="profile-sections">
-        <div class="profile-card profile-hero-card">
+        <div class="profile-top-actions">
+            <a href="{{ route('pdf.user.profile', $user->id) }}" class="profile-outline-btn">📄 Profila PDF</a>
+        </div>
+
+        <div class="profile-section-card profile-hero-card">
             <div class="profile-hero-inner">
                 <div class="profile-avatar-wrap">
                     <div class="profile-avatar">
@@ -494,7 +596,7 @@
                     <h2 class="profile-main-name">{{ $user->name }}</h2>
                     <div class="profile-main-email">{{ $user->email }}</div>
                     <p class="profile-main-text">
-                        Šeit vari pārvaldīt savu konta informāciju, atjaunināt profila attēlu un uzturēt savu profilu sakārtotu.
+                        Šeit vari pārvaldīt savu konta informāciju, atjaunināt profila attēlu, mainīt paroli un uzturēt savu profilu sakārtotu.
                     </p>
 
                     <div class="profile-stats">
@@ -504,13 +606,13 @@
                             <div class="stat-label">Receptes</div>
                         </div>
 
-                        <div class="stat-card">
+                        <div class="stat-card soft-green">
                             <div class="stat-icon">❤️</div>
                             <div class="stat-number">{{ $favoritesCount }}</div>
                             <div class="stat-label">Favorīti</div>
                         </div>
 
-                        <div class="stat-card">
+                        <div class="stat-card soft-pink">
                             <div class="stat-icon">💬</div>
                             <div class="stat-number">{{ $commentsCount }}</div>
                             <div class="stat-label">Komentāri</div>
@@ -520,7 +622,7 @@
             </div>
         </div>
 
-        <div class="profile-card">
+        <div class="profile-section-card">
             <div class="card-header">
                 <div class="card-icon">👤</div>
                 <div>
@@ -564,7 +666,7 @@
 
                         @if ($profilePhoto)
                             <div class="form-group">
-                                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted);">
+                                <label class="checkbox-label">
                                     <input type="checkbox" name="remove_profile_photo" value="1" id="removeProfilePhoto">
                                     Dzēst esošo bildi
                                 </label>
@@ -610,7 +712,7 @@
             </form>
         </div>
 
-        <div class="profile-card">
+        <div class="profile-section-card">
             <div class="card-header">
                 <div class="card-icon">🔒</div>
                 <div>
@@ -655,7 +757,7 @@
             </form>
         </div>
 
-        <div class="profile-card delete-section">
+        <div class="profile-section-card delete-section">
             <div class="card-header">
                 <div class="card-icon">⚠️</div>
                 <div>
@@ -678,15 +780,34 @@
                 Dzēst kontu
             </button>
         </div>
-    </div>
 
-    <div class="quick-actions">
-        <h3 class="quick-title">Ātras darbības</h3>
-        <div class="quick-actions-row">
-            <a href="/recipes/create" class="btn btn-success">Izveidot jaunu recepti</a>
-            <a href="/recipes" class="btn btn-secondary">Pārlūkot receptes</a>
-            <a href="/" class="btn btn-primary">Sākumlapa</a>
+        <div class="quick-actions-card">
+            <h3 class="quick-title">Ātras darbības</h3>
+            <p class="quick-subtitle">
+                Ātra piekļuve svarīgākajām darbībām jūsu profilā un receptēs.
+            </p>
+
+            <div class="quick-actions-grid">
+                <a href="/recipes/create" class="quick-action-card">
+                    <span class="quick-action-icon">➕</span>
+                    <div class="quick-action-title">Jauna recepte</div>
+                    <div class="quick-action-text">Izveidojiet un publicējiet jaunu recepti savā profilā.</div>
+                </a>
+
+                <a href="/recipes" class="quick-action-card">
+                    <span class="quick-action-icon">📖</span>
+                    <div class="quick-action-title">Pārlūkot receptes</div>
+                    <div class="quick-action-text">Apskatiet visas receptes un atrodiet jaunu iedvesmu.</div>
+                </a>
+
+                <a href="/" class="quick-action-card">
+                    <span class="quick-action-icon">🏠</span>
+                    <div class="quick-action-title">Sākumlapa</div>
+                    <div class="quick-action-text">Atgriezieties uz platformas sākumlapu.</div>
+                </a>
+            </div>
         </div>
+
     </div>
 </div>
 

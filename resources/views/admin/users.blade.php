@@ -1,245 +1,351 @@
 @extends('layouts.app')
 
+@section('title', 'Lietotāju pārvaldība')
+@section('hero_title', 'Lietotāju pārvaldība')
+@section('hero_text', 'Pārskati lietotājus, pārvaldi statusus un uzturi platformas kopienu kārtībā.')
+
 @section('content')
     <style>
-        :root {
-            --page-bg: #efe7dc;
-            --section-bg: #f8f3ed;
-            --card-bg: #fffdf9;
-            --soft-bg: #f2ebe2;
-            --line: #ddcfc0;
-            --text: #2f241d;
-            --muted: #7b6d61;
-            --accent: #7a5a43;
-            --accent-soft: #ebe0d2;
-            --success-bg: #e8eee2;
-            --success-text: #667652;
-            --danger-bg: #f3e2de;
-            --danger-text: #a45f52;
-            --warning-bg: #efe7dc;
-            --warning-text: #8a6545;
-            --shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
-        }
-
         .admin-users-page {
-            background: var(--page-bg);
-            min-height: 100vh;
-            padding: 36px 24px 60px;
             color: var(--text);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .admin-users-wrap {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        .page-shell {
-            background: var(--section-bg);
-            border: 1px solid var(--line);
-            padding: 36px;
-            box-shadow: var(--shadow);
-        }
-
-        .breadcrumb {
-            font-size: 14px;
-            color: var(--muted);
-            margin-bottom: 28px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 34px;
-        }
-
-        .stat-box {
-            background: var(--accent-soft);
-            border: 1px solid var(--line);
-            padding: 24px 18px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2.4rem;
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .users-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 26px;
-        }
-
-        .user-card {
-            background: var(--card-bg);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .user-header {
-            padding: 22px 24px 16px;
-            border-bottom: 1px solid #e8ddd1;
-            background: #fcf9f4;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border: 1px solid var(--line);
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            background: #f4ece2;
-            color: var(--accent);
-        }
-
-        .role-badge.admin {
-            background: #efe4d8;
-            color: var(--accent);
-        }
-
-        .role-badge.user {
-            background: #edf2e7;
-            color: #667652;
-            border-color: #d7dfcc;
-        }
-
-        .user-name {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
-            color: var(--accent);
-            font-weight: 500;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .user-email {
-            color: var(--muted);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        .user-meta-top {
+        .admin-users-stack {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 14px;
-            color: var(--muted);
+            flex-direction: column;
+            gap: 24px;
         }
 
-        .user-body {
-            padding: 22px 24px 24px;
-        }
-
-        .meta-table {
-            width: 100%;
-            border: 1px solid var(--line);
-            background: var(--soft-bg);
-            margin-bottom: 18px;
-        }
-
-        .meta-row {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            padding: 12px 14px;
-            border-bottom: 1px solid #e2d6c9;
-            gap: 12px;
+        .admin-breadcrumb {
+            display: flex;
             align-items: center;
-            font-size: 14px;
-        }
-
-        .meta-row:last-child {
-            border-bottom: none;
-        }
-
-        .meta-label {
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 16px 18px;
+            background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 18px;
             color: var(--muted);
+            font-size: 14px;
+            box-shadow: 0 10px 24px rgba(79, 59, 42, 0.04);
         }
 
-        .meta-value {
+        .admin-breadcrumb a {
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .admin-breadcrumb-current {
             color: var(--text);
-            font-weight: 600;
-            text-align: right;
+            font-weight: 800;
         }
 
-        .meta-value.success {
-            color: #667652;
+        .admin-section-card {
+            background: rgba(255, 253, 249, 0.96);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
         }
 
-        .meta-value.danger {
-            color: #a45f52;
+        .admin-section-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
         }
 
-        .actions {
+        .admin-section-title-wrap {
+            max-width: 760px;
+        }
+
+        .admin-section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #f5ece2;
+            border: 1px solid rgba(122, 90, 67, 0.12);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .admin-section-title {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.2rem;
+            line-height: 1.15;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        .admin-section-text {
+            margin-top: 10px;
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 15px;
+        }
+
+        .admin-header-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 11px 16px;
-            text-decoration: none;
-            border: 1px solid var(--line);
-            background: #fff;
-            color: var(--text);
-            font-size: 13px;
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .admin-stat-card {
+            background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 20px;
+            padding: 22px 18px;
+            text-align: center;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(79, 59, 42, 0.04);
+        }
+
+        .admin-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
+        }
+
+        .admin-stat-card.soft-green {
+            background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
+        }
+
+        .admin-stat-card.soft-blue {
+            background: linear-gradient(180deg, #edf4fa 0%, #e4eef7 100%);
+        }
+
+        .admin-stat-card.soft-pink {
+            background: linear-gradient(180deg, #faf0f3 0%, #f6e8ed 100%);
+        }
+
+        .admin-stat-number {
+            display: block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.5rem;
+            line-height: 1;
+            color: #6f472c;
             font-weight: 700;
-            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .admin-stat-label {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .user-card {
+            background: #fffdf9;
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 12px 26px rgba(79, 59, 42, 0.05);
             transition: 0.2s ease;
         }
 
-        .btn:hover {
-            filter: brightness(0.98);
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
         }
 
-        .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fffaf4;
+        .user-card-header {
+            padding: 24px 24px 18px;
+            background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+            border-bottom: 1px solid rgba(221, 207, 192, 0.9);
         }
 
-        .btn-success {
-            background: var(--success-bg);
-            color: var(--success-text);
+        .user-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .user-role-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(122, 90, 67, 0.12);
+            background: #f5ece2;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .user-role-badge.user {
+            background: #eef5ea;
+            color: #667652;
             border-color: #d7dfcc;
         }
 
-        .btn-danger {
-            background: var(--danger-bg);
-            color: var(--danger-text);
-            border-color: #e3c9c2;
+        .user-role-badge.admin {
+            background: #f5ece2;
+            color: var(--accent);
         }
 
-        .btn-warning {
-            background: var(--warning-bg);
-            color: var(--warning-text);
-            border-color: #deccb8;
+        .user-created {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 253, 249, 0.88);
+            border: 1px solid rgba(122, 90, 67, 0.12);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
         }
 
-        .btn-secondary {
-            background: #f5eee5;
+        .user-name {
+            margin: 0 0 8px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            line-height: 1.15;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .user-email {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0 0 12px;
+            word-break: break-word;
+        }
+
+        .user-summary-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .user-summary-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 253, 249, 0.88);
+            border: 1px solid rgba(122, 90, 67, 0.10);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .user-card-body {
+            padding: 22px 24px 24px;
+            background: #fffdf9;
+        }
+
+        .user-meta-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .user-meta-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+            border: 1px solid rgba(122, 90, 67, 0.10);
+            border-radius: 14px;
+        }
+
+        .user-meta-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .user-meta-value {
+            text-align: right;
             color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-meta-value.success {
+            color: #667652;
+        }
+
+        .user-meta-value.danger {
+            color: #a45f52;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .user-stat-pill {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fbf6ef 0%, #f5ece2 100%);
+            border: 1px solid rgba(122, 90, 67, 0.10);
+            text-align: center;
+        }
+
+        .user-stat-label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .user-stat-value {
+            display: block;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+        }
+
+        .user-actions .btn,
+        .user-actions form {
+            flex: 1 1 180px;
+        }
+
+        .user-actions form button {
+            width: 100%;
         }
 
         .btn-disabled {
@@ -247,12 +353,22 @@
             color: #8f8378;
             cursor: not-allowed;
             opacity: 0.85;
+            border-radius: 14px;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            border: 1px solid var(--line);
+            box-shadow: 0 6px 18px rgba(79, 59, 42, 0.04);
         }
 
         .pagination-wrap {
-            margin-top: 36px;
+            margin-top: 28px;
             padding-top: 24px;
-            border-top: 1px solid var(--line);
+            border-top: 1px solid rgba(221, 207, 192, 0.9);
             text-align: center;
         }
 
@@ -260,6 +376,7 @@
             margin-bottom: 18px;
             color: var(--muted);
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .pagination-wrap nav {
@@ -290,6 +407,7 @@
             padding: 10px 14px;
             text-decoration: none;
             border: 1px solid var(--line);
+            border-radius: 12px;
             background: #fff;
             color: var(--text);
             font-weight: 700;
@@ -300,8 +418,9 @@
 
         .pagination-wrap a.relative.inline-flex.items-center:hover,
         .pagination-wrap a.inline-flex.items-center:hover {
-            background: var(--soft-bg);
+            background: var(--surface-soft);
             color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .pagination-wrap span[aria-current="page"] > span,
@@ -316,55 +435,80 @@
             color: var(--muted) !important;
         }
 
-        .empty-state {
+        .admin-empty-state {
             text-align: center;
-            padding: 70px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--line);
+            padding: 54px 24px;
+            background: linear-gradient(180deg, #fbf5ee 0%, #f4eadf 100%);
+            border: 1px dashed rgba(122, 90, 67, 0.24);
+            border-radius: 24px;
         }
 
-        .empty-state .icon {
+        .admin-empty-icon {
             font-size: 4rem;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
-        .empty-state h3 {
+        .admin-empty-title {
             font-family: Georgia, "Times New Roman", serif;
-            color: var(--accent);
             font-size: 2rem;
+            color: var(--accent);
             margin-bottom: 10px;
             font-weight: 500;
         }
 
-        .empty-state p {
+        .admin-empty-text {
             color: var(--muted);
+            line-height: 1.75;
+            max-width: 620px;
+            margin: 0 auto;
         }
 
-        .quick-actions {
-            margin-top: 40px;
-            padding-top: 28px;
-            border-top: 1px solid var(--line);
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
         }
 
-        .quick-actions h3 {
-            text-align: center;
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--accent);
-            font-size: 2rem;
-            font-weight: 500;
-            margin-bottom: 22px;
+        .quick-action-card {
+            display: block;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            color: var(--text);
+            transition: 0.2s ease;
+            box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
         }
 
-        .quick-actions-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .quick-action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(79, 59, 42, 0.08);
         }
 
-        @media (max-width: 1100px) {
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
+        .quick-action-icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .quick-action-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .quick-action-text {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1180px) {
+            .admin-stats-grid,
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .users-grid {
@@ -372,59 +516,96 @@
             }
         }
 
-        @media (max-width: 700px) {
-            .admin-users-page {
-                padding: 20px 12px 40px;
-            }
-
-            .page-shell {
+        @media (max-width: 760px) {
+            .admin-section-card {
                 padding: 20px;
+                border-radius: 20px;
             }
 
-            .stats-row {
+            .admin-section-title {
+                font-size: 1.8rem;
+            }
+
+            .admin-stats-grid,
+            .quick-actions-grid,
+            .user-stats {
                 grid-template-columns: 1fr;
             }
 
-            .meta-row {
+            .user-meta-row {
                 grid-template-columns: 1fr;
             }
 
-            .meta-value {
+            .user-meta-value {
                 text-align: left;
             }
 
-            .user-meta-top {
-                flex-direction: column;
-                align-items: flex-start;
+            .user-actions .btn,
+            .user-actions form,
+            .btn-disabled {
+                flex-basis: 100%;
+                width: 100%;
             }
         }
     </style>
 
     <div class="admin-users-page">
-        <div class="admin-users-wrap">
-            <div class="page-shell">
-                <div class="breadcrumb">
-                    <a href="{{ route('admin.index') }}">Admin panelis</a>
-                    <span> / </span>
-                    <span style="font-weight: 700; color: var(--text);">Lietotāju pārvaldība</span>
+        <div class="admin-users-stack">
+
+            <div class="admin-breadcrumb">
+                <a href="{{ route('admin.index') }}">Admin panelis</a>
+                <span>/</span>
+                <span class="admin-breadcrumb-current">Lietotāju pārvaldība</span>
+            </div>
+
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Administrācija · Lietotāji</div>
+                        <h2 class="admin-section-title">Pārskats par lietotājiem</h2>
+                        <p class="admin-section-text">
+                            Šeit vari redzēt visus platformas lietotājus, pārvaldīt administratora statusu,
+                            pārskatīt viņu aktivitāti un vajadzības gadījumā dzēst kontus.
+                        </p>
+                    </div>
+
+                    <div class="admin-header-actions">
+                        <a href="{{ route('admin.index') }}" class="btn btn-secondary">Atpakaļ uz admin paneli</a>
+                        <a href="{{ route('admin.recipes') }}" class="btn btn-primary">Pārvaldīt receptes</a>
+                    </div>
                 </div>
 
-                <div class="stats-row">
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $usersCount }}</div>
-                        <div class="stat-label">Kopā lietotāju</div>
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number">{{ $usersCount }}</span>
+                        <span class="admin-stat-label">Kopā lietotāju</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $adminsCount }}</div>
-                        <div class="stat-label">Administratori</div>
+
+                    <div class="admin-stat-card soft-pink">
+                        <span class="admin-stat-number">{{ $adminsCount }}</span>
+                        <span class="admin-stat-label">Administratori</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $regularUsersCount }}</div>
-                        <div class="stat-label">Parastie lietotāji</div>
+
+                    <div class="admin-stat-card soft-green">
+                        <span class="admin-stat-number">{{ $regularUsersCount }}</span>
+                        <span class="admin-stat-label">Parastie lietotāji</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $newUsersThisWeekCount }}</div>
-                        <div class="stat-label">Jauni šonedēļ</div>
+
+                    <div class="admin-stat-card soft-blue">
+                        <span class="admin-stat-number">{{ $newUsersThisWeekCount }}</span>
+                        <span class="admin-stat-label">Jauni šonedēļ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Kopienas pārvaldība</div>
+                        <h2 class="admin-section-title">Lietotāju saraksts</h2>
+                        <p class="admin-section-text">
+                            Pārskati lietotājus pa vienam, redzi viņu statusu, receptes un pieejamās administrācijas darbības.
+                        </p>
                     </div>
                 </div>
 
@@ -432,41 +613,63 @@
                     <div class="users-grid">
                         @foreach($users as $user)
                             <div class="user-card">
-                                <div class="user-header">
-                                    @if($user->is_admin)
-                                        <div class="role-badge admin">Administrators</div>
-                                    @else
-                                        <div class="role-badge user">Lietotājs</div>
-                                    @endif
+                                <div class="user-card-header">
+                                    <div class="user-topline">
+                                        <span class="user-role-badge {{ $user->is_admin ? 'admin' : 'user' }}">
+                                            {{ $user->is_admin ? 'Administrators' : 'Lietotājs' }}
+                                        </span>
+
+                                        <span class="user-created">🕒 Reģ. {{ $user->created_at->format('d.m.Y') }}</span>
+                                    </div>
 
                                     <h3 class="user-name">{{ $user->name }}</h3>
                                     <p class="user-email">{{ $user->email }}</p>
 
-                                    <div class="user-meta-top">
-                                        <span>Reģ.: {{ $user->created_at->format('d.m.Y') }}</span>
-                                        <span>{{ $user->recipes->count() }} receptes</span>
+                                    <div class="user-summary-row">
+                                        <span class="user-summary-pill">{{ $user->recipes->count() }} receptes</span>
+                                        <span class="user-summary-pill">{{ $user->updated_at->diffForHumans() }}</span>
                                     </div>
                                 </div>
 
-                                <div class="user-body">
-                                    <div class="meta-table">
-                                        <div class="meta-row">
-                                            <div class="meta-label">E-pasts apstiprināts</div>
-                                            <div class="meta-value {{ $user->email_verified_at ? 'success' : 'danger' }}">
+                                <div class="user-card-body">
+                                    <div class="user-meta-grid">
+                                        <div class="user-meta-row">
+                                            <div class="user-meta-label">E-pasts apstiprināts</div>
+                                            <div class="user-meta-value {{ $user->email_verified_at ? 'success' : 'danger' }}">
                                                 {{ $user->email_verified_at ? 'Jā' : 'Nē' }}
                                             </div>
                                         </div>
-                                        <div class="meta-row">
-                                            <div class="meta-label">Pēdējā aktivitāte</div>
-                                            <div class="meta-value">
+
+                                        <div class="user-meta-row">
+                                            <div class="user-meta-label">Pēdējā aktivitāte</div>
+                                            <div class="user-meta-value">
                                                 {{ $user->updated_at->diffForHumans() }}
+                                            </div>
+                                        </div>
+
+                                        <div class="user-meta-row">
+                                            <div class="user-meta-label">Loma sistēmā</div>
+                                            <div class="user-meta-value">
+                                                {{ $user->is_admin ? 'Administrators' : 'Parastais lietotājs' }}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="actions">
+                                    <div class="user-stats">
+                                        <div class="user-stat-pill">
+                                            <span class="user-stat-label">Receptes</span>
+                                            <span class="user-stat-value">{{ $user->recipes->count() }}</span>
+                                        </div>
+
+                                        <div class="user-stat-pill">
+                                            <span class="user-stat-label">Konts izveidots</span>
+                                            <span class="user-stat-value">{{ $user->created_at->format('d.m.Y') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="user-actions">
                                         @if($user->id !== Auth::id())
-                                            <form method="POST" action="{{ route('admin.users.toggle-admin', $user) }}" style="display: inline;">
+                                            <form method="POST" action="{{ route('admin.users.toggle-admin', $user) }}">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button
@@ -478,7 +681,7 @@
                                             </form>
 
                                             @if(!$user->is_admin)
-                                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" style="display: inline;">
+                                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button
@@ -490,9 +693,7 @@
                                                 </form>
                                             @endif
                                         @else
-                                            <span class="btn btn-disabled">
-                                                Jūs pats
-                                            </span>
+                                            <span class="btn-disabled">Jūs pats</span>
                                         @endif
 
                                         @if($user->recipes->count() > 0)
@@ -516,28 +717,49 @@
                         </div>
                     @endif
                 @else
-                    <div class="empty-state">
-                        <div class="icon">👥</div>
-                        <h3>Nav lietotāju</h3>
-                        <p>Nav atrasts neviens lietotājs sistēmā.</p>
+                    <div class="admin-empty-state">
+                        <div class="admin-empty-icon">👥</div>
+                        <h3 class="admin-empty-title">Nav lietotāju</h3>
+                        <p class="admin-empty-text">
+                            Sistēmā pašlaik nav atrasts neviens lietotājs. Kad lietotāji reģistrēsies,
+                            tie parādīsies šajā administrācijas sadaļā.
+                        </p>
                     </div>
                 @endif
+            </div>
 
-                <div class="quick-actions">
-                    <h3>Ātras darbības</h3>
-                    <div class="quick-actions-row">
-                        <a href="{{ route('admin.index') }}" class="btn btn-primary">
-                            Admin panelis
-                        </a>
-                        <a href="{{ route('admin.recipes') }}" class="btn btn-success">
-                            Pārvaldīt receptes
-                        </a>
-                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">
-                            Vadības panelis
-                        </a>
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Ātrās darbības</div>
+                        <h2 class="admin-section-title">Noderīgas saites</h2>
+                        <p class="admin-section-text">
+                            Ātra piekļuve galvenajām administrācijas sadaļām un platformas pārskatam.
+                        </p>
                     </div>
                 </div>
+
+                <div class="quick-actions-grid">
+                    <a href="{{ route('admin.index') }}" class="quick-action-card">
+                        <span class="quick-action-icon">🏠</span>
+                        <div class="quick-action-title">Admin panelis</div>
+                        <div class="quick-action-text">Atgriezties uz galveno administrācijas pārskatu.</div>
+                    </a>
+
+                    <a href="{{ route('admin.recipes') }}" class="quick-action-card">
+                        <span class="quick-action-icon">🍽️</span>
+                        <div class="quick-action-title">Pārvaldīt receptes</div>
+                        <div class="quick-action-text">Skatīt visas receptes un pārvaldīt publicēto saturu.</div>
+                    </a>
+
+                    <a href="{{ route('dashboard') }}" class="quick-action-card">
+                        <span class="quick-action-icon">✨</span>
+                        <div class="quick-action-title">Vadības panelis</div>
+                        <div class="quick-action-text">Pāriet uz lietotāja vadības paneli un citām sadaļām.</div>
+                    </a>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection

@@ -8,115 +8,174 @@
 
 @section('content')
 <style>
-    .page {
-        max-width: 1450px;
-        margin: 0 auto;
-        padding: 28px 20px 50px;
+    .recipes-index-page {
+        color: var(--text);
     }
 
-    .hero {
-        padding: 18px 20px 32px;
-        text-align: center;
+    .recipes-index-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
     }
 
-    .hero-title {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 4rem;
-        line-height: 1.08;
-        color: var(--accent);
-        font-weight: 400;
-        margin-bottom: 12px;
-    }
-
-    .hero-text {
-        color: var(--muted);
-        font-size: 16px;
-        line-height: 1.7;
-        max-width: 820px;
-        margin: 0 auto;
-    }
-
-    .main-content {
-        background: rgba(255, 253, 249, 0.78);
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
-        padding: 34px;
-    }
-
-    .section-block + .section-block {
-        margin-top: 24px;
-    }
-
-    .intro-box,
-    .search-box,
-    .result-box,
-    .empty-box,
-    .pagination-box {
-        background: var(--card-bg);
-        border: 1px solid var(--line);
+    .recipes-section-card {
+        background: rgba(255, 253, 249, 0.96);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
         padding: 28px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
-    .intro-box {
-        text-align: center;
+    .recipes-hero-card {
+        background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
+        overflow: hidden;
     }
 
-    .intro-icon {
-        font-size: 3.5rem;
-        margin-bottom: 16px;
+    .recipes-hero-inner {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 24px;
+        align-items: center;
     }
 
-    .intro-box h2 {
-        font-family: Georgia, "Times New Roman", serif;
+    .recipes-hero-icon-wrap {
+        width: 108px;
+        height: 108px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #efe3d5 0%, #e7d5c3 100%);
+        border: 4px solid #f0e5d8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.8rem;
+        box-shadow: 0 10px 24px rgba(122, 90, 67, 0.12);
+        flex-shrink: 0;
+    }
+
+    .recipes-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        background: #f5ece2;
         color: var(--accent);
-        font-size: 2.3rem;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+
+    .recipes-main-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2.55rem;
         font-weight: 500;
-        margin-bottom: 12px;
+        color: var(--accent);
+        margin: 0 0 10px;
+        line-height: 1.08;
     }
 
-    .intro-box p {
+    .recipes-main-text {
         color: var(--muted);
-        line-height: 1.8;
-        max-width: 760px;
-        margin: 0 auto;
+        line-height: 1.85;
+        font-size: 14px;
+        max-width: 820px;
     }
 
-    .form-grid {
+    .section-head {
+        margin-bottom: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(221, 207, 192, 0.9);
+    }
+
+    .section-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f5ece2;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .section-title {
+        color: var(--accent);
+        margin-bottom: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 500;
+        line-height: 1.1;
+    }
+
+    .section-subtext {
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 14px;
+        max-width: 760px;
+    }
+
+    .filters-form-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr auto;
         gap: 16px;
         align-items: end;
     }
 
-    .search-actions {
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: var(--text);
+        font-size: 14px;
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font-size: 15px;
+        background: #fffdfa;
+        color: var(--text);
+        transition: 0.2s ease;
+        font-family: inherit;
+        box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: #b79d84;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
+    }
+
+    .filters-extra-actions {
         margin-top: 16px;
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
     }
 
-    .pdf-btn {
-        display: inline-block;
-        padding: 12px 18px;
-        text-decoration: none;
-        border: 1px solid var(--line);
-        background: var(--soft-bg);
-        color: var(--text);
-        font-size: 14px;
-        font-weight: 700;
-        transition: 0.2s ease;
-    }
-
-    .pdf-btn:hover {
-        background: var(--soft-bg-2);
-    }
-
-    .result-box {
+    .results-summary-card {
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
         text-align: center;
-        background: var(--soft-bg);
     }
 
-    .result-box h3 {
+    .results-summary-title {
         color: var(--accent);
         margin-bottom: 10px;
         font-family: Georgia, "Times New Roman", serif;
@@ -124,29 +183,32 @@
         font-weight: 500;
     }
 
-    .result-box p {
+    .results-summary-text {
         color: var(--muted);
-        line-height: 1.7;
+        line-height: 1.75;
+        font-size: 14px;
     }
 
-    .top-actions {
+    .actions-center {
         text-align: center;
     }
 
-    .top-actions .btn {
+    .actions-center .btn {
         min-width: 240px;
     }
 
     .recipe-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 22px;
     }
 
     .recipe-card {
-        background: var(--card-bg);
-        border: 1px solid var(--line);
-        padding: 24px;
+        background: #fffdf9;
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 12px 26px rgba(79, 59, 42, 0.05);
         transition: 0.2s ease;
         display: flex;
         flex-direction: column;
@@ -154,47 +216,78 @@
     }
 
     .recipe-card:hover {
-        background: #fffaf5;
+        transform: translateY(-3px);
+        box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
+    }
+
+    .recipe-card-top {
+        padding: 24px 24px 16px;
+        border-bottom: 1px solid rgba(221, 207, 192, 0.9);
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
     }
 
     .recipe-title {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
-        font-size: 1.7rem;
+        font-size: 1.8rem;
         font-weight: 500;
-        margin-bottom: 14px;
-        line-height: 1.2;
+        margin-bottom: 12px;
+        line-height: 1.16;
     }
 
     .recipe-description {
         color: var(--muted);
-        margin-bottom: 18px;
-        line-height: 1.7;
-        flex-grow: 1;
+        line-height: 1.75;
+        font-size: 14px;
     }
 
-    .recipe-meta {
+    .recipe-card-body {
+        padding: 20px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .recipe-meta-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px 14px;
+        gap: 10px;
         margin-bottom: 16px;
-        font-size: 14px;
+    }
+
+    .recipe-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 46px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+        border: 1px solid rgba(122, 90, 67, 0.10);
         color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .recipe-meta-icon {
+        font-size: 1rem;
+        flex-shrink: 0;
     }
 
     .rating-row {
-        margin: 6px 0 16px;
+        margin: 4px 0 16px;
         display: flex;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
         padding: 12px 14px;
-        background: var(--soft-bg);
-        border: 1px solid var(--line);
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 16px;
     }
 
     .rating-value {
-        font-weight: 700;
+        font-weight: 800;
         color: var(--text);
     }
 
@@ -210,7 +303,7 @@
     }
 
     .author-row {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid rgba(221, 207, 192, 0.9);
         padding-top: 15px;
         margin-bottom: 18px;
     }
@@ -223,6 +316,7 @@
         flex-wrap: wrap;
         font-size: 13px;
         color: var(--muted);
+        line-height: 1.6;
     }
 
     .pagination-box {
@@ -233,6 +327,7 @@
         margin-bottom: 18px;
         color: var(--muted);
         font-size: 14px;
+        line-height: 1.6;
     }
 
     .pagination-box nav {
@@ -263,6 +358,7 @@
         padding: 10px 14px;
         text-decoration: none;
         border: 1px solid var(--line);
+        border-radius: 12px;
         background: #fff;
         color: var(--text);
         font-weight: 700;
@@ -273,8 +369,9 @@
 
     .pagination-box a.relative.inline-flex.items-center:hover,
     .pagination-box a.inline-flex.items-center:hover {
-        background: var(--soft-bg);
+        background: var(--surface-soft);
         color: var(--accent);
+        transform: translateY(-1px);
     }
 
     .pagination-box span[aria-current="page"] > span,
@@ -291,25 +388,28 @@
 
     .empty-box {
         text-align: center;
-        padding: 60px 28px;
+        padding: 60px 24px;
+        background: linear-gradient(180deg, #fbf5ee 0%, #f4eadf 100%);
+        border: 1px dashed rgba(122, 90, 67, 0.24);
+        border-radius: 24px;
     }
 
     .empty-icon {
         font-size: 4rem;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     .empty-box h3 {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         font-size: 2rem;
         font-weight: 500;
     }
 
     .empty-box p {
         color: var(--muted);
-        margin-bottom: 30px;
+        margin-bottom: 26px;
         line-height: 1.8;
         max-width: 620px;
         margin-left: auto;
@@ -324,46 +424,28 @@
     }
 
     @media (max-width: 980px) {
-        .hero-title {
-            font-size: 2.8rem;
+        .recipes-section-card {
+            padding: 22px;
         }
 
-        .main-content {
-            padding: 24px;
+        .recipes-hero-inner,
+        .filters-form-grid {
+            grid-template-columns: 1fr;
         }
 
-        .form-grid {
-            grid-template-columns: 1fr 1fr;
+        .recipes-hero-icon-wrap {
+            width: 92px;
+            height: 92px;
+            font-size: 2.4rem;
         }
     }
 
     @media (max-width: 640px) {
-        .page {
-            padding: 16px 12px 32px;
-        }
-
-        .hero {
-            padding: 10px 8px 24px;
-        }
-
-        .hero-title {
-            font-size: 2.3rem;
-        }
-
-        .main-content,
-        .intro-box,
-        .search-box,
-        .result-box,
-        .empty-box,
-        .pagination-box {
+        .recipes-section-card {
             padding: 20px;
         }
 
-        .form-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-meta {
+        .recipe-meta-grid {
             grid-template-columns: 1fr;
         }
 
@@ -377,32 +459,47 @@
         }
 
         .empty-actions .btn,
-        .top-actions .btn,
+        .actions-center .btn,
         .recipe-card .btn {
             width: 100%;
+        }
+
+        .recipes-main-title {
+            font-size: 2rem;
         }
     }
 </style>
 
-<div class="page">
-    <div class="main-content">
+<div class="recipes-index-page">
+    <div class="recipes-index-stack">
 
-        <div class="section-block intro-box">
-            <div class="intro-icon">🔍</div>
-            <h2>Atrodiet savu nākamo recepti</h2>
-            <p>
-                Izmantojiet meklēšanu un filtrus, lai ātri atrastu piemērotākās receptes pēc nosaukuma, kategorijas vai grūtības līmeņa.
-            </p>
+        <div class="recipes-section-card recipes-hero-card">
+            <div class="recipes-hero-inner">
+                <div class="recipes-hero-icon-wrap">🔍</div>
+
+                <div>
+                    <div class="recipes-badge">Receptes un iedvesma</div>
+                    <h2 class="recipes-main-title">Atrodiet savu nākamo recepti</h2>
+                    <p class="recipes-main-text">
+                        Izmantojiet meklēšanu un filtrus, lai ātri atrastu piemērotākās receptes pēc nosaukuma,
+                        kategorijas vai grūtības līmeņa, un atklātu jaunas idejas ikdienai.
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div class="section-block search-box">
-            <h3 class="section-title">📋 Meklēšana un filtri</h3>
-            <p class="section-subtext">
-                Atlasiet receptes pēc sev svarīgākajiem kritērijiem un, ja nepieciešams, izdrukājiet atlasīto sarakstu.
-            </p>
+        <div class="recipes-section-card">
+            <div class="section-head">
+                <div class="section-kicker">Meklēšana un filtri</div>
+                <h3 class="section-title">Atlasiet sev piemērotākās receptes</h3>
+                <p class="section-subtext">
+                    Filtrējiet receptes pēc sev svarīgākajiem kritērijiem un, ja nepieciešams,
+                    izdrukājiet atlasīto sarakstu.
+                </p>
+            </div>
 
             <form method="GET" action="{{ route('recipes.index') }}">
-                <div class="form-grid">
+                <div class="filters-form-grid">
                     <div class="form-group">
                         <label class="form-label">Meklēt receptes</label>
                         <input
@@ -440,12 +537,12 @@
                 </div>
 
                 @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
-                    <div class="search-actions">
+                    <div class="filters-extra-actions">
                         <a href="{{ route('recipes.index') }}" class="btn btn-warning">
                             Notīrīt filtrus
                         </a>
 
-                        <a href="{{ route('pdf.filtered.recipes', request()->query()) }}" class="pdf-btn">
+                        <a href="{{ route('pdf.filtered.recipes', request()->query()) }}" class="btn btn-secondary">
                             Drukāt atlasīto
                         </a>
                     </div>
@@ -453,11 +550,11 @@
             </form>
         </div>
 
-        <div class="section-block result-box">
-            <h3>📊 Atrastas {{ $recipes->total() }} receptes</h3>
+        <div class="recipes-section-card results-summary-card">
+            <h3 class="results-summary-title">Atrastas {{ $recipes->total() }} receptes</h3>
 
             @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
-                <p>
+                <p class="results-summary-text">
                     Filtrēti rezultāti:
                     @if(request('search')) meklēšana "{{ request('search') }}" @endif
                     @if(request('category')) | kategorija "{{ request('category') }}" @endif
@@ -465,76 +562,101 @@
                     @if(request('max_time')) | max laiks "{{ request('max_time') }} min" @endif
                 </p>
             @else
-                <p>
+                <p class="results-summary-text">
                     Šeit redzams pilns pieejamo recepšu saraksts no kopienas.
                 </p>
             @endif
         </div>
 
-        <div class="section-block top-actions">
+        <div class="recipes-section-card actions-center">
             <a href="{{ route('recipes.create') }}" class="btn btn-success">
                 Pievienot jaunu recepti
             </a>
         </div>
 
         @if($recipes->count() > 0)
-            <div class="section-block">
+            <div class="recipes-section-card">
+                <div class="section-head">
+                    <div class="section-kicker">Kopienas receptes</div>
+                    <h3 class="section-title">Recepšu saraksts</h3>
+                    <p class="section-subtext">
+                        Pārlūkojiet receptes, salīdziniet vērtējumus un atrodiet sev piemērotāko maltīti.
+                    </p>
+                </div>
+
                 <div class="recipe-grid">
                     @foreach($recipes as $recipe)
                         <div class="recipe-card">
-                            <h3 class="recipe-title">{{ $recipe->title }}</h3>
+                            <div class="recipe-card-top">
+                                <h3 class="recipe-title">{{ $recipe->title }}</h3>
 
-                            <p class="recipe-description">
-                                {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
-                            </p>
-
-                            <div class="recipe-meta">
-                                <div>📂 {{ $recipe->category ?? 'Nav kategorijas' }}</div>
-                                <div>⭐ {{ $recipe->difficulty ?? 'Nav norādīta' }}</div>
-
-                                @if($recipe->prep_time || $recipe->cook_time)
-                                    <div>⏱️ {{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</div>
-                                @endif
-
-                                @if($recipe->servings)
-                                    <div>👥 {{ $recipe->servings }} porcijas</div>
-                                @endif
+                                <p class="recipe-description">
+                                    {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
+                                </p>
                             </div>
 
-                            <div class="rating-row">
-                                <span class="rating-value">
-                                    {{ $recipe->reviews_avg_rating ? round($recipe->reviews_avg_rating, 1) : 'Nav vērtējumu' }} / 5
-                                </span>
+                            <div class="recipe-card-body">
+                                <div class="recipe-meta-grid">
+                                    <div class="recipe-meta-item">
+                                        <span class="recipe-meta-icon">📂</span>
+                                        <span>{{ $recipe->category ?? 'Nav kategorijas' }}</span>
+                                    </div>
 
-                                <span class="rating-count">
-                                    ({{ $recipe->reviews_count }})
-                                </span>
+                                    <div class="recipe-meta-item">
+                                        <span class="recipe-meta-icon">⭐</span>
+                                        <span>{{ $recipe->difficulty ?? 'Nav norādīta' }}</span>
+                                    </div>
 
-                                <span class="rating-stars">
-                                    @php $r = (int) round($recipe->reviews_avg_rating ?? 0); @endphp
-                                    @for($i = 1; $i <= 5; $i++)
-                                        {!! $i <= $r ? '★' : '☆' !!}
-                                    @endfor
-                                </span>
-                            </div>
+                                    @if($recipe->prep_time || $recipe->cook_time)
+                                        <div class="recipe-meta-item">
+                                            <span class="recipe-meta-icon">⏱️</span>
+                                            <span>{{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</span>
+                                        </div>
+                                    @endif
 
-                            <div class="author-row">
-                                <div class="author-meta">
-                                    <span>Autors: {{ $recipe->user->name ?? 'Nezināms autors' }}</span>
-                                    <span>{{ $recipe->created_at->diffForHumans() }}</span>
+                                    @if($recipe->servings)
+                                        <div class="recipe-meta-item">
+                                            <span class="recipe-meta-icon">👥</span>
+                                            <span>{{ $recipe->servings }} porcijas</span>
+                                        </div>
+                                    @endif
                                 </div>
-                            </div>
 
-                            <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
-                                Skatīt recepti
-                            </a>
+                                <div class="rating-row">
+                                    <span class="rating-value">
+                                        {{ $recipe->reviews_avg_rating ? round($recipe->reviews_avg_rating, 1) : 'Nav vērtējumu' }} / 5
+                                    </span>
+
+                                    <span class="rating-count">
+                                        ({{ $recipe->reviews_count }})
+                                    </span>
+
+                                    <span class="rating-stars">
+                                        @php $r = (int) round($recipe->reviews_avg_rating ?? 0); @endphp
+                                        @for($i = 1; $i <= 5; $i++)
+                                            {!! $i <= $r ? '★' : '☆' !!}
+                                        @endfor
+                                    </span>
+                                </div>
+
+                                <div class="author-row">
+                                    <div class="author-meta">
+                                        <span>Autors: {{ $recipe->user->name ?? 'Nezināms autors' }}</span>
+                                        <span>{{ $recipe->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+
+                                <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
+                                    Skatīt recepti
+                                </a>
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </div>
 
             @if($recipes->hasPages())
-                <div class="section-block pagination-box">
+                <div class="recipes-section-card pagination-box">
                     <div class="pagination-summary">
                         Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
                     </div>
@@ -543,7 +665,7 @@
                 </div>
             @endif
         @else
-            <div class="section-block empty-box">
+            <div class="recipes-section-card empty-box">
                 <div class="empty-icon">🔎</div>
                 <h3>Nav atrasta neviena recepte</h3>
                 <p>

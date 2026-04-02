@@ -1,235 +1,324 @@
 @extends('layouts.app')
 
+@section('title', 'Recepšu pārvaldība')
+@section('hero_title', 'Recepšu pārvaldība')
+@section('hero_text', 'Pārskati, rediģē un uzturi visas platformas receptes vienuviet.')
+
 @section('content')
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-black leading-tight">
-            {{ __('Recepšu pārvaldība - Vecmāmiņas Receptes') }}
-        </h2>
-    </x-slot>
-
     <style>
-        :root {
-            --page-bg: #efe7dc;
-            --section-bg: #f8f3ed;
-            --card-bg: #fffdf9;
-            --soft-bg: #f2ebe2;
-            --line: #ddcfc0;
-            --text: #2f241d;
-            --muted: #7b6d61;
-            --accent: #7a5a43;
-            --accent-soft: #ebe0d2;
-            --success-bg: #e8eee2;
-            --success-text: #667652;
-            --danger-bg: #f3e2de;
-            --danger-text: #a45f52;
-            --shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
-        }
-
         .admin-recipes-page {
-            background: var(--page-bg);
-            min-height: 100vh;
-            padding: 36px 24px 60px;
             color: var(--text);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .admin-recipes-wrap {
-            max-width: 1280px;
-            margin: 0 auto;
+        .admin-recipes-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
-        .page-shell {
-            background: var(--section-bg);
-            border: 1px solid var(--line);
-            padding: 36px;
-            box-shadow: var(--shadow);
-        }
-
-        .breadcrumb {
-            font-size: 14px;
+        .admin-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 16px 18px;
+            background: linear-gradient(180deg, #faf4ed 0%, #f5ece2 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 18px;
             color: var(--muted);
-            margin-bottom: 28px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--line);
+            font-size: 14px;
+            box-shadow: 0 10px 24px rgba(79, 59, 42, 0.04);
         }
 
-        .breadcrumb a {
-            color: var(--accent);
+        .admin-breadcrumb a {
             text-decoration: none;
-            font-weight: 600;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 34px;
-        }
-
-        .stat-box {
-            background: var(--accent-soft);
-            border: 1px solid var(--line);
-            padding: 24px 18px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2.4rem;
             color: var(--accent);
-            margin-bottom: 8px;
             font-weight: 700;
         }
 
-        .stat-label {
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .recipes-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 26px;
-        }
-
-        .recipe-card {
-            background: var(--card-bg);
-            border: 1px solid var(--line);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .recipe-header {
-            padding: 26px 26px 18px;
-            border-bottom: 1px solid #e8ddd1;
-            background: #fcf9f4;
-        }
-
-        .recipe-title {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-            font-weight: 500;
-            line-height: 1.2;
-        }
-
-        .recipe-description {
-            color: var(--muted);
-            line-height: 1.7;
-            font-size: 14px;
-        }
-
-        .recipe-body {
-            padding: 22px 26px 24px;
-        }
-
-        .meta-table {
-            width: 100%;
-            border: 1px solid var(--line);
-            background: var(--soft-bg);
-            margin-bottom: 18px;
-        }
-
-        .meta-row {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            padding: 12px 14px;
-            border-bottom: 1px solid #e2d6c9;
-            gap: 12px;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .meta-row:last-child {
-            border-bottom: none;
-        }
-
-        .meta-label {
-            color: var(--muted);
-        }
-
-        .meta-value {
+        .admin-breadcrumb-current {
             color: var(--text);
-            font-weight: 600;
-            text-align: right;
+            font-weight: 800;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border: 1px solid var(--line);
-            background: #f6eee4;
+        .admin-section-card {
+            background: rgba(255, 253, 249, 0.96);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        }
+
+        .admin-section-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .admin-section-title-wrap {
+            max-width: 760px;
+        }
+
+        .admin-section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #f5ece2;
+            border: 1px solid rgba(122, 90, 67, 0.12);
             color: var(--accent);
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
         }
 
-        .badge-difficulty {
-            background: #f2e3df;
-            color: #9f5f56;
+        .admin-section-title {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.2rem;
+            line-height: 1.15;
+            font-weight: 500;
+            color: var(--accent);
         }
 
-        .recipe-stats {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 13px;
+        .admin-section-text {
+            margin-top: 10px;
             color: var(--muted);
-            margin-bottom: 20px;
+            line-height: 1.75;
+            font-size: 15px;
         }
 
-        .actions {
+        .admin-header-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 11px 16px;
-            text-decoration: none;
-            border: 1px solid var(--line);
-            background: #fff;
-            color: var(--text);
-            font-size: 13px;
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .admin-stat-card {
+            background: linear-gradient(180deg, #f9f2ea 0%, #efe3d5 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 20px;
+            padding: 22px 18px;
+            text-align: center;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(79, 59, 42, 0.04);
+        }
+
+        .admin-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
+        }
+
+        .admin-stat-card.soft-green {
+            background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
+        }
+
+        .admin-stat-card.soft-blue {
+            background: linear-gradient(180deg, #edf4fa 0%, #e5eef7 100%);
+        }
+
+        .admin-stat-card.soft-pink {
+            background: linear-gradient(180deg, #faf0f3 0%, #f5e7ec 100%);
+        }
+
+        .admin-stat-number {
+            display: block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.5rem;
+            line-height: 1;
+            color: var(--accent-dark);
             font-weight: 700;
-            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .admin-stat-label {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .recipe-card {
+            background: #fffdf9;
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 12px 26px rgba(79, 59, 42, 0.05);
             transition: 0.2s ease;
         }
 
-        .btn:hover {
-            filter: brightness(0.98);
+        .recipe-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
         }
 
-        .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fffaf4;
+        .recipe-card-header {
+            padding: 24px 24px 18px;
+            background: linear-gradient(180deg, #fcf8f3 0%, #f8f0e7 100%);
+            border-bottom: 1px solid rgba(221, 207, 192, 0.9);
         }
 
-        .btn-success {
-            background: var(--success-bg);
-            color: var(--success-text);
-            border-color: #d7dfcc;
+        .recipe-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
         }
 
-        .btn-danger {
-            background: var(--danger-bg);
-            color: var(--danger-text);
-            border-color: #e3c9c2;
+        .recipe-created {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 253, 249, 0.88);
+            border: 1px solid rgba(122, 90, 67, 0.12);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
         }
 
-        .btn-secondary {
-            background: #f5eee5;
+        .recipe-title {
+            margin: 0 0 10px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2rem;
+            line-height: 1.15;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .recipe-description {
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .recipe-card-body {
+            padding: 22px 24px 24px;
+        }
+
+        .recipe-meta-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .recipe-meta-row {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            background: #f8f2ea;
+            border: 1px solid rgba(122, 90, 67, 0.10);
+            border-radius: 14px;
+        }
+
+        .recipe-meta-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .recipe-meta-value {
+            text-align: right;
             color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .recipe-meta-badges {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(122, 90, 67, 0.12);
+            background: #f4e9dc;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .recipe-badge.difficulty {
+            background: #f4e4e1;
+            color: #9a5e57;
+        }
+
+        .recipe-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .recipe-stat-pill {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fbf6ef 0%, #f5ecdf 100%);
+            border: 1px solid rgba(122, 90, 67, 0.10);
+            text-align: center;
+        }
+
+        .recipe-stat-label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .recipe-stat-value {
+            display: block;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .recipe-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+        }
+
+        .recipe-actions .btn {
+            flex: 1 1 140px;
         }
 
         .pagination-wrap {
-            margin-top: 36px;
+            margin-top: 28px;
             padding-top: 24px;
-            border-top: 1px solid var(--line);
+            border-top: 1px solid rgba(221, 207, 192, 0.9);
             text-align: center;
         }
 
@@ -237,6 +326,7 @@
             margin-bottom: 18px;
             color: var(--muted);
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .pagination-wrap nav {
@@ -267,6 +357,7 @@
             padding: 10px 14px;
             text-decoration: none;
             border: 1px solid var(--line);
+            border-radius: 12px;
             background: #fff;
             color: var(--text);
             font-weight: 700;
@@ -277,8 +368,9 @@
 
         .pagination-wrap a.relative.inline-flex.items-center:hover,
         .pagination-wrap a.inline-flex.items-center:hover {
-            background: var(--soft-bg);
+            background: var(--surface-soft);
             color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .pagination-wrap span[aria-current="page"] > span,
@@ -293,55 +385,80 @@
             color: var(--muted) !important;
         }
 
-        .empty-state {
+        .admin-empty-state {
             text-align: center;
-            padding: 70px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--line);
+            padding: 54px 24px;
+            background: linear-gradient(180deg, #fbf5ee 0%, #f4eadf 100%);
+            border: 1px dashed rgba(122, 90, 67, 0.24);
+            border-radius: 24px;
         }
 
-        .empty-state .icon {
+        .admin-empty-icon {
             font-size: 4rem;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
-        .empty-state h3 {
+        .admin-empty-title {
             font-family: Georgia, "Times New Roman", serif;
-            color: var(--accent);
             font-size: 2rem;
+            color: var(--accent);
             margin-bottom: 10px;
             font-weight: 500;
         }
 
-        .empty-state p {
+        .admin-empty-text {
             color: var(--muted);
+            line-height: 1.75;
+            max-width: 620px;
+            margin: 0 auto;
         }
 
-        .quick-actions {
-            margin-top: 40px;
-            padding-top: 28px;
-            border-top: 1px solid var(--line);
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
         }
 
-        .quick-actions h3 {
-            text-align: center;
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--accent);
-            font-size: 2rem;
-            font-weight: 500;
-            margin-bottom: 22px;
+        .quick-action-card {
+            display: block;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+            border: 1px solid rgba(122, 90, 67, 0.14);
+            color: var(--text);
+            transition: 0.2s ease;
+            box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
         }
 
-        .quick-actions-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .quick-action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(79, 59, 42, 0.08);
         }
 
-        @media (max-width: 1100px) {
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
+        .quick-action-icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .quick-action-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .quick-action-text {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1180px) {
+            .admin-stats-grid,
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .recipes-grid {
@@ -349,54 +466,98 @@
             }
         }
 
-        @media (max-width: 700px) {
-            .admin-recipes-page {
-                padding: 20px 12px 40px;
-            }
-
-            .page-shell {
+        @media (max-width: 760px) {
+            .admin-section-card {
                 padding: 20px;
+                border-radius: 20px;
             }
 
-            .stats-row {
+            .admin-section-title {
+                font-size: 1.8rem;
+            }
+
+            .admin-stats-grid,
+            .quick-actions-grid,
+            .recipe-stats {
                 grid-template-columns: 1fr;
             }
 
-            .meta-row {
+            .recipe-meta-row {
                 grid-template-columns: 1fr;
             }
 
-            .meta-value {
+            .recipe-meta-value {
                 text-align: left;
+            }
+
+            .recipe-meta-badges {
+                justify-content: flex-start;
+            }
+
+            .recipe-actions .btn {
+                flex-basis: 100%;
             }
         }
     </style>
 
     <div class="admin-recipes-page">
-        <div class="admin-recipes-wrap">
-            <div class="page-shell">
-                <div class="breadcrumb">
-                    <a href="{{ route('admin.index') }}">Admin panelis</a>
-                    <span> / </span>
-                    <span style="font-weight: 700; color: var(--text);">Recepšu pārvaldība</span>
+        <div class="admin-recipes-stack">
+
+            <div class="admin-breadcrumb">
+                <a href="{{ route('admin.index') }}">Admin panelis</a>
+                <span>/</span>
+                <span class="admin-breadcrumb-current">Recepšu pārvaldība</span>
+            </div>
+
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Administrācija · Receptes</div>
+                        <h2 class="admin-section-title">Pārskats par visām receptēm</h2>
+                        <p class="admin-section-text">
+                            Šeit vari apskatīt platformā publicētās receptes, pārbaudīt autorus,
+                            rediģēt saturu un dzēst ierakstus, ja tas ir nepieciešams.
+                        </p>
+                    </div>
+
+                    <div class="admin-header-actions">
+                        <a href="{{ route('admin.index') }}" class="btn btn-secondary">Atpakaļ uz admin paneli</a>
+                        <a href="{{ route('recipes.index') }}" class="btn btn-primary">Skatīt publisko sarakstu</a>
+                    </div>
                 </div>
 
-                <div class="stats-row">
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $recipesCount }}</div>
-                        <div class="stat-label">Kopā recepšu</div>
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number">{{ $recipesCount }}</span>
+                        <span class="admin-stat-label">Kopā receptes</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $categoriesCount }}</div>
-                        <div class="stat-label">Kategorijas</div>
+
+                    <div class="admin-stat-card soft-green">
+                        <span class="admin-stat-number">{{ $categoriesCount }}</span>
+                        <span class="admin-stat-label">Kategorijas</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $newRecipesThisWeekCount }}</div>
-                        <div class="stat-label">Jaunas šonedēļ</div>
+
+                    <div class="admin-stat-card soft-blue">
+                        <span class="admin-stat-number">{{ $newRecipesThisWeekCount }}</span>
+                        <span class="admin-stat-label">Jaunas šonedēļ</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number">{{ $activeAuthorsCount }}</div>
-                        <div class="stat-label">Aktīvi autori</div>
+
+                    <div class="admin-stat-card soft-pink">
+                        <span class="admin-stat-number">{{ $activeAuthorsCount }}</span>
+                        <span class="admin-stat-label">Aktīvie autori</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Satura pārvaldība</div>
+                        <h2 class="admin-section-title">Recepšu saraksts</h2>
+                        <p class="admin-section-text">
+                            Šajā sadaļā vari pārskatīt receptes pa vienai, redzēt to pamata datus
+                            un veikt nepieciešamās darbības.
+                        </p>
                     </div>
                 </div>
 
@@ -404,44 +565,71 @@
                     <div class="recipes-grid">
                         @foreach($recipes as $recipe)
                             <div class="recipe-card">
-                                <div class="recipe-header">
+                                <div class="recipe-card-header">
+                                    <div class="recipe-topline">
+                                        <span class="recipe-created">🕒 {{ $recipe->created_at->diffForHumans() }}</span>
+
+                                        @if(!empty($recipe->category))
+                                            <span class="recipe-badge">{{ $recipe->category }}</span>
+                                        @endif
+                                    </div>
+
                                     <h3 class="recipe-title">{{ $recipe->title }}</h3>
+
                                     <p class="recipe-description">
-                                        {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
+                                        {{ \Illuminate\Support\Str::limit($recipe->description, 120) }}
                                     </p>
                                 </div>
 
-                                <div class="recipe-body">
-                                    <div class="meta-table">
-                                        <div class="meta-row">
-                                            <div class="meta-label">Autors</div>
-                                            <div class="meta-value">{{ $recipe->user->name ?? 'Nav norādīts' }}</div>
+                                <div class="recipe-card-body">
+                                    <div class="recipe-meta-grid">
+                                        <div class="recipe-meta-row">
+                                            <div class="recipe-meta-label">Autors</div>
+                                            <div class="recipe-meta-value">{{ $recipe->user->name ?? 'Nav norādīts' }}</div>
                                         </div>
-                                        <div class="meta-row">
-                                            <div class="meta-label">Kategorija</div>
-                                            <div class="meta-value">
-                                                <span class="badge">{{ $recipe->category ?? 'Nav norādīta' }}</span>
+
+                                        <div class="recipe-meta-row">
+                                            <div class="recipe-meta-label">Kategorija</div>
+                                            <div class="recipe-meta-value">
+                                                <div class="recipe-meta-badges">
+                                                    <span class="recipe-badge">{{ $recipe->category ?? 'Nav norādīta' }}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="meta-row">
-                                            <div class="meta-label">Grūtība</div>
-                                            <div class="meta-value">
-                                                <span class="badge badge-difficulty">{{ $recipe->difficulty ?? 'N/A' }}</span>
+
+                                        <div class="recipe-meta-row">
+                                            <div class="recipe-meta-label">Grūtība</div>
+                                            <div class="recipe-meta-value">
+                                                <div class="recipe-meta-badges">
+                                                    <span class="recipe-badge difficulty">{{ $recipe->difficulty ?? 'N/A' }}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="meta-row">
-                                            <div class="meta-label">Izveidots</div>
-                                            <div class="meta-value">{{ $recipe->created_at->format('d.m.Y H:i') }}</div>
+
+                                        <div class="recipe-meta-row">
+                                            <div class="recipe-meta-label">Izveidots</div>
+                                            <div class="recipe-meta-value">{{ $recipe->created_at->format('d.m.Y H:i') }}</div>
                                         </div>
                                     </div>
 
                                     <div class="recipe-stats">
-                                        <span>Sagatavošana: {{ $recipe->prep_time ?? 'N/A' }} min</span>
-                                        <span>Porcijas: {{ $recipe->servings ?? 'N/A' }}</span>
-                                        <span>{{ $recipe->created_at->diffForHumans() }}</span>
+                                        <div class="recipe-stat-pill">
+                                            <span class="recipe-stat-label">Sagatavošana</span>
+                                            <span class="recipe-stat-value">{{ $recipe->prep_time ?? 'N/A' }} min</span>
+                                        </div>
+
+                                        <div class="recipe-stat-pill">
+                                            <span class="recipe-stat-label">Porcijas</span>
+                                            <span class="recipe-stat-value">{{ $recipe->servings ?? 'N/A' }}</span>
+                                        </div>
+
+                                        <div class="recipe-stat-pill">
+                                            <span class="recipe-stat-label">Publicēta</span>
+                                            <span class="recipe-stat-value">{{ $recipe->created_at->format('d.m.Y') }}</span>
+                                        </div>
                                     </div>
 
-                                    <div class="actions">
+                                    <div class="recipe-actions">
                                         <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
                                             Skatīt
                                         </a>
@@ -452,12 +640,13 @@
                                             </a>
                                         @endif
 
-                                        <form method="POST" action="{{ route('admin.recipes.destroy', $recipe) }}" style="display: inline;">
+                                        <form method="POST" action="{{ route('admin.recipes.destroy', $recipe) }}" style="display: inline; flex: 1 1 140px;">
                                             @csrf
                                             @method('DELETE')
                                             <button
                                                 type="submit"
                                                 class="btn btn-danger"
+                                                style="width: 100%;"
                                                 onclick="return confirm('Vai tiešām dzēst šo recepti? Šī darbība ir neatgriezeniska!')">
                                                 Dzēst
                                             </button>
@@ -482,23 +671,55 @@
                         </div>
                     @endif
                 @else
-                    <div class="empty-state">
-                        <div class="icon">🍽️</div>
-                        <h3>Nav recepšu</h3>
-                        <p>Nav atrasta neviena recepte sistēmā.</p>
+                    <div class="admin-empty-state">
+                        <div class="admin-empty-icon">🍽️</div>
+                        <h3 class="admin-empty-title">Nav recepšu</h3>
+                        <p class="admin-empty-text">
+                            Sistēmā pašlaik nav atrasta neviena recepte. Kad receptes tiks pievienotas,
+                            tās parādīsies šeit administrācijas pārvaldības sadaļā.
+                        </p>
                     </div>
                 @endif
+            </div>
 
-                <div class="quick-actions">
-                    <h3>Ātras darbības</h3>
-                    <div class="quick-actions-row">
-                        <a href="{{ route('admin.index') }}" class="btn btn-primary">Admin panelis</a>
-                        <a href="{{ route('admin.users') }}" class="btn btn-success">Pārvaldīt lietotājus</a>
-                        <a href="{{ route('recipes.index') }}" class="btn btn-secondary">Skatīt visas receptes</a>
-                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Vadības panelis</a>
+            <div class="admin-section-card">
+                <div class="admin-section-head">
+                    <div class="admin-section-title-wrap">
+                        <div class="admin-section-kicker">Ātrās darbības</div>
+                        <h2 class="admin-section-title">Noderīgas saites</h2>
+                        <p class="admin-section-text">
+                            Ātra piekļuve svarīgākajām administrācijas un platformas sadaļām.
+                        </p>
                     </div>
                 </div>
+
+                <div class="quick-actions-grid">
+                    <a href="{{ route('admin.index') }}" class="quick-action-card">
+                        <span class="quick-action-icon">🏠</span>
+                        <div class="quick-action-title">Admin panelis</div>
+                        <div class="quick-action-text">Atgriezties uz galveno administrācijas pārskatu.</div>
+                    </a>
+
+                    <a href="{{ route('admin.users') }}" class="quick-action-card">
+                        <span class="quick-action-icon">👤</span>
+                        <div class="quick-action-title">Pārvaldīt lietotājus</div>
+                        <div class="quick-action-text">Skatīt lietotājus, viņu statusus un aktivitāti.</div>
+                    </a>
+
+                    <a href="{{ route('recipes.index') }}" class="quick-action-card">
+                        <span class="quick-action-icon">📖</span>
+                        <div class="quick-action-title">Visas receptes</div>
+                        <div class="quick-action-text">Atvērt publisko recepšu sarakstu lietotāju skatā.</div>
+                    </a>
+
+                    <a href="{{ route('dashboard') }}" class="quick-action-card">
+                        <span class="quick-action-icon">✨</span>
+                        <div class="quick-action-title">Vadības panelis</div>
+                        <div class="quick-action-text">Pāriet uz lietotāja vadības paneli un profila sadaļām.</div>
+                    </a>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection

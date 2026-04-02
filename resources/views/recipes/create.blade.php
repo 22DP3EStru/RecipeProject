@@ -19,69 +19,145 @@
         color: var(--text);
     }
 
-    .section-block + .section-block {
-        margin-top: 28px;
+    .create-recipe-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
     }
 
-    .intro-box,
-    .form-section,
-    .tips-box {
-        background: var(--surface);
-        border: 1px solid var(--line);
+    .create-section-card {
+        background: rgba(255, 253, 249, 0.96);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
         padding: 28px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
-    .intro-box {
-        text-align: center;
+    .create-hero-card {
+        background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
+        overflow: hidden;
     }
 
-    .intro-icon {
-        font-size: 3.5rem;
-        margin-bottom: 16px;
+    .create-hero-inner {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 24px;
+        align-items: center;
     }
 
-    .intro-box h2 {
-        font-family: Georgia, "Times New Roman", serif;
+    .create-hero-icon-wrap {
+        width: 108px;
+        height: 108px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #efe3d5 0%, #e7d5c3 100%);
+        border: 4px solid #f0e5d8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.8rem;
+        box-shadow: 0 10px 24px rgba(122, 90, 67, 0.12);
+        flex-shrink: 0;
+    }
+
+    .create-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        background: #f5ece2;
         color: var(--accent);
-        font-size: 2.3rem;
-        font-weight: 500;
-        margin-bottom: 12px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
     }
 
-    .intro-box p {
+    .create-main-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2.55rem;
+        font-weight: 500;
+        color: var(--accent);
+        margin: 0 0 10px;
+        line-height: 1.08;
+    }
+
+    .create-main-text {
         color: var(--muted);
-        line-height: 1.8;
+        line-height: 1.85;
+        font-size: 14px;
         max-width: 760px;
-        margin: 0 auto;
+    }
+
+    .error-summary {
+        padding: 20px 22px;
+        border: 1px solid #e7cfc9;
+        border-radius: 20px;
+        background: linear-gradient(180deg, #fcf2ef 0%, #f8ebe7 100%);
+        color: var(--danger-text);
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
+    }
+
+    .error-summary h4 {
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    .error-summary ul {
+        margin-left: 20px;
+        line-height: 1.7;
+    }
+
+    .form-section-head {
+        margin-bottom: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(221, 207, 192, 0.9);
+    }
+
+    .section-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f5ece2;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
     }
 
     .section-title {
         color: var(--accent);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        margin-bottom: 8px;
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.9rem;
+        font-size: 2rem;
         font-weight: 500;
+        line-height: 1.1;
     }
 
     .section-subtext {
         color: var(--muted);
-        line-height: 1.7;
-        margin-bottom: 22px;
+        line-height: 1.75;
+        font-size: 14px;
+        max-width: 760px;
     }
 
     .form-group {
-        margin-bottom: 22px;
+        margin-bottom: 20px;
     }
 
     .form-label {
         display: block;
-        margin-bottom: 9px;
+        margin-bottom: 8px;
         font-weight: 700;
         color: var(--text);
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .form-input,
@@ -90,19 +166,22 @@
         width: 100%;
         padding: 14px 16px;
         border: 1px solid var(--line);
+        border-radius: 14px;
         font-size: 15px;
         background: #fffdfa;
         color: var(--text);
         transition: 0.2s ease;
         font-family: inherit;
+        box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
     }
 
     .form-input:focus,
     .form-textarea:focus,
     .form-select:focus {
         outline: none;
-        border-color: #bba692;
+        border-color: #b79d84;
         background: #fff;
+        box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
     .form-textarea {
@@ -121,25 +200,7 @@
         margin-top: 7px;
         display: block;
         font-size: 13px;
-        line-height: 1.5;
-    }
-
-    .alert {
-        padding: 18px 20px;
-        margin-bottom: 24px;
-        border: 1px solid var(--danger-border);
-        background: #fbf3f1;
-        color: var(--danger-text);
-    }
-
-    .alert h4 {
-        margin-bottom: 12px;
-        font-size: 16px;
-    }
-
-    .alert ul {
-        margin-left: 20px;
-        line-height: 1.7;
+        line-height: 1.6;
     }
 
     .field-error {
@@ -153,19 +214,48 @@
     .form-input.is-invalid,
     .form-textarea.is-invalid,
     .form-select.is-invalid {
-        border-color: var(--danger-border);
+        border-color: #e7cfc9;
         background: #fff7f6;
     }
 
+    .time-summary-card {
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 18px;
+        padding: 18px;
+        margin-top: 10px;
+    }
+
+    .time-summary-title {
+        color: var(--accent);
+        font-weight: 800;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
     .note-pill {
-        display: inline-block;
-        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
         background: #f2e7da;
         color: #7a5a43;
         font-weight: 700;
         font-size: 12px;
         border: 1px solid var(--line);
+        border-radius: 999px;
         margin-top: 10px;
+    }
+
+    .ingredients-wrap {
+        display: grid;
+        gap: 12px;
+    }
+
+    .ingredient-item {
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 18px;
+        padding: 14px;
     }
 
     .ing-row {
@@ -173,13 +263,12 @@
         gap: 10px;
         flex-wrap: wrap;
         align-items: center;
-        margin-bottom: 10px;
     }
 
     .ing-row.has-error {
-        padding: 10px;
-        border: 1px solid var(--danger-border);
-        background: #fff8f7;
+        padding: 0;
+        border: none;
+        background: transparent;
     }
 
     .ing-qty {
@@ -196,12 +285,24 @@
     }
 
     .ing-errors {
-        margin-top: -2px;
-        margin-bottom: 10px;
+        margin-top: 8px;
     }
 
-    .ing-errors .field-error {
-        margin-top: 4px;
+    .media-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .media-box {
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 18px;
+        padding: 18px;
+    }
+
+    .actions-card {
+        text-align: center;
     }
 
     .actions-row {
@@ -209,7 +310,7 @@
         gap: 14px;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 10px;
+        margin-top: 4px;
     }
 
     .tips-box h3 {
@@ -217,8 +318,16 @@
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
         font-size: 2rem;
-        margin-bottom: 24px;
+        margin-bottom: 10px;
         font-weight: 500;
+    }
+
+    .tips-subtitle {
+        text-align: center;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 24px;
+        font-size: 14px;
     }
 
     .tips-grid {
@@ -228,10 +337,12 @@
     }
 
     .tip-card {
-        border: 1px solid var(--line);
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        border-radius: 18px;
         padding: 20px;
-        background: var(--surface-soft);
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
         text-align: center;
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
     }
 
     .tip-icon {
@@ -248,19 +359,29 @@
     .tip-card p {
         color: var(--muted);
         font-size: 13px;
-        line-height: 1.6;
+        line-height: 1.7;
     }
 
     @media (max-width: 900px) {
-        .form-row {
+        .create-section-card {
+            padding: 22px;
+        }
+
+        .create-hero-inner,
+        .form-row,
+        .media-grid {
             grid-template-columns: 1fr;
+        }
+
+        .create-hero-icon-wrap {
+            width: 92px;
+            height: 92px;
+            font-size: 2.4rem;
         }
     }
 
     @media (max-width: 640px) {
-        .intro-box,
-        .form-section,
-        .tips-box {
+        .create-section-card {
             padding: 20px;
         }
 
@@ -284,351 +405,400 @@
         .actions-row button {
             width: 100%;
         }
+
+        .create-main-title {
+            font-size: 2rem;
+        }
     }
 </style>
 
 <div class="create-recipe-page">
+    <div class="create-recipe-stack">
 
-    <div class="section-block intro-box">
-        <div class="intro-icon">👨‍🍳</div>
-        <h2>Izveidojiet savu recepti</h2>
-        <p>
-            Dalieties ar savām mīļākajām receptēm ar kopienu. Iekļaujiet sastāvdaļas, precīzas instrukcijas,
-            gatavošanas laikus un papildu padomus.
-        </p>
-    </div>
+        <div class="create-section-card create-hero-card">
+            <div class="create-hero-inner">
+                <div class="create-hero-icon-wrap">👨‍🍳</div>
 
-    @if($errors->any())
-        <div class="section-block alert">
-            <h4>Lūdzu, izlabojiet šādas kļūdas:</h4>
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                <div>
+                    <div class="create-badge">Jauna recepte</div>
+                    <h2 class="create-main-title">Izveidojiet savu recepti</h2>
+                    <p class="create-main-text">
+                        Dalieties ar savām mīļākajām receptēm ar kopienu. Iekļaujiet sastāvdaļas,
+                        precīzas instrukcijas, gatavošanas laikus un savus personīgos ieteikumus.
+                    </p>
+                </div>
+            </div>
         </div>
-    @endif
 
-    <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" novalidate>
-        @csrf
-
-        <div class="section-block form-section">
-            <h3 class="section-title">📋 Pamata informācija</h3>
-
-            <div class="form-group">
-                <label class="form-label" for="title">Receptes nosaukums</label>
-                <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value="{{ old('title') }}"
-                    class="form-input @error('title') is-invalid @enderror"
-                    placeholder="Piemēram: Mājas biezpiens ar ievārījumu"
-                    required
-                >
-                @error('title')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
+        @if($errors->any())
+            <div class="error-summary">
+                <h4>Lūdzu, izlabojiet šādas kļūdas:</h4>
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+        @endif
 
-            <div class="form-group">
-                <label class="form-label" for="description">Apraksts</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    class="form-textarea @error('description') is-invalid @enderror"
-                    placeholder="Īss apraksts par recepti - kas padara to īpašu?"
-                    required
-                >{{ old('description') }}</textarea>
-                @error('description')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-            </div>
+        <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" novalidate>
+            @csrf
 
-            <div class="form-row">
+            <div class="create-section-card">
+                <div class="form-section-head">
+                    <div class="section-kicker">1. Pamata informācija</div>
+                    <h3 class="section-title">Receptes apraksts</h3>
+                    <p class="section-subtext">
+                        Norādiet receptes nosaukumu, kategoriju, grūtības līmeni un īsu aprakstu, kas palīdzēs citiem saprast, kāpēc šī recepte ir īpaša.
+                    </p>
+                </div>
+
                 <div class="form-group">
-                    <label class="form-label" for="category">Kategorija</label>
-                    <select id="category" name="category" class="form-select @error('category') is-invalid @enderror" required>
-                        <option value="">Izvēlieties kategoriju</option>
-                        <option value="Brokastis" {{ old('category') == 'Brokastis' ? 'selected' : '' }}>Brokastis</option>
-                        <option value="Pusdienas" {{ old('category') == 'Pusdienas' ? 'selected' : '' }}>Pusdienas</option>
-                        <option value="Vakariņas" {{ old('category') == 'Vakariņas' ? 'selected' : '' }}>Vakariņas</option>
-                        <option value="Deserti" {{ old('category') == 'Deserti' ? 'selected' : '' }}>Deserti</option>
-                        <option value="Uzkodas" {{ old('category') == 'Uzkodas' ? 'selected' : '' }}>Uzkodas</option>
-                        <option value="Dzērieni" {{ old('category') == 'Dzērieni' ? 'selected' : '' }}>Dzērieni</option>
-                        <option value="Salāti" {{ old('category') == 'Salāti' ? 'selected' : '' }}>Salāti</option>
-                        <option value="Zupas" {{ old('category') == 'Zupas' ? 'selected' : '' }}>Zupas</option>
-                        <option value="Veģetārās" {{ old('category') == 'Veģetārās' ? 'selected' : '' }}>Veģetārās</option>
-                        <option value="Vegānās" {{ old('category') == 'Vegānās' ? 'selected' : '' }}>Vegānās</option>
-                        <option value="Bezglutēna" {{ old('category') == 'Bezglutēna' ? 'selected' : '' }}>Bezglutēna</option>
-                        <option value="Ātras receptes" {{ old('category') == 'Ātras receptes' ? 'selected' : '' }}>Ātras receptes</option>
-                    </select>
-                    @error('category')
+                    <label class="form-label" for="title">Receptes nosaukums</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ old('title') }}"
+                        class="form-input @error('title') is-invalid @enderror"
+                        placeholder="Piemēram: Mājas biezpiens ar ievārījumu"
+                        required
+                    >
+                    @error('title')
                         <div class="field-error">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="difficulty">Grūtības līmenis</label>
-                    <select id="difficulty" name="difficulty" class="form-select @error('difficulty') is-invalid @enderror" required>
-                        <option value="">Izvēlieties grūtību</option>
-                        <option value="Viegla" {{ old('difficulty') == 'Viegla' ? 'selected' : '' }}>Viegla</option>
-                        <option value="Vidēja" {{ old('difficulty') == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
-                        <option value="Grūta" {{ old('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
-                    </select>
-                    @error('difficulty')
+                    <label class="form-label" for="description">Apraksts</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="form-textarea @error('description') is-invalid @enderror"
+                        placeholder="Īss apraksts par recepti - kas padara to īpašu?"
+                        required
+                    >{{ old('description') }}</textarea>
+                    @error('description')
                         <div class="field-error">{{ $message }}</div>
                     @enderror
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="category">Kategorija</label>
+                        <select id="category" name="category" class="form-select @error('category') is-invalid @enderror" required>
+                            <option value="">Izvēlieties kategoriju</option>
+                            <option value="Brokastis" {{ old('category') == 'Brokastis' ? 'selected' : '' }}>Brokastis</option>
+                            <option value="Pusdienas" {{ old('category') == 'Pusdienas' ? 'selected' : '' }}>Pusdienas</option>
+                            <option value="Vakariņas" {{ old('category') == 'Vakariņas' ? 'selected' : '' }}>Vakariņas</option>
+                            <option value="Deserti" {{ old('category') == 'Deserti' ? 'selected' : '' }}>Deserti</option>
+                            <option value="Uzkodas" {{ old('category') == 'Uzkodas' ? 'selected' : '' }}>Uzkodas</option>
+                            <option value="Dzērieni" {{ old('category') == 'Dzērieni' ? 'selected' : '' }}>Dzērieni</option>
+                            <option value="Salāti" {{ old('category') == 'Salāti' ? 'selected' : '' }}>Salāti</option>
+                            <option value="Zupas" {{ old('category') == 'Zupas' ? 'selected' : '' }}>Zupas</option>
+                            <option value="Veģetārās" {{ old('category') == 'Veģetārās' ? 'selected' : '' }}>Veģetārās</option>
+                            <option value="Vegānās" {{ old('category') == 'Vegānās' ? 'selected' : '' }}>Vegānās</option>
+                            <option value="Bezglutēna" {{ old('category') == 'Bezglutēna' ? 'selected' : '' }}>Bezglutēna</option>
+                            <option value="Ātras receptes" {{ old('category') == 'Ātras receptes' ? 'selected' : '' }}>Ātras receptes</option>
+                        </select>
+                        @error('category')
+                            <div class="field-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="difficulty">Grūtības līmenis</label>
+                        <select id="difficulty" name="difficulty" class="form-select @error('difficulty') is-invalid @enderror" required>
+                            <option value="">Izvēlieties grūtību</option>
+                            <option value="Viegla" {{ old('difficulty') == 'Viegla' ? 'selected' : '' }}>Viegla</option>
+                            <option value="Vidēja" {{ old('difficulty') == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
+                            <option value="Grūta" {{ old('difficulty') == 'Grūta' ? 'selected' : '' }}>Grūta</option>
+                        </select>
+                        @error('difficulty')
+                            <div class="field-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="section-block form-section">
-            <h3 class="section-title">⏱️ Laiks un porcijas</h3>
+            <div class="create-section-card">
+                <div class="form-section-head">
+                    <div class="section-kicker">2. Laiks un porcijas</div>
+                    <h3 class="section-title">Gatavošanas informācija</h3>
+                    <p class="section-subtext">
+                        Norādiet sagatavošanas laiku, gatavošanas laiku un porciju skaitu, lai recepte būtu vēl pārskatāmāka un vieglāk izmantojama.
+                    </p>
+                </div>
 
-            <div class="form-row">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="prep_time">Sagatavošanas laiks (minūtēs)</label>
+                        <input
+                            type="number"
+                            id="prep_time"
+                            name="prep_time"
+                            value="{{ old('prep_time') }}"
+                            class="form-input @error('prep_time') is-invalid @enderror"
+                            placeholder="15"
+                            min="0"
+                        >
+                        @error('prep_time')
+                            <div class="field-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="cook_time">Gatavošanas laiks (minūtēs)</label>
+                        <input
+                            type="number"
+                            id="cook_time"
+                            name="cook_time"
+                            value="{{ old('cook_time') }}"
+                            class="form-input @error('cook_time') is-invalid @enderror"
+                            placeholder="30"
+                            min="0"
+                        >
+                        @error('cook_time')
+                            <div class="field-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label class="form-label" for="prep_time">Sagatavošanas laiks (minūtēs)</label>
+                    <label class="form-label" for="servings">Porciju skaits</label>
                     <input
                         type="number"
-                        id="prep_time"
-                        name="prep_time"
-                        value="{{ old('prep_time') }}"
-                        class="form-input @error('prep_time') is-invalid @enderror"
-                        placeholder="15"
-                        min="0"
+                        id="servings"
+                        name="servings"
+                        value="{{ old('servings') }}"
+                        class="form-input @error('servings') is-invalid @enderror"
+                        placeholder="4"
+                        min="1"
                     >
-                    @error('prep_time')
+                    @error('servings')
                         <div class="field-error">{{ $message }}</div>
                     @enderror
+                </div>
+
+                <div class="time-summary-card">
+                    <div class="time-summary-title">Kopējais laiks</div>
+                    <input
+                        type="text"
+                        id="total_time"
+                        name="total_time"
+                        value="{{ old('total_time') }}"
+                        class="form-input"
+                        placeholder="—"
+                        readonly
+                    >
+                    <small class="help-text">
+                        Automātiski aprēķināts no sagatavošanas un gatavošanas laikiem.
+                    </small>
+                </div>
+            </div>
+
+            <div class="create-section-card">
+                <div class="form-section-head">
+                    <div class="section-kicker">3. Sastāvdaļas</div>
+                    <h3 class="section-title">Sastāvdaļu saraksts</h3>
+                    <p class="section-subtext">
+                        Pievienojiet sastāvdaļas ar daudzumu, mērvienību un nosaukumu. Ja daudzumu nav nepieciešams norādīt, to var atstāt tukšu.
+                    </p>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="cook_time">Gatavošanas laiks (minūtēs)</label>
-                    <input
-                        type="number"
-                        id="cook_time"
-                        name="cook_time"
-                        value="{{ old('cook_time') }}"
-                        class="form-input @error('cook_time') is-invalid @enderror"
-                        placeholder="30"
-                        min="0"
-                    >
-                    @error('cook_time')
-                        <div class="field-error">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <label class="form-label">Sastāvdaļas</label>
 
-            <div class="form-group">
-                <label class="form-label" for="servings">Porciju skaits</label>
-                <input
-                    type="number"
-                    id="servings"
-                    name="servings"
-                    value="{{ old('servings') }}"
-                    class="form-input @error('servings') is-invalid @enderror"
-                    placeholder="4"
-                    min="1"
-                >
-                @error('servings')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-            </div>
+                    <div id="ingredientsWrap" class="ingredients-wrap">
+                        @if($useOld)
+                            @php
+                                $names = is_array($oldNames) ? $oldNames : [];
+                                $qtys  = is_array($oldQtys)  ? $oldQtys  : [];
+                                $units = is_array($oldUnits) ? $oldUnits : [];
+                                $rows = max(count($names), count($qtys), count($units));
+                                if($rows < 1) $rows = 1;
+                            @endphp
 
-            <div class="form-group" style="margin-top:10px;">
-                <label class="form-label" for="total_time">Kopējais laiks</label>
-                <input
-                    type="text"
-                    id="total_time"
-                    name="total_time"
-                    value="{{ old('total_time') }}"
-                    class="form-input"
-                    placeholder="—"
-                    readonly
-                >
-                <small class="help-text">
-                    Automātiski aprēķināts no sagatavošanas un gatavošanas laikiem.
-                </small>
-            </div>
-        </div>
+                            @for($i = 0; $i < $rows; $i++)
+                                <div class="ingredient-item">
+                                    <div class="ing-row {{ $errors->has('ingredient_name.' . $i) || $errors->has('ingredient_qty.' . $i) || $errors->has('ingredient_unit.' . $i) ? 'has-error' : '' }}">
+                                        <input class="form-input ing-qty @error('ingredient_qty.' . $i) is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
+                                               value="{{ $qtys[$i] ?? '' }}" placeholder="Daudzums">
+                                        <input class="form-input ing-unit @error('ingredient_unit.' . $i) is-invalid @enderror" name="ingredient_unit[]" type="text"
+                                               value="{{ $units[$i] ?? '' }}" placeholder="Mērv. (g, ml, gab)">
+                                        <input class="form-input ing-name @error('ingredient_name.' . $i) is-invalid @enderror" name="ingredient_name[]" type="text" required
+                                               value="{{ $names[$i] ?? '' }}" placeholder="Sastāvdaļa">
+                                        <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+                                    </div>
 
-        <div class="section-block form-section">
-            <h3 class="section-title">🥕 Sastāvdaļas</h3>
-            <p class="section-subtext">
-                Pievienojiet sastāvdaļas ar daudzumu, mērvienību un nosaukumu.
-            </p>
+                                    <div class="ing-errors">
+                                        @error('ingredient_qty.' . $i)
+                                            <div class="field-error">{{ $message }}</div>
+                                        @enderror
 
-            <div class="form-group">
-                <label class="form-label">Sastāvdaļu saraksts</label>
+                                        @error('ingredient_unit.' . $i)
+                                            <div class="field-error">{{ $message }}</div>
+                                        @enderror
 
-                <div id="ingredientsWrap">
-                    @if($useOld)
-                        @php
-                            $names = is_array($oldNames) ? $oldNames : [];
-                            $qtys  = is_array($oldQtys)  ? $oldQtys  : [];
-                            $units = is_array($oldUnits) ? $oldUnits : [];
-                            $rows = max(count($names), count($qtys), count($units));
-                            if($rows < 1) $rows = 1;
-                        @endphp
-
-                        @for($i = 0; $i < $rows; $i++)
+                                        @error('ingredient_name.' . $i)
+                                            <div class="field-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endfor
+                        @else
                             <div class="ingredient-item">
-                                <div class="ing-row {{ $errors->has('ingredient_name.' . $i) || $errors->has('ingredient_qty.' . $i) || $errors->has('ingredient_unit.' . $i) ? 'has-error' : '' }}">
-                                    <input class="form-input ing-qty @error('ingredient_qty.' . $i) is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                           value="{{ $qtys[$i] ?? '' }}" placeholder="Daudzums">
-                                    <input class="form-input ing-unit @error('ingredient_unit.' . $i) is-invalid @enderror" name="ingredient_unit[]" type="text"
-                                           value="{{ $units[$i] ?? '' }}" placeholder="Mērv. (g, ml, gab)">
-                                    <input class="form-input ing-name @error('ingredient_name.' . $i) is-invalid @enderror" name="ingredient_name[]" type="text" required
-                                           value="{{ $names[$i] ?? '' }}" placeholder="Sastāvdaļa">
+                                <div class="ing-row {{ $errors->has('ingredient_name.0') || $errors->has('ingredient_qty.0') || $errors->has('ingredient_unit.0') ? 'has-error' : '' }}">
+                                    <input class="form-input ing-qty @error('ingredient_qty.0') is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
+                                           value="" placeholder="Daudzums">
+                                    <input class="form-input ing-unit @error('ingredient_unit.0') is-invalid @enderror" name="ingredient_unit[]" type="text"
+                                           value="" placeholder="Mērv. (g, ml, gab)">
+                                    <input class="form-input ing-name @error('ingredient_name.0') is-invalid @enderror" name="ingredient_name[]" type="text" required
+                                           value="" placeholder="Sastāvdaļa">
                                     <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
                                 </div>
 
                                 <div class="ing-errors">
-                                    @error('ingredient_qty.' . $i)
+                                    @error('ingredient_qty.0')
                                         <div class="field-error">{{ $message }}</div>
                                     @enderror
 
-                                    @error('ingredient_unit.' . $i)
+                                    @error('ingredient_unit.0')
                                         <div class="field-error">{{ $message }}</div>
                                     @enderror
 
-                                    @error('ingredient_name.' . $i)
+                                    @error('ingredient_name.0')
                                         <div class="field-error">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        @endfor
-                    @else
-                        <div class="ingredient-item">
-                            <div class="ing-row {{ $errors->has('ingredient_name.0') || $errors->has('ingredient_qty.0') || $errors->has('ingredient_unit.0') ? 'has-error' : '' }}">
-                                <input class="form-input ing-qty @error('ingredient_qty.0') is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
-                                       value="" placeholder="Daudzums">
-                                <input class="form-input ing-unit @error('ingredient_unit.0') is-invalid @enderror" name="ingredient_unit[]" type="text"
-                                       value="" placeholder="Mērv. (g, ml, gab)">
-                                <input class="form-input ing-name @error('ingredient_name.0') is-invalid @enderror" name="ingredient_name[]" type="text" required
-                                       value="" placeholder="Sastāvdaļa">
-                                <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
-                            </div>
+                        @endif
+                    </div>
 
-                            <div class="ing-errors">
-                                @error('ingredient_qty.0')
-                                    <div class="field-error">{{ $message }}</div>
-                                @enderror
+                    @error('ingredient_name')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
 
-                                @error('ingredient_unit.0')
-                                    <div class="field-error">{{ $message }}</div>
-                                @enderror
+                    <button type="button" class="btn btn-success" onclick="addIngRow()" style="margin-top: 12px;">
+                        Pievienot sastāvdaļu
+                    </button>
 
-                                @error('ingredient_name.0')
-                                    <div class="field-error">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    @endif
+                    <small class="help-text">
+                        Ja nav jēgas daudzumu norādīt, piemēram “pēc garšas”, atstāj daudzumu tukšu.
+                    </small>
+                </div>
+            </div>
+
+            <div class="create-section-card">
+                <div class="form-section-head">
+                    <div class="section-kicker">4. Pagatavošana</div>
+                    <h3 class="section-title">Gatavošanas instrukcijas</h3>
+                    <p class="section-subtext">
+                        Aprakstiet pagatavošanas procesu soli pa solim, iekļaujot temperatūras, laikus un svarīgākās nianses.
+                    </p>
                 </div>
 
-                @error('ingredient_name')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
+                <div class="form-group">
+                    <label class="form-label" for="instructions">Soli pa solim instrukcijas</label>
+                    <textarea
+                        id="instructions"
+                        name="instructions"
+                        class="form-textarea @error('instructions') is-invalid @enderror"
+                        style="min-height: 300px;"
+                        placeholder="Aprakstiet gatavošanas procesu soli pa solim..."
+                        required
+                    >{{ old('instructions') }}</textarea>
+                    <small class="help-text">
+                        Būt skaidram un precīzam. Iekļaujiet temperatūras, laikus un īpašus paņēmienus.
+                    </small>
+                    @error('instructions')
+                        <div class="field-error">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
 
-                <button type="button" class="btn btn-success" onclick="addIngRow()" style="margin-top: 10px;">
-                    Pievienot sastāvdaļu
-                </button>
+            <div class="create-section-card">
+                <div class="form-section-head">
+                    <div class="section-kicker">5. Attēli un video</div>
+                    <h3 class="section-title">Papildu saturs</h3>
+                    <p class="section-subtext">
+                        Pievienojiet attēlu vai video, lai recepte izskatītos vēl pievilcīgāka un informatīvāka.
+                    </p>
+                </div>
 
-                <small class="help-text">
-                    Ja nav jēgas daudzumu norādīt, piemēram “pēc garšas”, atstāj daudzumu tukšu.
-                </small>
+                <div class="media-grid">
+                    <div class="media-box">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="image">Receptes attēls (nav obligāts)</label>
+                            <input id="image" type="file" name="image" accept="image/*" class="form-input @error('image') is-invalid @enderror">
+                            <small class="help-text">Atļauts: JPG, PNG, WEBP, GIF. Max ~4MB.</small>
+                            @error('image')
+                                <div class="field-error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="media-box">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="video">Video fails (nav obligāts)</label>
+                            <input id="video" type="file" name="video" accept="video/*" class="form-input @error('video') is-invalid @enderror">
+                            <small class="help-text">Atļauts: mp4, webm, mov.</small>
+                            @error('video')
+                                <div class="field-error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <span class="note-pill">Vari pievienot tikai attēlu, tikai video, vai abus.</span>
+            </div>
+
+            <div class="create-section-card actions-card">
+                <div class="actions-row">
+                    <button type="submit" class="btn btn-success">
+                        Publicēt recepti
+                    </button>
+                    <a href="/profile/recipes" class="btn btn-warning">
+                        Atcelt
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <div class="create-section-card tips-box">
+            <h3>Padomi labai receptei</h3>
+            <p class="tips-subtitle">
+                Daži vienkārši ieteikumi, lai tava recepte būtu pārskatāma, skaista un viegli izmantojama citiem.
+            </p>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">📸</div>
+                    <h5>Vizuāli pievilcīgs saturs</h5>
+                    <p>Attēli un skaidrs apraksts palīdz receptei izskatīties daudz pievilcīgākai.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">⏱️</div>
+                    <h5>Precīzi laiki</h5>
+                    <p>Norādiet precīzu sagatavošanas un gatavošanas laiku, lai citi var plānot ēst gatavošanu.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">📋</div>
+                    <h5>Skaidras instrukcijas</h5>
+                    <p>Sadaliet procesu vienkāršos un saprotamos soļos, lai recepti būtu viegli atkārtot.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🧂</div>
+                    <h5>Personīgais pieskāriens</h5>
+                    <p>Pievienojiet savus ieteikumus, variācijas vai pasniegšanas idejas.</p>
+                </div>
             </div>
         </div>
 
-        <div class="section-block form-section">
-            <h3 class="section-title">👩‍🍳 Gatavošanas instrukcijas</h3>
-
-            <div class="form-group">
-                <label class="form-label" for="instructions">Soli pa solim instrukcijas</label>
-                <textarea
-                    id="instructions"
-                    name="instructions"
-                    class="form-textarea @error('instructions') is-invalid @enderror"
-                    style="min-height: 300px;"
-                    placeholder="Aprakstiet gatavošanas procesu soli pa solim..."
-                    required
-                >{{ old('instructions') }}</textarea>
-                <small class="help-text">
-                    Būt skaidram un precīzam. Iekļaujiet temperatūras, laikus un īpašus paņēmienus.
-                </small>
-                @error('instructions')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <div class="section-block form-section">
-            <h3 class="section-title">📸 Attēls / Video</h3>
-
-            <div class="form-group">
-                <label class="form-label" for="image">Receptes attēls (nav obligāts)</label>
-                <input id="image" type="file" name="image" accept="image/*" class="form-input @error('image') is-invalid @enderror">
-                <small class="help-text">Atļauts: JPG, PNG, WEBP, GIF. Max ~4MB.</small>
-                @error('image')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="video">Video fails (nav obligāts)</label>
-                <input id="video" type="file" name="video" accept="video/*" class="form-input @error('video') is-invalid @enderror">
-                <small class="help-text">Atļauts: mp4, webm, mov.</small>
-                @error('video')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <span class="note-pill">Vari pievienot tikai attēlu, tikai video, vai abus.</span>
-        </div>
-
-        <div class="section-block">
-            <div class="actions-row">
-                <button type="submit" class="btn btn-success">
-                    Publicēt recepti
-                </button>
-                <a href="/profile/recipes" class="btn btn-warning">
-                    Atcelt
-                </a>
-            </div>
-        </div>
-    </form>
-
-    <div class="section-block tips-box">
-        <h3>Padomi labai receptei</h3>
-        <div class="tips-grid">
-            <div class="tip-card">
-                <div class="tip-icon">📸</div>
-                <h5>Vizuāli pievilcīgs saturs</h5>
-                <p>Attēli un skaidrs apraksts palīdz receptei izskatīties daudz pievilcīgākai.</p>
-            </div>
-
-            <div class="tip-card">
-                <div class="tip-icon">⏱️</div>
-                <h5>Precīzi laiki</h5>
-                <p>Norādiet precīzu sagatavošanas un gatavošanas laiku, lai citi var plānot ēst gatavošanu.</p>
-            </div>
-
-            <div class="tip-card">
-                <div class="tip-icon">📋</div>
-                <h5>Skaidras instrukcijas</h5>
-                <p>Sadaliet procesu vienkāršos un saprotamos soļos, lai recepti būtu viegli atkārtot.</p>
-            </div>
-
-            <div class="tip-card">
-                <div class="tip-icon">🧂</div>
-                <h5>Personīgais pieskāriens</h5>
-                <p>Pievienojiet savus ieteikumus, variācijas vai pasniegšanas idejas.</p>
-            </div>
-        </div>
     </div>
-
 </div>
 
 <script>

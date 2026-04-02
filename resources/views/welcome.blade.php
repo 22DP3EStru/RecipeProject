@@ -12,107 +12,108 @@
         color: var(--text);
     }
 
-    .hero {
-        padding: 18px 20px 32px;
+    .welcome-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .welcome-section-card {
+        background: rgba(255, 253, 249, 0.96);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+    }
+
+    .welcome-hero-card {
+        background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
+        overflow: hidden;
         text-align: center;
     }
 
-    .hero-title {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 4rem;
-        line-height: 1.08;
+    .welcome-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        background: #f5ece2;
         color: var(--accent);
-        font-weight: 400;
-        margin-bottom: 12px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
     }
 
-    .hero-text {
+    .welcome-main-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2.75rem;
+        font-weight: 500;
+        color: var(--accent);
+        margin: 0 0 16px;
+        line-height: 1.08;
+    }
+
+    .welcome-main-text {
         color: var(--muted);
-        font-size: 16px;
-        line-height: 1.7;
-        max-width: 820px;
+        line-height: 1.9;
+        font-size: 15px;
+        max-width: 860px;
         margin: 0 auto;
     }
 
-    .section-block + .section-block {
+    .hero-actions,
+    .cta-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
         margin-top: 28px;
     }
 
-    .hero-box,
-    .stats-box,
-    .features-box,
-    .about-box,
-    .contact-box,
-    .cta-box {
-        background: var(--surface);
-        border: 1px solid var(--line);
-        padding: 28px;
+    .section-head {
+        margin-bottom: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(221, 207, 192, 0.9);
     }
 
-    .hero-box {
-        text-align: center;
-        background: var(--surface-soft);
+    .section-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f5ece2;
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
     }
 
-    .hero-box h2,
-    .section-title,
-    .feature-card h4,
-    .contact-card h4,
-    .cta-box h3,
-    .stat-number {
+    .section-title {
+        margin-bottom: 8px;
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
+        font-size: 2rem;
         font-weight: 500;
+        line-height: 1.1;
     }
 
-    .hero-box h2 {
-        font-size: 2.5rem;
-        margin-bottom: 18px;
-    }
-
-    .hero-box p,
     .section-subtext,
     .muted-text {
         color: var(--muted);
         line-height: 1.8;
     }
 
-    .section-title {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1.9rem;
-    }
-
     .section-subtext {
-        margin-bottom: 22px;
-    }
-
-    .grid {
-        display: grid;
-        gap: 22px;
-    }
-
-    .grid-2 {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-
-    .grid-3 {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-
-    .grid-4 {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .hero-actions,
-    .cta-actions {
-        display: flex;
-        gap: 18px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 28px;
+        font-size: 14px;
+        max-width: 760px;
     }
 
     .stats-grid {
@@ -122,17 +123,40 @@
     }
 
     .stat-box {
-        background: var(--surface-soft);
-        border: 1px solid var(--line);
+        background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 20px;
         padding: 26px 22px;
         text-align: center;
+        transition: 0.18s ease;
+        box-shadow: 0 8px 20px rgba(79, 59, 42, 0.04);
+    }
+
+    .stat-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
+    }
+
+    .stat-box.soft-green {
+        background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
+    }
+
+    .stat-box.soft-pink {
+        background: linear-gradient(180deg, #faf0f3 0%, #f6e8ed 100%);
+    }
+
+    .stat-box.soft-blue {
+        background: linear-gradient(180deg, #edf3f6 0%, #e2ebf0 100%);
     }
 
     .stat-number {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--accent);
         font-size: 2.8rem;
         display: block;
         margin-bottom: 10px;
         line-height: 1;
+        font-weight: 700;
     }
 
     .stat-label {
@@ -142,30 +166,51 @@
         line-height: 1.6;
     }
 
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
     .feature-card,
     .contact-card {
-        background: var(--surface-soft);
-        border: 1px solid var(--line);
+        background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        border-radius: 22px;
         padding: 24px;
         transition: 0.2s ease;
-        text-align: center;
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
     }
 
     .feature-card:hover,
     .contact-card:hover {
-        background: #fffaf5;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px rgba(79, 59, 42, 0.08);
+    }
+
+    .feature-card {
+        text-align: center;
     }
 
     .feature-icon,
     .contact-icon {
-        font-size: 3.5rem;
-        margin-bottom: 18px;
+        font-size: 3.2rem;
+        margin-bottom: 16px;
+    }
+
+    .feature-card h4,
+    .contact-card h4,
+    .cta-box h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--accent);
+        font-weight: 500;
     }
 
     .feature-card h4,
     .contact-card h4 {
         font-size: 1.5rem;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
+        line-height: 1.15;
     }
 
     .about-content {
@@ -178,61 +223,47 @@
         margin-top: 18px;
     }
 
+    .about-content .lead {
+        font-size: 18px;
+    }
+
     .contact-card {
         text-align: left;
     }
 
-    .contact-card h4 {
-        margin-bottom: 10px;
-    }
-
     .contact-link-row {
         text-align: center;
-        margin-top: 22px;
+        margin-top: 24px;
     }
 
     .cta-box {
         text-align: center;
+        background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
     }
 
     .cta-box h3 {
         margin-bottom: 18px;
-        font-size: 2.1rem;
+        font-size: 2.2rem;
+        line-height: 1.1;
     }
 
-    @media (max-width: 900px) {
-        .hero-title {
-            font-size: 2.8rem;
+    @media (max-width: 980px) {
+        .welcome-section-card {
+            padding: 22px;
         }
 
-        .hero-box h2 {
-            font-size: 2.1rem;
+        .welcome-main-title {
+            font-size: 2.2rem;
         }
     }
 
     @media (max-width: 640px) {
-        .hero {
-            padding: 10px 8px 24px;
-        }
-
-        .hero-title {
-            font-size: 2.3rem;
-        }
-
-        .hero-box,
-        .stats-box,
-        .features-box,
-        .about-box,
-        .contact-box,
-        .cta-box {
+        .welcome-section-card {
             padding: 20px;
         }
 
-        .grid-2,
-        .grid-3,
-        .grid-4,
         .stats-grid,
-        .contact-grid {
+        .grid-3 {
             grid-template-columns: 1fr;
         }
 
@@ -250,103 +281,124 @@
 </style>
 
 <div class="welcome-page">
+    <div class="welcome-stack">
 
-    <div class="section-block hero-box">
-        <h2>Sveicināti kulinārijas pasaulē</h2>
-        <p>
-            Pievienojieties ēdiena entuziastu kopienai, kas dalās ar savām mīļākajām receptēm.
-            Atklājiet jaunas garšas, apgūstiet gatavošanas paņēmienus un saglabājiet savus favorītus.
-        </p>
-
-        @auth
-            <div class="hero-actions">
-                <a href="{{ url('/dashboard') }}" class="btn btn-primary">Uz vadības paneli</a>
-                <a href="/recipes/create" class="btn btn-success">Izveidot recepti</a>
-            </div>
-        @else
-            <div class="hero-actions">
-                <a href="{{ route('register') }}" class="btn btn-success">Sākt bez maksas</a>
-                <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
-            </div>
-        @endauth
-    </div>
-
-    <div class="section-block stats-box">
-        <h3 class="section-title">📊 Mūsu augošā kopiena</h3>
-        <p class="section-subtext">
-            Īss pārskats par platformas saturu un kopienas aktivitāti.
-        </p>
-
-        <div class="stats-grid">
-            <div class="stat-box">
-                <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
-                <span class="stat-label">Kopā receptes</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">{{ \App\Models\User::count() }}</span>
-                <span class="stat-label">Kopienas dalībnieki</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">{{ \App\Models\Recipe::whereNotNull('category')->distinct('category')->count('category') }}</span>
-                <span class="stat-label">Recepšu kategorijas</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">{{ \App\Models\Recipe::where('created_at', '>=', now()->subDays(7))->count() }}</span>
-                <span class="stat-label">Šīs nedēļas receptes</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="features" class="section-block features-box">
-        <h3 class="section-title">✨ Kāpēc izvēlēties Vecmāmiņas Receptes?</h3>
-        <p class="section-subtext">
-            Platforma radīta, lai recepšu glabāšana un atklāšana būtu vienkārša, pārskatāma un iedvesmojoša.
-        </p>
-
-        <div class="grid grid-3">
-            <div class="feature-card">
-                <div class="feature-icon">📝</div>
-                <h4>Vienkārša recepšu izveide</h4>
-                <p class="muted-text">
-                    Izveido un dalies ar receptēm, pievienojot sastāvdaļas un gatavošanas soļus.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <h4>Viedā meklēšana</h4>
-                <p class="muted-text">
-                    Atrodi receptes pēc nosaukuma un pārlūko tās pēc kategorijām.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">❤️</div>
-                <h4>Favorīti</h4>
-                <p class="muted-text">
-                    Saglabā receptes sirsniņā un ātri atrodi tās savā favorītu sarakstā.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div id="about" class="section-block about-box">
-        <h3 class="section-title">📖 Par mums</h3>
-
-        <div class="about-content">
-            <p class="muted-text" style="font-size: 18px;">
-                Vecmāmiņas Receptes ir recepšu platforma, kur ēdiena mīlētāji var dalīties ar saviem atradumiem,
-                saglabāt iecienītākās receptes un atklāt jaunas idejas.
+        <div class="welcome-section-card welcome-hero-card">
+            <div class="welcome-badge">Mājas garšas un iedvesma</div>
+            <h2 class="welcome-main-title">Sveicināti kulinārijas pasaulē</h2>
+            <p class="welcome-main-text">
+                Pievienojieties ēdiena entuziastu kopienai, kas dalās ar savām mīļākajām receptēm.
+                Atklājiet jaunas garšas, apgūstiet gatavošanas paņēmienus un saglabājiet savus favorītus vienuviet.
             </p>
-            <p class="muted-text" style="font-size: 16px;">
-                Mūsu mērķis ir padarīt gatavošanu vienkāršu un iedvesmojošu — gan iesācējiem, gan pieredzējušiem pavāriem.
-            </p>
+
+            @auth
+                <div class="hero-actions">
+                    <a href="{{ url('/dashboard') }}" class="btn btn-primary">Uz vadības paneli</a>
+                    <a href="/recipes/create" class="btn btn-success">Izveidot recepti</a>
+                </div>
+            @else
+                <div class="hero-actions">
+                    <a href="{{ route('register') }}" class="btn btn-success">Sākt bez maksas</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
+                </div>
+            @endauth
         </div>
 
-        <div class="section-block contact-box" style="margin-top: 30px;">
-            <h3 class="section-title">📞 Galvenie kontakti</h3>
+        <div class="welcome-section-card">
+            <div class="section-head">
+                <div class="section-kicker">Kopienas pārskats</div>
+                <h3 class="section-title">Mūsu augošā kopiena</h3>
+                <p class="section-subtext">
+                    Īss pārskats par platformas saturu un kopienas aktivitāti.
+                </p>
+            </div>
 
-            <div class="grid grid-3 contact-grid">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number">{{ \App\Models\Recipe::count() }}</span>
+                    <span class="stat-label">Kopā receptes</span>
+                </div>
+
+                <div class="stat-box soft-green">
+                    <span class="stat-number">{{ \App\Models\User::count() }}</span>
+                    <span class="stat-label">Kopienas dalībnieki</span>
+                </div>
+
+                <div class="stat-box soft-blue">
+                    <span class="stat-number">{{ \App\Models\Recipe::whereNotNull('category')->distinct('category')->count('category') }}</span>
+                    <span class="stat-label">Recepšu kategorijas</span>
+                </div>
+
+                <div class="stat-box soft-pink">
+                    <span class="stat-number">{{ \App\Models\Recipe::where('created_at', '>=', now()->subDays(7))->count() }}</span>
+                    <span class="stat-label">Šīs nedēļas receptes</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="features" class="welcome-section-card">
+            <div class="section-head">
+                <div class="section-kicker">Priekšrocības</div>
+                <h3 class="section-title">Kāpēc izvēlēties Vecmāmiņas Receptes?</h3>
+                <p class="section-subtext">
+                    Platforma radīta, lai recepšu glabāšana un atklāšana būtu vienkārša, pārskatāma un iedvesmojoša.
+                </p>
+            </div>
+
+            <div class="grid-3">
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h4>Vienkārša recepšu izveide</h4>
+                    <p class="muted-text">
+                        Izveido un dalies ar receptēm, pievienojot sastāvdaļas un gatavošanas soļus.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h4>Viedā meklēšana</h4>
+                    <p class="muted-text">
+                        Atrodi receptes pēc nosaukuma un pārlūko tās pēc kategorijām.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">❤️</div>
+                    <h4>Favorīti</h4>
+                    <p class="muted-text">
+                        Saglabā receptes sirsniņā un ātri atrodi tās savā favorītu sarakstā.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="welcome-section-card">
+            <div class="section-head">
+                <div class="section-kicker">Par mums</div>
+                <h3 class="section-title">Kas ir Vecmāmiņas Receptes?</h3>
+            </div>
+
+            <div class="about-content">
+                <p class="muted-text lead">
+                    Vecmāmiņas Receptes ir recepšu platforma, kur ēdiena mīlētāji var dalīties ar saviem atradumiem,
+                    saglabāt iecienītākās receptes un atklāt jaunas idejas.
+                </p>
+                <p class="muted-text">
+                    Mūsu mērķis ir padarīt gatavošanu vienkāršu un iedvesmojošu — gan iesācējiem, gan pieredzējušiem pavāriem.
+                </p>
+            </div>
+        </div>
+
+        <div class="welcome-section-card">
+            <div class="section-head">
+                <div class="section-kicker">Kontakti</div>
+                <h3 class="section-title">Galvenie kontakti</h3>
+                <p class="section-subtext">
+                    Ja rodas jautājumi, idejas vai nepieciešama palīdzība, sazinieties ar mums.
+                </p>
+            </div>
+
+            <div class="grid-3">
                 <div class="contact-card">
                     <div class="contact-icon">👤</div>
                     <h4>Galvenais kontakts</h4>
@@ -380,21 +432,21 @@
                 <a href="{{ route('contact') }}" class="btn btn-primary">Atvērt kontaktu lapu</a>
             </div>
         </div>
-    </div>
 
-    @guest
-        <div class="section-block cta-box">
-            <h3>Gatavi sākt gatavot?</h3>
-            <p class="muted-text" style="font-size: 18px; margin-bottom: 28px;">
-                Pievienojieties mūsu kopienai un sāciet saglabāt favorītus un dalīties ar receptēm.
-            </p>
+        @guest
+            <div class="welcome-section-card cta-box">
+                <h3>Gatavi sākt gatavot?</h3>
+                <p class="muted-text" style="font-size: 18px; margin-bottom: 28px;">
+                    Pievienojieties mūsu kopienai un sāciet saglabāt favorītus un dalīties ar receptēm.
+                </p>
 
-            <div class="cta-actions">
-                <a href="{{ route('register') }}" class="btn btn-success">Izveidot bezmaksas kontu</a>
-                <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties tagad</a>
+                <div class="cta-actions">
+                    <a href="{{ route('register') }}" class="btn btn-success">Izveidot bezmaksas kontu</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties tagad</a>
+                </div>
             </div>
-        </div>
-    @endguest
+        @endguest
 
+    </div>
 </div>
 @endsection

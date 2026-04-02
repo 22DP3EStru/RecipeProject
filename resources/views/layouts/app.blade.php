@@ -19,26 +19,35 @@
         :root {
             --page-bg: #eee5da;
             --page-bg-2: #e8ddd0;
-            --surface: #fffdf9;
+            --surface: rgba(255, 253, 249, 0.94);
+            --surface-strong: #fffdf9;
             --surface-soft: #f6efe7;
             --surface-soft-2: #efe4d6;
             --line: #ddcfc0;
+            --line-strong: #d4c2ae;
             --text: #2f241d;
             --muted: #7b6d61;
             --accent: #7a5a43;
             --accent-dark: #634733;
+            --accent-soft: #ebe0d2;
             --danger-bg: #f3e2de;
             --danger-text: #a45f52;
             --danger-border: #e3c9c2;
             --success-bg: #e8eee2;
             --success-text: #667652;
+            --success-border: #d7dfcc;
             --warning-bg: #f6eddc;
             --warning-text: #8a6a2f;
             --warning-border: #e3d3ae;
             --info-bg: #e7eff6;
             --info-text: #4d667d;
             --info-border: #c9d9e8;
-            --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
+            --shadow-sm: 0 10px 24px rgba(79, 59, 42, 0.05);
+            --shadow: 0 18px 44px rgba(79, 59, 42, 0.07);
+            --shadow-lg: 0 26px 60px rgba(79, 59, 42, 0.10);
+            --radius-sm: 12px;
+            --radius-md: 18px;
+            --radius-lg: 26px;
         }
 
         html, body {
@@ -49,46 +58,107 @@
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text);
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0)),
+                radial-gradient(circle at top left, rgba(255,255,255,0.46) 0%, rgba(255,255,255,0) 34%),
+                radial-gradient(circle at top right, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 28%),
                 linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
         }
 
         .site-shell {
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .site-shell::before,
+        .site-shell::after {
+            content: "";
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(18px);
+            opacity: 0.45;
+        }
+
+        .site-shell::before {
+            width: 280px;
+            height: 280px;
+            top: -80px;
+            left: -80px;
+            background: rgba(255, 248, 238, 0.7);
+        }
+
+        .site-shell::after {
+            width: 340px;
+            height: 340px;
+            right: -110px;
+            bottom: 40px;
+            background: rgba(239, 228, 214, 0.65);
         }
 
         .page {
+            position: relative;
+            z-index: 1;
             max-width: 1450px;
             margin: 0 auto;
-            padding: 28px 20px 50px;
+            padding: 26px 20px 54px;
         }
 
         .hero {
-            padding: 18px 20px 32px;
+            position: relative;
+            padding: 34px 24px 36px;
+            margin-bottom: 22px;
             text-align: center;
+            background: linear-gradient(180deg, rgba(255,253,249,0.72) 0%, rgba(255,250,244,0.52) 100%);
+            border: 1px solid rgba(221, 207, 192, 0.85);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 22%),
+                radial-gradient(circle at 85% 10%, rgba(239,228,214,0.55) 0%, rgba(239,228,214,0) 18%);
+            pointer-events: none;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 1;
         }
 
         .hero-title {
             font-family: Georgia, "Times New Roman", serif;
             font-size: 4rem;
-            line-height: 1.08;
+            line-height: 1.06;
             color: var(--accent);
-            font-weight: 400;
+            font-weight: 500;
             margin-bottom: 12px;
+            letter-spacing: 0.01em;
         }
 
         .hero-text {
             color: var(--muted);
             font-size: 16px;
-            line-height: 1.7;
-            max-width: 820px;
+            line-height: 1.8;
+            max-width: 860px;
             margin: 0 auto;
         }
 
         .nav-bar {
-            background: rgba(255, 253, 249, 0.95);
-            border: 1px solid var(--line);
-            padding: 16px 22px;
+            position: sticky;
+            top: 14px;
+            z-index: 20;
+            background: rgba(255, 253, 249, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 194, 174, 0.75);
+            border-radius: 22px;
+            padding: 16px 20px;
             display: grid;
             grid-template-columns: auto 1fr auto;
             align-items: center;
@@ -98,6 +168,9 @@
         }
 
         .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
             font-family: Georgia, "Times New Roman", serif;
             font-size: 1.9rem;
             color: var(--accent);
@@ -106,6 +179,18 @@
             letter-spacing: 0.02em;
             line-height: 1.1;
             white-space: nowrap;
+            transition: 0.2s ease;
+        }
+
+        .nav-brand::before {
+            content: "📖";
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .nav-brand:hover {
+            color: var(--accent-dark);
+            transform: translateY(-1px);
         }
 
         .nav-center {
@@ -118,7 +203,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             flex-wrap: nowrap;
             min-width: 0;
         }
@@ -126,10 +211,11 @@
         .nav-links a {
             color: var(--text);
             text-decoration: none;
-            padding: 9px 11px;
+            padding: 10px 13px;
             border: 1px solid transparent;
+            border-radius: 999px;
             transition: 0.2s ease;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 13.5px;
             white-space: nowrap;
             line-height: 1.2;
@@ -139,12 +225,14 @@
             background: var(--surface-soft);
             border-color: var(--line);
             color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .nav-links a.active {
             color: var(--accent);
-            background: var(--surface-soft);
-            border-color: var(--line);
+            background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%);
+            border-color: var(--line-strong);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
         }
 
         .nav-right {
@@ -155,20 +243,48 @@
             white-space: nowrap;
         }
 
+        .nav-user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 220px;
+            padding: 8px 12px;
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+        }
+
+        .nav-user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #f6efe7 0%, #ecdfd0 100%);
+            border: 1px solid var(--line);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-dark);
+            font-weight: 800;
+            font-size: 14px;
+            flex: 0 0 auto;
+        }
+
         .nav-user-name {
             color: var(--muted);
             font-size: 13.5px;
             font-weight: 700;
-            max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .main-content {
-            background: rgba(255, 253, 249, 0.82);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
+            background: rgba(255, 253, 249, 0.84);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(212, 194, 174, 0.85);
+            border-radius: 30px;
+            box-shadow: var(--shadow-lg);
             padding: 34px;
         }
 
@@ -183,13 +299,14 @@
             align-items: center;
             gap: 10px;
             font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.9rem;
+            font-size: 2rem;
             font-weight: 500;
+            line-height: 1.2;
         }
 
         .section-subtext {
             color: var(--muted);
-            line-height: 1.7;
+            line-height: 1.75;
             margin-bottom: 22px;
         }
 
@@ -213,16 +330,18 @@
             width: 100%;
             padding: 14px 16px;
             border: 1px solid var(--line);
+            border-radius: 14px;
             font-size: 15px;
             background: #fffdfa;
             color: var(--text);
             transition: 0.2s ease;
             font-family: inherit;
+            box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
         }
 
         .form-input,
         .form-select {
-            min-height: 48px;
+            min-height: 50px;
         }
 
         .form-textarea {
@@ -234,8 +353,9 @@
         .form-textarea:focus,
         .form-select:focus {
             outline: none;
-            border-color: #bba692;
+            border-color: #b79d84;
             background: #fff;
+            box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
         }
 
         .help-text {
@@ -243,7 +363,7 @@
             margin-top: 7px;
             display: block;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
         .form-row {
@@ -260,6 +380,7 @@
             padding: 12px 18px;
             text-decoration: none;
             border: 1px solid var(--line);
+            border-radius: 14px;
             background: #fff;
             color: var(--text);
             font-size: 14px;
@@ -269,26 +390,29 @@
             text-align: center;
             white-space: nowrap;
             font-family: inherit;
+            box-shadow: 0 6px 18px rgba(79, 59, 42, 0.04);
         }
 
         .btn:hover {
-            filter: brightness(0.98);
+            transform: translateY(-1px);
+            filter: brightness(0.99);
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: linear-gradient(180deg, #84624a 0%, #7a5a43 100%);
             border-color: var(--accent);
             color: #fffaf4;
+            box-shadow: 0 10px 24px rgba(122, 90, 67, 0.22);
         }
 
         .btn-primary:hover {
-            background: var(--accent-dark);
+            background: linear-gradient(180deg, #6e4f39 0%, #634733 100%);
         }
 
         .btn-success {
-            background: var(--success-bg);
+            background: linear-gradient(180deg, #eef3ea 0%, #e8eee2 100%);
             color: var(--success-text);
-            border-color: #d7dfcc;
+            border-color: var(--success-border);
         }
 
         .btn-success:hover {
@@ -296,7 +420,7 @@
         }
 
         .btn-secondary {
-            background: var(--surface-soft);
+            background: linear-gradient(180deg, #faf6f0 0%, #f6efe7 100%);
             color: var(--text);
         }
 
@@ -305,7 +429,7 @@
         }
 
         .btn-warning {
-            background: var(--warning-bg);
+            background: linear-gradient(180deg, #f8f0e2 0%, #f6eddc 100%);
             color: var(--warning-text);
             border-color: var(--warning-border);
         }
@@ -315,7 +439,7 @@
         }
 
         .btn-danger {
-            background: var(--danger-bg);
+            background: linear-gradient(180deg, #f7e9e5 0%, #f3e2de 100%);
             color: var(--danger-text);
             border-color: var(--danger-border);
         }
@@ -325,11 +449,23 @@
         }
 
         .card {
-            background: var(--surface);
-            border: 1px solid var(--line);
+            position: relative;
+            background: var(--surface-strong);
+            border: 1px solid rgba(221, 207, 192, 0.95);
+            border-radius: 22px;
             padding: 28px;
             margin-bottom: 22px;
-            box-shadow: 0 10px 30px rgba(79, 59, 42, 0.05);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+            pointer-events: none;
         }
 
         .card-title {
@@ -366,21 +502,29 @@
         }
 
         .stat-box {
-            background: linear-gradient(180deg, #f7f0e7 0%, #efe2d2 100%);
+            background: linear-gradient(180deg, #f9f2ea 0%, #efe2d2 100%);
             color: var(--text);
             padding: 24px 16px;
             text-align: center;
             border: 1px solid var(--line);
+            border-radius: 18px;
             box-shadow: 0 8px 24px rgba(90, 69, 52, 0.05);
+            transition: 0.2s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(90, 69, 52, 0.08);
         }
 
         .stat-number {
             font-family: Georgia, "Times New Roman", serif;
-            font-size: 2.3rem;
+            font-size: 2.4rem;
             font-weight: 700;
             display: block;
             margin-bottom: 8px;
             color: var(--accent-dark);
+            line-height: 1;
         }
 
         .stat-label {
@@ -406,12 +550,18 @@
             width: 48px;
             background: linear-gradient(180deg, #f6efe7 0%, #ecdfd0 100%);
             border: 1px solid var(--line);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             color: var(--accent-dark);
             flex: 0 0 auto;
+            box-shadow: 0 6px 16px rgba(79, 59, 42, 0.05);
+        }
+
+        .avatar {
+            border-radius: 50%;
         }
 
         .muted {
@@ -460,18 +610,20 @@
         }
 
         .flash-message {
-            padding: 14px 18px;
+            padding: 15px 18px;
             border: 1px solid;
+            border-radius: 16px;
             margin-bottom: 12px;
             font-size: 14px;
             line-height: 1.6;
             font-weight: 600;
+            box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
         }
 
         .flash-message.success {
             background: var(--success-bg);
             color: var(--success-text);
-            border-color: #d7dfcc;
+            border-color: var(--success-border);
         }
 
         .flash-message.error {
@@ -501,11 +653,35 @@
             margin-bottom: 4px;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 34px 20px;
+            background: linear-gradient(180deg, #f9f3eb 0%, #f4eadf 100%);
+            border: 1px dashed var(--line-strong);
+            border-radius: 22px;
+        }
+
+        .empty-state-title {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-size: 1.7rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-text {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
         @media (max-width: 1280px) {
             .nav-bar {
                 grid-template-columns: 1fr;
                 justify-items: center;
                 text-align: center;
+                position: relative;
+                top: 0;
             }
 
             .nav-center {
@@ -521,7 +697,7 @@
                 flex-wrap: wrap;
             }
 
-            .nav-user-name {
+            .nav-user-chip {
                 max-width: none;
             }
         }
@@ -529,6 +705,7 @@
         @media (max-width: 980px) {
             .main-content {
                 padding: 24px;
+                border-radius: 24px;
             }
 
             .stats-grid {
@@ -539,6 +716,10 @@
             .grid-3,
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 28px 18px 30px;
             }
 
             .hero-title {
@@ -557,15 +738,16 @@
 
         @media (max-width: 640px) {
             .page {
-                padding: 16px 12px 32px;
+                padding: 14px 12px 30px;
             }
 
             .hero {
-                padding: 10px 8px 24px;
+                padding: 22px 14px 24px;
+                border-radius: 22px;
             }
 
             .hero-title {
-                font-size: 2.3rem;
+                font-size: 2.25rem;
             }
 
             .hero-text {
@@ -573,8 +755,9 @@
             }
 
             .nav-bar {
-                padding: 16px;
+                padding: 16px 14px;
                 gap: 14px;
+                border-radius: 18px;
             }
 
             .main-content,
@@ -631,27 +814,39 @@
             @endif
 
             <nav class="nav-bar">
-                <a href="{{ url('/dashboard') }}" class="nav-brand">Vecmāmiņas Receptes</a>
+                <a href="{{ Auth::check() ? url('/dashboard') : url('/') }}" class="nav-brand">Vecmāmiņas Receptes</a>
 
                 <div class="nav-center">
-                    <div class="nav-links">
-                        <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
-                        <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
-                        <a href="{{ url('/categories') }}" class="{{ request()->is('categories') || request()->is('categories/*') ? 'active' : '' }}">Kategorijas</a>
-                        <a href="{{ url('/profile/recipes') }}" class="{{ request()->is('profile/recipes') ? 'active' : '' }}">Manas receptes</a>
-                        <a href="{{ url('/profile/favorites') }}" class="{{ request()->is('profile/favorites') ? 'active' : '' }}">Favorīti</a>
-                        <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
-                        <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
+                    @auth
+                        <div class="nav-links">
+                            <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
+                            <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
+                            <a href="{{ url('/categories') }}" class="{{ request()->is('categories') || request()->is('categories/*') ? 'active' : '' }}">Kategorijas</a>
+                            <a href="{{ url('/profile/recipes') }}" class="{{ request()->is('profile/recipes') ? 'active' : '' }}">Manas receptes</a>
+                            <a href="{{ url('/profile/favorites') }}" class="{{ request()->is('profile/favorites') ? 'active' : '' }}">Favorīti</a>
+                            <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
+                            <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
 
-                        @if(Auth::check() && Auth::user()->is_admin)
-                            <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
-                        @endif
-                    </div>
+                            @if(Auth::user()->is_admin)
+                                <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
+                            @endif
+                        </div>
+                    @endauth
                 </div>
 
                 <div class="nav-right">
+                    @guest
+                        <a href="{{ route('login') }}" class="btn btn-secondary">Ielogoties</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary">Reģistrēties</a>
+                    @endguest
+
                     @auth
-                        <span class="nav-user-name">{{ Auth::user()->name }}</span>
+                        <div class="nav-user-chip">
+                            <span class="nav-user-avatar">
+                                {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                            </span>
+                            <span class="nav-user-name">{{ Auth::user()->name }}</span>
+                        </div>
 
                         <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                             @csrf

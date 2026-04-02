@@ -6,24 +6,28 @@
 @section('content')
 <style>
     .register-page {
-        max-width: 1180px;
+        max-width: 1220px;
         margin: 0 auto;
     }
 
     .register-nav {
-        background: rgba(255, 253, 249, 0.92);
-        border: 1px solid var(--line);
-        padding: 18px 24px;
+        background: rgba(255, 253, 249, 0.94);
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 22px;
+        padding: 18px 22px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 18px;
         flex-wrap: wrap;
-        box-shadow: var(--shadow);
-        margin-bottom: 38px;
+        box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        margin-bottom: 30px;
     }
 
     .register-nav-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2rem;
         color: var(--accent);
@@ -32,9 +36,15 @@
         letter-spacing: 0.02em;
     }
 
+    .register-nav-brand::before {
+        content: "📖";
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
     .register-nav-links {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
         flex-wrap: wrap;
     }
@@ -44,8 +54,9 @@
         text-decoration: none;
         padding: 10px 14px;
         border: 1px solid transparent;
+        border-radius: 999px;
         transition: 0.2s ease;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 14px;
     }
 
@@ -53,45 +64,73 @@
         background: var(--surface-soft);
         border-color: var(--line);
         color: var(--accent);
+        transform: translateY(-1px);
     }
 
     .register-hero {
         display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        gap: 34px;
+        grid-template-columns: 1.04fr 0.96fr;
+        gap: 26px;
         align-items: stretch;
     }
 
+    .register-panel {
+        border: 1px solid rgba(122, 90, 67, 0.14);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(79, 59, 42, 0.07);
+        min-width: 0;
+    }
+
     .register-hero-left {
-        background: var(--surface);
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
-        padding: 44px;
+        background: rgba(255, 253, 249, 0.97);
+        padding: 40px;
     }
 
     .register-hero-right {
-        background: linear-gradient(180deg, #f8f1e8 0%, #f0e4d5 100%);
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
-        padding: 40px;
+        background: linear-gradient(180deg, #fbf5ee 0%, #f3e8dc 100%);
+        padding: 38px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        position: relative;
+    }
+
+    .register-hero-right::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at top right, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 24%),
+            radial-gradient(circle at bottom left, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 26%);
+        pointer-events: none;
+    }
+
+    .register-hero-right > * {
+        position: relative;
+        z-index: 1;
     }
 
     .register-eyebrow {
-        color: var(--muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent);
         text-transform: uppercase;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.12em;
         font-size: 12px;
         margin-bottom: 14px;
-        font-weight: 700;
+        font-weight: 800;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f5ece2;
+        border: 1px solid rgba(122, 90, 67, 0.12);
     }
 
     .register-title {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 3.1rem;
-        line-height: 1.1;
+        font-size: 3rem;
+        line-height: 1.08;
         color: var(--accent);
         margin-bottom: 16px;
         font-weight: 500;
@@ -105,13 +144,18 @@
     }
 
     .form-area {
-        margin-top: 28px;
+        margin-top: 30px;
         padding-top: 24px;
-        border-top: 1px solid var(--line);
+        border-top: 1px solid rgba(221, 207, 192, 0.9);
+    }
+
+    .form-grid {
+        display: grid;
+        gap: 20px;
     }
 
     .form-group {
-        margin-bottom: 22px;
+        margin-bottom: 0;
     }
 
     .form-label {
@@ -126,10 +170,12 @@
         width: 100%;
         padding: 15px 16px;
         border: 1px solid var(--line);
+        border-radius: 16px;
         font-size: 15px;
         background: #fffdfa;
         color: var(--text);
         transition: 0.2s ease;
+        box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
     }
 
     .form-input::placeholder {
@@ -138,8 +184,9 @@
 
     .form-input:focus {
         outline: none;
-        border-color: #bba692;
+        border-color: #b79d84;
         background: #fff;
+        box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
     .field-error {
@@ -147,25 +194,27 @@
         font-size: 13px;
         margin-top: 6px;
         display: block;
+        font-weight: 600;
     }
 
     .submit-btn {
         width: 100%;
         padding: 16px 18px;
         font-size: 16px;
+        margin-top: 8px;
     }
 
     .auth-links {
-        padding-top: 22px;
-        border-top: 1px solid var(--line);
+        padding-top: 24px;
+        border-top: 1px solid rgba(221, 207, 192, 0.9);
         margin-top: 28px;
     }
 
     .auth-links h4 {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
-        font-size: 1.8rem;
-        margin-bottom: 14px;
+        font-size: 1.85rem;
+        margin-bottom: 12px;
         font-weight: 500;
     }
 
@@ -176,12 +225,34 @@
         margin-bottom: 18px;
     }
 
+    .login-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 253, 249, 0.72);
+        border: 1px solid rgba(122, 90, 67, 0.12);
+        font-size: 2rem;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.05);
+    }
+
     .feature-title {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
-        font-size: 2.2rem;
-        margin-bottom: 14px;
+        font-size: 2.15rem;
+        margin-bottom: 12px;
         font-weight: 500;
+        line-height: 1.15;
     }
 
     .feature-text {
@@ -193,35 +264,28 @@
 
     .feature-list {
         display: grid;
-        gap: 18px;
+        gap: 14px;
     }
 
     .feature-item {
-        padding: 18px 0;
-        border-top: 1px solid rgba(122, 90, 67, 0.14);
-    }
-
-    .feature-item:first-child {
-        border-top: none;
-        padding-top: 0;
+        padding: 16px 16px;
+        border: 1px solid rgba(122, 90, 67, 0.10);
+        border-radius: 18px;
+        background: rgba(255, 253, 249, 0.56);
+        box-shadow: 0 8px 18px rgba(79, 59, 42, 0.03);
     }
 
     .feature-item h5 {
         color: var(--text);
         font-size: 1rem;
         margin-bottom: 6px;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     .feature-item p {
         color: var(--muted);
         font-size: 14px;
         line-height: 1.7;
-    }
-
-    .emoji {
-        font-size: 2rem;
-        margin-bottom: 12px;
     }
 
     @media (max-width: 980px) {
@@ -235,13 +299,14 @@
         }
 
         .register-title {
-            font-size: 2.5rem;
+            font-size: 2.45rem;
         }
     }
 
     @media (max-width: 640px) {
         .register-nav {
             padding: 16px;
+            border-radius: 18px;
         }
 
         .register-nav-brand {
@@ -255,6 +320,15 @@
 
         .register-title {
             font-size: 2rem;
+        }
+
+        .login-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .login-actions .btn {
+            width: 100%;
         }
     }
 </style>
@@ -274,7 +348,7 @@
     </nav>
 
     <div class="register-hero">
-        <div class="register-hero-left">
+        <div class="register-panel register-hero-left">
             <div class="register-eyebrow">Pievienojieties kopienai</div>
             <h1 class="register-title">Izveidojiet savu kontu</h1>
             <p class="register-text">
@@ -285,64 +359,66 @@
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
-                    <div class="form-group">
-                        <label class="form-label" for="name">Pilnais vārds</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value="{{ old('name') }}"
-                            class="form-input @error('name') is-invalid @enderror"
-                            placeholder="Ievadiet savu pilno vārdu"
-                            required
-                            autofocus
-                            autocomplete="name">
-                        @error('name')
-                            <span class="field-error">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Pilnais vārds</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value="{{ old('name') }}"
+                                class="form-input @error('name') is-invalid @enderror"
+                                placeholder="Ievadiet savu pilno vārdu"
+                                required
+                                autofocus
+                                autocomplete="name">
+                            @error('name')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="email">E-pasta adrese</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value="{{ old('email') }}"
-                            class="form-input @error('email') is-invalid @enderror"
-                            placeholder="Ievadiet savu e-pasta adresi"
-                            required
-                            autocomplete="email">
-                        @error('email')
-                            <span class="field-error">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">E-pasta adrese</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                class="form-input @error('email') is-invalid @enderror"
+                                placeholder="Ievadiet savu e-pasta adresi"
+                                required
+                                autocomplete="email">
+                            @error('email')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="password">Parole</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            class="form-input @error('password') is-invalid @enderror"
-                            placeholder="Izveidojiet drošu paroli"
-                            required
-                            autocomplete="new-password">
-                        @error('password')
-                            <span class="field-error">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">Parole</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-input @error('password') is-invalid @enderror"
+                                placeholder="Izveidojiet drošu paroli"
+                                required
+                                autocomplete="new-password">
+                            @error('password')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="password_confirmation">Apstiprināt paroli</label>
-                        <input
-                            type="password"
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            class="form-input"
-                            placeholder="Atkārtoti ievadiet paroli"
-                            required
-                            autocomplete="new-password">
+                        <div class="form-group">
+                            <label class="form-label" for="password_confirmation">Apstiprināt paroli</label>
+                            <input
+                                type="password"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                class="form-input"
+                                placeholder="Atkārtoti ievadiet paroli"
+                                required
+                                autocomplete="new-password">
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-success submit-btn">
@@ -357,33 +433,35 @@
                     Ielogojieties, lai piekļūtu savām receptēm un turpinātu savu kulinārijas ceļojumu.
                 </p>
 
-                <a href="{{ route('login') }}" class="btn btn-primary">
-                    Ielogoties
-                </a>
+                <div class="login-actions">
+                    <a href="{{ route('login') }}" class="btn btn-primary">
+                        Ielogoties
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="register-hero-right">
-            <div class="emoji">🎉</div>
+        <div class="register-panel register-hero-right">
+            <div class="feature-icon">🎉</div>
             <h2 class="feature-title">Ko iegūsiet pēc reģistrācijas</h2>
             <p class="feature-text">
-                Skaista un ērta vieta, kur glabāt savas receptes, atrast iedvesmu un veidot savu personīgo receptes pasauli.
+                Skaista, ērta un mājīga vieta, kur glabāt savas receptes, atrast iedvesmu un veidot savu personīgo recepšu pasauli.
             </p>
 
             <div class="feature-list">
                 <div class="feature-item">
                     <h5>Pievienot savas receptes</h5>
-                    <p>Izveidojiet un publicējiet savus ēdienus vienotā, pārskatāmā formātā.</p>
+                    <p>Izveidojiet un publicējiet savus ēdienus vienotā, pārskatāmā un skaistā formātā.</p>
                 </div>
 
                 <div class="feature-item">
                     <h5>Saglabāt iecienītākās receptes</h5>
-                    <p>Veidojiet savu favorītu kolekciju, lai labākās receptes vienmēr būtu pa rokai.</p>
+                    <p>Veidojiet savu favorītu kolekciju, lai labākās receptes vienmēr būtu ātri atrodamas.</p>
                 </div>
 
                 <div class="feature-item">
                     <h5>Atklāt jaunus ēdienus</h5>
-                    <p>Pārlūkojiet citu lietotāju receptes un atrodiet idejas ikdienai un svētkiem.</p>
+                    <p>Pārlūkojiet citu lietotāju receptes un atrodiet idejas ikdienai, svētkiem un īpašām reizēm.</p>
                 </div>
             </div>
         </div>
