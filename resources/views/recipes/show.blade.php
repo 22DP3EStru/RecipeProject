@@ -17,7 +17,9 @@
     }
 
     $origServings = (int)($recipe->servings ?? 1);
-    if ($origServings <= 0) { $origServings = 1; }
+    if ($origServings <= 0) {
+        $origServings = 1;
+    }
 
     $origPrep = (int)($recipe->prep_time ?? 0);
     $origCook = (int)($recipe->cook_time ?? 0);
@@ -28,6 +30,27 @@
         $ingredientsRel = $recipe->ingredientsItems;
     } catch (\Throwable $e) {
         $ingredientsRel = collect();
+    }
+
+    $recipeCategory = $recipe->category->name ?? $recipe->category ?? 'Nav norādīta';
+    $recipeDifficulty = $recipe->difficulty ?? 'Nav norādīta';
+
+    $avg = $recipe->reviews->avg('rating');
+    $avgRounded = $avg ? round($avg, 1) : null;
+    $count = $recipe->reviews->count();
+
+    $imageUrl = null;
+    if (!empty($recipe->image_url)) {
+        $imageUrl = $recipe->image_url;
+    } elseif (!empty($recipe->image_path)) {
+        $imageUrl = asset('storage/' . $recipe->image_path);
+    }
+
+    $videoUrl = null;
+    if (!empty($recipe->video_url)) {
+        $videoUrl = $recipe->video_url;
+    } elseif (!empty($recipe->video_path)) {
+        $videoUrl = asset('storage/' . $recipe->video_path);
     }
 @endphp
 
@@ -48,11 +71,11 @@
         border-radius: 24px;
         padding: 28px;
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        overflow: hidden;
     }
 
     .recipe-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
-        overflow: hidden;
     }
 
     .recipe-hero-head {
@@ -66,6 +89,7 @@
 
     .recipe-hero-left {
         min-width: 0;
+        flex: 1 1 560px;
     }
 
     .recipe-badge {
@@ -91,6 +115,7 @@
         line-height: 1.08;
         font-weight: 500;
         margin: 0 0 12px;
+        word-break: break-word;
     }
 
     .recipe-description {
@@ -98,6 +123,10 @@
         line-height: 1.85;
         font-size: 15px;
         max-width: 840px;
+    }
+
+    .recipe-fav-wrap {
+        flex: 0 0 auto;
     }
 
     .heart-btn {
@@ -153,6 +182,11 @@
         flex-wrap: wrap;
     }
 
+    .servings-label {
+        font-weight: 900;
+        color: var(--accent);
+    }
+
     .servings-input {
         width: 92px;
         padding: 12px 14px;
@@ -206,10 +240,11 @@
         border: 1px solid var(--line);
         border-radius: 16px;
         overflow: hidden;
+        background: #fffdfa;
     }
 
     .media-img {
-        max-height: 480px;
+        max-height: 520px;
         object-fit: cover;
     }
 
@@ -288,6 +323,7 @@
         color: var(--muted);
         font-weight: 700;
         line-height: 1.6;
+        word-break: break-word;
     }
 
     .content-inner {
@@ -341,6 +377,7 @@
         color: var(--text);
         font-size: 16px;
         line-height: 1.7;
+        word-break: break-word;
     }
 
     .old-format-note {
@@ -375,6 +412,7 @@
         color: var(--text);
         font-size: 16px;
         line-height: 1.8;
+        word-break: break-word;
     }
 
     .author-grid {
@@ -402,6 +440,7 @@
         color: var(--muted);
         font-weight: 700;
         line-height: 1.6;
+        word-break: break-word;
     }
 
     .flash-success {
@@ -429,6 +468,7 @@
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
         color: var(--accent);
         font-weight: 800;
+        text-align: center;
     }
 
     .review-card,
@@ -461,6 +501,7 @@
     .reply-user {
         font-weight: 800;
         color: var(--text);
+        word-break: break-word;
     }
 
     .review-date,
@@ -475,12 +516,14 @@
     .reply-text {
         color: var(--text);
         line-height: 1.8;
+        word-break: break-word;
     }
 
     .stars {
         display: inline-flex;
         flex-direction: row-reverse;
         gap: 6px;
+        flex-wrap: wrap;
     }
 
     .stars input {
@@ -492,6 +535,7 @@
         font-size: 26px;
         color: rgba(0,0,0,0.25);
         transition: 0.15s ease;
+        line-height: 1;
     }
 
     .stars label:hover {
@@ -572,6 +616,8 @@
         padding: 20px;
         transition: 0.2s ease;
         box-shadow: 0 8px 18px rgba(79, 59, 42, 0.04);
+        display: flex;
+        flex-direction: column;
     }
 
     .related-item:hover {
@@ -585,6 +631,7 @@
         font-family: Georgia, "Times New Roman", serif;
         font-size: 1.4rem;
         font-weight: 500;
+        word-break: break-word;
     }
 
     .related-item p {
@@ -592,6 +639,7 @@
         font-size: 14px;
         line-height: 1.7;
         margin-bottom: 15px;
+        flex: 1 1 auto;
     }
 
     .related-meta {
@@ -738,7 +786,7 @@
 
     .comments-pagination-wrap a.relative.inline-flex.items-center:hover,
     .comments-pagination-wrap a.inline-flex.items-center:hover {
-        background: var(--soft-bg);
+        background: var(--surface-soft);
         color: var(--accent);
     }
 
@@ -754,19 +802,49 @@
         color: var(--muted) !important;
     }
 
+    .inline-note-title {
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .section-action-btn {
+        width: 100%;
+    }
+
+    @media (max-width: 1100px) {
+        .recipe-main-title {
+            font-size: 2.35rem;
+        }
+    }
+
     @media (max-width: 900px) {
         .recipe-section-card {
             padding: 22px;
         }
+
+        .recipe-main-title {
+            font-size: 2.15rem;
+        }
     }
 
     @media (max-width: 640px) {
+        .recipe-show-stack {
+            gap: 18px;
+        }
+
         .recipe-section-card {
-            padding: 20px;
+            padding: 18px;
+            border-radius: 20px;
         }
 
         .recipe-main-title {
-            font-size: 2rem;
+            font-size: 1.9rem;
+            line-height: 1.14;
+        }
+
+        .recipe-description {
+            font-size: 14px;
+            line-height: 1.75;
         }
 
         .recipe-hero-head,
@@ -774,10 +852,19 @@
         .pdf-actions,
         .review-actions,
         .page-actions,
-        .comment-actions {
+        .comment-actions,
+        .review-top,
+        .comment-top,
+        .reply-top,
+        .ingredient-row,
+        .instruction-row {
             flex-direction: column;
+            align-items: flex-start;
         }
 
+        .recipe-fav-wrap,
+        .recipe-fav-wrap form,
+        .recipe-fav-wrap button,
         .recipe-hero-head form,
         .pdf-actions a,
         .review-actions .btn,
@@ -788,19 +875,34 @@
             width: 100%;
         }
 
-        .ingredient-row,
-        .instruction-row,
-        .review-top,
-        .comment-top,
-        .reply-top {
-            flex-direction: column;
-            align-items: flex-start;
+        .heart-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .servings-control {
+            align-items: stretch;
+        }
+
+        .servings-input {
+            width: 100%;
         }
 
         .author-grid,
         .meta-grid,
         .related-grid {
             grid-template-columns: 1fr;
+        }
+
+        .content-inner,
+        .review-card,
+        .comment-card,
+        .reply-card,
+        .comment-form-box {
+            padding: 18px;
+            border-radius: 18px;
         }
 
         .static-stars {
@@ -817,6 +919,29 @@
             margin-left: 0;
             width: 100%;
         }
+
+        .section-title {
+            font-size: 1.55rem;
+        }
+
+        .section-subtext {
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .meta-item {
+            padding: 18px;
+        }
+
+        .related-item h4 {
+            font-size: 1.2rem;
+        }
+
+        .comments-pagination-wrap .relative.inline-flex.items-center,
+        .comments-pagination-wrap .inline-flex.items-center {
+            padding: 9px 12px;
+            min-width: 40px;
+        }
     }
 </style>
 
@@ -828,12 +953,15 @@
                 <div class="recipe-hero-left">
                     <div class="recipe-badge">Recepte</div>
                     <h2 class="recipe-main-title">{{ $recipe->title }}</h2>
-                    <p class="recipe-description">
-                        {{ $recipe->description }}
-                    </p>
+
+                    @if(!empty($recipe->description))
+                        <p class="recipe-description">
+                            {{ $recipe->description }}
+                        </p>
+                    @endif
                 </div>
 
-                <div>
+                <div class="recipe-fav-wrap">
                     @auth
                         <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
                             @csrf
@@ -857,7 +985,7 @@
 
             <div class="servings-card">
                 <div class="servings-control">
-                    <span style="font-weight: 900; color: var(--accent);">Porcijas:</span>
+                    <span class="servings-label">Porcijas:</span>
                     <input
                         id="servingsInput"
                         class="servings-input"
@@ -876,18 +1004,18 @@
                 </div>
             </div>
 
-            @if($recipe->image_path || $recipe->video_path)
+            @if($imageUrl || $videoUrl)
                 <div class="media-wrap">
-                    @if($recipe->image_path)
+                    @if($imageUrl)
                         <div class="media-card">
-                            <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="Receptes attēls" class="media-img">
+                            <img src="{{ $imageUrl }}" alt="Receptes attēls" class="media-img">
                         </div>
                     @endif
 
-                    @if($recipe->video_path)
+                    @if($videoUrl)
                         <div class="media-card">
                             <video controls class="media-video">
-                                <source src="{{ asset('storage/' . $recipe->video_path) }}">
+                                <source src="{{ $videoUrl }}">
                                 Jūsu pārlūks neatbalsta video.
                             </video>
                         </div>
@@ -901,7 +1029,7 @@
                 <div class="section-kicker">Pamatinformācija</div>
                 <h3 class="section-title">Receptes informācija</h3>
                 <p class="section-subtext">
-                    Šeit redzama galvenā informācija par recepti, tās grūtības līmeni, laiku un porcijām.
+                    Šeit redzama galvenā informācija par recepti, tās grūtības līmeni, laiku, porcijām un kalorijām.
                 </p>
             </div>
 
@@ -909,19 +1037,13 @@
                 <div class="meta-item">
                     <div class="meta-icon">📂</div>
                     <h4>Kategorija</h4>
-                    <p>{{ $recipe->category ?? 'Nav norādīta' }}</p>
+                    <p>{{ $recipeCategory }}</p>
                 </div>
 
                 <div class="meta-item">
                     <div class="meta-icon">⭐</div>
                     <h4>Grūtība</h4>
-                    <p>{{ $recipe->difficulty ?? 'Nav norādīta' }}</p>
-                </div>
-
-                <div class="meta-item">
-                    <div class="meta-icon">👁️</div>
-                    <h4>Skatījumi</h4>
-                    <p>{{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</p>
+                    <p>{{ $recipeDifficulty }}</p>
                 </div>
 
                 @if(!is_null($recipe->prep_time))
@@ -951,6 +1073,14 @@
                     <h4>Porcijas</h4>
                     <p><span id="servingsDisplay" data-original="{{ $origServings }}">{{ $origServings }}</span> porcijas</p>
                 </div>
+
+                @if(!is_null($recipe->calories))
+                    <div class="meta-item">
+                        <div class="meta-icon">🔥</div>
+                        <h4>Kalorijas</h4>
+                        <p>{{ number_format((float)$recipe->calories, 0, ',', ' ') }} kcal</p>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -959,7 +1089,7 @@
                 <div class="section-kicker">Sastāvdaļas</div>
                 <h3 class="section-title">Kas būs nepieciešams</h3>
                 <p class="section-subtext">
-                    Pielāgojot porciju skaitu, sastāvdaļu daudzumi automātiski pārrēķināsies, ja recepte ir jaunajā formātā.
+                    Pielāgojot porciju skaitu, sastāvdaļu daudzumi automātiski pārrēķināsies.
                 </p>
             </div>
 
@@ -972,7 +1102,7 @@
                                     <span class="ingredient-check">✓</span>
 
                                     @php
-                                        $q = $ing->quantity ?? $ing->amount ?? $ing->qty ?? (isset($ing->pivot) ? ($ing->pivot->quantity ?? null) : null);
+                                        $q = $ing->quantity ?? null;
                                     @endphp
 
                                     @if(!is_null($q))
@@ -998,7 +1128,7 @@
                     @endphp
 
                     <div class="old-format-note">
-                        Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana var nebūt precīza.
+                        Šai receptei sastāvdaļas vēl ir vecajā formātā, tāpēc automātiska pārrēķināšana un kaloriju aprēķins var nebūt pieejams.
                     </div>
 
                     <ul class="ingredient-list">
@@ -1079,12 +1209,6 @@
             </div>
         </div>
 
-        @php
-            $avg = $recipe->reviews->avg('rating');
-            $avgRounded = $avg ? round($avg, 1) : null;
-            $count = $recipe->reviews->count();
-        @endphp
-
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Vērtējumi</div>
@@ -1093,10 +1217,6 @@
                     Skatiet kopējo novērtējumu un, ja vēlaties, pievienojiet savu vērtējumu.
                 </p>
             </div>
-
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
-            @endif
 
             <div class="review-summary">
                 <span class="review-badge">
@@ -1107,7 +1227,7 @@
             @auth
                 <div class="review-card" style="margin-bottom: 18px;">
                     @if(!$myReview)
-                        <div style="font-weight:800; margin-bottom:12px;">Tavs vērtējums</div>
+                        <div class="inline-note-title">Tavs vērtējums</div>
 
                         <form method="POST" action="{{ route('recipes.reviews.store', $recipe) }}">
                             @csrf
@@ -1116,7 +1236,7 @@
                                 <label class="review-label" style="margin-bottom:10px;">Vērtējums</label>
 
                                 <div class="stars">
-                                    @for($i=5; $i>=1; $i--)
+                                    @for($i = 5; $i >= 1; $i--)
                                         <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
                                         <label for="star{{ $i }}">★</label>
                                     @endfor
@@ -1127,14 +1247,14 @@
                                 @enderror
                             </div>
 
-                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                            <button type="submit" class="btn btn-success section-action-btn" style="margin-top:12px;">
                                 Saglabāt vērtējumu
                             </button>
                         </form>
                     @else
                         <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap;">
                             <div>
-                                <div style="font-weight:800;">Tavs vērtējums</div>
+                                <div class="inline-note-title" style="margin-bottom:0;">Tavs vērtējums</div>
                             </div>
 
                             <div class="review-actions">
@@ -1161,7 +1281,7 @@
                                 <span class="review-label">Vērtējums</span>
                                 <div class="review-value">
                                     <span class="static-stars" style="margin-left:0;">
-                                        @for($s=1; $s<=5; $s++)
+                                        @for($s = 1; $s <= 5; $s++)
                                             {!! $s <= $myReview->rating
                                                 ? '<span class="filled">★</span>'
                                                 : '<span class="empty">★</span>' !!}
@@ -1182,7 +1302,7 @@
                                 <label class="review-label" style="margin-bottom:10px;">Vērtējums</label>
 
                                 <div class="stars">
-                                    @for($i=5; $i>=1; $i--)
+                                    @for($i = 5; $i >= 1; $i--)
                                         <input type="radio" id="editStar{{ $i }}" name="rating" value="{{ $i }}"
                                                @checked((int)$myReview->rating === $i) required>
                                         <label for="editStar{{ $i }}">★</label>
@@ -1190,7 +1310,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                            <button type="submit" class="btn btn-success section-action-btn" style="margin-top:12px;">
                                 Saglabāt izmaiņas
                             </button>
                         </form>
@@ -1210,7 +1330,7 @@
                             <span class="review-label">Vērtējums</span>
                             <div class="review-value">
                                 <span class="static-stars" style="margin-left:0;">
-                                    @for($s=1; $s<=5; $s++)
+                                    @for($s = 1; $s <= 5; $s++)
                                         {!! $s <= $review->rating
                                             ? '<span class="filled">★</span>'
                                             : '<span class="empty">★</span>' !!}
@@ -1235,10 +1355,6 @@
                     Uzdodiet jautājumus, atstājiet atsauksmes un atbildiet citiem lietotājiem.
                 </p>
             </div>
-
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
-            @endif
 
             <div class="comment-summary">
                 <span class="comment-badge">
@@ -1274,7 +1390,7 @@
                             <div class="error-text">{{ $message }}</div>
                         @enderror
 
-                        <button type="submit" class="btn btn-success" style="margin-top:12px;">
+                        <button type="submit" class="btn btn-success section-action-btn" style="margin-top:12px;">
                             Pievienot komentāru
                         </button>
                     </form>
@@ -1319,7 +1435,7 @@
                                     placeholder="Uzraksti atbildi uz komentāru..."
                                 ></textarea>
 
-                                <button type="submit" class="btn btn-primary" style="margin-top:12px;">
+                                <button type="submit" class="btn btn-primary section-action-btn" style="margin-top:12px;">
                                     Ievietot atbildi
                                 </button>
                             </form>
@@ -1399,12 +1515,16 @@
 
                 <div class="related-grid">
                     @foreach($relatedRecipes as $relatedRecipe)
+                        @php
+                            $relatedCategory = $relatedRecipe->category->name ?? $relatedRecipe->category ?? '';
+                        @endphp
+
                         <div class="related-item">
                             <h4>{{ $relatedRecipe->title }}</h4>
                             <p>{{ \Illuminate\Support\Str::limit($relatedRecipe->description, 80) }}</p>
 
                             <div class="related-meta">
-                                <span>{{ $relatedRecipe->category }}</span>
+                                <span>{{ $relatedCategory }}</span>
                                 <span>{{ $relatedRecipe->user->name }}</span>
                                 <span>👁️ {{ number_format((int)($relatedRecipe->views ?? 0), 0, ',', ' ') }}</span>
                             </div>
@@ -1427,8 +1547,8 @@
     if (!input) return;
 
     const servingsDisplay = document.getElementById('servingsDisplay');
-    const prepEl  = document.getElementById('prepTime');
-    const cookEl  = document.getElementById('cookTime');
+    const prepEl = document.getElementById('prepTime');
+    const cookEl = document.getElementById('cookTime');
     const totalEl = document.getElementById('totalTime');
     const pdfLinks = document.querySelectorAll('.pdf-link');
 
@@ -1470,17 +1590,8 @@
             if (!raw0) return;
 
             const raw = raw0.replace(',', '.');
-
-            let orig;
-
-            if (raw.includes('/')) {
-                const [a, b] = raw.split('/').map(s => Number(s.trim()));
-                if (!Number.isFinite(a) || !Number.isFinite(b) || b === 0) return;
-                orig = a / b;
-            } else {
-                orig = parseFloat(raw);
-                if (!Number.isFinite(orig)) return;
-            }
+            const orig = parseFloat(raw);
+            if (!Number.isFinite(orig)) return;
 
             el.textContent = formatQty(orig * k);
         });

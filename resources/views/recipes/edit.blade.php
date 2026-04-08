@@ -660,7 +660,7 @@
                         @if($useOld)
                             @php
                                 $names = is_array($oldNames) ? $oldNames : [];
-                                $qtys  = is_array($oldQtys)  ? $oldQtys  : [];
+                                $qtys  = is_array($oldQtys) ? $oldQtys : [];
                                 $units = is_array($oldUnits) ? $oldUnits : [];
                                 $rows = max(count($names), count($qtys), count($units));
                                 if($rows < 1) $rows = 1;
@@ -753,10 +753,6 @@
                     <button type="button" class="btn btn-success" onclick="addIngRow()" style="margin-top: 12px;">
                         Pievienot sastāvdaļu
                     </button>
-
-                    <small class="help-text">
-                        Ja nav jēgas daudzumu norādīt, piemēram “pēc garšas”, atstāj daudzumu tukšu.
-                    </small>
                 </div>
             </div>
 

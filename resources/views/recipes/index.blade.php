@@ -24,11 +24,11 @@
         border-radius: 24px;
         padding: 28px;
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
+        overflow: hidden;
     }
 
     .recipes-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
-        overflow: hidden;
     }
 
     .recipes-hero-inner {
@@ -75,6 +75,7 @@
         color: var(--accent);
         margin: 0 0 10px;
         line-height: 1.08;
+        word-break: break-word;
     }
 
     .recipes-main-text {
@@ -131,6 +132,7 @@
 
     .form-group {
         margin-bottom: 0;
+        min-width: 0;
     }
 
     .form-label {
@@ -163,6 +165,10 @@
         box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
+    .filters-submit-btn {
+        min-width: 140px;
+    }
+
     .filters-extra-actions {
         margin-top: 16px;
         display: flex;
@@ -181,6 +187,7 @@
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2rem;
         font-weight: 500;
+        word-break: break-word;
     }
 
     .results-summary-text {
@@ -233,6 +240,7 @@
         font-weight: 500;
         margin-bottom: 12px;
         line-height: 1.16;
+        word-break: break-word;
     }
 
     .recipe-description {
@@ -267,6 +275,11 @@
         color: var(--muted);
         font-size: 13px;
         line-height: 1.5;
+        min-width: 0;
+    }
+
+    .recipe-meta-item span:last-child {
+        word-break: break-word;
     }
 
     .recipe-meta-icon {
@@ -423,52 +436,236 @@
         flex-wrap: wrap;
     }
 
-    @media (max-width: 980px) {
-        .recipes-section-card {
-            padding: 22px;
-        }
-
-        .recipes-hero-inner,
-        .filters-form-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recipes-hero-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
+@media (max-width: 980px) {
+    .recipes-section-card {
+        padding: 16px;
+        border-radius: 18px;
     }
 
-    @media (max-width: 640px) {
-        .recipes-section-card {
-            padding: 20px;
-        }
-
-        .recipe-meta-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .rating-stars {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .empty-actions {
-            flex-direction: column;
-        }
-
-        .empty-actions .btn,
-        .actions-center .btn,
-        .recipe-card .btn {
-            width: 100%;
-        }
-
-        .recipes-main-title {
-            font-size: 2rem;
-        }
+    .recipes-hero-inner,
+    .filters-form-grid {
+        grid-template-columns: 1fr;
     }
+
+    .recipes-hero-icon-wrap {
+        width: 68px;
+        height: 68px;
+        font-size: 1.8rem;
+        border-radius: 16px;
+    }
+
+    .filters-submit-btn {
+        width: 100%;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .recipes-index-stack {
+        gap: 10px;
+    }
+
+    .recipes-section-card {
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .recipe-card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .recipe-card-top,
+    .recipe-card-body {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .recipe-card-top {
+        padding-top: 10px;
+        padding-bottom: 8px;
+    }
+
+    .recipe-card-body {
+        padding-bottom: 10px;
+    }
+
+    .recipe-card-image,
+    .recipe-card img,
+    .recipe-thumb,
+    .recipe-cover {
+        height: 110px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .results-summary-title,
+    .section-title {
+        font-size: 1.05rem;
+        line-height: 1.2;
+        margin-bottom: 6px;
+    }
+
+    .recipes-main-title {
+        font-size: 1rem;
+        line-height: 1.15;
+        margin-bottom: 4px;
+    }
+
+    .recipes-main-text,
+    .results-summary-text,
+    .recipe-card p,
+    .recipe-card-text {
+        font-size: 11.5px;
+        line-height: 1.35;
+    }
+
+    .filters-extra-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .filters-extra-actions .btn,
+    .actions-center .btn,
+    .recipe-card .btn {
+        width: 100%;
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 11.5px;
+        border-radius: 10px;
+    }
+
+    .recipe-meta-grid {
+        gap: 6px;
+    }
+
+    .recipe-meta-grid > *,
+    .recipe-meta-item,
+    .recipe-pill,
+    .recipe-chip {
+        padding: 6px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 640px) {
+    .recipes-section-card {
+        padding: 8px;
+        border-radius: 12px;
+    }
+
+    .recipes-hero-inner {
+        gap: 10px;
+    }
+
+    .recipes-hero-icon-wrap {
+        width: 52px;
+        height: 52px;
+        font-size: 1.35rem;
+        border-radius: 12px;
+    }
+
+    .recipe-card-top,
+    .recipe-card-body {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .recipe-card-top {
+        padding-top: 8px;
+        padding-bottom: 6px;
+    }
+
+    .recipe-card-body {
+        padding-bottom: 8px;
+    }
+
+    .recipe-card-image,
+    .recipe-card img,
+    .recipe-thumb,
+    .recipe-cover {
+        height: 96px;
+        border-radius: 8px;
+    }
+
+    .recipe-meta-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .rating-row,
+    .author-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .rating-stars {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .empty-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .empty-actions .btn,
+    .actions-center .btn,
+    .recipe-card .btn,
+    .filters-submit-btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 32px;
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+
+    .recipes-main-title {
+        font-size: 0.95rem;
+    }
+
+    .results-summary-title,
+    .empty-box h3 {
+        font-size: 1rem;
+    }
+
+    .recipes-main-text,
+    .results-summary-text,
+    .recipe-card p,
+    .recipe-card-text,
+    .author-meta,
+    .recipe-date {
+        font-size: 11px;
+        line-height: 1.3;
+    }
+
+    .pagination-box .relative.inline-flex.items-center,
+    .pagination-box .inline-flex.items-center {
+        padding: 6px 8px;
+        min-width: 30px;
+        min-height: 30px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+}
 </style>
+
+@php
+    $activeSearch = $search ?? request('search');
+    $activeCategory = $category ?? request('category');
+    $activeDifficulty = $difficulty ?? request('difficulty');
+@endphp
 
 <div class="recipes-index-page">
     <div class="recipes-index-stack">
@@ -505,7 +702,7 @@
                         <input
                             type="text"
                             name="search"
-                            value="{{ $search ?? request('search') }}"
+                            value="{{ $activeSearch }}"
                             class="form-input"
                             placeholder="Meklēt pēc nosaukuma, apraksta vai sastāvdaļām..."
                         >
@@ -516,8 +713,11 @@
                         <select name="category" class="form-select">
                             <option value="">Visas kategorijas</option>
                             @foreach($categories as $cat)
-                                <option value="{{ $cat }}" {{ ($category ?? request('category')) == $cat ? 'selected' : '' }}>
-                                    {{ $cat }}
+                                @php
+                                    $catValue = is_object($cat) ? ($cat->name ?? '') : $cat;
+                                @endphp
+                                <option value="{{ $catValue }}" {{ $activeCategory == $catValue ? 'selected' : '' }}>
+                                    {{ $catValue }}
                                 </option>
                             @endforeach
                         </select>
@@ -527,13 +727,13 @@
                         <label class="form-label">Grūtība</label>
                         <select name="difficulty" class="form-select">
                             <option value="">Jebkura</option>
-                            <option value="Viegla" {{ ($difficulty ?? request('difficulty')) == 'Viegla' ? 'selected' : '' }}>Viegla</option>
-                            <option value="Vidēja" {{ ($difficulty ?? request('difficulty')) == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
-                            <option value="Grūta" {{ ($difficulty ?? request('difficulty')) == 'Grūta' ? 'selected' : '' }}>Grūta</option>
+                            <option value="Viegla" {{ $activeDifficulty == 'Viegla' ? 'selected' : '' }}>Viegla</option>
+                            <option value="Vidēja" {{ $activeDifficulty == 'Vidēja' ? 'selected' : '' }}>Vidēja</option>
+                            <option value="Grūta" {{ $activeDifficulty == 'Grūta' ? 'selected' : '' }}>Grūta</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Meklēt</button>
+                    <button type="submit" class="btn btn-primary filters-submit-btn">Meklēt</button>
                 </div>
 
                 @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
@@ -586,6 +786,13 @@
 
                 <div class="recipe-grid">
                     @foreach($recipes as $recipe)
+                        @php
+                            $recipeCategoryName = $recipe->category->name ?? $recipe->category ?? 'Nav kategorijas';
+                            $recipeDifficultyName = $recipe->difficulty ?? 'Nav norādīta';
+                            $totalTime = (int)($recipe->prep_time ?? 0) + (int)($recipe->cook_time ?? 0);
+                            $roundedRating = (int) round($recipe->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="recipe-card">
                             <div class="recipe-card-top">
                                 <h3 class="recipe-title">{{ $recipe->title }}</h3>
@@ -599,18 +806,18 @@
                                 <div class="recipe-meta-grid">
                                     <div class="recipe-meta-item">
                                         <span class="recipe-meta-icon">📂</span>
-                                        <span>{{ $recipe->category ?? 'Nav kategorijas' }}</span>
+                                        <span>{{ $recipeCategoryName }}</span>
                                     </div>
 
                                     <div class="recipe-meta-item">
                                         <span class="recipe-meta-icon">⭐</span>
-                                        <span>{{ $recipe->difficulty ?? 'Nav norādīta' }}</span>
+                                        <span>{{ $recipeDifficultyName }}</span>
                                     </div>
 
                                     @if($recipe->prep_time || $recipe->cook_time)
                                         <div class="recipe-meta-item">
                                             <span class="recipe-meta-icon">⏱️</span>
-                                            <span>{{ ($recipe->prep_time ?? 0) + ($recipe->cook_time ?? 0) }} min</span>
+                                            <span>{{ $totalTime }} min</span>
                                         </div>
                                     @endif
 
@@ -632,9 +839,8 @@
                                     </span>
 
                                     <span class="rating-stars">
-                                        @php $r = (int) round($recipe->reviews_avg_rating ?? 0); @endphp
                                         @for($i = 1; $i <= 5; $i++)
-                                            {!! $i <= $r ? '★' : '☆' !!}
+                                            {!! $i <= $roundedRating ? '★' : '☆' !!}
                                         @endfor
                                     </span>
                                 </div>

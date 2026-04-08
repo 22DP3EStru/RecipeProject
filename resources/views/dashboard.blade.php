@@ -478,12 +478,6 @@
                     <div class="action-title">Mani favorīti</div>
                     <div class="action-text">Ātri piekļūstiet savām saglabātajām receptēm.</div>
                 </a>
-
-                <a href="{{ route('contact') }}" class="action-card">
-                    <div class="action-icon">📞</div>
-                    <div class="action-title">Kontakti</div>
-                    <div class="action-text">Sazinieties ar mums jautājumu vai ieteikumu gadījumā.</div>
-                </a>
             </div>
         </div>
 

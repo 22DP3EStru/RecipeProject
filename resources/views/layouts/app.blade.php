@@ -63,6 +63,10 @@
                 linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
         }
 
+        body.menu-open {
+            overflow: hidden;
+        }
+
         .site-shell {
             min-height: 100vh;
             position: relative;
@@ -152,7 +156,7 @@
         .nav-bar {
             position: sticky;
             top: 14px;
-            z-index: 20;
+            z-index: 40;
             background: rgba(255, 253, 249, 0.92);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -276,6 +280,72 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .nav-toggle {
+            display: none;
+            border: 1px solid var(--line);
+            background: linear-gradient(180deg, #fffdfa 0%, #f6efe7 100%);
+            color: var(--accent-dark);
+            border-radius: 14px;
+            width: 48px;
+            height: 48px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(79, 59, 42, 0.05);
+            transition: 0.2s ease;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: inherit;
+        }
+
+        .nav-toggle:hover {
+            transform: translateY(-1px);
+            background: var(--surface-soft-2);
+        }
+
+        .nav-toggle-icon,
+        .nav-toggle-icon::before,
+        .nav-toggle-icon::after {
+            display: block;
+            width: 18px;
+            height: 2px;
+            border-radius: 999px;
+            background: currentColor;
+            position: relative;
+            transition: 0.25s ease;
+            content: "";
+        }
+
+        .nav-toggle-icon::before {
+            position: absolute;
+            top: -6px;
+            left: 0;
+        }
+
+        .nav-toggle-icon::after {
+            position: absolute;
+            top: 6px;
+            left: 0;
+        }
+
+        .menu-open .nav-toggle-icon {
+            background: transparent;
+        }
+
+        .menu-open .nav-toggle-icon::before {
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        .menu-open .nav-toggle-icon::after {
+            top: 0;
+            transform: rotate(-45deg);
+        }
+
+        .nav-mobile-panel {
+            display: none;
         }
 
         .main-content {
@@ -736,28 +806,183 @@
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .page {
                 padding: 14px 12px 30px;
             }
 
             .hero {
-                padding: 22px 14px 24px;
+                padding: 24px 16px 26px;
                 border-radius: 22px;
+                margin-bottom: 16px;
             }
 
             .hero-title {
-                font-size: 2.25rem;
+                font-size: 2.2rem;
+                line-height: 1.12;
+                margin-bottom: 10px;
             }
 
             .hero-text {
                 font-size: 15px;
+                line-height: 1.65;
             }
 
             .nav-bar {
-                padding: 16px 14px;
-                gap: 14px;
+                position: sticky;
+                top: 10px;
+                grid-template-columns: 1fr auto;
+                justify-items: stretch;
+                align-items: center;
+                gap: 12px;
+                padding: 14px;
                 border-radius: 18px;
+                margin-bottom: 18px;
+                text-align: left;
+            }
+
+            .nav-brand {
+                font-size: 1.35rem;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .nav-center,
+            .nav-right {
+                display: none;
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+            }
+
+            .nav-mobile-panel {
+                display: block;
+                position: fixed;
+                inset: 0;
+                z-index: 80;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.25s ease;
+            }
+
+            .menu-open .nav-mobile-panel {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .nav-mobile-backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(47, 36, 29, 0.32);
+                backdrop-filter: blur(3px);
+                -webkit-backdrop-filter: blur(3px);
+            }
+
+            .nav-mobile-sheet {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: min(88vw, 360px);
+                height: 100%;
+                background: linear-gradient(180deg, rgba(255,253,249,0.98) 0%, rgba(247,239,231,0.98) 100%);
+                border-left: 1px solid rgba(212, 194, 174, 0.85);
+                box-shadow: -18px 0 44px rgba(79, 59, 42, 0.12);
+                padding: 18px 16px 22px;
+                overflow-y: auto;
+                transform: translateX(100%);
+                transition: transform 0.28s ease;
+            }
+
+            .menu-open .nav-mobile-sheet {
+                transform: translateX(0);
+            }
+
+            .nav-mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .nav-mobile-title {
+                font-family: Georgia, "Times New Roman", serif;
+                color: var(--accent);
+                font-size: 1.35rem;
+                font-weight: 500;
+            }
+
+            .nav-mobile-close {
+                border: 1px solid var(--line);
+                background: #fffdfa;
+                color: var(--accent-dark);
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                font-size: 24px;
+                line-height: 1;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .nav-mobile-user {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: var(--surface-soft);
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                padding: 12px;
+                margin-bottom: 16px;
+            }
+
+            .nav-mobile-user-name {
+                font-weight: 700;
+                color: var(--text);
+                line-height: 1.4;
+                word-break: break-word;
+            }
+
+            .nav-mobile-links {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 18px;
+            }
+
+            .nav-mobile-links a {
+                display: block;
+                width: 100%;
+                text-decoration: none;
+                color: var(--text);
+                background: rgba(255,255,255,0.72);
+                border: 1px solid var(--line);
+                border-radius: 14px;
+                padding: 13px 14px;
+                font-weight: 700;
+                line-height: 1.35;
+                transition: 0.2s ease;
+            }
+
+            .nav-mobile-links a.active {
+                color: var(--accent);
+                background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%);
+                border-color: var(--line-strong);
+            }
+
+            .nav-mobile-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-mobile-actions .btn,
+            .nav-mobile-actions button {
+                width: 100%;
             }
 
             .main-content,
@@ -781,8 +1006,80 @@
             .btn {
                 width: 100%;
             }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .panel-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-icon {
+                font-size: 3rem;
+            }
+
+            .site-shell::before {
+                width: 200px;
+                height: 200px;
+            }
+
+            .site-shell::after {
+                width: 240px;
+                height: 240px;
+                right: -90px;
+                bottom: 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 12px 10px 24px;
+            }
+
+            .hero {
+                padding: 22px 14px 24px;
+                border-radius: 20px;
+            }
+
+            .hero-title {
+                font-size: 1.95rem;
+            }
+
+            .hero-text {
+                font-size: 14px;
+            }
+
+            .main-content,
+            .card {
+                padding: 16px;
+                border-radius: 20px;
+            }
+
+            .flash-message {
+                padding: 13px 14px;
+                font-size: 13px;
+            }
+
+            .section-title {
+                font-size: 1.45rem;
+            }
+
+            .card-title {
+                font-size: 1.35rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile-force.css') }}">
 </head>
 <body>
 <div class="site-shell">
@@ -854,7 +1151,68 @@
                         </form>
                     @endauth
                 </div>
+
+                <button
+                    type="button"
+                    class="nav-toggle"
+                    aria-label="Atvērt izvēlni"
+                    aria-expanded="false"
+                    aria-controls="mobileMenu"
+                    onclick="toggleMobileMenu()"
+                >
+                    <span class="nav-toggle-icon"></span>
+                </button>
             </nav>
+
+            <div class="nav-mobile-panel" id="mobileMenu">
+                <div class="nav-mobile-backdrop" onclick="closeMobileMenu()"></div>
+
+                <div class="nav-mobile-sheet">
+                    <div class="nav-mobile-header">
+                        <div class="nav-mobile-title">Izvēlne</div>
+                        <button type="button" class="nav-mobile-close" onclick="closeMobileMenu()" aria-label="Aizvērt izvēlni">
+                            ×
+                        </button>
+                    </div>
+
+                    @auth
+                        <div class="nav-mobile-user">
+                            <span class="nav-user-avatar">
+                                {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                            </span>
+                            <div class="nav-mobile-user-name">{{ Auth::user()->name }}</div>
+                        </div>
+
+                        <div class="nav-mobile-links">
+                            <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
+                            <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
+                            <a href="{{ url('/categories') }}" class="{{ request()->is('categories') || request()->is('categories/*') ? 'active' : '' }}">Kategorijas</a>
+                            <a href="{{ url('/profile/recipes') }}" class="{{ request()->is('profile/recipes') ? 'active' : '' }}">Manas receptes</a>
+                            <a href="{{ url('/profile/favorites') }}" class="{{ request()->is('profile/favorites') ? 'active' : '' }}">Favorīti</a>
+                            <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
+                            <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
+
+                            @if(Auth::user()->is_admin)
+                                <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
+                            @endif
+                        </div>
+
+                        <div class="nav-mobile-actions">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Iziet</button>
+                            </form>
+                        </div>
+                    @endauth
+
+                    @guest
+                        <div class="nav-mobile-actions">
+                            <a href="{{ route('login') }}" class="btn btn-secondary">Ielogoties</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary">Reģistrēties</a>
+                        </div>
+                    @endguest
+                </div>
+            </div>
         @endunless
 
         <div class="main-content">
@@ -864,5 +1222,77 @@
 
     </div>
 </div>
+
+<script>
+    function toggleMobileMenu() {
+        const body = document.body;
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.nav-toggle');
+
+        body.classList.toggle('menu-open');
+
+        const isOpen = body.classList.contains('menu-open');
+
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+
+        if (menu) {
+            menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        }
+    }
+
+    function closeMobileMenu() {
+        const body = document.body;
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.nav-toggle');
+
+        body.classList.remove('menu-open');
+
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+
+        if (menu) {
+            menu.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeMobileMenu();
+        }
+    });
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (window.innerWidth > 768) {
+            return;
+        }
+
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navToggle = document.querySelector('.nav-toggle');
+        const clickedLink = event.target.closest('.nav-mobile-links a');
+
+        if (clickedLink && mobileMenu) {
+            closeMobileMenu();
+        }
+
+        if (
+            document.body.classList.contains('menu-open') &&
+            mobileMenu &&
+            !event.target.closest('.nav-mobile-sheet') &&
+            navToggle &&
+            !event.target.closest('.nav-toggle')
+        ) {
+            closeMobileMenu();
+        }
+    });
+</script>
 </body>
 </html>

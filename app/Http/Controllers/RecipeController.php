@@ -21,13 +21,8 @@ class RecipeController extends Controller
         ]);
     }
 
-    /**
-     * PDF (A4) – recepte + bilde
-     * View: resources/views/recipes/pdf.blade.php
-     */
     public function downloadPdf(Recipe $recipe)
     {
-        $this->ensurePdfWritableDirs();
         $recipe->loadMissing(['user', 'ingredientsItems']);
 
         $filename = Str::slug($recipe->title ?? 'recepte') . '-' . $recipe->id . '.pdf';
@@ -39,55 +34,13 @@ class RecipeController extends Controller
         return $pdf->download($filename);
     }
 
-    /**
-     * PDF (A4) – tikai recepšu bilde (1 lapa)
-     * View: resources/views/recipes/pdf_image.blade.php
-     */
-    public function downloadImagePdf(Recipe $recipe)
-    {
-        $this->ensurePdfWritableDirs();
-
-        $filename = Str::slug($recipe->title ?? 'recepte') . '-' . $recipe->id . '-bilde.pdf';
-
-        $pdf = Pdf::loadView('recipes.pdf_image', [
-            'recipe' => $recipe,
-        ])->setPaper('a4');
-
-        return $pdf->download($filename);
-    }
-
-    /**
-     * Print view (HTML) – cilvēks atver pārlūkā un spiež Ctrl+P
-     * View: resources/views/recipes/print.blade.php
-     */
     public function printView(Recipe $recipe)
     {
         $recipe->loadMissing(['user', 'ingredientsItems']);
         return view('recipes.print', compact('recipe'));
     }
 
-    /**
-     * Fix permissions edge cases (Docker/FS)
-     */
-    private function ensurePdfWritableDirs(): void
-    {
-        $paths = [
-            storage_path('framework'),
-            storage_path('framework/cache'),
-            storage_path('framework/views'),
-            storage_path('framework/sessions'),
-            storage_path('logs'),
-            base_path('bootstrap/cache'),
-        ];
-
-        foreach ($paths as $p) {
-            if (!is_dir($p)) {
-                @mkdir($p, 0775, true);
-            }
-        }
-    }
-
-    private function validationRules(bool $isUpdate = false): array
+    private function validationRules(): array
     {
         return [
             'title' => 'required|string|max:255',
@@ -101,8 +54,10 @@ class RecipeController extends Controller
 
             'ingredient_name' => 'required|array|min:1',
             'ingredient_name.*' => 'required|string|max:255',
+
             'ingredient_qty' => 'nullable|array',
             'ingredient_qty.*' => 'nullable|numeric|min:0',
+
             'ingredient_unit' => 'nullable|array',
             'ingredient_unit.*' => 'nullable|string|max:30',
 
@@ -115,47 +70,9 @@ class RecipeController extends Controller
     {
         return [
             'title.required' => 'Lūdzu, ievadiet receptes nosaukumu.',
-            'title.max' => 'Receptes nosaukums nedrīkst būt garāks par 255 rakstzīmēm.',
-
             'description.required' => 'Lūdzu, ievadiet receptes aprakstu.',
-            'description.min' => 'Receptes aprakstam jābūt vismaz 10 rakstzīmes garam.',
-
             'instructions.required' => 'Lūdzu, ievadiet gatavošanas instrukcijas.',
-            'instructions.min' => 'Gatavošanas instrukcijām jābūt vismaz 10 rakstzīmes garām.',
-
-            'prep_time.integer' => 'Sagatavošanas laikam jābūt veselam skaitlim.',
-            'prep_time.min' => 'Sagatavošanas laiks nedrīkst būt negatīvs.',
-
-            'cook_time.integer' => 'Gatavošanas laikam jābūt veselam skaitlim.',
-            'cook_time.min' => 'Gatavošanas laiks nedrīkst būt negatīvs.',
-
-            'servings.integer' => 'Porciju skaitam jābūt veselam skaitlim.',
-            'servings.min' => 'Porciju skaitam jābūt vismaz 1.',
-
-            'difficulty.required' => 'Lūdzu, izvēlieties grūtības līmeni.',
-            'difficulty.in' => 'Izvēlieties derīgu grūtības līmeni.',
-
-            'category.required' => 'Lūdzu, izvēlieties kategoriju.',
-            'category.max' => 'Kategorijas nosaukums ir pārāk garš.',
-
             'ingredient_name.required' => 'Pievienojiet vismaz vienu sastāvdaļu.',
-            'ingredient_name.array' => 'Sastāvdaļu formāts nav derīgs.',
-            'ingredient_name.min' => 'Pievienojiet vismaz vienu sastāvdaļu.',
-            'ingredient_name.*.required' => 'Katras sastāvdaļas nosaukums ir obligāts.',
-            'ingredient_name.*.max' => 'Sastāvdaļas nosaukums nedrīkst būt garāks par 255 rakstzīmēm.',
-
-            'ingredient_qty.*.numeric' => 'Sastāvdaļas daudzumam jābūt skaitlim.',
-            'ingredient_qty.*.min' => 'Sastāvdaļas daudzums nedrīkst būt negatīvs.',
-
-            'ingredient_unit.*.max' => 'Mērvienība nedrīkst būt garāka par 30 rakstzīmēm.',
-
-            'image.image' => 'Augšupielādētajam failam jābūt attēlam.',
-            'image.mimes' => 'Attēlam jābūt JPG, JPEG, PNG, WEBP vai GIF formātā.',
-            'image.max' => 'Attēls nedrīkst pārsniegt 4 MB.',
-
-            'video.file' => 'Augšupielādētajam failam jābūt video failam.',
-            'video.mimetypes' => 'Video failam jābūt MP4, WEBM vai MOV formātā.',
-            'video.max' => 'Video fails nedrīkst pārsniegt 50 MB.',
         ];
     }
 
@@ -203,41 +120,6 @@ class RecipeController extends Controller
         ));
     }
 
-    /**
-     * Ja recipe_ingredients.quantity ir NULL, bet name ir "200 g Milti",
-     * tad sadala un ieliek quantity/unit/name pareizajās kolonnās.
-     */
-    private function tryBackfillIngredientQuantity(Recipe $recipe): void
-    {
-        $items = $recipe->relationLoaded('ingredientsItems')
-            ? $recipe->ingredientsItems
-            : $recipe->ingredientsItems()->get();
-
-        foreach ($items as $item) {
-            if (!is_null($item->quantity)) {
-                continue;
-            }
-
-            $line = trim((string) $item->name);
-            if ($line === '') {
-                continue;
-            }
-
-            if (preg_match('/^(\d+(?:[.,]\d+)?)\s*([^\d\s]+)?\s+(.+)$/u', $line, $m)) {
-                $qty = (float) str_replace(',', '.', $m[1]);
-                $unit = isset($m[2]) ? trim($m[2]) : null;
-                $name = trim($m[3]);
-
-                $item->quantity = $qty;
-                if (empty($item->unit) && !empty($unit)) {
-                    $item->unit = $unit;
-                }
-                $item->name = $name;
-                $item->save();
-            }
-        }
-    }
-
     public function show(Recipe $recipe)
     {
         $sessionKey = 'recipe_viewed_' . $recipe->id;
@@ -246,16 +128,6 @@ class RecipeController extends Controller
             $recipe->increment('views');
             session()->put($sessionKey, true);
         }
-
-        $recipe->load([
-            'user',
-            'reviews.user',
-            'ingredientsItems',
-        ]);
-
-        $recipe->refresh();
-
-        $this->tryBackfillIngredientQuantity($recipe);
 
         $recipe->load([
             'user',
@@ -295,11 +167,6 @@ class RecipeController extends Controller
         return view('recipes.create');
     }
 
-    /**
-     * No ingredient_*[] masīviem:
-     *  - izveido recipe_ingredients ierakstus
-     *  - uzģenerē legacy text lauku recipes.ingredients
-     */
     private function syncIngredientsFromArrays(Recipe $recipe, Request $request): void
     {
         $names = $request->input('ingredient_name', []);
@@ -311,6 +178,7 @@ class RecipeController extends Controller
         $legacyLines = [];
 
         $count = max(count($names), count($qtys), count($units));
+
         for ($i = 0; $i < $count; $i++) {
             $name = trim((string) ($names[$i] ?? ''));
             $qtyRaw = $qtys[$i] ?? null;
@@ -321,6 +189,7 @@ class RecipeController extends Controller
             }
 
             $quantity = null;
+
             if ($qtyRaw !== null && $qtyRaw !== '') {
                 $qtyNorm = str_replace(',', '.', (string) $qtyRaw);
                 if (is_numeric($qtyNorm)) {
@@ -335,11 +204,11 @@ class RecipeController extends Controller
             ]);
 
             if ($quantity !== null && $unit !== '') {
-                $legacyLines[] = rtrim(rtrim((string) $quantity, '0'), '.') . ' ' . $unit . ' ' . $name;
+                $legacyLines[] = $quantity . ' ' . $unit . ' ' . $name;
             } elseif ($quantity !== null) {
-                $legacyLines[] = rtrim(rtrim((string) $quantity, '0'), '.') . ' ' . $name;
+                $legacyLines[] = $quantity . ' ' . $name;
             } else {
-                $legacyLines[] = $name . ($unit !== '' ? ' (' . $unit . ')' : '');
+                $legacyLines[] = $name;
             }
         }
 
@@ -356,6 +225,7 @@ class RecipeController extends Controller
 
         $validated['user_id'] = Auth::id();
         $validated['views'] = 0;
+        $validated['ingredients'] = '';
 
         if ($request->hasFile('image')) {
             $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
@@ -364,8 +234,6 @@ class RecipeController extends Controller
         if ($request->hasFile('video')) {
             $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
         }
-
-        $validated['ingredients'] = '';
 
         try {
             $recipe = Recipe::create($validated);
@@ -377,12 +245,11 @@ class RecipeController extends Controller
         } catch (\Exception $e) {
             Log::error('Recipe store error', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
             return back()
                 ->withInput()
-                ->with('error', 'Neizdevās saglabāt recepti. Lūdzu, mēģiniet vēlreiz.');
+                ->with('error', 'Neizdevās saglabāt recepti.');
         }
     }
 
@@ -392,8 +259,6 @@ class RecipeController extends Controller
             abort(403);
         }
 
-        $recipe->load('ingredientsItems');
-        $this->tryBackfillIngredientQuantity($recipe);
         $recipe->load('ingredientsItems');
 
         return view('recipes.edit', compact('recipe'));
@@ -406,7 +271,7 @@ class RecipeController extends Controller
         }
 
         $validated = $request->validate(
-            $this->validationRules(true),
+            $this->validationRules(),
             $this->validationMessages()
         );
 
@@ -427,7 +292,6 @@ class RecipeController extends Controller
                 $validated['video_path'] = $request->file('video')->store('recipes/videos', 'public');
             }
 
-            $validated['ingredients'] = $recipe->ingredients ?? '';
             $recipe->update($validated);
 
             $this->syncIngredientsFromArrays($recipe, $request);
@@ -437,14 +301,12 @@ class RecipeController extends Controller
                 ->with('success', 'Recepte veiksmīgi atjaunināta.');
         } catch (\Exception $e) {
             Log::error('Recipe update error', [
-                'recipe_id' => $recipe->id,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
             return back()
                 ->withInput()
-                ->with('error', 'Neizdevās atjaunināt recepti. Lūdzu, mēģiniet vēlreiz.');
+                ->with('error', 'Neizdevās atjaunināt recepti.');
         }
     }
 
@@ -468,15 +330,5 @@ class RecipeController extends Controller
         return redirect()
             ->route('profile.recipes')
             ->with('success', 'Recepte veiksmīgi dzēsta!');
-    }
-
-    public function userRecipes()
-    {
-        $recipes = Recipe::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(12)
-            ->withQueryString();
-
-        return view('profile.recipes', compact('recipes'));
     }
 }

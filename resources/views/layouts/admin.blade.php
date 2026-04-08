@@ -136,6 +136,7 @@
             border-color: #e3c9c2;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
 </head>
 <body class="admin-layout">
 

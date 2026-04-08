@@ -10,16 +10,16 @@ class Recipe extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'title',
         'description',
-        'ingredients',
         'instructions',
         'prep_time',
         'cook_time',
         'servings',
         'difficulty',
         'category',
-        'user_id',
+        'ingredients',
         'image_path',
         'video_path',
         'views',
@@ -28,11 +28,15 @@ class Recipe extends Model
     protected $casts = [
         'prep_time' => 'integer',
         'cook_time' => 'integer',
-        'servings' => 'integer',
-        'views' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'servings'  => 'integer',
+        'views'     => 'integer',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function user()
     {
@@ -41,43 +45,32 @@ class Recipe extends Model
 
     public function ingredientsItems()
     {
-        return $this->hasMany(\App\Models\RecipeIngredient::class, 'recipe_id');
-    }
-
-    public function ingredients()
-    {
-        return $this->ingredientsItems();
-    }
-
-    public function favoritedByUsers()
-    {
-        return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps();
+        return $this->hasMany(RecipeIngredient::class);
     }
 
     public function reviews()
     {
-        return $this->hasMany(\App\Models\RecipeReview::class)->with('user')->latest();
+        return $this->hasMany(RecipeReview::class);
     }
 
     public function comments()
     {
-        return $this->hasMany(\App\Models\Comment::class)
-            ->whereNull('parent_id')
-            ->with(['user', 'replies.user'])
-            ->latest();
+        return $this->hasMany(Comment::class);
     }
 
-    public function getImageUrlAttribute()
+    public function favoritedByUsers()
     {
-        return $this->image_path
-            ? asset('storage/' . $this->image_path)
-            : null;
+        return $this->belongsToMany(User::class, 'favorites');
     }
 
-    public function getVideoUrlAttribute()
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
+
+    public function getTotalTimeAttribute()
     {
-        return $this->video_path
-            ? asset('storage/' . $this->video_path)
-            : null;
+        return (int) ($this->prep_time ?? 0) + (int) ($this->cook_time ?? 0);
     }
 }

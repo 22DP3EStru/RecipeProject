@@ -1,0 +1,678 @@
+/* =========================================================
+   COMPACT MOBILE CSS
+   pieslēgt pēc visiem pārējiem CSS
+========================================================= */
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+img,
+video,
+iframe,
+svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+:root {
+    --m-page-pad: 10px;
+    --m-block-pad: 10px;
+    --m-card-pad: 10px;
+    --m-gap: 8px;
+    --m-gap-lg: 10px;
+    --m-radius: 12px;
+    --m-radius-lg: 14px;
+    --m-text: 13px;
+    --m-small: 11.5px;
+    --m-title: 15px;
+    --m-h2: 18px;
+    --m-h1: 22px;
+}
+
+/* =========================================================
+   GLOBĀLI DROŠĪBAS OVERRIDE
+========================================================= */
+
+.container,
+.page,
+.page-shell,
+.page-content,
+.page-inner,
+.main-content,
+.site-shell,
+.dashboard-page,
+.recipes-index-page,
+.recipe-show-page,
+.create-recipe-page,
+.edit-recipe-page,
+.profile-page,
+.admin-page,
+.auth-page,
+.hero,
+.section-block,
+.section-card,
+.card,
+.recipe-card,
+.profile-card,
+.info-card,
+.stat-card,
+.form-card,
+.meta-box,
+.tips-box,
+.intro-box {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 992px) {
+    .page,
+    .page-shell,
+    .page-content,
+    .page-inner,
+    .main-content,
+    .dashboard-page,
+    .recipes-index-page,
+    .recipe-show-page,
+    .create-recipe-page,
+    .edit-recipe-page,
+    .profile-page,
+    .admin-page,
+    .auth-page {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .recipes-grid,
+    .cards-grid,
+    .stats-grid,
+    .dashboard-grid,
+    .profile-grid,
+    .favorites-grid,
+    .categories-grid,
+    .admin-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    .hero,
+    .section-block,
+    .section-card,
+    .card,
+    .recipe-card,
+    .profile-card,
+    .info-card,
+    .stat-card,
+    .form-card,
+    .meta-box,
+    .tips-box,
+    .intro-box {
+        padding: 14px !important;
+        border-radius: 16px !important;
+    }
+
+    .recipe-card img,
+    .card img,
+    .recipe-image,
+    .recipe-cover,
+    .recipe-thumb {
+        height: 170px !important;
+        object-fit: cover !important;
+        border-radius: 12px !important;
+    }
+}
+
+/* =========================================================
+   MOBILE - GALVENAIS COMPACT LAYOUT
+========================================================= */
+
+@media (max-width: 768px) {
+    body {
+        font-size: var(--m-text) !important;
+    }
+
+    /* ---------- ārējais layouts ---------- */
+
+    .page,
+    .page-shell,
+    .page-content,
+    .page-inner,
+    .main-content,
+    .dashboard-page,
+    .recipes-index-page,
+    .recipe-show-page,
+    .create-recipe-page,
+    .edit-recipe-page,
+    .profile-page,
+    .admin-page,
+    .auth-page {
+        padding-left: var(--m-page-pad) !important;
+        padding-right: var(--m-page-pad) !important;
+    }
+
+    /* ---------- hero un section ---------- */
+
+    .hero,
+    .page-hero,
+    .section-block,
+    .section-card,
+    .meta-box,
+    .tips-box,
+    .intro-box,
+    .form-card,
+    .info-card,
+    .profile-card,
+    .dashboard-section-card,
+    .dashboard-card {
+        padding: var(--m-block-pad) !important;
+        border-radius: var(--m-radius-lg) !important;
+        margin-bottom: 10px !important;
+    }
+
+    .hero {
+        padding: 12px !important;
+    }
+
+    /* ---------- virsraksti ---------- */
+
+    h1,
+    .hero-title,
+    .page-title {
+        font-size: var(--m-h1) !important;
+        line-height: 1.15 !important;
+        margin-bottom: 6px !important;
+    }
+
+    h2,
+    .section-title {
+        font-size: var(--m-h2) !important;
+        line-height: 1.18 !important;
+        margin-bottom: 6px !important;
+    }
+
+    h3,
+    .card-title,
+    .recipe-title,
+    .dashboard-main-title {
+        font-size: var(--m-title) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 4px !important;
+    }
+
+    p,
+    li,
+    .hero-text,
+    .section-text,
+    .card-text,
+    .recipe-description,
+    .profile-text,
+    .dashboard-main-text {
+        font-size: var(--m-text) !important;
+        line-height: 1.42 !important;
+    }
+
+    .muted,
+    .text-muted,
+    .meta-text,
+    .recipe-meta,
+    .card-meta,
+    .small-text,
+    .dashboard-badge {
+        font-size: var(--m-small) !important;
+        line-height: 1.35 !important;
+    }
+
+    /* ---------- universal grid ---------- */
+
+    .recipes-grid,
+    .cards-grid,
+    .profile-grid,
+    .favorites-grid,
+    .categories-grid,
+    .admin-grid,
+    .dashboard-grid,
+    .users-grid,
+    .form-grid,
+    .filters-grid,
+    .search-grid,
+    .split-layout,
+    .content-layout,
+    .recipe-layout,
+    .profile-layout,
+    .admin-layout {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: var(--m-gap) !important;
+    }
+
+    /* ---------- kartiņas ---------- */
+
+    .card,
+    .recipe-card,
+    .category-card,
+    .favorite-card,
+    .profile-card,
+    .user-card,
+    .admin-card,
+    .recipe-list-card,
+    .stat-card,
+    .dashboard-stat-card,
+    .dashboard-metric-card,
+    .dashboard-overview-card {
+        padding: var(--m-card-pad) !important;
+        border-radius: var(--m-radius) !important;
+        margin: 0 !important;
+    }
+
+    .recipe-card img,
+    .card img,
+    .recipe-image,
+    .recipe-cover,
+    .recipe-thumb,
+    .recipe-preview-image,
+    .category-card img,
+    .favorite-card img {
+        width: 100% !important;
+        height: 128px !important;
+        object-fit: cover !important;
+        border-radius: 10px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .recipe-show-page .recipe-image,
+    .recipe-show-page .recipe-cover,
+    .recipe-detail-image,
+    .recipe-main-image {
+        height: 180px !important;
+        border-radius: 12px !important;
+    }
+
+    .recipe-card-title,
+    .recipe-title,
+    .card-title {
+        font-size: 14px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .recipe-description,
+    .card-text,
+    .profile-text {
+        font-size: 12.5px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 6px !important;
+    }
+
+    .recipe-meta,
+    .card-meta,
+    .meta-row,
+    .info-row,
+    .recipe-extra-meta {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 4px 6px !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* ---------- dashboard specifiski ---------- */
+
+    .dashboard-stack {
+        gap: 8px !important;
+    }
+
+    .dashboard-section-card,
+    .dashboard-hero-card {
+        padding: 10px !important;
+        border-radius: 12px !important;
+    }
+
+    .dashboard-hero-inner,
+    .dashboard-hero-content {
+        gap: 8px !important;
+    }
+
+    .dashboard-hero-icon-wrap {
+        width: 34px !important;
+        height: 34px !important;
+        flex: 0 0 34px !important;
+        border-radius: 10px !important;
+    }
+
+    .dashboard-badge {
+        padding: 3px 7px !important;
+        border-radius: 999px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .dashboard-main-title {
+        font-size: 14px !important;
+    }
+
+    .dashboard-main-text {
+        font-size: 12px !important;
+    }
+
+    .dashboard-stats-grid,
+    .dashboard-metrics-grid,
+    .dashboard-overview-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    .dashboard-stat-card,
+    .dashboard-metric-card,
+    .dashboard-overview-card {
+        min-height: 74px !important;
+        padding: 8px !important;
+        border-radius: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .dashboard-stat-value,
+    .dashboard-metric-value,
+    .dashboard-overview-value {
+        font-size: 22px !important;
+        line-height: 1 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .dashboard-stat-label,
+    .dashboard-metric-label,
+    .dashboard-overview-label {
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* ---------- browse recipes / recipe cards mobile-first ---------- */
+
+    .recipes-grid .recipe-card,
+    .favorites-grid .recipe-card,
+    .recipe-list-card {
+        display: grid !important;
+        grid-template-columns: 104px 1fr !important;
+        gap: 8px !important;
+        align-items: start !important;
+    }
+
+    .recipes-grid .recipe-card img,
+    .favorites-grid .recipe-card img,
+    .recipe-list-card img,
+    .recipes-grid .recipe-image,
+    .favorites-grid .recipe-image {
+        width: 104px !important;
+        height: 92px !important;
+        margin-bottom: 0 !important;
+        border-radius: 10px !important;
+    }
+
+    /* Ja kartiņā ir body daļa */
+    .recipe-card-body,
+    .card-body,
+    .recipe-content {
+        padding: 0 !important;
+    }
+
+    /* ---------- pogas ---------- */
+
+    .button-row,
+    .actions-row,
+    .card-actions,
+    .form-actions,
+    .hero-actions,
+    .toolbar,
+    .top-bar,
+    .filters-row,
+    .search-row,
+    .recipe-actions,
+    .profile-actions,
+    .admin-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        align-items: stretch !important;
+    }
+
+    .btn,
+    button,
+    .action-btn,
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn,
+    .filter-btn,
+    .submit-btn,
+    .save-btn,
+    .edit-btn,
+    .delete-btn {
+        width: 100% !important;
+        min-height: 36px !important;
+        padding: 8px 10px !important;
+        font-size: 12.5px !important;
+        line-height: 1.2 !important;
+        border-radius: 10px !important;
+    }
+
+    a.btn,
+    a.action-btn,
+    a.primary-btn,
+    a.secondary-btn,
+    a.danger-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* ---------- formas ---------- */
+
+    form {
+        width: 100% !important;
+    }
+
+    .form-group,
+    .input-group,
+    .field-group {
+        margin-bottom: 8px !important;
+    }
+
+    label {
+        display: inline-block !important;
+        margin-bottom: 3px !important;
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100% !important;
+        min-height: 36px !important;
+        padding: 8px 10px !important;
+        font-size: 13px !important;
+        line-height: 1.25 !important;
+        border-radius: 10px !important;
+    }
+
+    textarea {
+        min-height: 90px !important;
+        resize: vertical;
+    }
+
+    /* ---------- navbar ---------- */
+
+    .nav-bar,
+    .navbar,
+    .nav,
+    .top-nav,
+    .header-nav,
+    .main-nav,
+    .nav-links {
+        gap: 6px !important;
+    }
+
+    .nav-bar a,
+    .navbar a,
+    .nav a,
+    .top-nav a,
+    .header-nav a,
+    .main-nav a {
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* ---------- tabulas ---------- */
+
+    .table-wrap,
+    .table-responsive {
+        overflow-x: auto !important;
+        border-radius: 10px !important;
+    }
+
+    table {
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+    }
+
+    th,
+    td {
+        padding: 8px !important;
+        font-size: 12px !important;
+    }
+
+    /* ---------- pagination ---------- */
+
+    .pagination,
+    .pagination-wrap {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+        justify-content: center !important;
+        margin-top: 8px !important;
+    }
+
+    .pagination a,
+    .pagination span {
+        min-width: 30px !important;
+        min-height: 30px !important;
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+        border-radius: 8px !important;
+    }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+    :root {
+        --m-page-pad: 8px;
+        --m-block-pad: 9px;
+        --m-card-pad: 9px;
+        --m-gap: 7px;
+        --m-text: 12.5px;
+        --m-small: 11px;
+        --m-title: 13.5px;
+        --m-h2: 16px;
+        --m-h1: 20px;
+    }
+
+    .recipe-card img,
+    .card img,
+    .recipe-image,
+    .recipe-cover,
+    .recipe-thumb,
+    .recipe-preview-image,
+    .category-card img,
+    .favorite-card img {
+        height: 118px !important;
+    }
+
+    .recipes-grid .recipe-card,
+    .favorites-grid .recipe-card,
+    .recipe-list-card {
+        grid-template-columns: 92px 1fr !important;
+        gap: 7px !important;
+    }
+
+    .recipes-grid .recipe-card img,
+    .favorites-grid .recipe-card img,
+    .recipe-list-card img,
+    .recipes-grid .recipe-image,
+    .favorites-grid .recipe-image {
+        width: 92px !important;
+        height: 82px !important;
+    }
+
+    .recipe-show-page .recipe-image,
+    .recipe-show-page .recipe-cover,
+    .recipe-detail-image,
+    .recipe-main-image {
+        height: 160px !important;
+    }
+
+    .dashboard-stat-card,
+    .dashboard-metric-card,
+    .dashboard-overview-card {
+        min-height: 68px !important;
+        padding: 7px !important;
+    }
+
+    .dashboard-stat-value,
+    .dashboard-metric-value,
+    .dashboard-overview-value {
+        font-size: 19px !important;
+    }
+
+    .dashboard-stat-label,
+    .dashboard-metric-label,
+    .dashboard-overview-label {
+        font-size: 10.5px !important;
+    }
+
+    .btn,
+    button,
+    .action-btn,
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn,
+    .filter-btn,
+    .submit-btn,
+    .save-btn,
+    .edit-btn,
+    .delete-btn {
+        min-height: 34px !important;
+        padding: 7px 9px !important;
+        font-size: 12px !important;
+    }
+
+    input,
+    select,
+    textarea {
+        min-height: 34px !important;
+        font-size: 12.5px !important;
+    }
+}
