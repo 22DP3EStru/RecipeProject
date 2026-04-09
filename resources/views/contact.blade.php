@@ -246,36 +246,6 @@
         line-height: 1.7;
     }
 
-    @media (max-width: 980px) {
-        .contact-section-card {
-            padding: 22px;
-        }
-
-        .contact-hero-inner {
-            grid-template-columns: 1fr;
-        }
-
-        .contact-hero-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .contact-section-card {
-            padding: 20px;
-        }
-
-        .contact-grid,
-        .quick-help-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .contact-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="contact-page">

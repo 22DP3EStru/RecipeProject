@@ -524,43 +524,326 @@
         line-height: 1.7;
     }
 
-    @media (max-width: 900px) {
-        .profile-section-card,
-        .quick-actions-card {
-            padding: 22px;
-        }
-
-        .profile-hero-inner,
-        .profile-edit-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .profile-avatar-wrap {
-            align-items: flex-start;
-        }
+    @media (max-width: 768px) {
+    .profile-stack {
+        gap: 16px;
     }
 
-    @media (max-width: 760px) {
-        .profile-stats,
-        .quick-actions-grid {
-            grid-template-columns: 1fr;
-        }
+    .profile-breadcrumb {
+        padding: 12px 14px;
+        font-size: 13px;
+        border-radius: 14px;
     }
 
-    @media (max-width: 640px) {
-        .card-header {
-            flex-direction: column;
-        }
-
-        .profile-main-name {
-            font-size: 2rem;
-        }
-
-        .modal-content {
-            margin-top: 20%;
-            padding: 22px;
-        }
+    .profile-top-actions {
+        justify-content: stretch;
     }
+
+    .profile-top-actions > * {
+        width: 100%;
+    }
+
+    .profile-outline-btn {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 13px;
+        border-radius: 12px;
+    }
+
+    .profile-section-card,
+    .quick-actions-card {
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    .profile-hero-inner {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .profile-avatar-wrap {
+        gap: 10px;
+    }
+
+    .profile-avatar {
+        width: 104px;
+        height: 104px;
+        font-size: 2.2rem;
+        margin: 0 auto;
+    }
+
+    .avatar-note {
+        max-width: 100%;
+        font-size: 12px;
+    }
+
+    .profile-badge {
+        margin: 0 auto 10px;
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+
+    .profile-main-name {
+        font-size: 1.9rem;
+        line-height: 1.1;
+        margin-bottom: 6px;
+    }
+
+    .profile-main-email {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .profile-main-text {
+        font-size: 13px;
+        line-height: 1.6;
+        max-width: 100%;
+    }
+
+    .profile-stats {
+        margin-top: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 10px 6px;
+        border-radius: 14px;
+    }
+
+    .stat-icon {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .stat-number {
+        font-size: 1.35rem;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        font-size: 11px;
+    }
+
+    .card-header {
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+    }
+
+    .card-icon {
+        font-size: 1.35rem;
+    }
+
+    .card-title {
+        font-size: 1.45rem;
+        margin-bottom: 2px;
+    }
+
+    .card-subtitle {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .profile-edit-layout {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .photo-preview-box {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .photo-preview-avatar {
+        width: 96px;
+        height: 96px;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .photo-preview-text {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .form-input,
+    .form-file {
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .form-help,
+    .form-error {
+        font-size: 12px;
+    }
+
+    .checkbox-label {
+        width: 100%;
+        font-size: 13px;
+        line-height: 1.45;
+        padding: 10px 12px;
+        border-radius: 12px;
+    }
+
+    .actions-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .actions-row .btn {
+        width: 100%;
+    }
+
+    .alert {
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .danger-box {
+        padding: 14px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+    }
+
+    .danger-box h4 {
+        font-size: 15px;
+    }
+
+    .danger-box p {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .quick-title {
+        font-size: 1.45rem;
+        margin-bottom: 8px;
+    }
+
+    .quick-subtitle {
+        font-size: 13px;
+        line-height: 1.55;
+        margin-bottom: 16px;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .quick-action-card {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .quick-action-icon {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .quick-action-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .quick-action-text {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-content {
+        margin: 20% auto 0;
+        padding: 18px 14px;
+        border-radius: 18px;
+    }
+
+    .modal-icon {
+        font-size: 2.3rem;
+        margin-bottom: 8px;
+    }
+
+    .modal-head {
+        margin-bottom: 16px;
+    }
+
+    .modal-head h3 {
+        font-size: 1.5rem;
+    }
+
+    .modal-head p {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-section-card,
+    .quick-actions-card {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    .profile-main-name {
+        font-size: 1.65rem;
+    }
+
+    .profile-avatar {
+        width: 92px;
+        height: 92px;
+        font-size: 1.95rem;
+    }
+
+    .photo-preview-avatar {
+        width: 88px;
+        height: 88px;
+        font-size: 1.8rem;
+    }
+
+    .profile-stats {
+        gap: 6px;
+    }
+
+    .stat-card {
+        padding: 8px 4px;
+    }
+
+    .stat-number {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 10px;
+    }
+
+    .card-title,
+    .quick-title {
+        font-size: 1.3rem;
+    }
+
+    .modal-content {
+        margin-top: 16%;
+        padding: 16px 12px;
+    }
+}
+
 </style>
 
 <div class="profile-page">

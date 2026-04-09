@@ -505,48 +505,281 @@
             line-height: 1.6;
         }
 
-        @media (max-width: 1180px) {
-            .admin-stats-grid,
-            .quick-actions-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+        @media (max-width: 768px) {
+    .admin-users-stack {
+        gap: 16px;
+    }
 
-            .users-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    .admin-breadcrumb {
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+    }
 
-        @media (max-width: 760px) {
-            .admin-section-card {
-                padding: 20px;
-                border-radius: 20px;
-            }
+    .admin-section-card {
+        padding: 14px;
+        border-radius: 18px;
+    }
 
-            .admin-section-title {
-                font-size: 1.8rem;
-            }
+    .admin-section-head {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
 
-            .admin-stats-grid,
-            .quick-actions-grid,
-            .user-stats {
-                grid-template-columns: 1fr;
-            }
+    .admin-section-title-wrap {
+        max-width: 100%;
+    }
 
-            .user-meta-row {
-                grid-template-columns: 1fr;
-            }
+    .admin-section-kicker {
+        font-size: 11px;
+        padding: 6px 10px;
+        margin-bottom: 8px;
+    }
 
-            .user-meta-value {
-                text-align: left;
-            }
+    .admin-section-title {
+        font-size: 1.45rem;
+        line-height: 1.12;
+    }
 
-            .user-actions .btn,
-            .user-actions form,
-            .btn-disabled {
-                flex-basis: 100%;
-                width: 100%;
-            }
-        }
+    .admin-section-text {
+        margin-top: 8px;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .admin-header-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .admin-header-actions .btn {
+        width: 100%;
+    }
+
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .admin-stat-card {
+        padding: 12px 8px;
+        border-radius: 14px;
+    }
+
+    .admin-stat-number {
+        font-size: 1.75rem;
+        margin-bottom: 6px;
+    }
+
+    .admin-stat-label {
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .users-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .user-card {
+        border-radius: 18px;
+    }
+
+    .user-card-header {
+        padding: 14px 14px 12px;
+    }
+
+    .user-topline {
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .user-role-badge,
+    .user-created,
+    .user-summary-pill {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .user-name {
+        font-size: 1.45rem;
+        margin-bottom: 6px;
+    }
+
+    .user-email {
+        font-size: 13px;
+        line-height: 1.55;
+        margin-bottom: 10px;
+    }
+
+    .user-summary-row {
+        gap: 6px;
+    }
+
+    .user-card-body {
+        padding: 14px;
+    }
+
+    .user-meta-grid {
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .user-meta-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 10px 12px;
+        border-radius: 12px;
+    }
+
+    .user-meta-label {
+        font-size: 12px;
+    }
+
+    .user-meta-value {
+        text-align: left;
+        font-size: 13px;
+    }
+
+    .user-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .user-stat-pill {
+        padding: 10px 8px;
+        border-radius: 12px;
+    }
+
+    .user-stat-label {
+        font-size: 10px;
+        margin-bottom: 4px;
+    }
+
+    .user-stat-value {
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .user-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .user-actions .btn,
+    .user-actions form,
+    .btn-disabled {
+        width: 100%;
+        flex: none;
+    }
+
+    .pagination-wrap {
+        margin-top: 18px;
+        padding-top: 16px;
+    }
+
+    .pagination-summary {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .admin-empty-state {
+        padding: 28px 16px;
+        border-radius: 18px;
+    }
+
+    .admin-empty-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+    }
+
+    .admin-empty-title {
+        font-size: 1.45rem;
+        margin-bottom: 8px;
+    }
+
+    .admin-empty-text {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .quick-action-card {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .quick-action-icon {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .quick-action-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .quick-action-text {
+        font-size: 12px;
+        line-height: 1.45;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-section-card {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    .admin-section-title {
+        font-size: 1.3rem;
+    }
+
+    .admin-stats-grid {
+        gap: 6px;
+    }
+
+    .admin-stat-card {
+        padding: 10px 6px;
+    }
+
+    .admin-stat-number {
+        font-size: 1.45rem;
+    }
+
+    .admin-stat-label {
+        font-size: 11px;
+    }
+
+    .user-name {
+        font-size: 1.28rem;
+    }
+
+    .user-stats {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .user-stat-pill {
+        padding: 9px 10px;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-action-card {
+        padding: 11px;
+    }
+}
+
     </style>
 
     <div class="admin-users-page">

@@ -325,48 +325,6 @@
         height: 100%;
     }
 
-    @media (max-width: 980px) {
-        .dashboard-section-card {
-            padding: 22px;
-        }
-
-        .dashboard-hero-inner {
-            grid-template-columns: 1fr;
-        }
-
-        .dashboard-hero-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .dashboard-section-card {
-            padding: 20px;
-        }
-
-        .stats-grid,
-        .actions-grid,
-        .recipe-grid,
-        .tips-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .my-recipe-actions {
-            flex-direction: column;
-        }
-
-        .actions-grid .btn,
-        .recipe-card .btn,
-        .my-recipe-actions .btn {
-            width: 100%;
-        }
-
-        .dashboard-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="dashboard-page">

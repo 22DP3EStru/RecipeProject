@@ -175,39 +175,6 @@
             color: var(--text);
         }
 
-        @media (max-width: 640px) {
-            .page {
-                padding: 16px 12px 32px;
-            }
-
-            .nav-bar {
-                padding: 16px;
-            }
-
-            .nav-brand {
-                font-size: 1.7rem;
-            }
-
-            .card {
-                padding: 24px;
-            }
-
-            .title {
-                font-size: 2rem;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            .actions form {
-                width: 100%;
-            }
-
-            .actions button {
-                width: 100%;
-            }
-        }
     </style>
         <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">

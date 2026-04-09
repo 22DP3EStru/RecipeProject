@@ -1,5 +1,5 @@
 /* =========================================================
-   COMPACT MOBILE CSS
+   MOBILE CSS
    pieslēgt pēc visiem pārējiem CSS
 ========================================================= */
 
@@ -32,7 +32,6 @@ svg {
     --m-block-pad: 10px;
     --m-card-pad: 10px;
     --m-gap: 8px;
-    --m-gap-lg: 10px;
     --m-radius: 12px;
     --m-radius-lg: 14px;
     --m-text: 13px;
@@ -43,7 +42,7 @@ svg {
 }
 
 /* =========================================================
-   GLOBĀLI DROŠĪBAS OVERRIDE
+   GLOBĀLI
 ========================================================= */
 
 .container,
@@ -106,7 +105,8 @@ svg {
     .profile-grid,
     .favorites-grid,
     .categories-grid,
-    .admin-grid {
+    .admin-grid,
+    .users-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 12px !important;
     }
@@ -131,7 +131,8 @@ svg {
     .card img,
     .recipe-image,
     .recipe-cover,
-    .recipe-thumb {
+    .recipe-thumb,
+    .recipe-preview-image {
         height: 170px !important;
         object-fit: cover !important;
         border-radius: 12px !important;
@@ -139,15 +140,13 @@ svg {
 }
 
 /* =========================================================
-   MOBILE - GALVENAIS COMPACT LAYOUT
+   MOBILE
 ========================================================= */
 
 @media (max-width: 768px) {
     body {
         font-size: var(--m-text) !important;
     }
-
-    /* ---------- ārējais layouts ---------- */
 
     .page,
     .page-shell,
@@ -166,7 +165,7 @@ svg {
         padding-right: var(--m-page-pad) !important;
     }
 
-    /* ---------- hero un section ---------- */
+    /* ---------- hero ---------- */
 
     .hero,
     .page-hero,
@@ -189,8 +188,6 @@ svg {
         padding: 12px !important;
     }
 
-    /* ---------- virsraksti ---------- */
-
     h1,
     .hero-title,
     .page-title {
@@ -209,6 +206,7 @@ svg {
     h3,
     .card-title,
     .recipe-title,
+    .recipe-card-title,
     .dashboard-main-title {
         font-size: var(--m-title) !important;
         line-height: 1.2 !important;
@@ -221,6 +219,7 @@ svg {
     .section-text,
     .card-text,
     .recipe-description,
+    .recipe-card-text,
     .profile-text,
     .dashboard-main-text {
         font-size: var(--m-text) !important;
@@ -238,7 +237,185 @@ svg {
         line-height: 1.35 !important;
     }
 
-    /* ---------- universal grid ---------- */
+    /* ---------- navbar ---------- */
+
+    .nav-bar {
+        grid-template-columns: 1fr auto !important;
+        gap: 10px !important;
+        padding: 12px 12px !important;
+        border-radius: 16px !important;
+        margin-bottom: 16px !important;
+        top: 8px !important;
+    }
+
+    .nav-brand {
+        font-size: 1.2rem !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .nav-brand::before {
+        font-size: 1rem !important;
+    }
+
+    .nav-center,
+    .nav-right {
+        display: none !important;
+    }
+
+    .nav-toggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 12px !important;
+        flex: 0 0 42px !important;
+    }
+
+    .nav-mobile-panel {
+        display: block !important;
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 9999 !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+        transition: opacity 0.22s ease !important;
+    }
+
+    body.menu-open .nav-mobile-panel {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .nav-mobile-backdrop {
+        position: absolute !important;
+        inset: 0 !important;
+        background: rgba(47, 36, 29, 0.34) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    .nav-mobile-sheet {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        height: 100% !important;
+        width: min(88vw, 360px) !important;
+        background: rgba(255, 253, 249, 0.98) !important;
+        border-left: 1px solid var(--line) !important;
+        box-shadow: -10px 0 30px rgba(79, 59, 42, 0.12) !important;
+        padding: 14px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.24s ease !important;
+        overflow-y: auto !important;
+    }
+
+    body.menu-open .nav-mobile-sheet {
+        transform: translateX(0) !important;
+    }
+
+    .nav-mobile-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        padding-bottom: 6px !important;
+        border-bottom: 1px solid var(--line) !important;
+    }
+
+    .nav-mobile-title {
+        font-family: Georgia, "Times New Roman", serif !important;
+        font-size: 1.25rem !important;
+        color: var(--accent) !important;
+        font-weight: 500 !important;
+    }
+
+    .nav-mobile-close {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 10px !important;
+        border: 1px solid var(--line) !important;
+        background: linear-gradient(180deg, #fffdfa 0%, #f6efe7 100%) !important;
+        color: var(--accent-dark) !important;
+        font-size: 24px !important;
+        line-height: 1 !important;
+        cursor: pointer !important;
+    }
+
+    .nav-mobile-user {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 10px !important;
+        background: var(--surface-soft) !important;
+        border: 1px solid var(--line) !important;
+        border-radius: 14px !important;
+    }
+
+    .nav-mobile-user .nav-user-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 14px !important;
+    }
+
+    .nav-mobile-user-name {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: var(--text) !important;
+        line-height: 1.3 !important;
+        word-break: break-word !important;
+    }
+
+    .nav-mobile-links {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+    }
+
+    .nav-mobile-links a {
+        display: block !important;
+        width: 100% !important;
+        padding: 11px 12px !important;
+        border-radius: 12px !important;
+        text-decoration: none !important;
+        color: var(--text) !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        background: #fffdfa !important;
+        border: 1px solid var(--line) !important;
+    }
+
+    .nav-mobile-links a.active {
+        color: var(--accent) !important;
+        background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%) !important;
+        border-color: var(--line-strong) !important;
+    }
+
+    .nav-mobile-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-top: auto !important;
+        padding-top: 8px !important;
+    }
+
+    .nav-mobile-actions form,
+    .nav-mobile-actions .btn {
+        width: 100% !important;
+    }
+
+    /* ---------- grid ---------- */
 
     .recipes-grid,
     .cards-grid,
@@ -255,7 +432,10 @@ svg {
     .content-layout,
     .recipe-layout,
     .profile-layout,
-    .admin-layout {
+    .admin-layout,
+    .grid-2,
+    .grid-3,
+    .form-row {
         display: grid !important;
         grid-template-columns: 1fr !important;
         gap: var(--m-gap) !important;
@@ -264,13 +444,11 @@ svg {
     /* ---------- kartiņas ---------- */
 
     .card,
-    .recipe-card,
     .category-card,
     .favorite-card,
     .profile-card,
     .user-card,
     .admin-card,
-    .recipe-list-card,
     .stat-card,
     .dashboard-stat-card,
     .dashboard-metric-card,
@@ -280,12 +458,7 @@ svg {
         margin: 0 !important;
     }
 
-    .recipe-card img,
     .card img,
-    .recipe-image,
-    .recipe-cover,
-    .recipe-thumb,
-    .recipe-preview-image,
     .category-card img,
     .favorite-card img {
         width: 100% !important;
@@ -293,6 +466,34 @@ svg {
         object-fit: cover !important;
         border-radius: 10px !important;
         margin-bottom: 8px !important;
+    }
+
+    /* ---------- recepšu kartiņas ---------- */
+
+    .recipe-card,
+    .recipe-list-card,
+    .favorite-card {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: var(--m-card-pad) !important;
+        border-radius: var(--m-radius) !important;
+        margin: 0 !important;
+        min-height: unset !important;
+    }
+
+    .recipe-card img,
+    .recipe-list-card img,
+    .favorite-card img,
+    .recipe-image,
+    .recipe-cover,
+    .recipe-thumb,
+    .recipe-preview-image {
+        width: 100% !important;
+        height: 140px !important;
+        object-fit: cover !important;
+        border-radius: 10px !important;
+        margin-bottom: 0 !important;
     }
 
     .recipe-show-page .recipe-image,
@@ -303,15 +504,15 @@ svg {
         border-radius: 12px !important;
     }
 
-    .recipe-card-title,
-    .recipe-title,
-    .card-title {
-        font-size: 14px !important;
-        line-height: 1.2 !important;
-        margin-bottom: 4px !important;
+    .recipe-card-body,
+    .card-body,
+    .recipe-content {
+        width: 100% !important;
+        padding: 0 !important;
     }
 
     .recipe-description,
+    .recipe-card-text,
     .card-text,
     .profile-text {
         font-size: 12.5px !important;
@@ -332,7 +533,17 @@ svg {
         margin-bottom: 6px !important;
     }
 
-    /* ---------- dashboard specifiski ---------- */
+    .recipe-meta > *,
+    .card-meta > *,
+    .meta-row > *,
+    .info-row > *,
+    .recipe-extra-meta > * {
+        min-height: 28px !important;
+        padding: 6px 8px !important;
+        border-radius: 10px !important;
+    }
+
+    /* ---------- dashboard ---------- */
 
     .dashboard-stack {
         gap: 8px !important;
@@ -372,7 +583,8 @@ svg {
 
     .dashboard-stats-grid,
     .dashboard-metrics-grid,
-    .dashboard-overview-grid {
+    .dashboard-overview-grid,
+    .stats-grid {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 8px !important;
@@ -404,35 +616,6 @@ svg {
     .dashboard-overview-label {
         font-size: 11px !important;
         line-height: 1.2 !important;
-    }
-
-    /* ---------- browse recipes / recipe cards mobile-first ---------- */
-
-    .recipes-grid .recipe-card,
-    .favorites-grid .recipe-card,
-    .recipe-list-card {
-        display: grid !important;
-        grid-template-columns: 104px 1fr !important;
-        gap: 8px !important;
-        align-items: start !important;
-    }
-
-    .recipes-grid .recipe-card img,
-    .favorites-grid .recipe-card img,
-    .recipe-list-card img,
-    .recipes-grid .recipe-image,
-    .favorites-grid .recipe-image {
-        width: 104px !important;
-        height: 92px !important;
-        margin-bottom: 0 !important;
-        border-radius: 10px !important;
-    }
-
-    /* Ja kartiņā ir body daļa */
-    .recipe-card-body,
-    .card-body,
-    .recipe-content {
-        padding: 0 !important;
     }
 
     /* ---------- pogas ---------- */
@@ -496,7 +679,8 @@ svg {
         margin-bottom: 8px !important;
     }
 
-    label {
+    label,
+    .form-label {
         display: inline-block !important;
         margin-bottom: 3px !important;
         font-size: 12px !important;
@@ -505,7 +689,10 @@ svg {
 
     input,
     select,
-    textarea {
+    textarea,
+    .form-input,
+    .form-textarea,
+    .form-select {
         width: 100% !important;
         min-height: 36px !important;
         padding: 8px 10px !important;
@@ -514,31 +701,29 @@ svg {
         border-radius: 10px !important;
     }
 
-    textarea {
+    textarea,
+    .form-textarea {
         min-height: 90px !important;
         resize: vertical;
     }
 
-    /* ---------- navbar ---------- */
+    /* ---------- recipes search/filter ---------- */
 
-    .nav-bar,
-    .navbar,
-    .nav,
-    .top-nav,
-    .header-nav,
-    .main-nav,
-    .nav-links {
-        gap: 6px !important;
+    body.page-recipes form,
+    body.page-recipes .form-row,
+    body.page-recipes .filters-form-grid,
+    body.page-recipes .filters-grid,
+    body.page-recipes .search-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
     }
 
-    .nav-bar a,
-    .navbar a,
-    .nav a,
-    .top-nav a,
-    .header-nav a,
-    .main-nav a {
-        font-size: 12px !important;
-        line-height: 1.2 !important;
+    body.page-recipes input,
+    body.page-recipes select,
+    body.page-recipes button,
+    body.page-recipes .btn {
+        width: 100% !important;
     }
 
     /* ---------- tabulas ---------- */
@@ -581,6 +766,57 @@ svg {
         font-size: 12px !important;
         border-radius: 8px !important;
     }
+
+    /* ---------- galvenais saturs ---------- */
+
+    .main-content {
+        padding: 14px !important;
+        border-radius: 18px !important;
+    }
+
+    .card {
+        padding: 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .card-title {
+        font-size: 1.2rem !important;
+        margin-bottom: 10px !important;
+    }
+
+    .section-title {
+        font-size: 1.25rem !important;
+        margin-bottom: 10px !important;
+    }
+
+    .stat-box {
+        padding: 14px 10px !important;
+        border-radius: 14px !important;
+    }
+
+    .stat-number {
+        font-size: 1.7rem !important;
+    }
+
+    .stat-label {
+        font-size: 12px !important;
+    }
+
+    .list-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        padding: 12px 0 !important;
+    }
+
+    .row-left {
+        width: 100% !important;
+    }
+
+    .nav-user-chip {
+        max-width: 100% !important;
+    }
 }
 
 /* =========================================================
@@ -600,31 +836,36 @@ svg {
         --m-h1: 20px;
     }
 
+    .nav-bar {
+        padding: 10px !important;
+        border-radius: 14px !important;
+    }
+
+    .nav-brand {
+        font-size: 1.05rem !important;
+    }
+
+    .nav-toggle {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .nav-mobile-sheet {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 12px !important;
+    }
+
     .recipe-card img,
-    .card img,
+    .recipe-list-card img,
+    .favorite-card img,
     .recipe-image,
     .recipe-cover,
     .recipe-thumb,
     .recipe-preview-image,
-    .category-card img,
-    .favorite-card img {
-        height: 118px !important;
-    }
-
-    .recipes-grid .recipe-card,
-    .favorites-grid .recipe-card,
-    .recipe-list-card {
-        grid-template-columns: 92px 1fr !important;
-        gap: 7px !important;
-    }
-
-    .recipes-grid .recipe-card img,
-    .favorites-grid .recipe-card img,
-    .recipe-list-card img,
-    .recipes-grid .recipe-image,
-    .favorites-grid .recipe-image {
-        width: 92px !important;
-        height: 82px !important;
+    .card img,
+    .category-card img {
+        height: 128px !important;
     }
 
     .recipe-show-page .recipe-image,
@@ -671,8 +912,24 @@ svg {
 
     input,
     select,
-    textarea {
+    textarea,
+    .form-input,
+    .form-textarea,
+    .form-select {
         min-height: 34px !important;
+        font-size: 12.5px !important;
+    }
+
+    .main-content {
+        padding: 12px !important;
+        border-radius: 16px !important;
+    }
+
+    .hero-title {
+        font-size: 1.65rem !important;
+    }
+
+    .hero-text {
         font-size: 12.5px !important;
     }
 }

@@ -247,37 +247,6 @@
         line-height: 1.1;
     }
 
-    @media (max-width: 980px) {
-        .welcome-section-card {
-            padding: 22px;
-        }
-
-        .welcome-main-title {
-            font-size: 2.2rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .welcome-section-card {
-            padding: 20px;
-        }
-
-        .stats-grid,
-        .grid-3 {
-            grid-template-columns: 1fr;
-        }
-
-        .hero-actions,
-        .cta-actions {
-            flex-direction: column;
-        }
-
-        .hero-actions .btn,
-        .cta-actions .btn,
-        .contact-link-row .btn {
-            width: 100%;
-        }
-    }
 </style>
 
 <div class="welcome-page">

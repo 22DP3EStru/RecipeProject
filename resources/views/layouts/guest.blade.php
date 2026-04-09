@@ -156,26 +156,6 @@
                 text-decoration: underline;
             }
 
-            @media (max-width: 900px) {
-                .auth-wrap {
-                    grid-template-columns: 1fr;
-                    max-width: 560px;
-                }
-
-                .auth-side {
-                    border-right: none;
-                    border-bottom: 1px solid var(--line);
-                    padding: 30px 24px;
-                }
-
-                .auth-brand {
-                    font-size: 2.3rem;
-                }
-
-                .auth-card {
-                    padding: 28px 22px;
-                }
-            }
         </style>
         <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
     </head>

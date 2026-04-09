@@ -288,49 +288,6 @@
         line-height: 1.7;
     }
 
-    @media (max-width: 980px) {
-        .register-hero {
-            grid-template-columns: 1fr;
-        }
-
-        .register-hero-left,
-        .register-hero-right {
-            padding: 30px;
-        }
-
-        .register-title {
-            font-size: 2.45rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .register-nav {
-            padding: 16px;
-            border-radius: 18px;
-        }
-
-        .register-nav-brand {
-            font-size: 1.7rem;
-        }
-
-        .register-hero-left,
-        .register-hero-right {
-            padding: 22px;
-        }
-
-        .register-title {
-            font-size: 2rem;
-        }
-
-        .login-actions {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .login-actions .btn {
-            width: 100%;
-        }
-    }
 </style>
 
 <div class="register-page">

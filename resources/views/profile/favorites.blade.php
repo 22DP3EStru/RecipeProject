@@ -415,49 +415,6 @@
         font-size: 14px;
     }
 
-    @media (max-width: 900px) {
-        .favorites-section-card {
-            padding: 22px;
-        }
-
-        .favorites-hero-inner {
-            grid-template-columns: 1fr;
-        }
-
-        .favorites-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 760px) {
-        .favorites-stats {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .favorites-section-card {
-            padding: 20px;
-        }
-
-        .recipes-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-actions {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .favorites-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="favorites-page">

@@ -415,49 +415,6 @@
         font-size: 14px;
     }
 
-    @media (max-width: 900px) {
-        .my-recipes-section-card {
-            padding: 22px;
-        }
-
-        .my-recipes-hero-inner {
-            grid-template-columns: 1fr;
-        }
-
-        .my-recipes-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 760px) {
-        .my-recipes-stats {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .my-recipes-section-card {
-            padding: 20px;
-        }
-
-        .recipes-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-actions {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .my-recipes-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="my-recipes-page">

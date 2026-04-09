@@ -443,61 +443,6 @@
         max-width: 700px;
         margin: 0 auto;
     }
-
-    @media (max-width: 980px) {
-        .categories-section-card {
-            padding: 22px;
-        }
-
-        .categories-hero-inner {
-            grid-template-columns: 1fr;
-        }
-
-        .categories-hero-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .categories-section-card {
-            padding: 20px;
-        }
-
-        .categories-grid,
-        .recipes-grid,
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .pdf-actions,
-        .recipe-card-top,
-        .recipe-meta-row,
-        .recipe-meta-row-bottom {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .pdf-actions a,
-        .category-card .btn,
-        .recipe-card .btn {
-            width: 100%;
-        }
-
-        .stats-row {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .stats-value {
-            text-align: left;
-        }
-
-        .categories-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="categories-page">

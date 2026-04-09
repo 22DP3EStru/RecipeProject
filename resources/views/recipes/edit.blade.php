@@ -421,56 +421,6 @@
         line-height: 1.7;
     }
 
-    @media (max-width: 900px) {
-        .edit-section-card {
-            padding: 22px;
-        }
-
-        .edit-hero-inner,
-        .form-row,
-        .current-media-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .edit-hero-icon-wrap {
-            width: 92px;
-            height: 92px;
-            font-size: 2.4rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .edit-section-card {
-            padding: 20px;
-        }
-
-        .ing-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .ing-qty,
-        .ing-unit,
-        .ing-name {
-            width: 100%;
-            min-width: unset;
-        }
-
-        .actions-row {
-            flex-direction: column;
-        }
-
-        .actions-row .btn,
-        .actions-row button,
-        .delete-row .btn,
-        .delete-row button {
-            width: 100%;
-        }
-
-        .edit-main-title {
-            font-size: 2rem;
-        }
-    }
 </style>
 
 <div class="edit-recipe-page">

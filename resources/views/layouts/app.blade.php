@@ -8,6 +8,7 @@
 
     <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=9">
 
     <style>
         * {
@@ -50,7 +51,8 @@
             --radius-lg: 26px;
         }
 
-        html, body {
+        html,
+        body {
             min-height: 100%;
         }
 
@@ -164,7 +166,7 @@
             border-radius: 22px;
             padding: 16px 20px;
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto 1fr auto auto;
             align-items: center;
             gap: 20px;
             box-shadow: var(--shadow);
@@ -305,29 +307,34 @@
             background: var(--surface-soft-2);
         }
 
-        .nav-toggle-icon,
-        .nav-toggle-icon::before,
-        .nav-toggle-icon::after {
+        .nav-toggle-icon {
+            position: relative;
             display: block;
             width: 18px;
             height: 2px;
             border-radius: 999px;
             background: currentColor;
-            position: relative;
             transition: 0.25s ease;
+        }
+
+        .nav-toggle-icon::before,
+        .nav-toggle-icon::after {
             content: "";
+            position: absolute;
+            left: 0;
+            width: 18px;
+            height: 2px;
+            border-radius: 999px;
+            background: currentColor;
+            transition: 0.25s ease;
         }
 
         .nav-toggle-icon::before {
-            position: absolute;
             top: -6px;
-            left: 0;
         }
 
         .nav-toggle-icon::after {
-            position: absolute;
             top: 6px;
-            left: 0;
         }
 
         .menu-open .nav-toggle-icon {
@@ -745,343 +752,208 @@
             margin: 0 auto;
         }
 
-        @media (max-width: 1280px) {
-            .nav-bar {
-                grid-template-columns: 1fr;
-                justify-items: center;
-                text-align: center;
-                position: relative;
-                top: 0;
-            }
-
-            .nav-center {
-                width: 100%;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-            }
-
-            .nav-right {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .nav-user-chip {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 980px) {
-            .main-content {
-                padding: 24px;
-                border-radius: 24px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .grid-2,
-            .grid-3,
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                padding: 28px 18px 30px;
-            }
-
-            .hero-title {
-                font-size: 2.8rem;
-            }
-
-            .nav-brand {
-                font-size: 1.7rem;
-            }
-
-            .nav-links a {
-                font-size: 13px;
-                padding: 8px 10px;
-            }
-        }
-
         @media (max-width: 768px) {
-            .page {
-                padding: 14px 12px 30px;
-            }
-
-            .hero {
-                padding: 24px 16px 26px;
-                border-radius: 22px;
-                margin-bottom: 16px;
-            }
-
-            .hero-title {
-                font-size: 2.2rem;
-                line-height: 1.12;
-                margin-bottom: 10px;
-            }
-
-            .hero-text {
-                font-size: 15px;
-                line-height: 1.65;
-            }
-
             .nav-bar {
-                position: sticky;
-                top: 10px;
-                grid-template-columns: 1fr auto;
-                justify-items: stretch;
-                align-items: center;
-                gap: 12px;
-                padding: 14px;
-                border-radius: 18px;
-                margin-bottom: 18px;
-                text-align: left;
+                grid-template-columns: 1fr auto !important;
+                align-items: center !important;
+                gap: 10px !important;
+                padding: 12px !important;
+                border-radius: 16px !important;
+                margin-bottom: 16px !important;
+                top: 8px !important;
             }
 
             .nav-brand {
-                font-size: 1.35rem;
-                min-width: 0;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                font-size: 1.15rem !important;
+                gap: 8px !important;
+                min-width: 0 !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+            }
+
+            .nav-brand::before {
+                font-size: 1rem !important;
             }
 
             .nav-center,
             .nav-right {
-                display: none;
+                display: none !important;
             }
 
             .nav-toggle {
-                display: inline-flex;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 42px !important;
+                height: 42px !important;
+                flex: 0 0 42px !important;
+                border-radius: 12px !important;
+                z-index: 60 !important;
             }
 
             .nav-mobile-panel {
-                display: block;
-                position: fixed;
-                inset: 0;
-                z-index: 80;
-                pointer-events: none;
-                opacity: 0;
-                transition: opacity 0.25s ease;
+                display: block !important;
+                position: fixed !important;
+                inset: 0 !important;
+                z-index: 9999 !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                transition: opacity 0.22s ease !important;
             }
 
-            .menu-open .nav-mobile-panel {
-                opacity: 1;
-                pointer-events: auto;
+            body.menu-open .nav-mobile-panel {
+                opacity: 1 !important;
+                pointer-events: auto !important;
             }
 
             .nav-mobile-backdrop {
-                position: absolute;
-                inset: 0;
-                background: rgba(47, 36, 29, 0.32);
-                backdrop-filter: blur(3px);
-                -webkit-backdrop-filter: blur(3px);
+                position: absolute !important;
+                inset: 0 !important;
+                background: rgba(47, 36, 29, 0.34) !important;
+                backdrop-filter: blur(4px) !important;
+                -webkit-backdrop-filter: blur(4px) !important;
             }
 
             .nav-mobile-sheet {
-                position: absolute;
-                top: 0;
-                right: 0;
-                width: min(88vw, 360px);
-                height: 100%;
-                background: linear-gradient(180deg, rgba(255,253,249,0.98) 0%, rgba(247,239,231,0.98) 100%);
-                border-left: 1px solid rgba(212, 194, 174, 0.85);
-                box-shadow: -18px 0 44px rgba(79, 59, 42, 0.12);
-                padding: 18px 16px 22px;
-                overflow-y: auto;
-                transform: translateX(100%);
-                transition: transform 0.28s ease;
+                position: absolute !important;
+                top: 0 !important;
+                right: 0 !important;
+                height: 100% !important;
+                width: min(88vw, 360px) !important;
+                background: rgba(255, 253, 249, 0.98) !important;
+                border-left: 1px solid var(--line) !important;
+                box-shadow: -10px 0 30px rgba(79, 59, 42, 0.12) !important;
+                padding: 14px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+                overflow-y: auto !important;
+                transform: translateX(100%) !important;
+                transition: transform 0.24s ease !important;
             }
 
-            .menu-open .nav-mobile-sheet {
-                transform: translateX(0);
+            body.menu-open .nav-mobile-sheet {
+                transform: translateX(0) !important;
             }
 
             .nav-mobile-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                margin-bottom: 16px;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
+                padding-bottom: 6px !important;
+                border-bottom: 1px solid var(--line) !important;
             }
 
             .nav-mobile-title {
-                font-family: Georgia, "Times New Roman", serif;
-                color: var(--accent);
-                font-size: 1.35rem;
-                font-weight: 500;
+                font-family: Georgia, "Times New Roman", serif !important;
+                font-size: 1.2rem !important;
+                color: var(--accent) !important;
             }
 
             .nav-mobile-close {
-                border: 1px solid var(--line);
-                background: #fffdfa;
-                color: var(--accent-dark);
-                width: 42px;
-                height: 42px;
-                border-radius: 12px;
-                font-size: 24px;
-                line-height: 1;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 10px !important;
+                border: 1px solid var(--line) !important;
+                background: linear-gradient(180deg, #fffdfa 0%, #f6efe7 100%) !important;
+                color: var(--accent-dark) !important;
+                font-size: 24px !important;
+                line-height: 1 !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: pointer !important;
             }
 
             .nav-mobile-user {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                background: var(--surface-soft);
-                border: 1px solid var(--line);
-                border-radius: 18px;
-                padding: 12px;
-                margin-bottom: 16px;
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+                padding: 10px !important;
+                background: var(--surface-soft) !important;
+                border: 1px solid var(--line) !important;
+                border-radius: 14px !important;
             }
 
             .nav-mobile-user-name {
-                font-weight: 700;
-                color: var(--text);
-                line-height: 1.4;
-                word-break: break-word;
+                font-size: 13px !important;
+                font-weight: 700 !important;
+                color: var(--text) !important;
+                line-height: 1.3 !important;
             }
 
             .nav-mobile-links {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-bottom: 18px;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 6px !important;
             }
 
             .nav-mobile-links a {
-                display: block;
-                width: 100%;
-                text-decoration: none;
-                color: var(--text);
-                background: rgba(255,255,255,0.72);
-                border: 1px solid var(--line);
-                border-radius: 14px;
-                padding: 13px 14px;
-                font-weight: 700;
-                line-height: 1.35;
-                transition: 0.2s ease;
+                display: block !important;
+                width: 100% !important;
+                padding: 11px 12px !important;
+                border-radius: 12px !important;
+                text-decoration: none !important;
+                color: var(--text) !important;
+                font-size: 13px !important;
+                font-weight: 700 !important;
+                line-height: 1.25 !important;
+                background: #fffdfa !important;
+                border: 1px solid var(--line) !important;
             }
 
             .nav-mobile-links a.active {
-                color: var(--accent);
-                background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%);
-                border-color: var(--line-strong);
+                color: var(--accent) !important;
+                background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%) !important;
+                border-color: var(--line-strong) !important;
             }
 
             .nav-mobile-actions {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 8px !important;
+                margin-top: auto !important;
+                padding-top: 8px !important;
             }
 
             .nav-mobile-actions .btn,
+            .nav-mobile-actions form,
+            .nav-mobile-actions a,
             .nav-mobile-actions button {
-                width: 100%;
-            }
-
-            .main-content,
-            .card {
-                padding: 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .list-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nowrap {
-                white-space: normal;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .section-title {
-                font-size: 1.6rem;
-            }
-
-            .card-title {
-                font-size: 1.5rem;
-            }
-
-            .panel-title {
-                font-size: 1.8rem;
-            }
-
-            .hero-icon {
-                font-size: 3rem;
-            }
-
-            .site-shell::before {
-                width: 200px;
-                height: 200px;
-            }
-
-            .site-shell::after {
-                width: 240px;
-                height: 240px;
-                right: -90px;
-                bottom: 20px;
+                width: 100% !important;
             }
         }
 
-        @media (max-width: 640px) {
-            .page {
-                padding: 12px 10px 24px;
+        @media (max-width: 480px) {
+            .nav-bar {
+                padding: 10px !important;
+                border-radius: 14px !important;
             }
 
-            .hero {
-                padding: 22px 14px 24px;
-                border-radius: 20px;
+            .nav-brand {
+                font-size: 1.02rem !important;
             }
 
-            .hero-title {
-                font-size: 1.95rem;
+            .nav-toggle {
+                width: 40px !important;
+                height: 40px !important;
             }
 
-            .hero-text {
-                font-size: 14px;
-            }
-
-            .main-content,
-            .card {
-                padding: 16px;
-                border-radius: 20px;
-            }
-
-            .flash-message {
-                padding: 13px 14px;
-                font-size: 13px;
-            }
-
-            .section-title {
-                font-size: 1.45rem;
-            }
-
-            .card-title {
-                font-size: 1.35rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
+            .nav-mobile-sheet {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 12px !important;
             }
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/mobile-force.css') }}">
 </head>
-<body>
+<body class="
+    {{ request()->is('recipes') ? 'page-recipes' : '' }}
+    {{ request()->is('profile') || request()->is('profile/*') ? 'page-profile' : '' }}
+    {{ request()->is('admin') || request()->is('admin/*') ? 'page-admin' : '' }}
+">
 <div class="site-shell">
     <div class="page">
 
@@ -1164,7 +1036,7 @@
                 </button>
             </nav>
 
-            <div class="nav-mobile-panel" id="mobileMenu">
+            <div class="nav-mobile-panel" id="mobileMenu" aria-hidden="true">
                 <div class="nav-mobile-backdrop" onclick="closeMobileMenu()"></div>
 
                 <div class="nav-mobile-sheet">
@@ -1219,7 +1091,6 @@
             @include('components.flash-messages')
             @yield('content')
         </div>
-
     </div>
 </div>
 

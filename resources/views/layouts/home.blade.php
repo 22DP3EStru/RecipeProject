@@ -184,36 +184,6 @@
         color: #7b6d61;
     }
 
-    @media (max-width: 1100px) {
-        .home-hero {
-            grid-template-columns: 1fr;
-        }
-
-        .featured-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .categories-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 700px) {
-        .home-hero-left,
-        .home-hero-right,
-        .home-section {
-            padding: 22px;
-        }
-
-        .home-title {
-            font-size: 2.3rem;
-        }
-
-        .featured-grid,
-        .categories-grid {
-            grid-template-columns: 1fr;
-        }
-    }
 </style>
 
 <div class="home-page">

@@ -11,7 +11,7 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\RecipeReviewController;
 use Illuminate\Support\Facades\Route;
 
-// Public (bez login)
+// Public
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -24,24 +24,25 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
 
-// PDF / Print - tikai ielogotiem, bet ne obligāti verificētiem
-Route::get('/recipes/{recipe}/pdf', [RecipeController::class, 'downloadPdf'])
-    ->middleware(['auth'])
-    ->name('recipes.pdf');
+// Recipes - publiskās lapas
+Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
 
-Route::get('/recipes/{recipe}/pdf/image', [RecipeController::class, 'downloadImagePdf'])
-    ->middleware(['auth'])
-    ->name('recipes.pdf.image');
+// PDF / Print - tikai ielogotiem
+Route::middleware(['auth'])->group(function () {
+    Route::get('/recipes/{recipe}/pdf', [RecipeController::class, 'downloadPdf'])
+        ->name('recipes.pdf');
 
-Route::get('/recipes/{recipe}/print', [RecipeController::class, 'printView'])
-    ->middleware(['auth'])
-    ->name('recipes.print');
+    Route::get('/recipes/{recipe}/print', [RecipeController::class, 'printView'])
+        ->name('recipes.print');
+});
 
-// Dashboard (tikai ielogotiem)
+// Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+// Auth group
 Route::middleware(['auth'])->group(function () {
 
     // Categories
@@ -56,23 +57,37 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile/recipes', [RecipeController::class, 'userRecipes'])->name('profile.recipes');
 
-    // Recipes - skatīties var ielogots lietotājs, bet veidot/labot/dzēst tikai verificēts
-    Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
-    Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
-    Route::get('/recipes/create', [RecipeController::class, 'create'])->middleware('verified')->name('recipes.create');
-    Route::post('/recipes', [RecipeController::class, 'store'])->middleware('verified')->name('recipes.store');
-    Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
-    Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->middleware('verified')->name('recipes.edit');
-    Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.update');
-    Route::patch('/recipes/{recipe}', [RecipeController::class, 'update'])->middleware('verified')->name('recipes.patch');
-    Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->middleware('verified')->name('recipes.destroy');
+    // Recipes - tikai verificētiem veidot/labot/dzēst
+    Route::get('/recipes/create', [RecipeController::class, 'create'])
+        ->middleware('verified')
+        ->name('recipes.create');
 
-    // Comments - tikai verificētiem
+    Route::post('/recipes', [RecipeController::class, 'store'])
+        ->middleware('verified')
+        ->name('recipes.store');
+
+    Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])
+        ->middleware('verified')
+        ->name('recipes.edit');
+
+    Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])
+        ->middleware('verified')
+        ->name('recipes.update');
+
+    Route::patch('/recipes/{recipe}', [RecipeController::class, 'update'])
+        ->middleware('verified')
+        ->name('recipes.patch');
+
+    Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])
+        ->middleware('verified')
+        ->name('recipes.destroy');
+
+    // Comments
     Route::post('/comments', [CommentController::class, 'store'])
         ->middleware('verified')
         ->name('comments.store');
 
-    // Favorites - tikai verificētiem
+    // Favorites
     Route::post('/recipes/{recipe}/favorite', [FavoriteController::class, 'toggle'])
         ->middleware('verified')
         ->name('recipes.favorite.toggle');
@@ -81,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('verified')
         ->name('profile.favorites');
 
-    // Reviews - tikai verificētiem
+    // Reviews
     Route::post('/recipes/{recipe}/reviews', [RecipeReviewController::class, 'store'])
         ->middleware('verified')
         ->name('recipes.reviews.store');
@@ -90,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('verified')
         ->name('recipes.reviews.destroy');
 
-    // Admin - tikai adminiem
+    // Admin
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
 

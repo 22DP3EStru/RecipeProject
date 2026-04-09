@@ -324,49 +324,6 @@
         line-height: 1.7;
     }
 
-    @media (max-width: 980px) {
-        .login-hero {
-            grid-template-columns: 1fr;
-        }
-
-        .login-hero-left,
-        .login-hero-right {
-            padding: 30px;
-        }
-
-        .login-title {
-            font-size: 2.45rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .login-nav {
-            padding: 16px;
-            border-radius: 18px;
-        }
-
-        .login-nav-brand {
-            font-size: 1.7rem;
-        }
-
-        .login-hero-left,
-        .login-hero-right {
-            padding: 22px;
-        }
-
-        .login-title {
-            font-size: 2rem;
-        }
-
-        .register-actions {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .register-actions .btn {
-            width: 100%;
-        }
-    }
 </style>
 
 <div class="login-page">

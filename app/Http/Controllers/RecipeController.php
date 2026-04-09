@@ -37,6 +37,7 @@ class RecipeController extends Controller
     public function printView(Recipe $recipe)
     {
         $recipe->loadMissing(['user', 'ingredientsItems']);
+
         return view('recipes.print', compact('recipe'));
     }
 
@@ -120,6 +121,18 @@ class RecipeController extends Controller
         ));
     }
 
+    public function userRecipes()
+    {
+        $recipes = Recipe::with('user')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->paginate(12);
+
+        return view('profile.recipes', compact('recipes'));
+    }
+
     public function show(Recipe $recipe)
     {
         $sessionKey = 'recipe_viewed_' . $recipe->id;
@@ -170,7 +183,7 @@ class RecipeController extends Controller
     private function syncIngredientsFromArrays(Recipe $recipe, Request $request): void
     {
         $names = $request->input('ingredient_name', []);
-        $qtys  = $request->input('ingredient_qty', []);
+        $qtys = $request->input('ingredient_qty', []);
         $units = $request->input('ingredient_unit', []);
 
         $recipe->ingredientsItems()->delete();
@@ -227,6 +240,14 @@ class RecipeController extends Controller
         $validated['views'] = 0;
         $validated['ingredients'] = '';
 
+        unset(
+            $validated['ingredient_name'],
+            $validated['ingredient_qty'],
+            $validated['ingredient_unit'],
+            $validated['image'],
+            $validated['video']
+        );
+
         if ($request->hasFile('image')) {
             $validated['image_path'] = $request->file('image')->store('recipes/images', 'public');
         }
@@ -273,6 +294,14 @@ class RecipeController extends Controller
         $validated = $request->validate(
             $this->validationRules(),
             $this->validationMessages()
+        );
+
+        unset(
+            $validated['ingredient_name'],
+            $validated['ingredient_qty'],
+            $validated['ingredient_unit'],
+            $validated['image'],
+            $validated['video']
         );
 
         try {
