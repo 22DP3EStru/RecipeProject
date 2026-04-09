@@ -324,6 +324,286 @@
         line-height: 1.7;
     }
 
+    /* =========================================================
+   LOGIN MOBILE
+========================================================= */
+
+.login-page {
+    width: 100%;
+    max-width: 1220px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+.login-nav,
+.login-hero,
+.login-panel,
+.form-area,
+.form-grid,
+.form-group,
+.auth-links,
+.feature-list,
+.feature-item,
+.login-nav-links,
+.register-actions {
+    min-width: 0;
+}
+
+@media (max-width: 980px) {
+    .login-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .login-hero-left,
+    .login-hero-right {
+        padding: 30px 26px;
+    }
+
+    .login-title {
+        font-size: 2.35rem;
+    }
+
+    .feature-title {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page {
+        max-width: 100%;
+    }
+
+    .login-nav {
+        padding: 16px;
+        border-radius: 18px;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .login-nav-brand {
+        width: 100%;
+        font-size: 1.7rem;
+        line-height: 1.2;
+    }
+
+    .login-nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .login-nav-links a {
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    .login-nav > div:last-child {
+        width: 100%;
+    }
+
+    .login-nav > div:last-child .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .login-hero {
+        gap: 18px;
+    }
+
+    .login-panel {
+        border-radius: 22px;
+    }
+
+    .login-hero-left,
+    .login-hero-right {
+        padding: 22px 18px;
+    }
+
+    .login-eyebrow {
+        font-size: 11px;
+        padding: 6px 10px;
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .login-title {
+        font-size: 1.9rem;
+        line-height: 1.15;
+        margin-bottom: 12px;
+    }
+
+    .login-text,
+    .feature-text,
+    .auth-links p {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .form-area {
+        margin-top: 22px;
+        padding-top: 18px;
+    }
+
+    .form-grid {
+        gap: 16px;
+    }
+
+    .form-label {
+        font-size: 13px;
+        margin-bottom: 7px;
+    }
+
+    .form-input {
+        padding: 13px 14px;
+        font-size: 16px;
+        border-radius: 14px;
+    }
+
+    .remember-row {
+        margin-top: 0;
+    }
+
+    .remember-label {
+        width: 100%;
+        align-items: flex-start;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.45;
+        border-radius: 13px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    .auth-links {
+        padding-top: 18px;
+    }
+
+    .auth-links h4 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .register-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .register-actions .btn,
+    .register-actions .secondary-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .feature-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 1.55rem;
+        border-radius: 15px;
+        margin-bottom: 14px;
+    }
+
+    .feature-title {
+        font-size: 1.6rem;
+        line-height: 1.18;
+        margin-bottom: 10px;
+    }
+
+    .feature-list {
+        gap: 10px;
+    }
+
+    .feature-item {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .feature-item h5 {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+
+    .feature-item p {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-nav {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .login-nav-brand {
+        font-size: 1.45rem;
+        gap: 10px;
+    }
+
+    .login-nav-brand::before {
+        font-size: 1rem;
+    }
+
+    .login-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .login-nav-links a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .login-panel {
+        border-radius: 18px;
+    }
+
+    .login-hero-left,
+    .login-hero-right {
+        padding: 18px 14px;
+    }
+
+    .login-title {
+        font-size: 1.65rem;
+    }
+
+    .login-text {
+        font-size: 13px;
+    }
+
+    .form-input {
+        padding: 12px 13px;
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        padding: 13px 14px;
+        font-size: 14px;
+    }
+
+    .auth-links h4 {
+        font-size: 1.28rem;
+    }
+
+    .feature-title {
+        font-size: 1.4rem;
+    }
+
+    .feature-text,
+    .auth-links p,
+    .feature-item p {
+        font-size: 13px;
+    }
+}
+
 </style>
 
 <div class="login-page">
