@@ -752,7 +752,7 @@
             margin: 0 auto;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1500px) {
             .nav-bar {
                 grid-template-columns: 1fr auto !important;
                 align-items: center !important;
