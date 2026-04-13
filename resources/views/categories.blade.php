@@ -517,20 +517,24 @@
                             };
                         @endphp
 
-                        <div class="category-card {{ $categoryClass }}">
-                            <div class="category-icon">
-                                @switch($categoryName)
-                                    @case('Brokastis') 🍳 @break
-                                    @case('Pusdienas') 🍽️ @break
-                                    @case('Vakariņas') 🌙 @break
-                                    @case('Deserti') 🍰 @break
-                                    @case('Dzērieni') 🥤 @break
-                                    @case('Uzkodas') 🥨 @break
-                                    @case('Salāti') 🥗 @break
-                                    @case('Zupas') 🍲 @break
-                                    @default 🍴
-                                @endswitch
-                            </div>
+                <div class="category-card {{ $categoryClass }}">
+                    <div class="category-icon">
+                        @switch($categoryName)
+                            @case('Brokastis') 🍳 @break
+                            @case('Pusdienas') 🍛 @break
+                            @case('Vakariņas') 🌙 @break
+                            @case('Deserti') 🍰 @break
+                            @case('Dzērieni') 🧃 @break
+                            @case('Uzkodas') 🥨 @break
+                            @case('Salāti') 🥗 @break
+                            @case('Zupas') 🍲 @break
+                            @case('Veģetārās') 🥕 @break
+                            @case('Vegānās') 🌱 @break
+                            @case('Bezglutēna') 🌾🚫 @break
+                            @case('Ātras receptes') ⚡ @break
+                            @default 🍴
+                        @endswitch
+                    </div>
 
                             <h3 class="category-title">{{ $categoryName }}</h3>
 

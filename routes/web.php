@@ -24,9 +24,13 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
 
+// Dashboard
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
 // Recipes - publiskās lapas
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
-Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
 
 // PDF / Print - tikai ielogotiem
 Route::middleware(['auth'])->group(function () {
@@ -36,11 +40,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/recipes/{recipe}/print', [RecipeController::class, 'printView'])
         ->name('recipes.print');
 });
-
-// Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 // Auth group
 Route::middleware(['auth'])->group(function () {
@@ -117,6 +116,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/recipes/{recipe}', [AdminController::class, 'destroyRecipe'])->name('recipes.destroy');
     });
 });
+
+// ŠIM jābūt pēc create/edit u.c. routes
+Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
 
 // PDF sekcija - publiska
 Route::prefix('pdf')->name('pdf.')->group(function () {
