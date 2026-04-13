@@ -1,134 +1,191 @@
-﻿# Vecmāmiņas Receptes
+# 🍲 Vecmāmiņas Receptes
 
-## Īss apraksts
-Vienkārša **Laravel bāzēta recepšu tīmekļa vietne**, kas ļauj reģistrētiem lietotājiem izveidot, rediģēt, skatīt un dzēst receptes. Vietne piedāvā kategorizāciju, meklēšanu, iecienītāko (favorites) sistēmu un administratora paneli lietotāju un recepšu pārvaldībai.
+## 📌 Projekta apraksts
+**Vecmāmiņas Receptes** ir Laravel bāzēta tīmekļa lietotne recepšu pārvaldībai. Tā ļauj lietotājiem izveidot, meklēt un saglabāt receptes, kā arī nodrošina administratora paneli sistēmas pārvaldībai.
 
-Šis projekts demonstrē tipisku Laravel aplikācijas struktūru ar autentifikāciju, CRUD funkcionalitāti un datubāzes migrācijām.
-
----
-
-# Kas šī vietne nodrošina
-
-- Lietotāju reģistrāciju un autentifikāciju
-- Receptes CRUD (izveide, lasīšana, rediģēšana, dzēšana)
-- Kategorijas — receptes var tikt grupētas pēc veida (piem., brokastis, vakariņas, deserti)
-- Meklēšanu un filtrus pēc kategorijas un grūtības
-- Iecienītākās receptes (favorites) — lietotāji var atzīmēt receptes
-- Administratora paneli — pārvaldīt lietotājus, receptes un piešķirt admin tiesības
+Projekts demonstrē tipisku Laravel aplikācijas arhitektūru ar autentifikāciju, CRUD funkcionalitāti un datubāzes migrācijām.
 
 ---
 
-# Kā vietne strādā (lietotāja plūsma)
+## ✨ Funkcionalitāte
 
-1. Lietotājs reģistrējas vai piesakās.
-2. Var pārlūkot receptes pēc kategorijām vai meklēt pēc atslēgvārdiem.
-3. Receptes lapā var redzēt sastāvdaļas, instrukcijas un saistītās receptes.
-4. Piesakoties, lietotājs var:
-   - saglabāt receptes kā iecienītākās
-   - pievienot savas receptes
-   - rediģēt savas receptes
-5. Administrators redz papildus pārvaldības lapu, kur iespējams dzēst receptes vai lietotājus un mainīt admin statusus.
-
----
-
-# Tehniskais pārskats
-
-- **Backend:** Laravel (PHP)
-- **Datubāze:** MySQL / MariaDB (konfigurējama `.env`)
-- **Modeļi:** `User`, `Recipe`, `Favorite`, `Category`
-- **Skati:** Blade template faili `resources/views/`
-- **Maršruti:** `routes/web.php`
-- **Middleware:** `admin` — aizsargā admin sadaļu
-- **Frontend:** Tailwind CSS
+- 🔐 Lietotāju reģistrācija un autentifikācija  
+- 📖 Recepšu pārvaldība (CRUD)  
+- 🗂️ Kategorijas (piem., brokastis, deserti u.c.)  
+- 🔎 Meklēšana un filtrēšana  
+- ❤️ Iecienītākās receptes (favorites)  
+- 🛠️ Administratora panelis:
+  - Lietotāju pārvaldība  
+  - Recepšu pārvaldība  
+  - Admin tiesību piešķiršana  
 
 ---
 
-# Projekta struktūra
+## 🧭 Lietotāja plūsma
 
-Svarīgākās projekta mapes:
+1. Lietotājs reģistrējas vai piesakās  
+2. Pārlūko vai meklē receptes  
+3. Atver recepti un apskata detaļas  
+4. Autorizēts lietotājs var:
+   - pievienot receptes  
+   - rediģēt savas receptes  
+   - saglabāt favorītos  
+5. Administrators var pārvaldīt sistēmu  
+
+---
+
+## 🧱 Tehnoloģijas
+
+- **Backend:** Laravel (PHP)  
+- **Frontend:** Blade + Tailwind CSS  
+- **Datubāze:** MySQL / MariaDB  
+- **Autentifikācija:** Laravel Auth  
+- **Konteinerizācija:** Docker + Docker Compose  
+
+---
+
+## 📂 Projekta struktūra
 
 ```
-app/Http/Controllers/   # Kontrolieri
-app/Models/             # Modeļi
-resources/views/        # Blade skati
-routes/web.php          # Web maršruti
-database/migrations/    # Datubāzes migrācijas
-public/                 # Publiskie faili
+app/
+ ├── Http/Controllers/
+ ├── Models/
+
+resources/views/
+routes/web.php
+database/migrations/
+public/
 ```
 
 ---
 
-# Uzstādīšana lokāli (ātra)
+# 🚀 Palaišana ar Docker (ieteicamais veids)
 
-### 1. Nokopēt `.env` piemēru
+## Prasības
+- Docker
+- Docker Compose
+
+---
+
+## 1. Klonēt projektu
+
+```bash
+git clone <repo-url>
+cd recipe-app
+```
+
+---
+
+## 2. Izveidot `.env`
 
 ```bash
 cp .env.example .env
 ```
 
-### 2. Instalēt atkarības
+---
+
+## 3. Palaist konteinerus
+
+```bash
+docker-compose up -d --build
+```
+
+---
+
+## 4. Ieeja konteinerā
+
+```bash
+docker exec -it app bash
+```
+
+---
+
+## 5. Instalēt atkarības
 
 ```bash
 composer install
-```
-
-### 3. Ģenerēt aplikācijas atslēgu
-
-```bash
 php artisan key:generate
 ```
 
-### 4. Konfigurēt datubāzi
+---
 
-`.env` failā iestatīt:
-
-```
-DB_DATABASE=recipe_app
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### 5. Migrēt datubāzi
+## 6. Migrācijas
 
 ```bash
 php artisan migrate
 ```
 
-### 6. Palaist projektu
+---
+
+## 7. Atvērt aplikāciju
+
+http://localhost:8000
+
+---
+
+## 🐳 Docker konfigurācija
+
+`.env` failā jābūt:
+
+```
+DB_HOST=db
+DB_DATABASE=recipe_app
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+
+---
+
+# 💻 Lokālā palaišana (bez Docker)
 
 ```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
 php artisan serve
 ```
 
-Pēc tam aplikācija būs pieejama:
+Aplikācija būs pieejama:
 
-```
 http://127.0.0.1:8000
+
+---
+
+# ⚠️ Biežākās problēmas
+
+### Docker nepalaižas
+- Pārbaudi vai Docker darbojas  
+- Izmanto `--build`
+
+### DB connection error
+- Pārbaudi `.env`  
+- Pārliecinies, ka DB konteiners darbojas  
+
+### 500 / white screen
+Pārbaudi logus:
+```bash
+storage/logs/laravel.log
 ```
 
 ---
 
-# Piezīmes par drošību un datiem
+# 🔒 Drošība
 
-- Pārliecinieties, ka **sessions un CSRF** ir pareizi konfigurēti (`SESSION_DRIVER`, `SESSION_DOMAIN`).
-- Pirms migrācijām ieteicams veikt **datubāzes dublēšanu**.
-- **Admin tiesības** piešķirt tikai uzticamiem lietotājiem.
+- CSRF aizsardzība aktivizēta pēc noklusējuma  
+- `.env` failu nedrīkst publicēt  
+- Admin tiesības piešķirt tikai uzticamiem lietotājiem  
+
+---
+
+# 📎 Dokumentācija
+
+https://1drv.ms/w/c/e89a595db40b3546/IQAzKAeK-fvEQqDYZIph98acAV2lkiiDLd51d5KMupucvno?e=sq6s1I
 
 ---
 
-# Kur skatīt kodu
+# 👩‍💻 Autors
 
-- **Maršruti:** `routes/web.php`
-- **Kontrolieri:** `app/Http/Controllers/`
-- **Modeļi:** `app/Models/`
-- **Skati:** `resources/views/`
-
----
-Dokumentācija: https://1drv.ms/w/c/e89a595db40b3546/IQAzKAeK-fvEQqDYZIph98acAV2lkiiDLd51d5KMupucvno?e=uFAdhY
-
----
-# Autors
-
-Elīza Strūberga
-Rīgas Valsts tehnikums
-4.kurss datoriķi
+**Elīza Strūberga**  
+Rīgas Valsts tehnikums  
+4. kurss — datoriķi  
