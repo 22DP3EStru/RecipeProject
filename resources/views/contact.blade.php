@@ -282,11 +282,11 @@
                     <div class="muted">
                         <div class="contact-line">
                             <span class="contact-label">E-pasts:</span>
-                            <span class="contact-value"> info@vecmaminasreceptes.lv</span>
+                            <span class="contact-value"> info@vecmaminasreceptes.site</span>
                         </div>
                         <div class="contact-line">
                             <span class="contact-label">Tālrunis:</span>
-                            <span class="contact-value"> +371 20000000</span>
+                            <span class="contact-value"> +371 27825277</span>
                         </div>
                         <div class="contact-line">
                             <span class="contact-label">Darba laiks:</span>
@@ -301,7 +301,7 @@
                     <div class="muted">
                         <div class="contact-line">
                             <span class="contact-label">E-pasts:</span>
-                            <span class="contact-value"> support@vecmaminasreceptes.lv</span>
+                            <span class="contact-value"> support@vecmaminasreceptes.site</span>
                         </div>
                         <div class="contact-line">
                             <span class="contact-label">Atbildes laiks:</span>
@@ -320,7 +320,7 @@
                     <div class="muted">
                         <div class="contact-line">
                             <span class="contact-label">E-pasts:</span>
-                            <span class="contact-value"> sadarbiba@vecmaminasreceptes.lv</span>
+                            <span class="contact-value"> sadarbiba@vecmaminasreceptes.site</span>
                         </div>
                         <div class="contact-line">
                             Raksti, ja ir idejas jaunām funkcijām, saturam vai sadarbības iespējām.
