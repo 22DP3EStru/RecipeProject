@@ -197,6 +197,14 @@
         font-weight: 600;
     }
 
+    .password-help {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
     .submit-btn {
         width: 100%;
         padding: 16px 18px;
@@ -288,273 +296,272 @@
         line-height: 1.7;
     }
 
-    /* =========================================================
-   REGISTER MOBILE
-========================================================= */
-
-.register-page {
-    width: 100%;
-    max-width: 1220px;
-    margin: 0 auto;
-    overflow-x: hidden;
-}
-
-.register-nav,
-.register-hero,
-.register-panel,
-.form-area,
-.form-grid,
-.form-group,
-.auth-links,
-.feature-list,
-.feature-item,
-.register-nav-links,
-.login-actions {
-    min-width: 0;
-}
-
-@media (max-width: 980px) {
-    .register-hero {
-        grid-template-columns: 1fr;
-    }
-
-    .register-hero-left,
-    .register-hero-right {
-        padding: 30px 26px;
-    }
-
-    .register-title {
-        font-size: 2.35rem;
-    }
-
-    .feature-title {
-        font-size: 1.9rem;
-    }
-}
-
-@media (max-width: 768px) {
     .register-page {
-        max-width: 100%;
-    }
-
-    .register-nav {
-        padding: 16px;
-        border-radius: 18px;
-        gap: 14px;
-        margin-bottom: 20px;
-    }
-
-    .register-nav-brand {
         width: 100%;
-        font-size: 1.7rem;
-        line-height: 1.2;
+        max-width: 1220px;
+        margin: 0 auto;
+        overflow-x: hidden;
     }
 
-    .register-nav-links {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
-    }
-
-    .register-nav-links a {
-        padding: 9px 12px;
-        font-size: 13px;
-    }
-
-    .register-nav > div:last-child {
-        width: 100%;
-    }
-
-    .register-nav > div:last-child .btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .register-hero {
-        gap: 18px;
-    }
-
-    .register-panel {
-        border-radius: 22px;
-    }
-
-    .register-hero-left,
-    .register-hero-right {
-        padding: 22px 18px;
-    }
-
-    .register-eyebrow {
-        font-size: 11px;
-        padding: 6px 10px;
-        letter-spacing: 0.08em;
-        margin-bottom: 12px;
-        max-width: 100%;
-        white-space: normal;
-    }
-
-    .register-title {
-        font-size: 1.9rem;
-        line-height: 1.15;
-        margin-bottom: 12px;
-    }
-
-    .register-text,
-    .feature-text,
-    .auth-links p {
-        font-size: 14px;
-        line-height: 1.65;
-    }
-
-    .form-area {
-        margin-top: 22px;
-        padding-top: 18px;
-    }
-
-    .form-grid {
-        gap: 16px;
-    }
-
-    .form-label {
-        font-size: 13px;
-        margin-bottom: 7px;
-    }
-
-    .form-input {
-        padding: 13px 14px;
-        font-size: 16px;
-        border-radius: 14px;
-    }
-
-    .submit-btn {
-        width: 100%;
-        padding: 14px 16px;
-        font-size: 15px;
-        margin-top: 4px;
-    }
-
-    .auth-links {
-        padding-top: 18px;
-        margin-top: 22px;
-    }
-
-    .auth-links h4 {
-        font-size: 1.45rem;
-        line-height: 1.2;
-        margin-bottom: 10px;
-    }
-
+    .register-nav,
+    .register-hero,
+    .register-panel,
+    .form-area,
+    .form-grid,
+    .form-group,
+    .auth-links,
+    .feature-list,
+    .feature-item,
+    .register-nav-links,
     .login-actions {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        min-width: 0;
     }
 
-    .login-actions .btn {
-        width: 100%;
-        text-align: center;
+    @media (max-width: 980px) {
+        .register-hero {
+            grid-template-columns: 1fr;
+        }
+
+        .register-hero-left,
+        .register-hero-right {
+            padding: 30px 26px;
+        }
+
+        .register-title {
+            font-size: 2.35rem;
+        }
+
+        .feature-title {
+            font-size: 1.9rem;
+        }
     }
 
-    .feature-icon {
-        width: 54px;
-        height: 54px;
-        font-size: 1.55rem;
-        border-radius: 15px;
-        margin-bottom: 14px;
+    @media (max-width: 768px) {
+        .register-page {
+            max-width: 100%;
+        }
+
+        .register-nav {
+            padding: 16px;
+            border-radius: 18px;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .register-nav-brand {
+            width: 100%;
+            font-size: 1.7rem;
+            line-height: 1.2;
+        }
+
+        .register-nav-links {
+            width: 100%;
+            justify-content: flex-start;
+            gap: 8px;
+        }
+
+        .register-nav-links a {
+            padding: 9px 12px;
+            font-size: 13px;
+        }
+
+        .register-nav > div:last-child {
+            width: 100%;
+        }
+
+        .register-nav > div:last-child .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .register-hero {
+            gap: 18px;
+        }
+
+        .register-panel {
+            border-radius: 22px;
+        }
+
+        .register-hero-left,
+        .register-hero-right {
+            padding: 22px 18px;
+        }
+
+        .register-eyebrow {
+            font-size: 11px;
+            padding: 6px 10px;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+            max-width: 100%;
+            white-space: normal;
+        }
+
+        .register-title {
+            font-size: 1.9rem;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        .register-text,
+        .feature-text,
+        .auth-links p {
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .form-area {
+            margin-top: 22px;
+            padding-top: 18px;
+        }
+
+        .form-grid {
+            gap: 16px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .form-input {
+            padding: 13px 14px;
+            font-size: 16px;
+            border-radius: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .auth-links {
+            padding-top: 18px;
+            margin-top: 22px;
+        }
+
+        .auth-links h4 {
+            font-size: 1.45rem;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .login-actions {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .login-actions .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 54px;
+            height: 54px;
+            font-size: 1.55rem;
+            border-radius: 15px;
+            margin-bottom: 14px;
+        }
+
+        .feature-title {
+            font-size: 1.6rem;
+            line-height: 1.18;
+            margin-bottom: 10px;
+        }
+
+        .feature-list {
+            gap: 10px;
+        }
+
+        .feature-item {
+            padding: 14px;
+            border-radius: 16px;
+        }
+
+        .feature-item h5 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .feature-item p {
+            font-size: 13px;
+            line-height: 1.55;
+        }
     }
 
-    .feature-title {
-        font-size: 1.6rem;
-        line-height: 1.18;
-        margin-bottom: 10px;
-    }
+    @media (max-width: 480px) {
+        .register-nav {
+            padding: 14px;
+            border-radius: 16px;
+        }
 
-    .feature-list {
-        gap: 10px;
-    }
+        .register-nav-brand {
+            font-size: 1.45rem;
+            gap: 10px;
+        }
 
-    .feature-item {
-        padding: 14px;
-        border-radius: 16px;
-    }
+        .register-nav-brand::before {
+            font-size: 1rem;
+        }
 
-    .feature-item h5 {
-        font-size: 0.95rem;
-        margin-bottom: 5px;
-    }
+        .register-nav-links {
+            flex-direction: column;
+            align-items: stretch;
+        }
 
-    .feature-item p {
-        font-size: 13px;
-        line-height: 1.55;
-    }
-}
+        .register-nav-links a {
+            width: 100%;
+            text-align: center;
+        }
 
-@media (max-width: 480px) {
-    .register-nav {
-        padding: 14px;
-        border-radius: 16px;
-    }
+        .register-panel {
+            border-radius: 18px;
+        }
 
-    .register-nav-brand {
-        font-size: 1.45rem;
-        gap: 10px;
-    }
+        .register-hero-left,
+        .register-hero-right {
+            padding: 18px 14px;
+        }
 
-    .register-nav-brand::before {
-        font-size: 1rem;
-    }
+        .register-title {
+            font-size: 1.65rem;
+        }
 
-    .register-nav-links {
-        flex-direction: column;
-        align-items: stretch;
-    }
+        .register-text {
+            font-size: 13px;
+        }
 
-    .register-nav-links a {
-        width: 100%;
-        text-align: center;
-    }
+        .form-input {
+            padding: 12px 13px;
+            font-size: 16px;
+        }
 
-    .register-panel {
-        border-radius: 18px;
-    }
+        .submit-btn {
+            padding: 13px 14px;
+            font-size: 14px;
+        }
 
-    .register-hero-left,
-    .register-hero-right {
-        padding: 18px 14px;
-    }
+        .auth-links h4 {
+            font-size: 1.28rem;
+        }
 
-    .register-title {
-        font-size: 1.65rem;
-    }
+        .feature-title {
+            font-size: 1.4rem;
+        }
 
-    .register-text {
-        font-size: 13px;
-    }
+        .feature-text,
+        .auth-links p,
+        .feature-item p {
+            font-size: 13px;
+        }
 
-    .form-input {
-        padding: 12px 13px;
-        font-size: 16px;
+        .password-help {
+            font-size: 12px;
+        }
     }
-
-    .submit-btn {
-        padding: 13px 14px;
-        font-size: 14px;
-    }
-
-    .auth-links h4 {
-        font-size: 1.28rem;
-    }
-
-    .feature-title {
-        font-size: 1.4rem;
-    }
-
-    .feature-text,
-    .auth-links p,
-    .feature-item p {
-        font-size: 13px;
-    }
-}
-
 </style>
 
 <div class="register-page">
@@ -627,6 +634,11 @@
                                 placeholder="Izveidojiet drošu paroli"
                                 required
                                 autocomplete="new-password">
+
+                            <small class="password-help">
+                                Parolei jābūt vismaz 8 rakstzīmes garai, un tai jāsatur vismaz viens lielais burts, viens mazais burts un viens cipars.
+                            </small>
+
                             @error('password')
                                 <span class="field-error">{{ $message }}</span>
                             @enderror

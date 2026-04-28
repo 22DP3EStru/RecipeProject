@@ -1,4 +1,4 @@
-@if (session('success') || session('error') || session('warning') || session('info') || $errors->any())
+@if (session('success') || session('error') || session('warning') || session('info'))
     <div class="flash-messages">
         @if (session('success'))
             <div class="flash-message success">
@@ -21,17 +21,6 @@
         @if (session('info'))
             <div class="flash-message info">
                 {{ session('info') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="flash-message error">
-                <strong>Lūdzu izlabo šādas kļūdas:</strong>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
             </div>
         @endif
     </div>

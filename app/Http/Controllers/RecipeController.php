@@ -71,9 +71,48 @@ class RecipeController extends Controller
     {
         return [
             'title.required' => 'Lūdzu, ievadiet receptes nosaukumu.',
+            'title.string' => 'Receptes nosaukumam jābūt tekstam.',
+            'title.max' => 'Receptes nosaukums nedrīkst pārsniegt 255 rakstzīmes.',
+
             'description.required' => 'Lūdzu, ievadiet receptes aprakstu.',
+            'description.string' => 'Receptes aprakstam jābūt tekstam.',
+            'description.min' => 'Receptes aprakstam jābūt vismaz 10 rakstzīmes garam.',
+
             'instructions.required' => 'Lūdzu, ievadiet gatavošanas instrukcijas.',
-            'ingredient_name.required' => 'Pievienojiet vismaz vienu sastāvdaļu.',
+            'instructions.string' => 'Gatavošanas instrukcijām jābūt tekstam.',
+            'instructions.min' => 'Gatavošanas instrukcijām jābūt vismaz 10 rakstzīmes garām.',
+
+            'prep_time.integer' => 'Sagatavošanas laikam jābūt veselam skaitlim.',
+            'prep_time.min' => 'Sagatavošanas laiks nedrīkst būt negatīvs.',
+
+            'cook_time.integer' => 'Gatavošanas laikam jābūt veselam skaitlim.',
+            'cook_time.min' => 'Gatavošanas laiks nedrīkst būt negatīvs.',
+
+            'servings.integer' => 'Porciju skaitam jābūt veselam skaitlim.',
+            'servings.min' => 'Porciju skaitam jābūt vismaz 1.',
+
+            'difficulty.required' => 'Lūdzu, izvēlieties grūtības līmeni.',
+            'difficulty.in' => 'Izvēlētais grūtības līmenis nav derīgs.',
+
+            'category.required' => 'Lūdzu, izvēlieties kategoriju.',
+            'category.max' => 'Kategorija nedrīkst pārsniegt 100 rakstzīmes.',
+
+            'ingredient_name.required' => 'Lūdzu, pievienojiet vismaz vienu sastāvdaļu.',
+            'ingredient_name.min' => 'Lūdzu, pievienojiet vismaz vienu sastāvdaļu.',
+            'ingredient_name.*.required' => 'Lūdzu, ievadiet sastāvdaļas nosaukumu.',
+            'ingredient_name.*.max' => 'Sastāvdaļas nosaukums nedrīkst pārsniegt 255 rakstzīmes.',
+
+            'ingredient_qty.*.numeric' => 'Sastāvdaļas daudzumam jābūt skaitlim.',
+            'ingredient_qty.*.min' => 'Sastāvdaļas daudzums nedrīkst būt negatīvs.',
+
+            'ingredient_unit.*.max' => 'Sastāvdaļas mērvienība nedrīkst pārsniegt 30 rakstzīmes.',
+
+            'image.image' => 'Augšupielādētajam failam jābūt attēlam.',
+            'image.mimes' => 'Attēlam jābūt JPG, JPEG, PNG, WEBP vai GIF formātā.',
+            'image.max' => 'Attēla izmērs nedrīkst pārsniegt 4 MB.',
+
+            'video.mimetypes' => 'Video jābūt MP4, WEBM vai MOV formātā.',
+            'video.max' => 'Video izmērs nedrīkst pārsniegt 50 MB.',
         ];
     }
 
