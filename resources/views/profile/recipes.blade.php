@@ -414,7 +414,6 @@
         line-height: 1.7;
         font-size: 14px;
     }
-
 </style>
 
 <div class="my-recipes-page">
@@ -525,8 +524,12 @@
                                         Rediģēt
                                     </a>
 
-                                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
-                                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti?')">
+                                    <form
+                                        method="POST"
+                                        action="{{ route('recipes.destroy', $recipe) }}"
+                                        data-confirm-delete
+                                        data-confirm-message="Vai tiešām vēlaties dzēst šo recepti? Šī darbība ir neatgriezeniska."
+                                    >
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">

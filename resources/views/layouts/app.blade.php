@@ -65,7 +65,8 @@
                 linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
         }
 
-        body.menu-open {
+        body.menu-open,
+        body.confirm-modal-open {
             overflow: hidden;
         }
 
@@ -752,6 +753,102 @@
             margin: 0 auto;
         }
 
+        .confirm-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(47, 36, 29, 0.44);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .confirm-modal-backdrop.is-open {
+            display: flex;
+        }
+
+        .confirm-modal {
+            width: min(100%, 520px);
+            position: relative;
+            background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
+            border: 1px solid rgba(122, 90, 67, 0.18);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 30px 80px rgba(47, 36, 29, 0.26);
+            overflow: hidden;
+            animation: confirmModalIn 0.18s ease-out;
+        }
+
+        .confirm-modal::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.78), rgba(255,255,255,0));
+            pointer-events: none;
+        }
+
+        .confirm-modal-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #f7e9e5 0%, #f3e2de 100%);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 900;
+            box-shadow: 0 10px 24px rgba(164, 95, 82, 0.12);
+        }
+
+        .confirm-modal-title {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--accent);
+            font-size: 2.05rem;
+            font-weight: 500;
+            line-height: 1.15;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .confirm-modal-text {
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 15px;
+            text-align: center;
+            margin: 0 auto 24px;
+            max-width: 430px;
+        }
+
+        .confirm-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .confirm-modal-actions .btn {
+            min-width: 150px;
+        }
+
+        @keyframes confirmModalIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         @media (max-width: 1500px) {
             .nav-bar {
                 grid-template-columns: 1fr auto !important;
@@ -946,6 +1043,29 @@
                 max-width: 100% !important;
                 padding: 12px !important;
             }
+
+            .confirm-modal {
+                padding: 24px 18px;
+                border-radius: 22px;
+            }
+
+            .confirm-modal-icon {
+                width: 62px;
+                height: 62px;
+                font-size: 30px;
+            }
+
+            .confirm-modal-title {
+                font-size: 1.65rem;
+            }
+
+            .confirm-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .confirm-modal-actions .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1094,6 +1214,30 @@
     </div>
 </div>
 
+<div class="confirm-modal-backdrop" id="globalConfirmModal" aria-hidden="true">
+    <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="globalConfirmTitle" aria-describedby="globalConfirmText">
+        <div class="confirm-modal-icon">!</div>
+
+        <h2 class="confirm-modal-title" id="globalConfirmTitle">
+            Apstiprināt darbību
+        </h2>
+
+        <p class="confirm-modal-text" id="globalConfirmText">
+            Vai tiešām vēlaties veikt šo darbību?
+        </p>
+
+        <div class="confirm-modal-actions">
+            <button type="button" class="btn btn-secondary" id="globalConfirmCancel">
+                Atcelt
+            </button>
+
+            <button type="button" class="btn btn-danger" id="globalConfirmSubmit">
+                Apstiprināt
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     function toggleMobileMenu() {
         const body = document.body;
@@ -1129,12 +1273,6 @@
         }
     }
 
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            closeMobileMenu();
-        }
-    });
-
     window.addEventListener('resize', function () {
         if (window.innerWidth > 768) {
             closeMobileMenu();
@@ -1162,6 +1300,193 @@
             !event.target.closest('.nav-toggle')
         ) {
             closeMobileMenu();
+        }
+    });
+
+    let globalConfirmCallback = null;
+
+    function getConfirmTitle(message) {
+        const text = String(message || '').toLowerCase();
+
+        if (text.includes('status')) {
+            return 'Mainīt lietotāja statusu';
+        }
+
+        if (text.includes('vērtēj')) {
+            return 'Dzēst vērtējumu';
+        }
+
+        if (text.includes('favorīt')) {
+            return 'Noņemt no favorītiem';
+        }
+
+        if (text.includes('lietotāj')) {
+            return 'Dzēst lietotāju';
+        }
+
+        if (text.includes('recept')) {
+            return 'Dzēst recepti';
+        }
+
+        if (text.includes('koment')) {
+            return 'Dzēst komentāru';
+        }
+
+        return 'Apstiprināt darbību';
+    }
+
+    function getConfirmButtonText(message) {
+        const text = String(message || '').toLowerCase();
+
+        if (text.includes('status')) {
+            return 'Mainīt statusu';
+        }
+
+        if (text.includes('favorīt') || text.includes('noņemt')) {
+            return 'Noņemt';
+        }
+
+        if (text.includes('dzēst')) {
+            if (text.includes('lietotāj')) {
+                return 'Dzēst lietotāju';
+            }
+
+            if (text.includes('recept')) {
+                return 'Dzēst recepti';
+            }
+
+            if (text.includes('vērtēj')) {
+                return 'Dzēst vērtējumu';
+            }
+
+            if (text.includes('koment')) {
+                return 'Dzēst komentāru';
+            }
+
+            return 'Dzēst';
+        }
+
+        return 'Apstiprināt';
+    }
+
+    function openGlobalConfirmModal(message, callback) {
+        const modal = document.getElementById('globalConfirmModal');
+        const title = document.getElementById('globalConfirmTitle');
+        const text = document.getElementById('globalConfirmText');
+        const submit = document.getElementById('globalConfirmSubmit');
+
+        if (!modal || !title || !text || !submit) {
+            if (typeof callback === 'function') {
+                callback();
+            }
+
+            return;
+        }
+
+        globalConfirmCallback = callback;
+
+        title.textContent = getConfirmTitle(message);
+        text.textContent = message || 'Vai tiešām vēlaties veikt šo darbību?';
+        submit.textContent = getConfirmButtonText(message);
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('confirm-modal-open');
+
+        setTimeout(function () {
+            submit.focus();
+        }, 50);
+    }
+
+    function closeGlobalConfirmModal() {
+        const modal = document.getElementById('globalConfirmModal');
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('confirm-modal-open');
+        globalConfirmCallback = null;
+    }
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeMobileMenu();
+            closeGlobalConfirmModal();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        const confirmTrigger = event.target.closest('[onclick*="confirm"]');
+
+        if (!confirmTrigger) {
+            return;
+        }
+
+        const onclickValue = confirmTrigger.getAttribute('onclick') || '';
+        const confirmMatch = onclickValue.match(/confirm\((['"`])([\s\S]*?)\1\)/);
+
+        if (!confirmMatch) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const message = confirmMatch[2];
+
+        openGlobalConfirmModal(message, function () {
+            const form = confirmTrigger.closest('form');
+
+            if (form) {
+                form.submit();
+                return;
+            }
+
+            if (confirmTrigger.tagName === 'A' && confirmTrigger.href) {
+                window.location.href = confirmTrigger.href;
+            }
+        });
+    }, true);
+
+    document.addEventListener('submit', function (event) {
+        const form = event.target;
+
+        if (!form || form.dataset.confirmHandled === 'true') {
+            return;
+        }
+
+        if (form.hasAttribute('data-confirm-delete')) {
+            event.preventDefault();
+
+            const message = form.dataset.confirmMessage || 'Vai tiešām vēlaties veikt šo darbību?';
+
+            openGlobalConfirmModal(message, function () {
+                form.dataset.confirmHandled = 'true';
+                form.submit();
+            });
+        }
+    }, true);
+
+    document.getElementById('globalConfirmCancel')?.addEventListener('click', function () {
+        closeGlobalConfirmModal();
+    });
+
+    document.getElementById('globalConfirmSubmit')?.addEventListener('click', function () {
+        const callback = globalConfirmCallback;
+
+        closeGlobalConfirmModal();
+
+        if (typeof callback === 'function') {
+            callback();
+        }
+    });
+
+    document.getElementById('globalConfirmModal')?.addEventListener('click', function (event) {
+        if (event.target === this) {
+            closeGlobalConfirmModal();
         }
     });
 </script>

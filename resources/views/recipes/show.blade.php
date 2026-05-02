@@ -1132,8 +1132,12 @@
                                     Rediģēt
                                 </button>
 
-                                <form method="POST" action="{{ route('recipes.reviews.destroy', $recipe) }}"
-                                      onsubmit="return confirm('Dzēst savu vērtējumu?')">
+                                <form
+                                    method="POST"
+                                    action="{{ route('recipes.reviews.destroy', $recipe) }}"
+                                    data-confirm-delete
+                                    data-confirm-message="Vai tiešām vēlaties dzēst savu vērtējumu? Šī darbība ir neatgriezeniska."
+                                >
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">
@@ -1350,8 +1354,12 @@
                         Rediģēt recepti
                     </a>
 
-                    <form method="POST" action="{{ route('recipes.destroy', $recipe) }}"
-                          onsubmit="return confirm('Vai tiešām vēlaties dzēst šo recepti? Šo darbību nevar atsaukt.')">
+                    <form
+                        method="POST"
+                        action="{{ route('recipes.destroy', $recipe) }}"
+                        data-confirm-delete
+                        data-confirm-message="Vai tiešām vēlaties dzēst šo recepti? Šī darbība ir neatgriezeniska."
+                    >
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">

@@ -414,7 +414,6 @@
         line-height: 1.7;
         font-size: 14px;
     }
-
 </style>
 
 <div class="favorites-page">
@@ -521,7 +520,12 @@
                                         Skatīt
                                     </a>
 
-                                    <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}">
+                                    <form
+                                        method="POST"
+                                        action="{{ route('recipes.favorite.toggle', $recipe) }}"
+                                        data-confirm-delete
+                                        data-confirm-message="Vai tiešām vēlaties noņemt šo recepti no favorītiem?"
+                                    >
                                         @csrf
                                         <button type="submit" class="btn btn-danger">
                                             Noņemt

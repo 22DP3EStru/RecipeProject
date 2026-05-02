@@ -456,277 +456,276 @@
         }
 
         @media (max-width: 768px) {
-    .admin-recipes-stack {
-        gap: 16px;
-    }
+            .admin-recipes-stack {
+                gap: 16px;
+            }
 
-    .admin-breadcrumb {
-        padding: 12px 14px;
-        border-radius: 14px;
-        font-size: 13px;
-    }
+            .admin-breadcrumb {
+                padding: 12px 14px;
+                border-radius: 14px;
+                font-size: 13px;
+            }
 
-    .admin-section-card {
-        padding: 14px;
-        border-radius: 18px;
-    }
+            .admin-section-card {
+                padding: 14px;
+                border-radius: 18px;
+            }
 
-    .admin-section-head {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        margin-bottom: 16px;
-    }
+            .admin-section-head {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
 
-    .admin-section-title-wrap {
-        max-width: 100%;
-    }
+            .admin-section-title-wrap {
+                max-width: 100%;
+            }
 
-    .admin-section-kicker {
-        font-size: 11px;
-        padding: 6px 10px;
-        margin-bottom: 8px;
-    }
+            .admin-section-kicker {
+                font-size: 11px;
+                padding: 6px 10px;
+                margin-bottom: 8px;
+            }
 
-    .admin-section-title {
-        font-size: 1.45rem;
-        line-height: 1.12;
-    }
+            .admin-section-title {
+                font-size: 1.45rem;
+                line-height: 1.12;
+            }
 
-    .admin-section-text {
-        margin-top: 8px;
-        font-size: 13px;
-        line-height: 1.55;
-    }
+            .admin-section-text {
+                margin-top: 8px;
+                font-size: 13px;
+                line-height: 1.55;
+            }
 
-    .admin-header-actions {
-        flex-direction: column;
-        gap: 8px;
-    }
+            .admin-header-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
 
-    .admin-header-actions .btn {
-        width: 100%;
-    }
+            .admin-header-actions .btn {
+                width: 100%;
+            }
 
-    .admin-stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
+            .admin-stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
 
-    .admin-stat-card {
-        padding: 12px 8px;
-        border-radius: 14px;
-    }
+            .admin-stat-card {
+                padding: 12px 8px;
+                border-radius: 14px;
+            }
 
-    .admin-stat-number {
-        font-size: 1.75rem;
-        margin-bottom: 6px;
-    }
+            .admin-stat-number {
+                font-size: 1.75rem;
+                margin-bottom: 6px;
+            }
 
-    .admin-stat-label {
-        font-size: 12px;
-        line-height: 1.35;
-    }
+            .admin-stat-label {
+                font-size: 12px;
+                line-height: 1.35;
+            }
 
-    .recipes-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
+            .recipes-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
 
-    .recipe-card {
-        border-radius: 18px;
-    }
+            .recipe-card {
+                border-radius: 18px;
+            }
 
-    .recipe-card-header {
-        padding: 14px 14px 12px;
-    }
+            .recipe-card-header {
+                padding: 14px 14px 12px;
+            }
 
-    .recipe-topline {
-        gap: 8px;
-        margin-bottom: 10px;
-    }
+            .recipe-topline {
+                gap: 8px;
+                margin-bottom: 10px;
+            }
 
-    .recipe-created,
-    .recipe-badge {
-        font-size: 11px;
-        padding: 5px 8px;
-    }
+            .recipe-created,
+            .recipe-badge {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
 
-    .recipe-title {
-        font-size: 1.45rem;
-        margin-bottom: 8px;
-    }
+            .recipe-title {
+                font-size: 1.45rem;
+                margin-bottom: 8px;
+            }
 
-    .recipe-description {
-        font-size: 13px;
-        line-height: 1.55;
-    }
+            .recipe-description {
+                font-size: 13px;
+                line-height: 1.55;
+            }
 
-    .recipe-card-body {
-        padding: 14px;
-    }
+            .recipe-card-body {
+                padding: 14px;
+            }
 
-    .recipe-meta-grid {
-        gap: 8px;
-        margin-bottom: 14px;
-    }
+            .recipe-meta-grid {
+                gap: 8px;
+                margin-bottom: 14px;
+            }
 
-    .recipe-meta-row {
-        grid-template-columns: 1fr;
-        gap: 6px;
-        padding: 10px 12px;
-        border-radius: 12px;
-    }
+            .recipe-meta-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                padding: 10px 12px;
+                border-radius: 12px;
+            }
 
-    .recipe-meta-label {
-        font-size: 12px;
-    }
+            .recipe-meta-label {
+                font-size: 12px;
+            }
 
-    .recipe-meta-value {
-        text-align: left;
-        font-size: 13px;
-    }
+            .recipe-meta-value {
+                text-align: left;
+                font-size: 13px;
+            }
 
-    .recipe-meta-badges {
-        justify-content: flex-start;
-    }
+            .recipe-meta-badges {
+                justify-content: flex-start;
+            }
 
-    .recipe-stats {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        margin-bottom: 14px;
-    }
+            .recipe-stats {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
+                margin-bottom: 14px;
+            }
 
-    .recipe-stat-pill {
-        padding: 10px 6px;
-        border-radius: 12px;
-    }
+            .recipe-stat-pill {
+                padding: 10px 6px;
+                border-radius: 12px;
+            }
 
-    .recipe-stat-label {
-        font-size: 10px;
-        margin-bottom: 4px;
-    }
+            .recipe-stat-label {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
 
-    .recipe-stat-value {
-        font-size: 12px;
-        line-height: 1.35;
-    }
+            .recipe-stat-value {
+                font-size: 12px;
+                line-height: 1.35;
+            }
 
-    .recipe-actions {
-        flex-direction: column;
-        gap: 8px;
-    }
+            .recipe-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
 
-    .recipe-actions .btn,
-    .recipe-actions form {
-        width: 100%;
-        flex: none;
-    }
+            .recipe-actions .btn,
+            .recipe-actions form {
+                width: 100%;
+                flex: none;
+            }
 
-    .pagination-wrap {
-        margin-top: 18px;
-        padding-top: 16px;
-    }
+            .pagination-wrap {
+                margin-top: 18px;
+                padding-top: 16px;
+            }
 
-    .pagination-summary {
-        font-size: 12px;
-        margin-bottom: 12px;
-    }
+            .pagination-summary {
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
 
-    .admin-empty-state {
-        padding: 28px 16px;
-        border-radius: 18px;
-    }
+            .admin-empty-state {
+                padding: 28px 16px;
+                border-radius: 18px;
+            }
 
-    .admin-empty-icon {
-        font-size: 2.8rem;
-        margin-bottom: 10px;
-    }
+            .admin-empty-icon {
+                font-size: 2.8rem;
+                margin-bottom: 10px;
+            }
 
-    .admin-empty-title {
-        font-size: 1.45rem;
-        margin-bottom: 8px;
-    }
+            .admin-empty-title {
+                font-size: 1.45rem;
+                margin-bottom: 8px;
+            }
 
-    .admin-empty-text {
-        font-size: 13px;
-        line-height: 1.55;
-    }
+            .admin-empty-text {
+                font-size: 13px;
+                line-height: 1.55;
+            }
 
-    .quick-actions-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
 
-    .quick-action-card {
-        padding: 12px;
-        border-radius: 14px;
-    }
+            .quick-action-card {
+                padding: 12px;
+                border-radius: 14px;
+            }
 
-    .quick-action-icon {
-        font-size: 20px;
-        margin-bottom: 8px;
-    }
+            .quick-action-icon {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
 
-    .quick-action-title {
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
+            .quick-action-title {
+                font-size: 14px;
+                margin-bottom: 4px;
+            }
 
-    .quick-action-text {
-        font-size: 12px;
-        line-height: 1.45;
-    }
-}
+            .quick-action-text {
+                font-size: 12px;
+                line-height: 1.45;
+            }
+        }
 
-@media (max-width: 480px) {
-    .admin-section-card {
-        padding: 12px;
-        border-radius: 16px;
-    }
+        @media (max-width: 480px) {
+            .admin-section-card {
+                padding: 12px;
+                border-radius: 16px;
+            }
 
-    .admin-section-title {
-        font-size: 1.3rem;
-    }
+            .admin-section-title {
+                font-size: 1.3rem;
+            }
 
-    .admin-stats-grid {
-        gap: 6px;
-    }
+            .admin-stats-grid {
+                gap: 6px;
+            }
 
-    .admin-stat-card {
-        padding: 10px 6px;
-    }
+            .admin-stat-card {
+                padding: 10px 6px;
+            }
 
-    .admin-stat-number {
-        font-size: 1.45rem;
-    }
+            .admin-stat-number {
+                font-size: 1.45rem;
+            }
 
-    .admin-stat-label {
-        font-size: 11px;
-    }
+            .admin-stat-label {
+                font-size: 11px;
+            }
 
-    .recipe-title {
-        font-size: 1.28rem;
-    }
+            .recipe-title {
+                font-size: 1.28rem;
+            }
 
-    .recipe-stats {
-        grid-template-columns: 1fr;
-        gap: 6px;
-    }
+            .recipe-stats {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
 
-    .recipe-stat-pill {
-        padding: 9px 10px;
-    }
+            .recipe-stat-pill {
+                padding: 9px 10px;
+            }
 
-    .quick-actions-grid {
-        grid-template-columns: 1fr;
-    }
+            .quick-actions-grid {
+                grid-template-columns: 1fr;
+            }
 
-    .quick-action-card {
-        padding: 11px;
-    }
-}
-
+            .quick-action-card {
+                padding: 11px;
+            }
+        }
     </style>
 
     <div class="admin-recipes-page">
@@ -869,14 +868,19 @@
                                             </a>
                                         @endif
 
-                                        <form method="POST" action="{{ route('admin.recipes.destroy', $recipe) }}" style="display: inline; flex: 1 1 140px;">
+                                        <form
+                                            method="POST"
+                                            action="{{ route('admin.recipes.destroy', $recipe) }}"
+                                            style="display: inline; flex: 1 1 140px;"
+                                            data-confirm-delete
+                                            data-confirm-message="Vai tiešām vēlaties dzēst šo recepti? Šī darbība ir neatgriezeniska."
+                                        >
                                             @csrf
                                             @method('DELETE')
                                             <button
                                                 type="submit"
                                                 class="btn btn-danger"
-                                                style="width: 100%;"
-                                                onclick="return confirm('Vai tiešām dzēst šo recepti? Šī darbība ir neatgriezeniska!')">
+                                                style="width: 100%;">
                                                 Dzēst
                                             </button>
                                         </form>
