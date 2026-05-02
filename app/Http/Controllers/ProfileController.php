@@ -23,6 +23,7 @@ class ProfileController extends Controller
             'user' => $user->loadCount([
                 'recipes',
                 'favoriteRecipes',
+                'comments',
             ]),
         ]);
     }

@@ -10,7 +10,7 @@
 @php
     $recipesCount = $user->recipes_count ?? 0;
     $favoritesCount = $user->favorite_recipes_count ?? 0;
-    $commentsCount = 0;
+    $commentsCount = $user->comments_count ?? 0;
 
     $profilePhoto = $user->profile_photo ?? null;
     $userInitial = strtoupper(mb_substr($user->name ?? 'U', 0, 1));
