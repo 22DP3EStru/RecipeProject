@@ -372,8 +372,8 @@
                     <div class="contact-icon">👤</div>
                     <h4>Galvenais kontakts</h4>
                     <p class="muted-text">
-                        E-pasts: <strong>info@vecmaminasreceptes.lv</strong><br>
-                        Tālrunis: <strong>+371 20000000</strong><br>
+                        E-pasts: <strong>info@vecmaminasreceptes.site</strong><br>
+                        Tālrunis: <strong>+371 27825277</strong><br>
                         Darba laiks: <strong>P–Pk 09:00–18:00</strong>
                     </p>
                 </div>
@@ -382,7 +382,7 @@
                     <div class="contact-icon">🛠️</div>
                     <h4>Tehniskais atbalsts</h4>
                     <p class="muted-text">
-                        E-pasts: <strong>support@vecmaminasreceptes.lv</strong><br>
+                        E-pasts: <strong>support@vecmaminasreceptes.site</strong><br>
                         Atbildes laiks: <strong>24–48h</strong>
                     </p>
                 </div>
@@ -391,7 +391,7 @@
                     <div class="contact-icon">💬</div>
                     <h4>Ieteikumi</h4>
                     <p class="muted-text">
-                        E-pasts: <strong>ieteikumi@vecmaminasreceptes.lv</strong><br>
+                        E-pasts: <strong>ieteikumi@vecmaminasreceptes.site</strong><br>
                         Raksti, ja ir idejas uzlabojumiem vai jaunām funkcijām.
                     </p>
                 </div>
