@@ -2,14 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Globālie stili recepšu lietotnei */
+/**
+ * Galvenais CSS fails recepšu tīmekļa vietnei.
+ *
+ * Šajā failā tiek definēti globālie stili,
+ * krāsu mainīgie, navigācija, kartītes,
+ * formas, pogas, statistikas bloki un
+ * responsīvais dizains dažādiem ekrānu izmēriem.
+ */
 
+/* Pamata reset stili */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Globālie krāsu un dizaina mainīgie */
 :root {
     --page-bg: #eee5da;
     --page-bg-2: #e8ddd0;
@@ -33,6 +42,7 @@
     --shadow: 0 16px 40px rgba(79, 59, 42, 0.07);
 }
 
+/* Galvenie lapas stili */
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background:
@@ -42,19 +52,21 @@ body {
     color: var(--text);
 }
 
+/* Galvenais aplikācijas konteiners */
 .app-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 28px 20px 50px;
 }
 
-/* Header */
+/* Galvenes stili */
 .header {
     text-align: center;
     padding: 18px 20px 32px;
     margin-bottom: 34px;
 }
 
+/* Galvenais virsraksts */
 .header h1 {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 4rem;
@@ -64,6 +76,7 @@ body {
     margin-bottom: 12px;
 }
 
+/* Galvenes apraksta teksts */
 .header p {
     color: var(--muted);
     font-size: 16px;
@@ -72,7 +85,7 @@ body {
     margin: 0 auto;
 }
 
-/* Navigation */
+/* Navigācijas josla */
 .nav-bar {
     background: rgba(255, 253, 249, 0.92);
     border: 1px solid var(--line);
@@ -86,6 +99,7 @@ body {
     gap: 24px;
 }
 
+/* Vietnes nosaukums navigācijā */
 .nav-brand {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 2rem;
@@ -96,6 +110,7 @@ body {
     line-height: 1.1;
 }
 
+/* Navigācijas saišu konteiners */
 .nav-links {
     display: flex;
     gap: 10px;
@@ -103,6 +118,7 @@ body {
     align-items: center;
 }
 
+/* Navigācijas saites */
 .nav-links a {
     color: var(--text);
     text-decoration: none;
@@ -113,25 +129,28 @@ body {
     font-size: 14px;
 }
 
+/* Navigācijas saites hover efekts */
 .nav-links a:hover {
     background: var(--soft-bg);
     border-color: var(--line);
     color: var(--accent);
 }
 
+/* Aktīvās navigācijas saites stils */
 .nav-links a.active {
     color: var(--accent);
     background: var(--soft-bg);
     border-color: var(--line);
 }
 
+/* Lietotāja informācija navigācijā */
 .nav-user {
     color: var(--muted);
     font-weight: 600;
     font-size: 14px;
 }
 
-/* Main Content */
+/* Galvenā satura konteiners */
 .main-content {
     background: rgba(255, 253, 249, 0.78);
     border: 1px solid var(--line);
@@ -139,7 +158,7 @@ body {
     padding: 34px;
 }
 
-/* Cards */
+/* Universāla kartīte */
 .card {
     background: var(--card-bg);
     border: 1px solid var(--line);
@@ -148,10 +167,12 @@ body {
     transition: 0.2s ease;
 }
 
+/* Kartītes hover efekts */
 .card:hover {
     background: #fffaf5;
 }
 
+/* Kartītes virsraksts */
 .card-title {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.9rem;
@@ -161,25 +182,28 @@ body {
     font-weight: 500;
 }
 
-/* Grid */
+/* Universāls grid izkārtojums */
 .grid {
     display: grid;
     gap: 22px;
 }
 
+/* Divu kolonnu režģis */
 .grid-2 {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+/* Trīs kolonnu režģis */
 .grid-3 {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+/* Četru kolonnu režģis */
 .grid-4 {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-/* Buttons */
+/* Universālā poga */
 .btn {
     display: inline-block;
     padding: 12px 18px;
@@ -195,38 +219,45 @@ body {
     font-family: inherit;
 }
 
+/* Pogas hover efekts */
 .btn:hover {
     filter: brightness(0.98);
 }
 
+/* Primārā poga */
 .btn-primary {
     background: var(--accent);
     border-color: var(--accent);
     color: #fffaf4;
 }
 
+/* Primārās pogas hover efekts */
 .btn-primary:hover {
     background: var(--accent-dark);
 }
 
+/* Veiksmes darbības poga */
 .btn-success {
     background: var(--success-bg);
     color: var(--success-text);
     border-color: #d8e1cf;
 }
 
+/* Brīdinājuma poga */
 .btn-warning {
     background: var(--warning-bg);
     color: var(--warning-text);
     border-color: #e2ccc1;
 }
 
+/* Dzēšanas vai bīstamības poga */
 .btn-danger {
     background: var(--danger-bg);
     color: var(--danger-text);
     border-color: var(--danger-border);
 }
 
+/* Izrakstīšanās poga */
 .btn-logout {
     background: var(--danger-bg);
     color: var(--danger-text);
@@ -235,11 +266,12 @@ body {
     font-size: 14px;
 }
 
-/* Forms */
+/* Formas lauku grupa */
 .form-group {
     margin-bottom: 20px;
 }
 
+/* Formas lauka virsraksts */
 .form-label {
     display: block;
     margin-bottom: 9px;
@@ -248,6 +280,7 @@ body {
     font-size: 15px;
 }
 
+/* Formas ievades lauki */
 .form-input,
 .form-select,
 .form-textarea {
@@ -261,6 +294,7 @@ body {
     font-family: inherit;
 }
 
+/* Formas lauka fokusētais stāvoklis */
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
@@ -269,7 +303,7 @@ body {
     background: #fff;
 }
 
-/* Stats */
+/* Statistikas bloku režģis */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -277,6 +311,7 @@ body {
     margin: 30px 0;
 }
 
+/* Statistikas kartīte */
 .stat-box {
     background: var(--soft-bg);
     border: 1px solid var(--line);
@@ -284,6 +319,7 @@ body {
     text-align: center;
 }
 
+/* Statistikas skaitliskā vērtība */
 .stat-number {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 2.8rem;
@@ -294,6 +330,7 @@ body {
     line-height: 1;
 }
 
+/* Statistikas nosaukums */
 .stat-label {
     font-size: 15px;
     color: var(--muted);
@@ -301,7 +338,7 @@ body {
     line-height: 1.6;
 }
 
-/* Admin Alert */
+/* Administratora brīdinājuma bloks */
 .admin-alert {
     background: var(--danger-bg);
     color: var(--danger-text);
@@ -311,7 +348,7 @@ body {
     text-align: center;
 }
 
-/* Recipe Cards */
+/* Recepšu kartīte */
 .recipe-card {
     background: var(--card-bg);
     border: 1px solid var(--line);
@@ -319,10 +356,12 @@ body {
     transition: 0.2s ease;
 }
 
+/* Recepšu kartītes hover efekts */
 .recipe-card:hover {
     background: #fffaf5;
 }
 
+/* Sarežģītības līmeņa birka */
 .difficulty-badge {
     padding: 6px 12px;
     font-size: 12px;
@@ -330,47 +369,53 @@ body {
     border: 1px solid var(--line);
 }
 
+/* Vieglas receptes birka */
 .difficulty-easy {
     background: var(--success-bg);
     color: var(--success-text);
 }
 
+/* Vidējas sarežģītības receptes birka */
 .difficulty-medium {
     background: var(--warning-bg);
     color: var(--warning-text);
 }
 
+/* Sarežģītas receptes birka */
 .difficulty-hard {
     background: var(--danger-bg);
     color: var(--danger-text);
 }
 
-/* Alerts */
+/* Universāls paziņojuma bloks */
 .alert {
     padding: 18px 20px;
     margin: 20px 0;
     border: 1px solid var(--line);
 }
 
+/* Kļūdas paziņojums */
 .alert-error {
     background: #fbf3f1;
     border-color: var(--danger-border);
     color: var(--danger-text);
 }
 
+/* Veiksmīgas darbības paziņojums */
 .alert-success {
     background: var(--success-bg);
     border-color: #d8e1cf;
     color: var(--success-text);
 }
 
+/* Informatīvs paziņojums */
 .alert-info {
     background: var(--info-bg);
     border-color: var(--line);
     color: var(--info-text);
 }
 
-/* Sections */
+/* Sadaļas konteiners */
 .section {
     background: var(--soft-bg);
     border: 1px solid var(--line);
@@ -378,6 +423,7 @@ body {
     margin: 25px 0;
 }
 
+/* Sadaļas virsraksts */
 .section-title {
     color: var(--accent);
     font-size: 1.9rem;
@@ -386,34 +432,42 @@ body {
     font-family: Georgia, "Times New Roman", serif;
 }
 
-/* Responsive */
+/* Responsīvie stili mobilajām ierīcēm */
 @media (max-width: 768px) {
+
+    /* Galvenā virsraksta izmēra samazināšana mobilajā skatā */
     .header h1 {
         font-size: 2.3rem;
     }
 
+    /* Galvenes teksta pielāgošana mobilajam skatam */
     .header p {
         font-size: 1rem;
     }
 
+    /* Navigācijas joslas izkārtojums mobilajā skatā */
     .nav-bar {
         flex-direction: column;
         gap: 15px;
         padding: 16px;
     }
 
+    /* Vietnes nosaukuma izmērs mobilajā skatā */
     .nav-brand {
         font-size: 1.7rem;
     }
 
+    /* Galvenā satura padding samazināšana */
     .main-content {
         padding: 20px;
     }
 
+    /* Kartīšu padding samazināšana */
     .card {
         padding: 20px;
     }
 
+    /* Grid elementi mobilajā skatā tiek attēloti vienā kolonnā */
     .grid-2,
     .grid-3,
     .grid-4 {
@@ -421,27 +475,32 @@ body {
     }
 }
 
-/* Utilities */
+/* Teksta centrēšanas utilītklase */
 .text-center {
     text-align: center;
 }
 
+/* Margin-bottom noņemšana */
 .mb-0 {
     margin-bottom: 0;
 }
 
+/* Neliela apakšējā atkāpe */
 .mb-1 {
     margin-bottom: 10px;
 }
 
+/* Vidēja apakšējā atkāpe */
 .mb-2 {
     margin-bottom: 20px;
 }
 
+/* Neliela augšējā atkāpe */
 .mt-1 {
     margin-top: 10px;
 }
 
+/* Vidēja augšējā atkāpe */
 .mt-2 {
     margin-top: 20px;
 }

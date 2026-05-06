@@ -1,22 +1,47 @@
-<?php // PHP atvēršanas tags (front controller fails: public/index.php)
+<?php
 
-use Illuminate\Foundation\Application; // Importē Laravel Application klasi (tipam/IDE palīdzībai)
-use Illuminate\Http\Request; // Importē HTTP Request klasi (lai noķertu ienākošo pieprasījumu)
+/**
+ * Laravel aplikācijas galvenais sākuma fails (front controller).
+ *
+ * Šis fails ir pirmais, kas tiek izpildīts pēc HTTP pieprasījuma saņemšanas.
+ * Tas inicializē Laravel vidi, ielādē nepieciešamās bibliotēkas,
+ * pārbauda uzturēšanas režīmu un nodod pieprasījumu Laravel sistēmai
+ * turpmākai apstrādei.
+ */
 
-define('LARAVEL_START', microtime(true)); // Definē starta timestamp (profilēšanai/diagnostikai)
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 
- // Determine if the application is in maintenance mode... // Pārbauda, vai aplikācija ir maintenance režīmā
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) { // Ja eksistē maintenance fails (un saglabā ceļu mainīgajā)
-    require $maintenance; // Ielādē maintenance skriptu (parasti parāda "down for maintenance" atbildi)
-} // Aizver maintenance pārbaudi
+/**
+ * Tiek definēts Laravel aplikācijas palaišanas sākuma laiks.
+ * Šī vērtība var tikt izmantota veiktspējas mērīšanai un diagnostikai.
+ */
+define('LARAVEL_START', microtime(true));
 
-// Register the Composer autoloader... // Ielādē Composer autoloader, lai strādātu klases/autoload
-require __DIR__.'/../vendor/autoload.php'; // Iekļauj vendor/autoload.php (Composer)
+/**
+ * Tiek pārbaudīts, vai aplikācija atrodas uzturēšanas režīmā.
+ * Ja uzturēšanas fails eksistē, tas tiek ielādēts pirms pārējās aplikācijas palaišanas.
+ */
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
 
- // Bootstrap Laravel and handle the request... // Inicializē Laravel un apstrādā HTTP pieprasījumu
-/** @var Application $app */ // PHPDoc anotācija: $app ir Application instance (IDE/typehint)
-$app = require_once __DIR__.'/../bootstrap/app.php'; // Ielādē bootstrap/app.php un iegūst $app instance
+/**
+ * Tiek ielādēts Composer autoloaderis.
+ * Tas nodrošina automātisku PHP klašu ielādi no vendor mapes.
+ */
+require __DIR__.'/../vendor/autoload.php';
 
-$app->handleRequest(Request::capture()); // Noķer pašreizējo HTTP pieprasījumu un nodod Laravel apstrādei
+/**
+ * Tiek inicializēta Laravel aplikācija.
+ * Bootstrap fails sagatavo aplikācijas vidi un atgriež Application instanci.
+ *
+ * @var Application $app
+ */
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-
+/**
+ * Tiek iegūts pašreizējais HTTP pieprasījums un nodots Laravel apstrādei.
+ * Šajā brīdī sākas maršrutēšana, middleware izpilde un atbildes ģenerēšana.
+ */
+$app->handleRequest(Request::capture());

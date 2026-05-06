@@ -1,15 +1,31 @@
+<?php
+/*
+    Administrācijas paneļa skats.
+
+    Šis Blade fails nodrošina administratora paneli recepšu sistēmā.
+    Panelī tiek attēlota sistēmas statistika, ātrās darbības,
+    sistēmas pārskats, brīdinājumi, jaunākie lietotāji,
+    jaunākās receptes, populārākās receptes un PDF eksporti.
+*/
+?>
+
 @extends('layouts.app')
+
+<?php /* Norāda lapas nosaukumu pārlūkprogrammas cilnē */ ?>
 @section('title', 'Administrācijas panelis')
 
+<?php /* Sāk galveno lapas satura sekciju */ ?>
 @section('content')
 
 <style>
+    /* Galvenais administrācijas paneļa konteiners */
     .admin-dashboard {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Paziņojumu bloks veiksmīgām un kļūdainām darbībām */
     .admin-alert {
         padding: 18px 20px;
         border-radius: 18px;
@@ -18,6 +34,7 @@
         box-shadow: 0 10px 30px rgba(60, 40, 20, 0.04);
     }
 
+    /* Administrācijas sadaļas kartīte */
     .admin-section {
         background: #fff;
         border: 1px solid rgba(120, 84, 52, 0.12);
@@ -26,6 +43,7 @@
         box-shadow: 0 14px 34px rgba(91, 62, 35, 0.05);
     }
 
+    /* Administrācijas sadaļas virsraksts */
     .admin-section-title {
         margin: 0 0 18px;
         font-size: 32px;
@@ -36,12 +54,14 @@
         gap: 10px;
     }
 
+    /* Administrācijas sadaļas paskaidrojuma teksts */
     .admin-subtitle {
         margin: -6px 0 0;
         color: #7d6b5d;
         font-size: 15px;
     }
 
+    /* Statistikas kartīšu režģis */
     .dashboard-stats-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -49,6 +69,7 @@
         margin-top: 22px;
     }
 
+    /* Vienas statistikas kartītes noformējums */
     .dashboard-stat-card {
         background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -57,18 +78,22 @@
         text-align: center;
     }
 
+    /* Zaļās statistikas kartītes variants */
     .dashboard-stat-card.soft-green {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
     }
 
+    /* Zilās statistikas kartītes variants */
     .dashboard-stat-card.soft-blue {
         background: linear-gradient(180deg, #edf4fa 0%, #e4eef7 100%);
     }
 
+    /* Rozā statistikas kartītes variants */
     .dashboard-stat-card.soft-pink {
         background: linear-gradient(180deg, #faf0f3 0%, #f6e8ed 100%);
     }
 
+    /* Lielais statistikas skaitlis */
     .dashboard-stat-number {
         display: block;
         font-size: 42px;
@@ -78,6 +103,7 @@
         margin-bottom: 10px;
     }
 
+    /* Statistikas kartītes nosaukums */
     .dashboard-stat-label {
         display: block;
         font-size: 15px;
@@ -85,6 +111,7 @@
         font-weight: 700;
     }
 
+    /* Ātro darbību kartīšu režģis */
     .dashboard-actions-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -92,6 +119,7 @@
         margin-top: 18px;
     }
 
+    /* Vienas ātrās darbības kartīte */
     .dashboard-action-card {
         display: block;
         text-decoration: none;
@@ -103,46 +131,54 @@
         transition: 0.2s ease;
     }
 
+    /* Ātrās darbības kartītes hover efekts */
     .dashboard-action-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 24px rgba(91, 62, 35, 0.08);
     }
 
+    /* Ātrās darbības ikona */
     .dashboard-action-icon {
         font-size: 24px;
         margin-bottom: 10px;
         display: block;
     }
 
+    /* Ātrās darbības virsraksts */
     .dashboard-action-title {
         font-weight: 800;
         font-size: 16px;
         margin-bottom: 6px;
     }
 
+    /* Ātrās darbības apraksts */
     .dashboard-action-text {
         font-size: 14px;
         color: #7b6d61;
         line-height: 1.5;
     }
 
+    /* Divu kolonnu izkārtojums sistēmas pārskatam un brīdinājumiem */
     .dashboard-mini-grid {
         display: grid;
         grid-template-columns: 1.2fr 0.8fr;
         gap: 18px;
     }
 
+    /* Vienāda platuma divu kolonnu izkārtojums */
     .dashboard-columns-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
     }
 
+    /* Saraksta galvenais konteiners */
     .dashboard-list {
         display: flex;
         flex-direction: column;
     }
 
+    /* Viena saraksta ieraksta izkārtojums */
     .dashboard-list-item {
         display: flex;
         justify-content: space-between;
@@ -151,11 +187,13 @@
         border-bottom: 1px solid rgba(0,0,0,0.06);
     }
 
+    /* Noņem apakšējo līniju pēdējam saraksta ierakstam */
     .dashboard-list-item:last-child {
         border-bottom: none;
         padding-bottom: 0;
     }
 
+    /* Saraksta ieraksta kreisās puses izkārtojums */
     .dashboard-item-left {
         display: flex;
         align-items: center;
@@ -163,6 +201,7 @@
         min-width: 0;
     }
 
+    /* Kopējie izmēri avatāram un ikonas blokam */
     .dashboard-avatar,
     .dashboard-icon-box {
         width: 44px;
@@ -173,6 +212,7 @@
         justify-content: center;
     }
 
+    /* Lietotāja avatāra noformējums */
     .dashboard-avatar {
         border-radius: 50%;
         background: rgba(102,126,234,0.14);
@@ -180,24 +220,28 @@
         font-weight: 900;
     }
 
+    /* Receptes ikonas bloka noformējums */
     .dashboard-icon-box {
         border-radius: 14px;
         background: rgba(240,147,251,0.16);
         font-size: 19px;
     }
 
+    /* Saraksta ieraksta virsraksts */
     .dashboard-item-title {
         font-weight: 800;
         color: #2f241d;
         font-size: 16px;
     }
 
+    /* Saraksta ieraksta papildu informācija */
     .dashboard-item-meta {
         color: #7b6d61;
         font-size: 14px;
         line-height: 1.45;
     }
 
+    /* Saraksta ieraksta laika informācija */
     .dashboard-item-time {
         font-size: 14px;
         color: #8e8175;
@@ -205,6 +249,7 @@
         flex-shrink: 0;
     }
 
+    /* Statusa birkas pamata noformējums */
     .dashboard-badge {
         display: inline-block;
         margin-top: 6px;
@@ -214,11 +259,13 @@
         font-weight: 800;
     }
 
+    /* Administratora statusa birka */
     .dashboard-badge.admin {
         background: rgba(245,87,108,0.12);
         color: #d45066;
     }
 
+    /* Brīdinājumu un informācijas sarakstu izkārtojums */
     .dashboard-warning-list,
     .dashboard-info-list {
         display: flex;
@@ -227,6 +274,7 @@
         margin-top: 10px;
     }
 
+    /* Brīdinājuma un informācijas bloka pamata noformējums */
     .dashboard-warning-item,
     .dashboard-info-item {
         border-radius: 16px;
@@ -235,6 +283,7 @@
         background: #fcfaf7;
     }
 
+    /* Brīdinājuma un informācijas bloka virsraksts */
     .dashboard-warning-item strong,
     .dashboard-info-item strong {
         display: block;
@@ -242,27 +291,32 @@
         color: #2f241d;
     }
 
+    /* Brīdinājuma un informācijas bloka apraksts */
     .dashboard-warning-item span,
     .dashboard-info-item span {
         font-size: 14px;
         color: #7b6d61;
     }
 
+    /* Brīdinājuma statusa bloks */
     .dashboard-warning-item.warning {
         background: #fff7ec;
         border-color: rgba(201, 128, 39, 0.18);
     }
 
+    /* Bīstamības statusa bloks */
     .dashboard-warning-item.danger {
         background: #fff0f1;
         border-color: rgba(220, 76, 100, 0.15);
     }
 
+    /* Veiksmīga statusa bloks */
     .dashboard-warning-item.success {
         background: #f2f8ef;
         border-color: rgba(86, 171, 47, 0.18);
     }
 
+    /* Populārāko recepšu saraksta izkārtojums */
     .dashboard-top-list {
         display: flex;
         flex-direction: column;
@@ -270,6 +324,7 @@
         margin-top: 10px;
     }
 
+    /* Vienas populārās receptes ieraksts */
     .dashboard-top-item {
         display: flex;
         justify-content: space-between;
@@ -281,6 +336,7 @@
         padding: 14px 16px;
     }
 
+    /* Receptes vietas numurs top sarakstā */
     .dashboard-top-rank {
         min-width: 34px;
         height: 34px;
@@ -294,6 +350,7 @@
         font-size: 14px;
     }
 
+    /* Populārās receptes galvenās informācijas bloks */
     .dashboard-top-main {
         display: flex;
         align-items: center;
@@ -302,28 +359,33 @@
         flex: 1;
     }
 
+    /* Populārās receptes nosaukums */
     .dashboard-top-title {
         font-weight: 800;
         color: #2f241d;
     }
 
+    /* Populārās receptes papildu informācija */
     .dashboard-top-meta {
         font-size: 14px;
         color: #7b6d61;
     }
 
+    /* Populārās receptes skatījumu vērtība */
     .dashboard-top-value {
         font-weight: 900;
         color: #7a5a43;
         white-space: nowrap;
     }
 
+    /* PDF eksportu pogu konteiners */
     .dashboard-pdf-actions {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
     }
 
+    /* PDF eksportēšanas pogas noformējums */
     .dashboard-outline-btn {
         display: inline-block;
         padding: 11px 16px;
@@ -337,270 +399,277 @@
         transition: 0.2s ease;
     }
 
+    /* PDF eksportēšanas pogas hover efekts */
     .dashboard-outline-btn:hover {
         background: #f8f2ea;
     }
 
+    /* Mobilā skata pielāgojumi */
     @media (max-width: 768px) {
-    .admin-dashboard {
-        gap: 16px;
+        .admin-dashboard {
+            gap: 16px;
+        }
+
+        .admin-alert {
+            padding: 12px 14px;
+            border-radius: 14px;
+        }
+
+        .admin-section {
+            padding: 14px;
+            border-radius: 18px;
+        }
+
+        .admin-section-title {
+            font-size: 1.45rem;
+            line-height: 1.15;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .admin-subtitle {
+            font-size: 13px;
+            line-height: 1.55;
+            margin-top: 0;
+        }
+
+        .dashboard-stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .dashboard-stat-card {
+            padding: 12px 8px;
+            border-radius: 14px;
+        }
+
+        .dashboard-stat-number {
+            font-size: 1.75rem;
+            margin-bottom: 6px;
+        }
+
+        .dashboard-stat-label {
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .dashboard-actions-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .dashboard-action-card {
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .dashboard-action-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-action-title {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-action-text {
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .dashboard-mini-grid,
+        .dashboard-columns-2 {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .dashboard-list-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 12px 0;
+        }
+
+        .dashboard-item-left {
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .dashboard-avatar,
+        .dashboard-icon-box {
+            width: 38px;
+            height: 38px;
+        }
+
+        .dashboard-icon-box {
+            font-size: 16px;
+            border-radius: 12px;
+        }
+
+        .dashboard-item-title {
+            font-size: 14px;
+            line-height: 1.35;
+        }
+
+        .dashboard-item-meta {
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .dashboard-item-time {
+            font-size: 12px;
+            white-space: normal;
+        }
+
+        .dashboard-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        .dashboard-warning-list,
+        .dashboard-info-list,
+        .dashboard-top-list {
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .dashboard-warning-item,
+        .dashboard-info-item {
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .dashboard-warning-item strong,
+        .dashboard-info-item strong {
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .dashboard-warning-item span,
+        .dashboard-info-item span {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .dashboard-top-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .dashboard-top-main {
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .dashboard-top-rank {
+            min-width: 30px;
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .dashboard-top-title {
+            font-size: 14px;
+            line-height: 1.35;
+        }
+
+        .dashboard-top-meta {
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .dashboard-top-value {
+            font-size: 13px;
+            white-space: normal;
+        }
+
+        .dashboard-pdf-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dashboard-outline-btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px 12px;
+            font-size: 13px;
+            border-radius: 12px;
+        }
     }
 
-    .admin-alert {
-        padding: 12px 14px;
-        border-radius: 14px;
-    }
+    /* Ļoti mazu ekrānu pielāgojumi */
+    @media (max-width: 480px) {
+        .admin-section {
+            padding: 12px;
+            border-radius: 16px;
+        }
 
-    .admin-section {
-        padding: 14px;
-        border-radius: 18px;
-    }
+        .admin-section-title {
+            font-size: 1.3rem;
+        }
 
-    .admin-section-title {
-        font-size: 1.45rem;
-        line-height: 1.15;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
+        .dashboard-stats-grid {
+            gap: 6px;
+        }
 
-    .admin-subtitle {
-        font-size: 13px;
-        line-height: 1.55;
-        margin-top: 0;
-    }
+        .dashboard-stat-card {
+            padding: 10px 6px;
+        }
 
-    .dashboard-stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 16px;
-    }
+        .dashboard-stat-number {
+            font-size: 1.45rem;
+        }
 
-    .dashboard-stat-card {
-        padding: 12px 8px;
-        border-radius: 14px;
-    }
+        .dashboard-stat-label {
+            font-size: 11px;
+        }
 
-    .dashboard-stat-number {
-        font-size: 1.75rem;
-        margin-bottom: 6px;
-    }
+        .dashboard-actions-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
 
-    .dashboard-stat-label {
-        font-size: 12px;
-        line-height: 1.35;
-    }
+        .dashboard-action-card {
+            padding: 11px;
+        }
 
-    .dashboard-actions-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 14px;
+        .dashboard-top-item,
+        .dashboard-warning-item,
+        .dashboard-info-item {
+            padding: 10px;
+        }
     }
-
-    .dashboard-action-card {
-        padding: 12px;
-        border-radius: 14px;
-    }
-
-    .dashboard-action-icon {
-        font-size: 20px;
-        margin-bottom: 8px;
-    }
-
-    .dashboard-action-title {
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
-
-    .dashboard-action-text {
-        font-size: 12px;
-        line-height: 1.45;
-    }
-
-    .dashboard-mini-grid,
-    .dashboard-columns-2 {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-
-    .dashboard-list-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        padding: 12px 0;
-    }
-
-    .dashboard-item-left {
-        width: 100%;
-        align-items: flex-start;
-    }
-
-    .dashboard-avatar,
-    .dashboard-icon-box {
-        width: 38px;
-        height: 38px;
-    }
-
-    .dashboard-icon-box {
-        font-size: 16px;
-        border-radius: 12px;
-    }
-
-    .dashboard-item-title {
-        font-size: 14px;
-        line-height: 1.35;
-    }
-
-    .dashboard-item-meta {
-        font-size: 12px;
-        line-height: 1.45;
-    }
-
-    .dashboard-item-time {
-        font-size: 12px;
-        white-space: normal;
-    }
-
-    .dashboard-badge {
-        font-size: 11px;
-        padding: 4px 8px;
-    }
-
-    .dashboard-warning-list,
-    .dashboard-info-list,
-    .dashboard-top-list {
-        gap: 10px;
-        margin-top: 8px;
-    }
-
-    .dashboard-warning-item,
-    .dashboard-info-item {
-        padding: 12px;
-        border-radius: 14px;
-    }
-
-    .dashboard-warning-item strong,
-    .dashboard-info-item strong {
-        margin-bottom: 4px;
-        font-size: 14px;
-    }
-
-    .dashboard-warning-item span,
-    .dashboard-info-item span {
-        font-size: 12px;
-        line-height: 1.5;
-    }
-
-    .dashboard-top-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 12px;
-        border-radius: 14px;
-    }
-
-    .dashboard-top-main {
-        width: 100%;
-        align-items: flex-start;
-    }
-
-    .dashboard-top-rank {
-        min-width: 30px;
-        width: 30px;
-        height: 30px;
-        font-size: 12px;
-    }
-
-    .dashboard-top-title {
-        font-size: 14px;
-        line-height: 1.35;
-    }
-
-    .dashboard-top-meta {
-        font-size: 12px;
-        line-height: 1.45;
-    }
-
-    .dashboard-top-value {
-        font-size: 13px;
-        white-space: normal;
-    }
-
-    .dashboard-pdf-actions {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .dashboard-outline-btn {
-        width: 100%;
-        text-align: center;
-        padding: 10px 12px;
-        font-size: 13px;
-        border-radius: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .admin-section {
-        padding: 12px;
-        border-radius: 16px;
-    }
-
-    .admin-section-title {
-        font-size: 1.3rem;
-    }
-
-    .dashboard-stats-grid {
-        gap: 6px;
-    }
-
-    .dashboard-stat-card {
-        padding: 10px 6px;
-    }
-
-    .dashboard-stat-number {
-        font-size: 1.45rem;
-    }
-
-    .dashboard-stat-label {
-        font-size: 11px;
-    }
-
-    .dashboard-actions-grid {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
-
-    .dashboard-action-card {
-        padding: 11px;
-    }
-
-    .dashboard-top-item,
-    .dashboard-warning-item,
-    .dashboard-info-item {
-        padding: 10px;
-    }
-}
-
 </style>
 
+<?php /* Galvenais administrācijas paneļa konteiners */ ?>
 <div class="admin-dashboard">
 
+    <?php /* Pārbauda, vai sesijā ir veiksmīgas darbības paziņojums */ ?>
     @if(session('success'))
         <div class="admin-alert" style="border-left: 6px solid #56ab2f;">
             <div style="font-weight: 700; color: #2f855a;">✅ {{ session('success') }}</div>
         </div>
     @endif
 
+    <?php /* Pārbauda, vai sesijā ir kļūdas paziņojums */ ?>
     @if(session('error'))
         <div class="admin-alert" style="border-left: 6px solid #f5576c;">
             <div style="font-weight: 700; color: #c53030;">❌ {{ session('error') }}</div>
         </div>
     @endif
 
+    <?php /* Administrācijas kopsavilkuma sadaļa */ ?>
     <div class="admin-section">
         <h2 class="admin-section-title">📊 Administrācijas kopsavilkums</h2>
         <p class="admin-subtitle">Pārskats par lietotājiem, receptēm un platformas aktivitāti vienuviet.</p>
 
+        <?php /* Statistikas kartīšu saraksts */ ?>
         <div class="dashboard-stats-grid">
             <div class="dashboard-stat-card">
                 <span class="dashboard-stat-number">{{ $usersCount }}</span>
@@ -644,6 +713,7 @@
         </div>
     </div>
 
+    <?php /* Ātro darbību sadaļa */ ?>
     <div class="admin-section">
         <h2 class="admin-section-title">⚡ Ātrās darbības</h2>
 
@@ -674,6 +744,7 @@
         </div>
     </div>
 
+    <?php /* Sistēmas pārskata un brīdinājumu sadaļa */ ?>
     <div class="dashboard-mini-grid">
         <div class="admin-section">
             <h2 class="admin-section-title">📌 Sistēmas pārskats</h2>
@@ -740,6 +811,7 @@
         </div>
     </div>
 
+    <?php /* Jaunāko lietotāju un jaunāko recepšu sadaļa */ ?>
     <div class="dashboard-columns-2">
         <div class="admin-section">
             <h2 class="admin-section-title">👤 Jaunākie lietotāji</h2>
@@ -800,6 +872,7 @@
         </div>
     </div>
 
+    <?php /* Populārāko recepšu un eksportu sadaļa */ ?>
     <div class="dashboard-columns-2">
         <div class="admin-section">
             <h2 class="admin-section-title">🏆 Populārākās receptes</h2>

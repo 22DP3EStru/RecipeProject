@@ -1,16 +1,22 @@
-/* =========================================================
+/* 
    MOBILE CSS
-   pieslēgt pēc visiem pārējiem CSS
-========================================================= */
 
+   Šis fails pielāgo tīmekļa vietnes izkārtojumu planšetēm
+   un mobilajām ierīcēm. Fails jāielādē pēc pārējiem CSS failiem,
+   lai mobilie pielāgojumi varētu pārrakstīt pamata stilus.
+*/
+
+/* Novērš automātisku teksta palielināšanu mobilajās pārlūkprogrammās. */
 html {
     -webkit-text-size-adjust: 100%;
 }
 
+/* Paslēpj horizontālo pārplūdi, lai mobilajā skatā neveidotos sānu ritjosla. */
 body {
     overflow-x: hidden;
 }
 
+/* Visiem elementiem tiek piemērots border-box modelis, lai padding un border nepalielinātu kopējo platumu. */
 *,
 *::before,
 *::after {
@@ -18,6 +24,7 @@ body {
     min-width: 0;
 }
 
+/* Multivides elementi tiek pielāgoti vecākelementa platumam. */
 img,
 video,
 iframe,
@@ -27,6 +34,7 @@ svg {
     display: block;
 }
 
+/* Globālie mainīgie mobilajam skatam. */
 :root {
     --m-page-pad: 10px;
     --m-block-pad: 10px;
@@ -41,10 +49,9 @@ svg {
     --m-h1: 22px;
 }
 
-/* =========================================================
-   GLOBĀLI
-========================================================= */
+/* GLOBĀLI */
 
+/* Galvenajiem konteineriem tiek ierobežots maksimālais platums, lai tie nepārsniegtu ekrāna robežas. */
 .container,
 .page,
 .page-shell,
@@ -76,11 +83,10 @@ svg {
     min-width: 0;
 }
 
-/* =========================================================
-   TABLET
-========================================================= */
+/* TABLET */
 
 @media (max-width: 992px) {
+    /* Planšetes skatā lapas malām tiek samazinātas horizontālās atkāpes. */
     .page,
     .page-shell,
     .page-content,
@@ -98,6 +104,7 @@ svg {
         padding-right: 14px !important;
     }
 
+    /* Režģa elementi planšetēs tiek sadalīti divās kolonnās. */
     .recipes-grid,
     .cards-grid,
     .stats-grid,
@@ -111,6 +118,7 @@ svg {
         gap: 12px !important;
     }
 
+    /* Kartītēm un sadaļu blokiem tiek samazinātas atkāpes un noapaļojums. */
     .hero,
     .section-block,
     .section-card,
@@ -127,6 +135,7 @@ svg {
         border-radius: 16px !important;
     }
 
+    /* Attēli kartītēs tiek pielāgoti vienotam augstumam. */
     .recipe-card img,
     .card img,
     .recipe-image,
@@ -139,15 +148,15 @@ svg {
     }
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
 @media (max-width: 768px) {
+    /* Mobilajā skatā tiek izmantots mazāks pamata teksta izmērs. */
     body {
         font-size: var(--m-text) !important;
     }
 
+    /* Lapas galvenajiem blokiem tiek samazinātas sānu atkāpes. */
     .page,
     .page-shell,
     .page-content,
@@ -165,8 +174,9 @@ svg {
         padding-right: var(--m-page-pad) !important;
     }
 
-    /* ---------- hero ---------- */
+    /* hero un sadaļu bloki */
 
+    /* Galvenajiem vizuālajiem blokiem tiek samazinātas iekšējās atkāpes. */
     .hero,
     .page-hero,
     .section-block,
@@ -188,6 +198,7 @@ svg {
         padding: 12px !important;
     }
 
+    /* Pirmā līmeņa virsraksti tiek samazināti mobilajam ekrānam. */
     h1,
     .hero-title,
     .page-title {
@@ -196,6 +207,7 @@ svg {
         margin-bottom: 6px !important;
     }
 
+    /* Otrā līmeņa virsraksti tiek pielāgoti mobilajam skatam. */
     h2,
     .section-title {
         font-size: var(--m-h2) !important;
@@ -203,6 +215,7 @@ svg {
         margin-bottom: 6px !important;
     }
 
+    /* Kartīšu un recepšu virsraksti tiek padarīti kompaktāki. */
     h3,
     .card-title,
     .recipe-title,
@@ -213,6 +226,7 @@ svg {
         margin-bottom: 4px !important;
     }
 
+    /* Pamatteksts tiek pielāgots mazākiem ekrāniem. */
     p,
     li,
     .hero-text,
@@ -226,6 +240,7 @@ svg {
         line-height: 1.42 !important;
     }
 
+    /* Mazāka nozīmes tekstiem tiek izmantots mazāks fonta izmērs. */
     .muted,
     .text-muted,
     .meta-text,
@@ -237,8 +252,9 @@ svg {
         line-height: 1.35 !important;
     }
 
-    /* ---------- navbar ---------- */
+    /* navigācija */
 
+    /* Navigācijas josla tiek pārveidota uz mobilo izkārtojumu. */
     .nav-bar {
         grid-template-columns: 1fr auto !important;
         gap: 10px !important;
@@ -248,6 +264,7 @@ svg {
         top: 8px !important;
     }
 
+    /* Zīmola nosaukums tiek saīsināts, ja tas neietilpst pieejamajā platumā. */
     .nav-brand {
         font-size: 1.2rem !important;
         gap: 8px !important;
@@ -261,11 +278,13 @@ svg {
         font-size: 1rem !important;
     }
 
+    /* Parastā navigācija mobilajā skatā tiek paslēpta. */
     .nav-center,
     .nav-right {
         display: none !important;
     }
 
+    /* Tiek parādīta mobilās izvēlnes poga. */
     .nav-toggle {
         display: inline-flex !important;
         align-items: center !important;
@@ -276,6 +295,7 @@ svg {
         flex: 0 0 42px !important;
     }
 
+    /* Mobilās izvēlnes panelis sākotnēji ir paslēpts. */
     .nav-mobile-panel {
         display: block !important;
         position: fixed !important;
@@ -286,11 +306,13 @@ svg {
         transition: opacity 0.22s ease !important;
     }
 
+    /* Kad body elementam ir klase menu-open, mobilā izvēlne kļūst redzama. */
     body.menu-open .nav-mobile-panel {
         opacity: 1 !important;
         pointer-events: auto !important;
     }
 
+    /* Fona pārklājums aiz mobilās izvēlnes. */
     .nav-mobile-backdrop {
         position: absolute !important;
         inset: 0 !important;
@@ -299,6 +321,7 @@ svg {
         -webkit-backdrop-filter: blur(4px) !important;
     }
 
+    /* Sānu panelis, kurā atrodas mobilās navigācijas saites. */
     .nav-mobile-sheet {
         position: absolute !important;
         top: 0 !important;
@@ -317,10 +340,12 @@ svg {
         overflow-y: auto !important;
     }
 
+    /* Atvērtā stāvoklī mobilais panelis tiek pabīdīts redzamajā zonā. */
     body.menu-open .nav-mobile-sheet {
         transform: translateX(0) !important;
     }
 
+    /* Mobilās izvēlnes galvene. */
     .nav-mobile-header {
         display: flex !important;
         align-items: center !important;
@@ -337,6 +362,7 @@ svg {
         font-weight: 500 !important;
     }
 
+    /* Mobilās izvēlnes aizvēršanas poga. */
     .nav-mobile-close {
         display: inline-flex !important;
         align-items: center !important;
@@ -352,6 +378,7 @@ svg {
         cursor: pointer !important;
     }
 
+    /* Lietotāja informācijas bloks mobilajā izvēlnē. */
     .nav-mobile-user {
         display: flex !important;
         align-items: center !important;
@@ -376,6 +403,7 @@ svg {
         word-break: break-word !important;
     }
 
+    /* Mobilās navigācijas saites tiek attēlotas vertikālā sarakstā. */
     .nav-mobile-links {
         display: flex !important;
         flex-direction: column !important;
@@ -396,12 +424,14 @@ svg {
         border: 1px solid var(--line) !important;
     }
 
+    /* Aktīvā navigācijas saite tiek vizuāli izcelta. */
     .nav-mobile-links a.active {
         color: var(--accent) !important;
         background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%) !important;
         border-color: var(--line-strong) !important;
     }
 
+    /* Mobilās izvēlnes darbību pogas tiek novietotas paneļa apakšā. */
     .nav-mobile-actions {
         display: flex !important;
         flex-direction: column !important;
@@ -415,8 +445,9 @@ svg {
         width: 100% !important;
     }
 
-    /* ---------- grid ---------- */
+    /* režģi */
 
+    /* Visi galvenie režģi mobilajā skatā tiek pārveidoti vienā kolonnā. */
     .recipes-grid,
     .cards-grid,
     .profile-grid,
@@ -441,8 +472,9 @@ svg {
         gap: var(--m-gap) !important;
     }
 
-    /* ---------- kartiņas ---------- */
+    /* kartītes */
 
+    /* Kartītēm mobilajā skatā tiek samazinātas atkāpes un noapaļojums. */
     .card,
     .category-card,
     .favorite-card,
@@ -458,6 +490,7 @@ svg {
         margin: 0 !important;
     }
 
+    /* Kartīšu attēli tiek vienādoti pēc izmēra. */
     .card img,
     .category-card img,
     .favorite-card img {
@@ -468,8 +501,9 @@ svg {
         margin-bottom: 8px !important;
     }
 
-    /* ---------- recepšu kartiņas ---------- */
+    /* recepšu kartītes */
 
+    /* Recepšu kartītes mobilajā skatā tiek attēlotas vertikālā izkārtojumā. */
     .recipe-card,
     .recipe-list-card,
     .favorite-card {
@@ -482,6 +516,7 @@ svg {
         min-height: unset !important;
     }
 
+    /* Recepšu attēliem tiek noteikts vienots augstums. */
     .recipe-card img,
     .recipe-list-card img,
     .favorite-card img,
@@ -496,6 +531,7 @@ svg {
         margin-bottom: 0 !important;
     }
 
+    /* Receptes detalizētajā skatā attēlam tiek piešķirts lielāks augstums. */
     .recipe-show-page .recipe-image,
     .recipe-show-page .recipe-cover,
     .recipe-detail-image,
@@ -504,6 +540,7 @@ svg {
         border-radius: 12px !important;
     }
 
+    /* Recepšu kartītes satura daļa aizņem visu pieejamo platumu. */
     .recipe-card-body,
     .card-body,
     .recipe-content {
@@ -520,6 +557,7 @@ svg {
         margin-bottom: 6px !important;
     }
 
+    /* Meta informācija tiek attēlota vairākās rindās, ja nepietiek vietas. */
     .recipe-meta,
     .card-meta,
     .meta-row,
@@ -543,7 +581,7 @@ svg {
         border-radius: 10px !important;
     }
 
-    /* ---------- dashboard ---------- */
+    /* informācijas panelis */
 
     .dashboard-stack {
         gap: 8px !important;
@@ -581,6 +619,7 @@ svg {
         font-size: 12px !important;
     }
 
+    /* Statistikas bloki tiek izkārtoti divās kolonnās arī mobilajā skatā. */
     .dashboard-stats-grid,
     .dashboard-metrics-grid,
     .dashboard-overview-grid,
@@ -618,8 +657,9 @@ svg {
         line-height: 1.2 !important;
     }
 
-    /* ---------- pogas ---------- */
+    /* pogas */
 
+    /* Pogu rindas mobilajā skatā tiek attēlotas vertikāli. */
     .button-row,
     .actions-row,
     .card-actions,
@@ -638,6 +678,7 @@ svg {
         align-items: stretch !important;
     }
 
+    /* Pogas aizņem visu pieejamo platumu, lai tās būtu ērtāk nospiest mobilajā ierīcē. */
     .btn,
     button,
     .action-btn,
@@ -657,6 +698,7 @@ svg {
         border-radius: 10px !important;
     }
 
+    /* Saites, kas izskatās kā pogas, tiek centrētas kā flex elementi. */
     a.btn,
     a.action-btn,
     a.primary-btn,
@@ -667,7 +709,7 @@ svg {
         justify-content: center !important;
     }
 
-    /* ---------- formas ---------- */
+    /* formas */
 
     form {
         width: 100% !important;
@@ -687,6 +729,7 @@ svg {
         line-height: 1.3 !important;
     }
 
+    /* Ievades lauki mobilajā skatā aizņem visu platumu. */
     input,
     select,
     textarea,
@@ -707,8 +750,9 @@ svg {
         resize: vertical;
     }
 
-    /* ---------- recipes search/filter ---------- */
+    /* recepšu meklēšana un filtrēšana */
 
+    /* Recepšu lapas meklēšanas un filtru forma tiek sakārtota vienā kolonnā. */
     body.page-recipes form,
     body.page-recipes .form-row,
     body.page-recipes .filters-form-grid,
@@ -726,8 +770,9 @@ svg {
         width: 100% !important;
     }
 
-    /* ---------- tabulas ---------- */
+    /* tabulas */
 
+    /* Tabulām tiek atļauta horizontāla ritināšana, lai tās neizjauktu lapas platumu. */
     .table-wrap,
     .table-responsive {
         overflow-x: auto !important;
@@ -747,8 +792,9 @@ svg {
         font-size: 12px !important;
     }
 
-    /* ---------- pagination ---------- */
+    /* lapošana  */
 
+    /* Lapošanas pogas mobilajā skatā tiek lauztas vairākās rindās. */
     .pagination,
     .pagination-wrap {
         display: flex !important;
@@ -767,7 +813,7 @@ svg {
         border-radius: 8px !important;
     }
 
-    /* ---------- galvenais saturs ---------- */
+    /* galvenais saturs */
 
     .main-content {
         padding: 14px !important;
@@ -803,6 +849,7 @@ svg {
         font-size: 12px !important;
     }
 
+    /* Saraksta rinda mobilajā skatā tiek pārveidota vertikālā izkārtojumā. */
     .list-row {
         flex-direction: column !important;
         align-items: flex-start !important;
@@ -819,11 +866,10 @@ svg {
     }
 }
 
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
+/* SMALL MOBILE */
 
 @media (max-width: 480px) {
+    /* Ļoti maziem ekrāniem tiek vēl vairāk samazināti izmēri un atkāpes. */
     :root {
         --m-page-pad: 8px;
         --m-block-pad: 9px;
@@ -850,12 +896,14 @@ svg {
         height: 40px !important;
     }
 
+    /* Uz ļoti maziem ekrāniem mobilā izvēlne aizņem visu ekrāna platumu. */
     .nav-mobile-sheet {
         width: 100% !important;
         max-width: 100% !important;
         padding: 12px !important;
     }
 
+    /* Attēlu augstums tiek samazināts, lai saturs ietilptu mazākā ekrānā. */
     .recipe-card img,
     .recipe-list-card img,
     .favorite-card img,
