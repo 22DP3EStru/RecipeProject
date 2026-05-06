@@ -1,35 +1,91 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido personal_access_tokens tabulu
+ * recepšu tīmekļa vietnes API autentifikācijas vajadzībām.
+ *
+ * Migrācija atbild par:
+ * - personīgo piekļuves tokenu glabāšanu;
+ * - API autentifikācijas struktūras sagatavošanu;
+ * - tokenu atļauju glabāšanu;
+ * - tokenu derīguma termiņu pārvaldību;
+ * - polymorphic relāciju nodrošināšanu;
+ * - tabulas dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Izveido personal_access_tokens tabulu.
      */
-    public function up(): void // Metode, kas izveido tabulu datubāzē
+    public function up(): void
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) { // Izveido 'personal_access_tokens' tabulu (API tokeniem)
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->morphs('tokenable'); // Izveido polymorphic attiecību laukus (tokenable_id un tokenable_type)
-            $table->string('name'); // Saglabā tokena nosaukumu
-            $table->string('token', 64)->unique(); // Saglabā unikālu 64 simbolu tokena vērtību
-            $table->text('abilities')->nullable(); // Saglabā tokena atļaujas (var būt NULL)
-            $table->timestamp('last_used_at')->nullable(); // Saglabā pēdējās izmantošanas laiku (var būt NULL)
-            $table->timestamp('expires_at')->nullable(); // Saglabā tokena derīguma termiņu (var būt NULL)
-            $table->timestamps(); // Izveido created_at un updated_at laukus
+        /**
+         * Tiek izveidota personal_access_tokens tabula,
+         * kurā tiek glabāti API autentifikācijas tokeni.
+         */
+        Schema::create('personal_access_tokens', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Tiek izveidoti polymorphic relācijas lauki:
+             * tokenable_id un tokenable_type.
+             *
+             * Tie ļauj tokenu piesaistīt dažādiem modeļiem.
+             */
+            $table->morphs('tokenable');
+
+            /**
+             * Tokena nosaukums.
+             */
+            $table->string('name');
+
+            /**
+             * Unikāla tokena vērtība ar 64 simbolu garumu.
+             */
+            $table->string('token', 64)->unique();
+
+            /**
+             * Tokenam piešķirtās atļaujas.
+             * Var saturēt NULL vērtību.
+             */
+            $table->text('abilities')->nullable();
+
+            /**
+             * Tokena pēdējās izmantošanas laiks.
+             * Var saturēt NULL vērtību.
+             */
+            $table->timestamp('last_used_at')->nullable();
+
+            /**
+             * Tokena derīguma termiņš.
+             * Var saturēt NULL vērtību.
+             */
+            $table->timestamp('expires_at')->nullable();
+
+            /**
+             * Automātiski izveido created_at un updated_at laukus.
+             */
+            $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ migrāciju un dzēš personal_access_tokens tabulu.
      */
-    public function down(): void // Metode, kas atceļ migrāciju (dzēš tabulu)
+    public function down(): void
     {
-        Schema::dropIfExists('personal_access_tokens'); // Dzēš 'personal_access_tokens' tabulu, ja tā eksistē
+        /**
+         * Tiek dzēsta personal_access_tokens tabula.
+         */
+        Schema::dropIfExists('personal_access_tokens');
     }
 };
-
-

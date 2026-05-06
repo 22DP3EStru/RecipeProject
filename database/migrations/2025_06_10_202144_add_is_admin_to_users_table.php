@@ -1,30 +1,53 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras izmaiņām
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija pievieno administratora statusa lauku
+ * users tabulai recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - administratora statusa glabāšanas lauka izveidi;
+ * - lietotāju tiesību līmeņu nodrošināšanu;
+ * - noklusējuma lietotāja statusa definēšanu;
+ * - kolonnas dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Veic izmaiņas users tabulā.
      */
-    public function up(): void // Metode, kas veic izmaiņas datubāzē
+    public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) { // Modificē esošo 'users' tabulu
-            $table->boolean('is_admin')->default(false); // Pievieno boolean lauku 'is_admin' ar noklusējuma vērtību false
+        /**
+         * Tiek modificēta users tabula,
+         * pievienojot administratora statusa lauku.
+         */
+        Schema::table('users', function (Blueprint $table) {
+
+            /**
+             * Boolean tipa lauks, kas nosaka,
+             * vai lietotājam ir administratora tiesības.
+             *
+             * Noklusējuma vērtība ir false.
+             */
+            $table->boolean('is_admin')->default(false);
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ veiktās izmaiņas users tabulā.
      */
-    public function down(): void // Metode, kas atceļ veiktās izmaiņas
+    public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) { // Modificē esošo 'users' tabulu
-            $table->dropColumn('is_admin'); // Dzēš 'is_admin' kolonnu
+        /**
+         * Tiek dzēsta is_admin kolonna no users tabulas.
+         */
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('is_admin');
         });
     }
 };
-
-

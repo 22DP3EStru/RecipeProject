@@ -1,37 +1,123 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido newrecipes tabulu
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - recepšu datu glabāšanas struktūras izveidi;
+ * - receptes pamatinformācijas saglabāšanu;
+ * - receptes sasaisti ar lietotāju;
+ * - pagatavošanas parametru glabāšanu;
+ * - kategorijas un sarežģītības informācijas glabāšanu;
+ * - automātisko laika zīmogu izveidi;
+ * - tabulas dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Izveido newrecipes tabulu.
      */
-    public function up(): void // Metode, kas izveido tabulu datubāzē
+    public function up(): void
     {
-        Schema::create('newrecipes', function (Blueprint $table) { // Izveido 'newrecipes' tabulu
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->string('title'); // Izveido receptes nosaukuma lauku
-            $table->text('description'); // Izveido receptes apraksta lauku
-            $table->text('ingredients'); // Izveido sastāvdaļu lauku
-            $table->text('instructions'); // Izveido pagatavošanas instrukciju lauku
-            $table->string('category'); // Izveido kategorijas lauku
-            $table->integer('prep_time')->nullable(); // Izveido sagatavošanas laiku (var būt NULL)
-            $table->integer('cook_time')->nullable(); // Izveido gatavošanas laiku (var būt NULL)
-            $table->integer('servings')->nullable(); // Izveido porciju skaitu (var būt NULL)
-            $table->enum('difficulty', ['Easy', 'Medium', 'Hard']); // Izveido sarežģītības lauku ar fiksētām vērtībām
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Izveido ārējo atslēgu uz users tabulu ar dzēšanas kaskādi
-            $table->timestamps(); // Izveido created_at un updated_at laukus
+        /**
+         * Tiek izveidota newrecipes tabula,
+         * kurā tiek glabātas receptes.
+         */
+        Schema::create('newrecipes', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Receptes nosaukums.
+             */
+            $table->string('title');
+
+            /**
+             * Receptes apraksts.
+             */
+            $table->text('description');
+
+            /**
+             * Receptes sastāvdaļu saraksts.
+             */
+            $table->text('ingredients');
+
+            /**
+             * Receptes pagatavošanas instrukcijas.
+             */
+            $table->text('instructions');
+
+            /**
+             * Receptes kategorija.
+             */
+            $table->string('category');
+
+            /**
+             * Sagatavošanas laiks minūtēs.
+             * Var saturēt NULL vērtību.
+             */
+            $table->integer('prep_time')->nullable();
+
+            /**
+             * Gatavošanas laiks minūtēs.
+             * Var saturēt NULL vērtību.
+             */
+            $table->integer('cook_time')->nullable();
+
+            /**
+             * Porciju skaits.
+             * Var saturēt NULL vērtību.
+             */
+            $table->integer('servings')->nullable();
+
+            /**
+             * Receptes sarežģītības līmenis.
+             *
+             * Atļautās vērtības:
+             * - Easy
+             * - Medium
+             * - Hard
+             */
+            $table->enum('difficulty', ['Easy', 'Medium', 'Hard']);
+
+            /**
+             * Ārējā atslēga uz users tabulu.
+             *
+             * Ja lietotājs tiek dzēsts,
+             * tiek dzēstas arī viņa receptes.
+             */
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
+
+            /**
+             * Automātiski izveido created_at un updated_at laukus.
+             */
+            $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ migrāciju un dzēš tabulu.
      */
-    public function down(): void // Metode, kas atceļ migrāciju
+    public function down(): void
     {
-        Schema::dropIfExists('recipes'); // Dzēš 'recipes' tabulu (PIEZĪME: šeit nosaukums neatbilst 'newrecipes')
+        /**
+         * Tiek dzēsta newrecipes tabula.
+         *
+         * Piezīme:
+         * Oriģinālajā failā bija norādīts recipes tabulas nosaukums,
+         * taču korektais tabulas nosaukums ir newrecipes.
+         */
+        Schema::dropIfExists('newrecipes');
     }
 };

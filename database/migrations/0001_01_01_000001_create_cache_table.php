@@ -1,37 +1,88 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido kešatmiņas un kešatmiņas bloķēšanas tabulas
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - cache tabulas izveidi;
+ * - cache_locks tabulas izveidi;
+ * - kešatmiņas datu glabāšanas struktūras sagatavošanu;
+ * - bloķēšanas mehānisma nodrošināšanu kešatmiņas darbībām;
+ * - tabulu dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Izveido datubāzes tabulas.
      */
-    public function up(): void // Metode, kas izveido tabulas datubāzē
+    public function up(): void
     {
-        Schema::create('cache', function (Blueprint $table) { // Izveido 'cache' tabulu
-            $table->string('key')->primary(); // Izveido atslēgas lauku kā primāro atslēgu
-            $table->mediumText('value'); // Izveido lauku kešatmiņas datu glabāšanai
-            $table->integer('expiration'); // Izveido lauku, kas glabā derīguma termiņu (timestamp)
+        /**
+         * Tiek izveidota cache tabula,
+         * kurā tiek glabāti sistēmas kešatmiņas dati.
+         */
+        Schema::create('cache', function (Blueprint $table) {
+
+            /**
+             * Kešatmiņas ieraksta atslēga,
+             * kas tiek izmantota kā primārā atslēga.
+             */
+            $table->string('key')->primary();
+
+            /**
+             * Kešatmiņā saglabātie dati.
+             */
+            $table->mediumText('value');
+
+            /**
+             * Kešatmiņas ieraksta derīguma termiņš.
+             */
+            $table->integer('expiration');
         });
 
-        Schema::create('cache_locks', function (Blueprint $table) { // Izveido 'cache_locks' tabulu
-            $table->string('key')->primary(); // Izveido atslēgas lauku kā primāro atslēgu
-            $table->string('owner'); // Izveido lauku, kas norāda bloķējuma īpašnieku
-            $table->integer('expiration'); // Izveido lauku bloķējuma derīguma termiņam
+        /**
+         * Tiek izveidota cache_locks tabula,
+         * kas nodrošina kešatmiņas bloķēšanas mehānismu.
+         */
+        Schema::create('cache_locks', function (Blueprint $table) {
+
+            /**
+             * Bloķējuma atslēga,
+             * kas tiek izmantota kā primārā atslēga.
+             */
+            $table->string('key')->primary();
+
+            /**
+             * Bloķējuma īpašnieka identifikators.
+             */
+            $table->string('owner');
+
+            /**
+             * Bloķējuma derīguma termiņš.
+             */
+            $table->integer('expiration');
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ migrāciju un dzēš izveidotās tabulas.
      */
-    public function down(): void // Metode, kas atceļ migrāciju (dzēš tabulas)
+    public function down(): void
     {
-        Schema::dropIfExists('cache'); // Dzēš 'cache' tabulu, ja tā eksistē
-        Schema::dropIfExists('cache_locks'); // Dzēš 'cache_locks' tabulu, ja tā eksistē
+        /**
+         * Tiek dzēsta cache tabula.
+         */
+        Schema::dropIfExists('cache');
+
+        /**
+         * Tiek dzēsta cache_locks tabula.
+         */
+        Schema::dropIfExists('cache_locks');
     }
 };
-
-

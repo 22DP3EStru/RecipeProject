@@ -1,24 +1,82 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido favorites tabulu
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - favorītu sistēmas datu glabāšanas struktūras izveidi;
+ * - lietotāju sasaisti ar favorītu receptēm;
+ * - pivot tabulas izveidi daudzi-preti-daudzi relācijai;
+ * - unikālu favorītu ierobežojuma nodrošināšanu;
+ * - automātisko laika zīmogu izveidi;
+ * - datu dzēšanas kaskādes nodrošināšanu;
+ * - tabulas dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration { // Definē anonīmu klasi, kas paplašina Migration
-    public function up(): void // Metode, kas izveido tabulu datubāzē
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Izveido favorites tabulu.
+     */
+    public function up(): void
     {
-        Schema::create('favorites', function (Blueprint $table) { // Izveido 'favorites' pivot tabulu
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // Izveido ārējo atslēgu uz users tabulu ar dzēšanas kaskādi
-            $table->foreignId('recipe_id')->constrained()->cascadeOnDelete(); // Izveido ārējo atslēgu uz recipes tabulu ar dzēšanas kaskādi
-            $table->timestamps(); // Izveido created_at un updated_at laukus
+        /**
+         * Tiek izveidota favorites pivot tabula,
+         * kas glabā lietotāju favorītu receptes.
+         */
+        Schema::create('favorites', function (Blueprint $table) {
 
-            $table->unique(['user_id', 'recipe_id']); // Nodrošina, ka viens lietotājs nevar pievienot vienu un to pašu recepti favorītiem vairākas reizes
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Ārējā atslēga uz users tabulu.
+             *
+             * Ja lietotājs tiek dzēsts,
+             * tiek dzēsti arī viņa favorītu ieraksti.
+             */
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            /**
+             * Ārējā atslēga uz recipes tabulu.
+             *
+             * Ja recepte tiek dzēsta,
+             * tiek dzēsti arī tās favorītu ieraksti.
+             */
+            $table->foreignId('recipe_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            /**
+             * Automātiski izveido created_at un updated_at laukus.
+             */
+            $table->timestamps();
+
+            /**
+             * Nodrošina, ka viens lietotājs
+             * nevar vienu un to pašu recepti pievienot favorītiem vairākas reizes.
+             */
+            $table->unique(['user_id', 'recipe_id']);
         });
     }
 
-    public function down(): void // Metode, kas atceļ migrāciju (dzēš tabulu)
+    /**
+     * Atceļ migrāciju un dzēš favorites tabulu.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('favorites'); // Dzēš 'favorites' tabulu, ja tā eksistē
+        /**
+         * Tiek dzēsta favorites tabula.
+         */
+        Schema::dropIfExists('favorites');
     }
 };

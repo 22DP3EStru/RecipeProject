@@ -1,57 +1,195 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido darbu rindas (queue) sistēmas tabulas
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - jobs tabulas izveidi;
+ * - job_batches tabulas izveidi;
+ * - failed_jobs tabulas izveidi;
+ * - fonā izpildāmo darbu glabāšanu;
+ * - darbu partiju pārvaldību;
+ * - neveiksmīgu darbu žurnalēšanu;
+ * - tabulu dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Izveido datubāzes tabulas.
      */
-    public function up(): void // Metode, kas izveido tabulas datubāzē
+    public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) { // Izveido 'jobs' tabulu rindas apstrādei (queue)
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->string('queue')->index(); // Izveido rindas nosaukumu ar indeksu
-            $table->longText('payload'); // Saglabā darba datus (serializētā formā)
-            $table->unsignedTinyInteger('attempts'); // Saglabā mēģinājumu skaitu
-            $table->unsignedInteger('reserved_at')->nullable(); // Laiks, kad darbs rezervēts (var būt NULL)
-            $table->unsignedInteger('available_at'); // Laiks, kad darbs pieejams izpildei
-            $table->unsignedInteger('created_at'); // Darba izveides laiks
+        /**
+         * Tiek izveidota jobs tabula,
+         * kurā tiek glabāti rindā ievietotie darbi.
+         */
+        Schema::create('jobs', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Darbu rindas nosaukums.
+             */
+            $table->string('queue')->index();
+
+            /**
+             * Serializēti darba dati.
+             */
+            $table->longText('payload');
+
+            /**
+             * Darba izpildes mēģinājumu skaits.
+             */
+            $table->unsignedTinyInteger('attempts');
+
+            /**
+             * Laiks, kad darbs rezervēts izpildei.
+             * Var saturēt NULL vērtību.
+             */
+            $table->unsignedInteger('reserved_at')->nullable();
+
+            /**
+             * Laiks, kad darbs kļūst pieejams izpildei.
+             */
+            $table->unsignedInteger('available_at');
+
+            /**
+             * Darba izveides laiks.
+             */
+            $table->unsignedInteger('created_at');
         });
 
-        Schema::create('job_batches', function (Blueprint $table) { // Izveido 'job_batches' tabulu partiju apstrādei
-            $table->string('id')->primary(); // Izveido partijas ID kā primāro atslēgu
-            $table->string('name'); // Partijas nosaukums
-            $table->integer('total_jobs'); // Kopējais darbu skaits partijā
-            $table->integer('pending_jobs'); // Neapstrādāto darbu skaits
-            $table->integer('failed_jobs'); // Neveiksmīgo darbu skaits
-            $table->longText('failed_job_ids'); // Saglabā neveiksmīgo darbu ID sarakstu
-            $table->mediumText('options')->nullable(); // Papildu opcijas (var būt NULL)
-            $table->integer('cancelled_at')->nullable(); // Atcelšanas laiks (var būt NULL)
-            $table->integer('created_at'); // Partijas izveides laiks
-            $table->integer('finished_at')->nullable(); // Partijas pabeigšanas laiks (var būt NULL)
+        /**
+         * Tiek izveidota job_batches tabula,
+         * kas paredzēta darbu partiju pārvaldībai.
+         */
+        Schema::create('job_batches', function (Blueprint $table) {
+
+            /**
+             * Partijas identifikators kā primārā atslēga.
+             */
+            $table->string('id')->primary();
+
+            /**
+             * Partijas nosaukums.
+             */
+            $table->string('name');
+
+            /**
+             * Kopējais darbu skaits partijā.
+             */
+            $table->integer('total_jobs');
+
+            /**
+             * Neizpildīto darbu skaits.
+             */
+            $table->integer('pending_jobs');
+
+            /**
+             * Neveiksmīgo darbu skaits.
+             */
+            $table->integer('failed_jobs');
+
+            /**
+             * Neveiksmīgo darbu identifikatoru saraksts.
+             */
+            $table->longText('failed_job_ids');
+
+            /**
+             * Papildu partijas opcijas.
+             * Var saturēt NULL vērtību.
+             */
+            $table->mediumText('options')->nullable();
+
+            /**
+             * Partijas atcelšanas laiks.
+             * Var saturēt NULL vērtību.
+             */
+            $table->integer('cancelled_at')->nullable();
+
+            /**
+             * Partijas izveides laiks.
+             */
+            $table->integer('created_at');
+
+            /**
+             * Partijas pabeigšanas laiks.
+             * Var saturēt NULL vērtību.
+             */
+            $table->integer('finished_at')->nullable();
         });
 
-        Schema::create('failed_jobs', function (Blueprint $table) { // Izveido 'failed_jobs' tabulu neveiksmīgajiem darbiem
-            $table->id(); // Izveido primāro atslēgu
-            $table->string('uuid')->unique(); // Izveido unikālu darba UUID
-            $table->text('connection'); // Saglabā savienojuma nosaukumu
-            $table->text('queue'); // Saglabā rindas nosaukumu
-            $table->longText('payload'); // Saglabā darba datus
-            $table->longText('exception'); // Saglabā kļūdas informāciju (exception)
-            $table->timestamp('failed_at')->useCurrent(); // Saglabā neveiksmes laiku (automātiski pašreizējais laiks)
+        /**
+         * Tiek izveidota failed_jobs tabula,
+         * kurā tiek saglabāti neveiksmīgi izpildītie darbi.
+         */
+        Schema::create('failed_jobs', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Unikāls darba identifikators.
+             */
+            $table->string('uuid')->unique();
+
+            /**
+             * Savienojuma nosaukums,
+             * kuru izmantoja darba izpildei.
+             */
+            $table->text('connection');
+
+            /**
+             * Darbu rindas nosaukums.
+             */
+            $table->text('queue');
+
+            /**
+             * Serializēti darba dati.
+             */
+            $table->longText('payload');
+
+            /**
+             * Kļūdas informācija un exception dati.
+             */
+            $table->longText('exception');
+
+            /**
+             * Neveiksmīgās izpildes laiks.
+             */
+            $table->timestamp('failed_at')->useCurrent();
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ migrāciju un dzēš izveidotās tabulas.
      */
-    public function down(): void // Metode, kas atceļ migrāciju (dzēš tabulas)
+    public function down(): void
     {
-        Schema::dropIfExists('jobs'); // Dzēš 'jobs' tabulu, ja tā eksistē
-        Schema::dropIfExists('job_batches'); // Dzēš 'job_batches' tabulu, ja tā eksistē
-        Schema::dropIfExists('failed_jobs'); // Dzēš 'failed_jobs' tabulu, ja tā eksistē
+        /**
+         * Tiek dzēsta jobs tabula.
+         */
+        Schema::dropIfExists('jobs');
+
+        /**
+         * Tiek dzēsta job_batches tabula.
+         */
+        Schema::dropIfExists('job_batches');
+
+        /**
+         * Tiek dzēsta failed_jobs tabula.
+         */
+        Schema::dropIfExists('failed_jobs');
     }
 };

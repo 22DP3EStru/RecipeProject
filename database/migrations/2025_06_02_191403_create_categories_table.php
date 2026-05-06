@@ -1,21 +1,58 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido categories tabulu
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - recepšu kategoriju glabāšanas struktūras izveidi;
+ * - kategoriju nosaukumu saglabāšanu;
+ * - automātisko laika zīmogu izveidi;
+ * - tabulas dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration { // Definē anonīmu klasi, kas paplašina Migration
-    public function up(): void { // Metode, kas izveido tabulu datubāzē
-        Schema::create('categories', function (Blueprint $table) { // Izveido 'categories' tabulu
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->string('name'); // Izveido kategorijas nosaukuma lauku
-            $table->timestamps(); // Izveido created_at un updated_at laukus
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Izveido categories tabulu.
+     */
+    public function up(): void
+    {
+        /**
+         * Tiek izveidota categories tabula,
+         * kurā tiek glabātas recepšu kategorijas.
+         */
+        Schema::create('categories', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Kategorijas nosaukums.
+             */
+            $table->string('name');
+
+            /**
+             * Automātiski izveido created_at un updated_at laukus.
+             */
+            $table->timestamps();
         });
     }
 
-    public function down(): void { // Metode, kas atceļ migrāciju (dzēš tabulu)
-        Schema::dropIfExists('categories'); // Dzēš 'categories' tabulu, ja tā eksistē
+    /**
+     * Atceļ migrāciju un dzēš categories tabulu.
+     */
+    public function down(): void
+    {
+        /**
+         * Tiek dzēsta categories tabula.
+         */
+        Schema::dropIfExists('categories');
     }
 };
-
-

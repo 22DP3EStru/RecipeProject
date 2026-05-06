@@ -1,49 +1,153 @@
-<?php // Norāda, ka šis ir PHP migrācijas fails
+<?php
 
-use Illuminate\Database\Migrations\Migration; // Iekļauj Migration bāzes klasi
-use Illuminate\Database\Schema\Blueprint; // Iekļauj Blueprint klasi tabulu struktūras definēšanai
-use Illuminate\Support\Facades\Schema; // Iekļauj Schema fasādi darbam ar datubāzes shēmu
+/**
+ * Šī migrācija izveido galvenās autentifikācijas un sesiju tabulas
+ * recepšu tīmekļa vietnes datubāzē.
+ *
+ * Migrācija atbild par:
+ * - lietotāju tabulas izveidi;
+ * - paroles atiestatīšanas tokenu tabulas izveidi;
+ * - sesiju glabāšanas tabulas izveidi;
+ * - autentifikācijas datu struktūras sagatavošanu;
+ * - tabulu dzēšanu migrācijas atcelšanas gadījumā.
+ */
 
-return new class extends Migration // Definē anonīmu klasi, kas paplašina Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
     /**
-     * Run the migrations. // Dokumentācijas komentārs par up metodi
+     * Izveido datubāzes tabulas.
      */
-    public function up(): void // Metode, kas izveido tabulas datubāzē
+    public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) { // Izveido 'users' tabulu
-            $table->id(); // Izveido primāro atslēgu (auto increment ID)
-            $table->string('name'); // Izveido name lauku (teksta tips)
-            $table->string('email')->unique(); // Izveido unikālu email lauku
-            $table->timestamp('email_verified_at')->nullable(); // Izveido e-pasta apstiprināšanas lauku (var būt NULL)
-            $table->string('password'); // Izveido password lauku
-            $table->rememberToken(); // Izveido remember_token lauku autentifikācijai
-            $table->timestamps(); // Izveido created_at un updated_at laukus
+        /**
+         * Tiek izveidota users tabula,
+         * kurā tiek glabāti sistēmas lietotāju dati.
+         */
+        Schema::create('users', function (Blueprint $table) {
+
+            /**
+             * Primārā atslēga ar automātisku ID pieaugumu.
+             */
+            $table->id();
+
+            /**
+             * Lietotāja vārds.
+             */
+            $table->string('name');
+
+            /**
+             * Lietotāja e-pasta adrese.
+             * Lauks ir unikāls.
+             */
+            $table->string('email')->unique();
+
+            /**
+             * E-pasta apstiprināšanas datums un laiks.
+             * Var saturēt NULL vērtību.
+             */
+            $table->timestamp('email_verified_at')->nullable();
+
+            /**
+             * Lietotāja parole.
+             */
+            $table->string('password');
+
+            /**
+             * Tokens funkcijai “remember me”.
+             */
+            $table->rememberToken();
+
+            /**
+             * Automātiski izveido created_at un updated_at laukus.
+             */
+            $table->timestamps();
         });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) { // Izveido 'password_reset_tokens' tabulu
-            $table->string('email')->primary(); // Izveido email lauku kā primāro atslēgu
-            $table->string('token'); // Izveido token lauku paroles atiestatīšanai
-            $table->timestamp('created_at')->nullable(); // Izveido tokena izveides laiku (var būt NULL)
+        /**
+         * Tiek izveidota password_reset_tokens tabula,
+         * kas paredzēta paroles atiestatīšanas funkcionalitātei.
+         */
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+
+            /**
+             * E-pasta adrese tiek izmantota kā primārā atslēga.
+             */
+            $table->string('email')->primary();
+
+            /**
+             * Paroles atiestatīšanas tokens.
+             */
+            $table->string('token');
+
+            /**
+             * Tokena izveidošanas datums un laiks.
+             * Var saturēt NULL vērtību.
+             */
+            $table->timestamp('created_at')->nullable();
         });
 
-        Schema::create('sessions', function (Blueprint $table) { // Izveido 'sessions' tabulu
-            $table->string('id')->primary(); // Izveido sesijas ID kā primāro atslēgu
-            $table->foreignId('user_id')->nullable()->index(); // Izveido ārējo atslēgu uz users tabulu (var būt NULL)
-            $table->string('ip_address', 45)->nullable(); // Izveido IP adreses lauku (maks. 45 simboli, IPv6 atbalsts)
-            $table->text('user_agent')->nullable(); // Izveido pārlūka informācijas lauku
-            $table->longText('payload'); // Izveido sesijas datu lauku
-            $table->integer('last_activity')->index(); // Izveido pēdējās aktivitātes lauku ar indeksu
+        /**
+         * Tiek izveidota sessions tabula,
+         * kas glabā lietotāju sesiju informāciju.
+         */
+        Schema::create('sessions', function (Blueprint $table) {
+
+            /**
+             * Sesijas identifikators kā primārā atslēga.
+             */
+            $table->string('id')->primary();
+
+            /**
+             * Ārējā atslēga uz users tabulu.
+             * Var saturēt NULL vērtību.
+             */
+            $table->foreignId('user_id')->nullable()->index();
+
+            /**
+             * Lietotāja IP adrese.
+             * Atbalsta arī IPv6 adreses.
+             */
+            $table->string('ip_address', 45)->nullable();
+
+            /**
+             * Informācija par lietotāja pārlūku.
+             */
+            $table->text('user_agent')->nullable();
+
+            /**
+             * Sesijas dati serializētā formā.
+             */
+            $table->longText('payload');
+
+            /**
+             * Pēdējās aktivitātes laiks.
+             */
+            $table->integer('last_activity')->index();
         });
     }
 
     /**
-     * Reverse the migrations. // Dokumentācijas komentārs par down metodi
+     * Atceļ migrāciju un dzēš izveidotās tabulas.
      */
-    public function down(): void // Metode, kas atceļ migrāciju (dzēš tabulas)
+    public function down(): void
     {
-        Schema::dropIfExists('users'); // Dzēš 'users' tabulu, ja tā eksistē
-        Schema::dropIfExists('password_reset_tokens'); // Dzēš 'password_reset_tokens' tabulu, ja tā eksistē
-        Schema::dropIfExists('sessions'); // Dzēš 'sessions' tabulu, ja tā eksistē
+        /**
+         * Tiek dzēsta users tabula.
+         */
+        Schema::dropIfExists('users');
+
+        /**
+         * Tiek dzēsta password_reset_tokens tabula.
+         */
+        Schema::dropIfExists('password_reset_tokens');
+
+        /**
+         * Tiek dzēsta sessions tabula.
+         */
+        Schema::dropIfExists('sessions');
     }
 };
