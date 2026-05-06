@@ -1,22 +1,59 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace Database\Factories; // Definē nosaukumvietu (namespace) fabriku klasēm
+/**
+ * UserFactory klase nodrošina testa lietotāju datu ģenerēšanu.
+ *
+ * Factory atbild par:
+ * - nejaušu lietotāju datu izveidi;
+ * - unikālu e-pasta adrešu ģenerēšanu;
+ * - paroļu šifrēšanu;
+ * - autentifikācijas tokenu ģenerēšanu;
+ * - automatizētu testu un datu aizpildes atbalstu.
+ */
 
-use Illuminate\Database\Eloquent\Factories\Factory; // Iekļauj bāzes Factory klasi
-use Illuminate\Support\Str; // Iekļauj Str klasi darbam ar string funkcijām
-use Illuminate\Support\Facades\Hash; // Iekļauj Hash fasādi paroles šifrēšanai
+namespace Database\Factories;
 
-class UserFactory extends Factory // Definē UserFactory klasi, kas paplašina Factory
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
+class UserFactory extends Factory
 {
-    public function definition(): array // Metode, kas nosaka noklusējuma datu struktūru lietotāja ģenerēšanai
+    /**
+     * Definē lietotāja noklusējuma datu struktūru.
+     */
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->name(), // Ģenerē nejaušu lietotāja vārdu
-            'email' => $this->faker->unique()->safeEmail(), // Ģenerē unikālu un drošu e-pasta adresi
-            'email_verified_at' => now(), // Iestata e-pasta apstiprināšanas laiku uz pašreizējo brīdi
-            'password' => Hash::make('password'), // Šifrē noklusējuma paroli "password"
-            'remember_token' => Str::random(10), // Ģenerē nejaušu 10 simbolu atcerēšanās tokenu
+
+            /**
+             * Tiek ģenerēts nejaušs lietotāja vārds,
+             * izmantojot Faker bibliotēku.
+             */
+            'name' => $this->faker->name(),
+
+            /**
+             * Tiek ģenerēta unikāla un droša e-pasta adrese.
+             */
+            'email' => $this->faker->unique()->safeEmail(),
+
+            /**
+             * Tiek iestatīts e-pasta apstiprināšanas datums
+             * uz pašreizējo laiku.
+             */
+            'email_verified_at' => now(),
+
+            /**
+             * Noklusējuma parole tiek šifrēta,
+             * izmantojot Hash funkcionalitāti.
+             */
+            'password' => Hash::make('password'),
+
+            /**
+             * Tiek ģenerēts nejaušs atcerēšanās tokens,
+             * kuru izmanto autentifikācijas sistēma.
+             */
+            'remember_token' => Str::random(10),
         ];
     }
 }
-

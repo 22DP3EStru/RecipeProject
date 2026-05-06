@@ -1,32 +1,51 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Middleware; // Šis fails atrodas Middleware mapē
+/**
+ * AdminMiddleware middleware nodrošina administratora piekļuves kontroli
+ * recepšu tīmekļa vietnē.
+ *
+ * Middleware atbild par:
+ * - lietotāja autentifikācijas pārbaudi;
+ * - administratora tiesību pārbaudi;
+ * - neatļautas piekļuves bloķēšanu;
+ * - lietotāja pārsūtīšanu uz autorizācijas lapu;
+ * - administratora sadaļu aizsardzību.
+ */
 
-use Closure; // Closure tips (funkcija, kas tiek padota kā nākamais solis)
-use Illuminate\Http\Request; // HTTP pieprasījums
-use Illuminate\Support\Facades\Auth; // Autentifikācijas sistēma
+namespace App\Http\Middleware;
 
-class AdminMiddleware // Middleware, kas pārbauda vai lietotājs ir administrators
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next) 
-    // handle metode tiek izpildīta pirms piekļuves konkrētai route
+    /**
+     * Pārbauda, vai lietotājs ir autentificēts administrators.
+     */
+    public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) { 
-        // Ja lietotājs nav ielogojies
-
-            return redirect()->route('login'); 
-            // Pārsūta uz login lapu
+        /**
+         * Ja lietotājs nav ielogojies sistēmā,
+         * viņš tiek pārsūtīts uz autorizācijas lapu.
+         */
+        if (!Auth::check()) {
+            return redirect()->route('login');
         }
 
-        if (!Auth::user()->is_admin) { 
-        // Ja lietotājs ir ielogojies, bet nav administrators
-
-            abort(403, 'Access denied. Admin privileges required.'); 
-            // Aptur izpildi un parāda 403 kļūdu (nav atļauts)
+        /**
+         * Ja lietotājs ir autentificēts,
+         * bet viņam nav administratora tiesību,
+         * tiek parādīta 403 piekļuves kļūda.
+         */
+        if (!Auth::user()->is_admin) {
+            abort(403, 'Access denied. Admin privileges required.');
         }
 
-        return $next($request); 
-        // Ja viss ir kārtībā (ielogots un admins),
-        // turpina pie nākamā soļa (atļauj piekļuvi)
+        /**
+         * Ja visas pārbaudes ir veiksmīgas,
+         * pieprasījums tiek nodots nākamajam sistēmas posmam.
+         */
+        return $next($request);
     }
 }

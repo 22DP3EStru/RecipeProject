@@ -1,52 +1,83 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Controllers; // Kontrolieris atrodas Controllers mapē
+/**
+ * CategoryController kontrolieris nodrošina recepšu kategoriju
+ * attēlošanu recepšu tīmekļa vietnē.
+ *
+ * Kontrolieris atbild par:
+ * - visu recepšu kategoriju sākumlapas attēlošanu;
+ * - konkrētas kategorijas recepšu attēlošanu;
+ * - kategoriju datu iegūšanu no datubāzes;
+ * - recepšu filtrēšanu pēc kategorijas;
+ * - kategoriju saraksta nodošanu skatiem.
+ */
 
-use App\Models\Recipe; // Recipe modelis (recipes tabula)
-use Illuminate\Http\Request; // HTTP pieprasījums (šajā failā tieši netiek izmantots)
+namespace App\Http\Controllers;
 
-class CategoryController extends Controller // Kontrolieris kategoriju lapām
+use App\Models\Recipe;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
 {
-    public function index() // Parāda kategoriju sākumlapu (šeit: visas receptes)
+    /**
+     * Attēlo kategoriju sākumlapu ar visām receptēm.
+     */
+    public function index()
     {
-        $recipes = Recipe::with('user')->latest()->get(); 
-        // Paņem visas receptes no datubāzes
-        // with('user') nozīmē: paņem arī receptes autoru (lietotāju)
-        // latest() nozīmē: jaunākās receptes pirmās
-        // get() nozīmē: paņem visus ierakstus (bez lapošanas)
+        /**
+         * Tiek iegūtas visas receptes no datubāzes.
+         * Receptes tiek ielādētas kopā ar autoru datiem
+         * un sakārtotas pēc jaunākajiem ierakstiem.
+         */
+        $recipes = Recipe::with('user')
+            ->latest()
+            ->get();
 
-        return view('categories', compact('recipes')); 
-        // Atver categories skatu un iedod tam mainīgo $recipes
+        /**
+         * Iegūtie dati tiek nodoti kategoriju skatam.
+         */
+        return view('categories', compact('recipes'));
     }
 
-    public function show($category) // Parāda konkrētas kategorijas receptes
+    /**
+     * Attēlo konkrētas kategorijas receptes.
+     */
+    public function show($category)
     {
-        $categoryName = urldecode($category); 
-        // Pārvērš URL tekstu normālā tekstā
-        // (piem., %20 pārvēršas par atstarpi)
+        /**
+         * URL kategorijas nosaukums tiek pārveidots
+         * cilvēkam lasāmā formātā.
+         */
+        $categoryName = urldecode($category);
 
-        $recipes = Recipe::with('user') 
-            // Paņem receptes kopā ar autoru (user)
-            ->where('category', $categoryName) 
-            // Filtrē receptes, kur category sakrīt ar izvēlēto kategoriju
-            ->latest() 
-            // Jaunākās receptes pirmās
-            ->paginate(12); 
-            // Parāda pa 12 receptēm vienā lapā (lapošana)
+        /**
+         * Tiek atlasītas receptes, kuru kategorija
+         * sakrīt ar izvēlēto kategoriju.
+         *
+         * Receptes tiek ielādētas kopā ar autoru datiem,
+         * sakārtotas pēc jaunākajiem ierakstiem
+         * un sadalītas lapās pa 12 receptēm.
+         */
+        $recipes = Recipe::with('user')
+            ->where('category', $categoryName)
+            ->latest()
+            ->paginate(12);
 
-        $allCategories = Recipe::distinct('category')->pluck('category')->filter(); 
-        // Paņem visas unikālās kategorijas no recipes tabulas
-        // distinct('category') nozīmē: bez dublikātiem
-        // pluck('category') paņem tikai category kolonnu (sarakstu)
-        // filter() izmet tukšās vērtības (piem., null vai "")
+        /**
+         * Tiek iegūts visu unikālo kategoriju saraksts.
+         * Tukšās vērtības tiek izņemtas no rezultāta.
+         */
+        $allCategories = Recipe::distinct('category')
+            ->pluck('category')
+            ->filter();
 
-        return view('categories.show', [ 
-            // Atver categories.show skatu un iedod tam šos datus
-            'recipes' => $recipes, // Konkrētās kategorijas receptes
-            'categoryName' => $categoryName, // Kategorijas nosaukums, ko rāda lapā
-            'allCategories' => $allCategories // Visu kategoriju saraksts (piem., sidebar/filtrs)
+        /**
+         * Kategorijas dati tiek nodoti categories.show skatam.
+         */
+        return view('categories.show', [
+            'recipes' => $recipes,
+            'categoryName' => $categoryName,
+            'allCategories' => $allCategories
         ]);
     }
 }
-
-

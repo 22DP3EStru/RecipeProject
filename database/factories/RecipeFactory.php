@@ -1,22 +1,59 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace Database\Factories; // Definē nosaukumvietu (namespace) fabriku klasēm
+/**
+ * RecipeFactory klase nodrošina testa recepšu datu ģenerēšanu.
+ *
+ * Factory atbild par:
+ * - nejaušu recepšu datu izveidi;
+ * - testa ierakstu ģenerēšanu datubāzei;
+ * - recepšu sasaisti ar lietotājiem un kategorijām;
+ * - Faker bibliotēkas izmantošanu datu ģenerēšanai;
+ * - automatizētu testu un datu aizpildes atbalstu.
+ */
 
-use Illuminate\Database\Eloquent\Factories\Factory; // Iekļauj bāzes Factory klasi
-use App\Models\User; // Iekļauj User modeli
-use App\Models\Category; // Iekļauj Category modeli
+namespace Database\Factories;
 
-class RecipeFactory extends Factory // Definē RecipeFactory klasi, kas paplašina Factory
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Category;
+
+class RecipeFactory extends Factory
 {
-    public function definition(): array // Metode, kas nosaka noklusējuma datu struktūru receptes ģenerēšanai
+    /**
+     * Definē receptes noklusējuma datu struktūru.
+     */
+    public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(4), // Ģenerē nejaušu nosaukumu ar 4 vārdiem
-            'description' => $this->faker->paragraph(3), // Ģenerē nejaušu aprakstu ar 3 teikumiem
-            'image' => 'recipes/default.jpg', // Norāda noklusējuma attēla ceļu
-            'user_id' => User::inRandomOrder()->first()->id, // Piešķir nejauša lietotāja ID
-            'category_id' => Category::inRandomOrder()->first()->id, // Piešķir nejaušas kategorijas ID
+
+            /**
+             * Tiek ģenerēts nejaušs receptes nosaukums
+             * ar četriem vārdiem.
+             */
+            'title' => $this->faker->sentence(4),
+
+            /**
+             * Tiek ģenerēts nejaušs receptes apraksts
+             * ar trim teikumiem.
+             */
+            'description' => $this->faker->paragraph(3),
+
+            /**
+             * Tiek norādīts noklusējuma receptes attēla ceļš.
+             */
+            'image' => 'recipes/default.jpg',
+
+            /**
+             * Receptes ierakstam tiek piešķirts
+             * nejauši izvēlēts lietotājs.
+             */
+            'user_id' => User::inRandomOrder()->first()->id,
+
+            /**
+             * Receptes ierakstam tiek piešķirta
+             * nejauši izvēlēta kategorija.
+             */
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 }
-

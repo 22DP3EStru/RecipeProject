@@ -1,24 +1,56 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace App\Models; // Definē nosaukumvietu (namespace), kurā atrodas šis modelis
+/**
+ * Rating modelis nodrošina darbu ar recepšu vērtējumu datiem datubāzē.
+ *
+ * Modelis atbild par:
+ * - recepšu vērtējumu glabāšanu;
+ * - vērtējumu sasaisti ar receptēm;
+ * - vērtējumu sasaisti ar lietotājiem;
+ * - lietotāju piešķirto vērtējumu apstrādi;
+ * - relāciju definēšanu Eloquent ORM sistēmā.
+ */
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Iekļauj HasFactory trait, lai varētu izmantot fabriku (factory)
-use Illuminate\Database\Eloquent\Model; // Iekļauj Eloquent bāzes Model klasi
+namespace App\Models;
 
-class Rating extends Model // Definē Rating modeli, kas paplašina Eloquent Model
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Rating extends Model
 {
-    use HasFactory; // Pievieno HasFactory funkcionalitāti šim modelim
+    /**
+     * Tiek pievienota factory funkcionalitāte,
+     * kas ļauj ģenerēt testa datus un izmantot model factories.
+     */
+    use HasFactory;
 
-    protected $fillable = ['recipe_id', 'user_id', 'rating']; // Norāda laukus, kurus drīkst masveidā aizpildīt (mass assignment)
+    /**
+     * Lauki, kurus atļauts masveidā aizpildīt,
+     * izmantojot create() vai update() metodes.
+     */
+    protected $fillable = [
+        'recipe_id',
+        'user_id',
+        'rating'
+    ];
 
-    public function recipe() // Definē attiecību ar Recipe modeli
+    /**
+     * Definē saistību starp vērtējumu un recepti.
+     *
+     * Katrs vērtējums pieder vienai receptei.
+     */
+    public function recipe()
     {
-        return $this->belongsTo(Recipe::class); // Norāda, ka vērtējums pieder vienai receptei (many-to-one)
+        return $this->belongsTo(Recipe::class);
     }
 
-    public function user() // Definē attiecību ar User modeli
+    /**
+     * Definē saistību starp vērtējumu un lietotāju.
+     *
+     * Katrs vērtējums pieder vienam lietotājam.
+     */
+    public function user()
     {
-        return $this->belongsTo(User::class); // Norāda, ka vērtējums pieder vienam lietotājam (many-to-one)
+        return $this->belongsTo(User::class);
     }
 }
-

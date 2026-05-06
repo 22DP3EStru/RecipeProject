@@ -1,20 +1,31 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Controllers; // Šis ir galvenais kontrolieru namespace
+/**
+ * Controller klase ir galvenā bāzes klase visiem sistēmas kontrolieriem.
+ *
+ * Šī klase nodrošina kopīgu funkcionalitāti, kuru var izmantot citi
+ * kontrolieri recepšu tīmekļa vietnē.
+ *
+ * Klase atbild par:
+ * - autorizācijas funkcionalitātes pieejamību;
+ * - validācijas funkcionalitātes pieejamību;
+ * - kopīgas Laravel kontrolieru struktūras nodrošināšanu.
+ */
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
-// Trait, kas ļauj izmantot autorizācijas funkcijas (pārbaudīt atļaujas)
+namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Validation\ValidatesRequests; 
-// Trait, kas ļauj izmantot validācijas metodes (piem., $request->validate())
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
-use Illuminate\Routing\Controller as BaseController; 
-// Laravel pamata Controller klase (pārsaukta par BaseController)
-
-class Controller extends BaseController // Galvenais kontrolieris, no kura manto visi pārējie
+class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests; 
-    // Iekļauj:
-    // - autorizācijas iespējas (policies, gates)
-    // - validācijas funkcionalitāti
+    /**
+     * Tiek pievienotas Laravel nodrošinātās autorizācijas
+     * un validācijas iespējas.
+     *
+     * AuthorizesRequests ļauj pārbaudīt lietotāja tiesības,
+     * savukārt ValidatesRequests nodrošina pieprasījumu datu validāciju.
+     */
+    use AuthorizesRequests, ValidatesRequests;
 }

@@ -1,36 +1,55 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Middleware; // Šis fails atrodas Middleware mapē
+/**
+ * RedirectIfAuthenticated middleware nodrošina jau autentificētu lietotāju
+ * pārsūtīšanu uz sistēmas galveno paneli.
+ *
+ * Middleware atbild par:
+ * - autentificēta lietotāja pārbaudi;
+ * - piekļuves ierobežošanu autorizācijas lapām;
+ * - automātisku pārsūtīšanu uz dashboard sadaļu;
+ * - vairāku autentifikācijas guardu apstrādi.
+ */
 
-use App\Providers\RouteServiceProvider; // (Šajā failā netiek izmantots, bet parasti satur redirect ceļus)
-use Closure; // Closure tips (nākamā darbība ķēdē)
-use Illuminate\Http\Request; // HTTP pieprasījums
-use Illuminate\Support\Facades\Auth; // Autentifikācijas sistēma
-use Symfony\Component\HttpFoundation\Response; // Atgriežamais atbildes tips
+namespace App\Http\Middleware;
 
-class RedirectIfAuthenticated // Middleware, kas pārsūta jau ielogotus lietotājus
+use App\Providers\RouteServiceProvider;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class RedirectIfAuthenticated
 {
     /**
-     * Handle an incoming request.
+     * Pārbauda, vai lietotājs jau ir autentificējies sistēmā.
      */
-
-    public function handle(Request $request, Closure $next, string ...$guards): Response 
-    // Šī metode tiek izsaukta pirms piekļuves konkrētai route
+    public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        $guards = empty($guards) ? [null] : $guards; 
-        // Ja nav norādīti guardi, izmanto noklusējuma (null)
+        /**
+         * Ja nav norādīts konkrēts autentifikācijas guards,
+         * tiek izmantots noklusējuma guards.
+         */
+        $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) { // Pārbauda katru guard tipu
-            if (Auth::guard($guard)->check()) { 
-            // Ja lietotājs ir ielogots ar šo guard
+        /**
+         * Tiek pārbaudīts katrs autentifikācijas guards.
+         */
+        foreach ($guards as $guard) {
 
-                return redirect('/dashboard'); 
-                // Pārsūta uz dashboard (tātad login lapa nav pieejama ielogotiem)
+            /**
+             * Ja lietotājs jau ir autentificējies,
+             * viņš tiek pārsūtīts uz dashboard sadaļu.
+             */
+            if (Auth::guard($guard)->check()) {
+                return redirect('/dashboard');
             }
         }
 
-        return $next($request); 
-        // Ja lietotājs nav ielogots → atļauj turpināt uz pieprasīto lapu
+        /**
+         * Ja lietotājs nav autentificējies,
+         * pieprasījums tiek nodots nākamajam sistēmas posmam.
+         */
+        return $next($request);
     }
 }
-

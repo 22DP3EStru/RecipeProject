@@ -1,37 +1,63 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Http\Controllers; // Kontrolieris atrodas Controllers mapē
+/**
+ * WelcomeController kontrolieris nodrošina sistēmas sākumlapas funkcionalitāti.
+ *
+ * Kontrolieris atbild par:
+ * - sākumlapas attēlošanu;
+ * - populārāko recepšu atlasi;
+ * - recepšu vidējā vērtējuma aprēķināšanu;
+ * - recepšu datu nodošanu sākumlapas skatam.
+ */
 
-use App\Models\Recipe; // Recipe modelis (recipes tabula)
-use Illuminate\Http\Request; // HTTP pieprasījums (šajā failā netiek izmantots)
+namespace App\Http\Controllers;
 
-class WelcomeController extends Controller // Kontrolieris sākumlapai (welcome lapa)
+use App\Models\Recipe;
+use Illuminate\Http\Request;
+
+class WelcomeController extends Controller
 {
-    public function index() // Metode, kas parāda sākumlapu
+    /**
+     * Attēlo sistēmas sākumlapu ar populārākajām receptēm.
+     */
+    public function index()
     {
-        // Get 3 most popular recipes based on ratings
-        // Make sure we only get recipes that have users
+        /**
+         * Tiek atlasītas receptes kopā ar autoru datiem.
+         */
+        $popularRecipes = Recipe::with(['user'])
 
-        $popularRecipes = Recipe::with(['user']) 
-            // Paņem receptes kopā ar autoru (user)
+            /**
+             * Tiek atlasītas tikai tās receptes,
+             * kurām eksistē saistīts lietotājs.
+             */
+            ->whereHas('user')
 
-            ->whereHas('user') 
-            // Nodrošina, ka tiek paņemtas tikai tās receptes,
-            // kurām tiešām eksistē lietotājs (nav “bojātu” ierakstu)
+            /**
+             * Katrai receptei tiek aprēķināts vidējais vērtējums
+             * no ratings tabulas.
+             */
+            ->withAvg('ratings', 'rating')
 
-            ->withAvg('ratings', 'rating') 
-            // Aprēķina katrai receptei vidējo vērtējumu no ratings tabulas
+            /**
+             * Receptes tiek sakārtotas dilstošā secībā
+             * pēc vidējā vērtējuma.
+             */
+            ->orderByDesc('ratings_avg_rating')
 
-            ->orderByDesc('ratings_avg_rating') 
-            // Sakārto pēc vidējā vērtējuma (no lielākā uz mazāko)
+            /**
+             * Tiek atlasītas tikai trīs populārākās receptes.
+             */
+            ->take(3)
 
-            ->take(3) 
-            // Paņem tikai 3 populārākās receptes
+            /**
+             * Tiek izpildīts datubāzes vaicājums.
+             */
+            ->get();
 
-            ->get(); 
-            // Izpilda vaicājumu un dabū rezultātus
-
-        return view('welcome', compact('popularRecipes')); 
-        // Atver welcome skatu un padod tam populārās receptes
+        /**
+         * Populārāko recepšu dati tiek nodoti welcome skatam.
+         */
+        return view('welcome', compact('popularRecipes'));
     }
 }

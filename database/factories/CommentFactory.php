@@ -1,15 +1,32 @@
-<?php // Norāda, ka šis ir PHP fails
+<?php
 
-namespace Database\Factories; // Definē nosaukumvietu (namespace) fabriku klasēm
+/**
+ * CommentFactory klase nodrošina testa komentāru datu ģenerēšanu.
+ *
+ * Factory atbild par:
+ * - nejaušu komentāru datu izveidi;
+ * - testa ierakstu ģenerēšanu datubāzei;
+ * - Faker bibliotēkas izmantošanu komentāru satura izveidei;
+ * - automatizētu testu un datu aizpildes atbalstu.
+ */
 
-use Illuminate\Database\Eloquent\Factories\Factory; // Iekļauj bāzes Factory klasi
+namespace Database\Factories;
 
-class CommentFactory extends Factory // Definē CommentFactory klasi, kas paplašina Factory
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class CommentFactory extends Factory
 {
-    public function definition(): array // Metode, kas nosaka noklusējuma datu struktūru fabrikas izveidei
+    /**
+     * Definē komentāra noklusējuma datu struktūru.
+     */
+    public function definition(): array
     {
         return [
-            'body' => $this->faker->sentence(), // Ģenerē nejaušu teikumu komentāra tekstam, izmantojot Faker bibliotēku
+            /**
+             * Tiek ģenerēts nejaušs komentāra teksts,
+             * izmantojot Faker bibliotēku.
+             */
+            'body' => $this->faker->sentence(),
         ];
     }
 }

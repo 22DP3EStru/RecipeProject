@@ -1,26 +1,44 @@
-<?php // Sākas PHP kods
+<?php
 
-namespace App\Models; // Modelis atrodas Models mapē
+/**
+ * Category modelis nodrošina darbu ar recepšu kategoriju datiem datubāzē.
+ *
+ * Modelis atbild par:
+ * - kategoriju datu glabāšanu;
+ * - kategoriju nosaukumu un slug vērtību apstrādi;
+ * - saistības uzturēšanu starp kategorijām un receptēm;
+ * - kategoriju ierakstu izmantošanu Eloquent ORM sistēmā.
+ */
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; 
-// Ļauj izmantot factory (testēšanai / datu ģenerēšanai)
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model; 
-// Pamata Eloquent modelis (darbs ar datubāzi)
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model // Category modelis (kategoriju tabula)
+class Category extends Model
 {
-    use HasFactory; // Iespēja izmantot factory šim modelim
+    /**
+     * Tiek pievienota factory funkcionalitāte,
+     * kas ļauj ģenerēt testa datus un izmantot model factories.
+     */
+    use HasFactory;
 
-    protected $fillable = ['name', 'slug']; 
-    // Šie lauki drīkst tikt masveidā aizpildīti (piem., create() vai update())
-    // name = kategorijas nosaukums
-    // slug = URL draudzīgais nosaukums
+    /**
+     * Lauki, kurus atļauts masveidā aizpildīt,
+     * izmantojot create() vai update() metodes.
+     */
+    protected $fillable = [
+        'name',
+        'slug'
+    ];
 
-    public function recipes() 
-    // Attiecība: viena kategorija var saturēt vairākas receptes
+    /**
+     * Definē saistību starp kategoriju un receptēm.
+     *
+     * Vienai kategorijai var būt vairākas receptes.
+     */
+    public function recipes()
     {
-        return $this->hasMany(Recipe::class); 
-        // 1 kategorija → daudzas receptes (one-to-many relationship)
+        return $this->hasMany(Recipe::class);
     }
 }
