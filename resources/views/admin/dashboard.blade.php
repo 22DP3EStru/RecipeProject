@@ -1,20 +1,18 @@
-<?php
-/*
+{{-- 
     Administrācijas paneļa skats.
 
     Šis Blade fails nodrošina administratora paneli recepšu sistēmā.
     Panelī tiek attēlota sistēmas statistika, ātrās darbības,
     sistēmas pārskats, brīdinājumi, jaunākie lietotāji,
     jaunākās receptes, populārākās receptes un PDF eksporti.
-*/
-?>
+--}}
 
 @extends('layouts.app')
 
-<?php /* Norāda lapas nosaukumu pārlūkprogrammas cilnē */ ?>
+{{-- Norāda lapas nosaukumu pārlūkprogrammas cilnē --}}
 @section('title', 'Administrācijas panelis')
 
-<?php /* Sāk galveno lapas satura sekciju */ ?>
+{{-- Sāk galveno lapas satura sekciju --}}
 @section('content')
 
 <style>
@@ -647,29 +645,29 @@
     }
 </style>
 
-<?php /* Galvenais administrācijas paneļa konteiners */ ?>
+{{-- Galvenais administrācijas paneļa konteiners --}}
 <div class="admin-dashboard">
 
-    <?php /* Pārbauda, vai sesijā ir veiksmīgas darbības paziņojums */ ?>
+    {{-- Attēlo veiksmīgas darbības paziņojumu, ja tāds ir saglabāts sesijā --}}
     @if(session('success'))
         <div class="admin-alert" style="border-left: 6px solid #56ab2f;">
             <div style="font-weight: 700; color: #2f855a;">✅ {{ session('success') }}</div>
         </div>
     @endif
 
-    <?php /* Pārbauda, vai sesijā ir kļūdas paziņojums */ ?>
+    {{-- Attēlo kļūdas paziņojumu, ja tāds ir saglabāts sesijā --}}
     @if(session('error'))
         <div class="admin-alert" style="border-left: 6px solid #f5576c;">
             <div style="font-weight: 700; color: #c53030;">❌ {{ session('error') }}</div>
         </div>
     @endif
 
-    <?php /* Administrācijas kopsavilkuma sadaļa */ ?>
+    {{-- Administrācijas kopsavilkuma sadaļa ar galvenajiem sistēmas rādītājiem --}}
     <div class="admin-section">
         <h2 class="admin-section-title">📊 Administrācijas kopsavilkums</h2>
         <p class="admin-subtitle">Pārskats par lietotājiem, receptēm un platformas aktivitāti vienuviet.</p>
 
-        <?php /* Statistikas kartīšu saraksts */ ?>
+        {{-- Statistikas kartītes ar kopējiem lietotāju, recepšu, administratoru un aktivitātes datiem --}}
         <div class="dashboard-stats-grid">
             <div class="dashboard-stat-card">
                 <span class="dashboard-stat-number">{{ $usersCount }}</span>
@@ -713,7 +711,7 @@
         </div>
     </div>
 
-    <?php /* Ātro darbību sadaļa */ ?>
+    {{-- Ātro darbību sadaļa ar saitēm uz biežāk izmantotajām administrācijas funkcijām --}}
     <div class="admin-section">
         <h2 class="admin-section-title">⚡ Ātrās darbības</h2>
 
@@ -744,11 +742,12 @@
         </div>
     </div>
 
-    <?php /* Sistēmas pārskata un brīdinājumu sadaļa */ ?>
+    {{-- Sistēmas pārskata un brīdinājumu sadaļa --}}
     <div class="dashboard-mini-grid">
         <div class="admin-section">
             <h2 class="admin-section-title">📌 Sistēmas pārskats</h2>
 
+            {{-- Tekstveida pārskats par galvenajiem sistēmas datiem --}}
             <div class="dashboard-info-list">
                 <div class="dashboard-info-item">
                     <strong>Reģistrētie lietotāji</strong>
@@ -775,6 +774,7 @@
         <div class="admin-section">
             <h2 class="admin-section-title">🚨 Brīdinājumi</h2>
 
+            {{-- Brīdinājumi palīdz administratoram ātri pamanīt nepilnīgus vai jaunus sistēmas datus --}}
             <div class="dashboard-warning-list">
                 <div class="dashboard-warning-item warning">
                     <strong>Šodien pievienotas receptes</strong>
@@ -811,11 +811,12 @@
         </div>
     </div>
 
-    <?php /* Jaunāko lietotāju un jaunāko recepšu sadaļa */ ?>
+    {{-- Jaunāko lietotāju un jaunāko recepšu sadaļa --}}
     <div class="dashboard-columns-2">
         <div class="admin-section">
             <h2 class="admin-section-title">👤 Jaunākie lietotāji</h2>
 
+            {{-- Cikls attēlo pēdējos reģistrētos lietotājus --}}
             <div class="dashboard-list">
                 @forelse($latestUsers as $user)
                     <div class="dashboard-list-item">
@@ -828,6 +829,7 @@
                                 <div class="dashboard-item-title">{{ $user->name ?? '—' }}</div>
                                 <div class="dashboard-item-meta">{{ $user->email }}</div>
 
+                                {{-- Ja lietotājs ir administrators, tiek parādīta administratora statusa birka --}}
                                 @if($user->is_admin)
                                     <span class="dashboard-badge admin">Admin</span>
                                 @endif
@@ -847,6 +849,7 @@
         <div class="admin-section">
             <h2 class="admin-section-title">🍽️ Jaunākās receptes</h2>
 
+            {{-- Cikls attēlo pēdējās sistēmā pievienotās receptes --}}
             <div class="dashboard-list">
                 @forelse($latestRecipes as $recipe)
                     <div class="dashboard-list-item">
@@ -872,11 +875,12 @@
         </div>
     </div>
 
-    <?php /* Populārāko recepšu un eksportu sadaļa */ ?>
+    {{-- Populārāko recepšu un PDF eksportu sadaļa --}}
     <div class="dashboard-columns-2">
         <div class="admin-section">
             <h2 class="admin-section-title">🏆 Populārākās receptes</h2>
 
+            {{-- Cikls attēlo receptes, kurām ir lielākais skatījumu skaits --}}
             <div class="dashboard-top-list">
                 @forelse($topRecipes as $index => $recipe)
                     <div class="dashboard-top-item">
@@ -903,6 +907,7 @@
         <div class="admin-section">
             <h2 class="admin-section-title">📄 Eksporti</h2>
 
+            {{-- Saites uz PDF dokumentu ģenerēšanas funkcijām --}}
             <div class="dashboard-pdf-actions">
                 <a href="{{ route('pdf.admin.statistics') }}" class="dashboard-outline-btn">Statistikas PDF</a>
                 <a href="{{ route('pdf.popular.recipes') }}" class="dashboard-outline-btn">Populārākās receptes PDF</a>
@@ -911,7 +916,7 @@
             <div class="dashboard-info-list" style="margin-top:18px;">
                 <div class="dashboard-info-item">
                     <strong>Statistikas pārskats</strong>
-                    <span>Lejupielādē administrācijas panela statistiku PDF formātā.</span>
+                    <span>Lejupielādē administrācijas paneļa statistiku PDF formātā.</span>
                 </div>
 
                 <div class="dashboard-info-item">

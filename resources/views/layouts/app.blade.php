@@ -1,22 +1,73 @@
+<!--
+    Galvenais lietotnes izkārtojuma fails.
+
+    Šis Blade fails nosaka kopējo lapas struktūru visai tīmekļa vietnei:
+    - HTML dokumenta pamata struktūru;
+    - meta informāciju;
+    - kopējos CSS stilus;
+    - augšējo virsraksta daļu;
+    - navigācijas joslu;
+    - mobilo izvēlni;
+    - galveno satura konteineru;
+    - paziņojumu izvadi;
+    - globālo apstiprinājuma modālo logu;
+    - JavaScript funkcijas izvēlnes un apstiprinājumu darbībai.
+
+    Šo izkārtojumu izmanto citas Blade lapas ar @extends('layouts.app'),
+    bet konkrētais lapas saturs tiek ievietots sadaļā @yield('content').
+-->
+
 <!DOCTYPE html>
 <html lang="lv">
 <head>
+    <!-- Dokumenta kodējums, lai pareizi attēlotos latviešu valodas simboli. -->
     <meta charset="UTF-8">
+
+    <!-- Nodrošina korektu lapas pielāgošanos mobilajām ierīcēm. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Lapas virsraksts. Ja konkrētā lapa nenorāda savu title, tiek izmantots noklusējuma nosaukums. -->
     <title>@yield('title', 'Vecmāmiņas Receptes')</title>
+
+    <!-- Lapas apraksts meklētājprogrammām un pārlūkprogrammas priekšskatījumam. -->
     <meta name="description" content="@yield('meta_description', 'Vecmāmiņas Receptes - garšīgas mājās gatavotas receptes, favorīti, kategorijas un iedvesma katrai dienai.')">
 
+    <!-- Vietnes ikona pārlūkprogrammas cilnei. Versijas parametrs palīdz pārlūkam ielādēt atjaunināto failu. -->
     <link rel="icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+
+    <!-- Atsevišķs CSS fails mobilajam dizainam. -->
     <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=9">
 
     <style>
+        /*
+            Globālais CSS sākums.
+
+            Šajā sadaļā definēti kopējie vietnes stili:
+            - krāsu mainīgie;
+            - kopējais lapas fons;
+            - navigācijas josla;
+            - kartītes;
+            - formas;
+            - pogas;
+            - modālais logs;
+            - mobilā izvēlne.
+        */
+
+        /*
+            Universālais selektors atiestata noklusējuma ārējās un iekšējās atkāpes.
+            box-sizing: border-box palīdz precīzāk kontrolēt elementu platumu.
+        */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /*
+            CSS mainīgie tiek izmantoti visā lapā, lai dizainu būtu vieglāk uzturēt.
+            Ja nepieciešams mainīt krāsu vai ēnu, to var izdarīt vienā vietā.
+        */
         :root {
             --page-bg: #eee5da;
             --page-bg-2: #e8ddd0;
@@ -51,11 +102,16 @@
             --radius-lg: 26px;
         }
 
+        /* Nodrošina, ka HTML un body aizņem vismaz visu ekrāna augstumu. */
         html,
         body {
             min-height: 100%;
         }
 
+        /*
+            Galvenais lapas ķermenis.
+            Šeit tiek definēts fonts, teksta krāsa un dekoratīvais fons.
+        */
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text);
@@ -65,17 +121,29 @@
                 linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-2) 100%);
         }
 
+        /*
+            Kad atvērta mobilā izvēlne vai modālais logs,
+            lapas ritināšana tiek bloķēta.
+        */
         body.menu-open,
         body.confirm-modal-open {
             overflow: hidden;
         }
 
+        /*
+            Ārējais vietnes ietvars.
+            Tas satur visu lapas vizuālo struktūru.
+        */
         .site-shell {
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
+        /*
+            Dekoratīvie fona elementi.
+            Tie nav klikšķināmi un atrodas aiz galvenā satura.
+        */
         .site-shell::before,
         .site-shell::after {
             content: "";
@@ -103,6 +171,10 @@
             background: rgba(239, 228, 214, 0.65);
         }
 
+        /*
+            Galvenais lapas konteiners.
+            max-width ierobežo saturu lielos ekrānos.
+        */
         .page {
             position: relative;
             z-index: 1;
@@ -111,6 +183,9 @@
             padding: 26px 20px 54px;
         }
 
+        /*
+            Hero sadaļa tiek izmantota lapas nosaukumam un īsam aprakstam.
+        */
         .hero {
             position: relative;
             padding: 34px 24px 36px;
@@ -123,6 +198,7 @@
             overflow: hidden;
         }
 
+        /* Hero sadaļas dekoratīvais fona pārklājums. */
         .hero::before {
             content: "";
             position: absolute;
@@ -133,6 +209,7 @@
             pointer-events: none;
         }
 
+        /* Nodrošina, ka hero teksts atrodas virs dekoratīvā pārklājuma. */
         .hero > * {
             position: relative;
             z-index: 1;
@@ -156,6 +233,10 @@
             margin: 0 auto;
         }
 
+        /*
+            Navigācijas josla.
+            position: sticky ļauj navigācijai palikt redzamai lapas ritināšanas laikā.
+        */
         .nav-bar {
             position: sticky;
             top: 14px;
@@ -174,6 +255,10 @@
             margin-bottom: 34px;
         }
 
+        /*
+            Vietnes logo/nosaukums navigācijā.
+            Tas vienlaikus ir arī saite uz sākuma vai vadības paneļa lapu.
+        */
         .nav-brand {
             display: inline-flex;
             align-items: center;
@@ -189,6 +274,7 @@
             transition: 0.2s ease;
         }
 
+        /* Pievieno dekoratīvu grāmatas ikonu pirms vietnes nosaukuma. */
         .nav-brand::before {
             content: "📖";
             font-size: 1.2rem;
@@ -200,6 +286,7 @@
             transform: translateY(-1px);
         }
 
+        /* Centrālā navigācijas daļa ar lapu saitēm. */
         .nav-center {
             min-width: 0;
             display: flex;
@@ -215,6 +302,10 @@
             min-width: 0;
         }
 
+        /*
+            Navigācijas saites.
+            Tās tiek stilizētas kā noapaļotas pogas.
+        */
         .nav-links a {
             color: var(--text);
             text-decoration: none;
@@ -235,6 +326,10 @@
             transform: translateY(-1px);
         }
 
+        /*
+            Aktīvās lapas saite.
+            Klase active tiek piešķirta, salīdzinot pašreizējo URL ar attiecīgo sadaļu.
+        */
         .nav-links a.active {
             color: var(--accent);
             background: linear-gradient(180deg, #f8f1e9 0%, #f0e5d8 100%);
@@ -242,6 +337,7 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
         }
 
+        /* Labā navigācijas puse ar lietotāja informāciju un iziešanas pogu. */
         .nav-right {
             display: flex;
             align-items: center;
@@ -250,6 +346,7 @@
             white-space: nowrap;
         }
 
+        /* Lietotāja informatīvā kapsula navigācijā. */
         .nav-user-chip {
             display: inline-flex;
             align-items: center;
@@ -261,6 +358,7 @@
             border-radius: 999px;
         }
 
+        /* Lietotāja avatārs ar vārda pirmo burtu. */
         .nav-user-avatar {
             width: 34px;
             height: 34px;
@@ -285,6 +383,10 @@
             white-space: nowrap;
         }
 
+        /*
+            Mobilās izvēlnes poga.
+            Lielos ekrānos tā ir paslēpta, bet mazākos ekrānos tiek parādīta.
+        */
         .nav-toggle {
             display: none;
             border: 1px solid var(--line);
@@ -308,6 +410,10 @@
             background: var(--surface-soft-2);
         }
 
+        /*
+            Hamburger ikona mobilajai izvēlnei.
+            Tā tiek veidota ar vienu span un diviem pseidoelementiem.
+        */
         .nav-toggle-icon {
             position: relative;
             display: block;
@@ -338,6 +444,9 @@
             top: 6px;
         }
 
+        /*
+            Kad izvēlne ir atvērta, hamburger ikona pārvēršas par X simbolu.
+        */
         .menu-open .nav-toggle-icon {
             background: transparent;
         }
@@ -352,10 +461,15 @@
             transform: rotate(-45deg);
         }
 
+        /* Mobilās izvēlnes panelis sākotnēji ir paslēpts. */
         .nav-mobile-panel {
             display: none;
         }
 
+        /*
+            Galvenā satura kaste.
+            Tajā tiek ievietots konkrētās lapas saturs ar @yield('content').
+        */
         .main-content {
             background: rgba(255, 253, 249, 0.84);
             backdrop-filter: blur(6px);
@@ -366,6 +480,7 @@
             padding: 34px;
         }
 
+        /* Ja vairākas sadaļas seko viena otrai, starp tām tiek izveidota atstarpe. */
         .section-block + .section-block {
             margin-top: 28px;
         }
@@ -388,6 +503,10 @@
             margin-bottom: 22px;
         }
 
+        /*
+            Formu elementi.
+            Šie stili tiek izmantoti dažādās lapās: profila rediģēšanā, recepšu formās u.c.
+        */
         .form-group {
             display: flex;
             flex-direction: column;
@@ -427,6 +546,9 @@
             resize: vertical;
         }
 
+        /*
+            Fokusa stils palīdz lietotājam saprast, kurš formas lauks pašlaik ir aktīvs.
+        */
         .form-input:focus,
         .form-textarea:focus,
         .form-select:focus {
@@ -444,12 +566,17 @@
             line-height: 1.55;
         }
 
+        /* Divu kolonnu formas rinda. */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 18px;
         }
 
+        /*
+            Kopējā pogu klase.
+            Šī klase nodrošina vienotu pogu izmēru, noapaļojumu un animāciju.
+        */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -476,6 +603,7 @@
             filter: brightness(0.99);
         }
 
+        /* Galvenā darbības poga. */
         .btn-primary {
             background: linear-gradient(180deg, #84624a 0%, #7a5a43 100%);
             border-color: var(--accent);
@@ -487,6 +615,7 @@
             background: linear-gradient(180deg, #6e4f39 0%, #634733 100%);
         }
 
+        /* Veiksmīgas vai pozitīvas darbības poga. */
         .btn-success {
             background: linear-gradient(180deg, #eef3ea 0%, #e8eee2 100%);
             color: var(--success-text);
@@ -497,6 +626,7 @@
             background: #dde6d3;
         }
 
+        /* Sekundārā poga mazāk svarīgām darbībām. */
         .btn-secondary {
             background: linear-gradient(180deg, #faf6f0 0%, #f6efe7 100%);
             color: var(--text);
@@ -506,6 +636,7 @@
             background: var(--surface-soft-2);
         }
 
+        /* Brīdinājuma darbības poga. */
         .btn-warning {
             background: linear-gradient(180deg, #f8f0e2 0%, #f6eddc 100%);
             color: var(--warning-text);
@@ -516,6 +647,7 @@
             background: #f0e3cc;
         }
 
+        /* Bīstamas darbības poga, piemēram, dzēšanai vai iziešanai. */
         .btn-danger {
             background: linear-gradient(180deg, #f7e9e5 0%, #f3e2de 100%);
             color: var(--danger-text);
@@ -526,6 +658,10 @@
             background: #eed6d1;
         }
 
+        /*
+            Kartītes komponents.
+            To var izmantot informācijas blokiem, sarakstiem un sadaļām.
+        */
         .card {
             position: relative;
             background: var(--surface-strong);
@@ -559,6 +695,7 @@
             text-align: center;
         }
 
+        /* Universāls režģa izkārtojums. */
         .grid {
             display: grid;
             gap: 20px;
@@ -572,6 +709,10 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
+        /*
+            Statistikas režģis.
+            Izmanto, lai attēlotu skaitliskus rādītājus, piemēram, recepšu vai lietotāju skaitu.
+        */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -610,6 +751,10 @@
             color: var(--muted);
         }
 
+        /*
+            Saraksta rinda.
+            Izmanto, lai attēlotu informāciju divās pusēs, piemēram, nosaukumu un darbības pogas.
+        */
         .list-row {
             display: flex;
             justify-content: space-between;
@@ -683,6 +828,10 @@
             margin-bottom: 4px;
         }
 
+        /*
+            Sistēmas paziņojumu sadaļa.
+            Tajā tiek attēloti veiksmīgas darbības, kļūdu, brīdinājumu un informatīvie paziņojumi.
+        */
         .flash-messages {
             margin-bottom: 24px;
         }
@@ -731,6 +880,10 @@
             margin-bottom: 4px;
         }
 
+        /*
+            Tukšā stāvokļa bloks.
+            Tas tiek izmantots, ja sarakstā vēl nav datu, piemēram, nav recepšu vai favorītu.
+        */
         .empty-state {
             text-align: center;
             padding: 34px 20px;
@@ -753,6 +906,10 @@
             margin: 0 auto;
         }
 
+        /*
+            Globālais apstiprinājuma modālais logs.
+            Tas aizstāj parasto browser confirm() logu ar vizuāli pielāgotu logu.
+        */
         .confirm-modal-backdrop {
             position: fixed;
             inset: 0;
@@ -766,6 +923,7 @@
             -webkit-backdrop-filter: blur(7px);
         }
 
+        /* Klase is-open padara modālo logu redzamu. */
         .confirm-modal-backdrop.is-open {
             display: flex;
         }
@@ -837,6 +995,9 @@
             min-width: 150px;
         }
 
+        /*
+            Modālā loga atvēršanās animācija.
+        */
         @keyframes confirmModalIn {
             from {
                 opacity: 0;
@@ -849,6 +1010,11 @@
             }
         }
 
+        /*
+            Responsīvais dizains.
+            Pie mazāka ekrāna platuma parastā navigācija tiek paslēpta
+            un tiek izmantota mobilā sānu izvēlne.
+        */
         @media (max-width: 1500px) {
             .nav-bar {
                 grid-template-columns: 1fr auto !important;
@@ -1023,6 +1189,9 @@
             }
         }
 
+        /*
+            Papildu pielāgojumi ļoti šauriem mobilajiem ekrāniem.
+        */
         @media (max-width: 480px) {
             .nav-bar {
                 padding: 10px !important;
@@ -1069,6 +1238,14 @@
         }
     </style>
 </head>
+
+<!--
+    body klase tiek veidota dinamiski pēc pašreizējā URL.
+    Tas ļauj konkrētām lapām piešķirt īpašus CSS stilus, piemēram:
+    - page-recipes recepšu lapai;
+    - page-profile profila lapai;
+    - page-admin administrācijas lapai.
+-->
 <body class="
     {{ request()->is('recipes') ? 'page-recipes' : '' }}
     {{ request()->is('profile') || request()->is('profile/*') ? 'page-profile' : '' }}
@@ -1078,19 +1255,33 @@
     <div class="page">
 
         @php
+            /*
+                Šis mainīgais nosaka, vai konkrētajā lapā jāslēpj galvenā navigācija.
+
+                Navigācija netiek rādīta autentifikācijas lapās:
+                - ielogošanās lapā;
+                - reģistrācijas lapā;
+                - paroles atjaunošanas lapās.
+
+                Tas padara autentifikācijas lapas vizuāli vienkāršākas.
+            */
             $hideMainNavigation = request()->routeIs('login')
                 || request()->routeIs('register')
                 || request()->routeIs('password.request')
                 || request()->routeIs('password.reset');
         @endphp
 
+        <!-- Ja navigācija nav jāslēpj, tiek attēlots hero bloks un navigācijas josla. -->
         @unless($hideMainNavigation)
+
+            <!-- Administrācijas lapām tiek rādīts īpašs virsraksts un apraksts. -->
             @if(request()->is('admin*'))
                 <div class="hero">
                     <h1 class="hero-title">Administrācijas panelis</h1>
                     <p class="hero-text">Šeit vari pārvaldīt lietotājus, receptes un sistēmas saturu.</p>
                 </div>
             @else
+                <!-- Parastajām lapām hero teksts tiek ņemts no konkrētās Blade lapas vai noklusējuma vērtībām. -->
                 <div class="hero">
                     <h1 class="hero-title">
                         @yield('hero_title', 'Vecmāmiņas Receptes')
@@ -1102,9 +1293,21 @@
                 </div>
             @endif
 
+            <!--
+                Galvenā navigācijas josla.
+
+                Tā satur:
+                - vietnes nosaukumu;
+                - galvenās navigācijas saites autorizētiem lietotājiem;
+                - ielogošanās/reģistrācijas pogas viesiem;
+                - lietotāja informāciju un iziešanas pogu autorizētiem lietotājiem;
+                - mobilās izvēlnes pogu.
+            -->
             <nav class="nav-bar">
+                <!-- Ja lietotājs ir pieslēdzies, logo ved uz dashboard; ja nav, uz sākumlapu. -->
                 <a href="{{ Auth::check() ? url('/dashboard') : url('/') }}" class="nav-brand">Vecmāmiņas Receptes</a>
 
+                <!-- Centrālā navigācija tiek rādīta tikai autorizētiem lietotājiem. -->
                 <div class="nav-center">
                     @auth
                         <div class="nav-links">
@@ -1116,6 +1319,7 @@
                             <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
                             <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
 
+                            <!-- Administrācijas sadaļa redzama tikai administratoram. -->
                             @if(Auth::user()->is_admin)
                                 <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
                             @endif
@@ -1123,12 +1327,15 @@
                     @endauth
                 </div>
 
+                <!-- Labā navigācijas puse ar lietotāja darbībām. -->
                 <div class="nav-right">
+                    <!-- Viesiem tiek rādītas ielogošanās un reģistrācijas pogas. -->
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-secondary">Ielogoties</a>
                         <a href="{{ route('register') }}" class="btn btn-primary">Reģistrēties</a>
                     @endguest
 
+                    <!-- Autorizētiem lietotājiem tiek rādīts lietotāja vārds un iziešanas forma. -->
                     @auth
                         <div class="nav-user-chip">
                             <span class="nav-user-avatar">
@@ -1137,6 +1344,7 @@
                             <span class="nav-user-name">{{ Auth::user()->name }}</span>
                         </div>
 
+                        <!-- Laravel izlogošanās tiek veikta ar POST metodi, tāpēc tiek izmantota forma. -->
                         <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn btn-danger">Iziet</button>
@@ -1144,6 +1352,7 @@
                     @endauth
                 </div>
 
+                <!-- Mobilās izvēlnes atvēršanas poga. -->
                 <button
                     type="button"
                     class="nav-toggle"
@@ -1156,18 +1365,28 @@
                 </button>
             </nav>
 
+            <!--
+                Mobilā navigācijas izvēlne.
+
+                Šis panelis tiek izmantots mazākos ekrānos.
+                Tas satur tās pašas galvenās saites, kas darbvirsmas navigācijā.
+            -->
             <div class="nav-mobile-panel" id="mobileMenu" aria-hidden="true">
+                <!-- Fona pārklājums; uzklikšķinot uz tā, izvēlne aizveras. -->
                 <div class="nav-mobile-backdrop" onclick="closeMobileMenu()"></div>
 
                 <div class="nav-mobile-sheet">
                     <div class="nav-mobile-header">
                         <div class="nav-mobile-title">Izvēlne</div>
+
+                        <!-- Poga mobilās izvēlnes aizvēršanai. -->
                         <button type="button" class="nav-mobile-close" onclick="closeMobileMenu()" aria-label="Aizvērt izvēlni">
                             ×
                         </button>
                     </div>
 
                     @auth
+                        <!-- Lietotāja informācija mobilajā izvēlnē. -->
                         <div class="nav-mobile-user">
                             <span class="nav-user-avatar">
                                 {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
@@ -1175,6 +1394,7 @@
                             <div class="nav-mobile-user-name">{{ Auth::user()->name }}</div>
                         </div>
 
+                        <!-- Mobilās navigācijas saites. -->
                         <div class="nav-mobile-links">
                             <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">Vadības panelis</a>
                             <a href="{{ url('/recipes') }}" class="{{ request()->is('recipes') || request()->is('recipes/*') ? 'active' : '' }}">Receptes</a>
@@ -1184,11 +1404,13 @@
                             <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Kontakti</a>
                             <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">Profils</a>
 
+                            <!-- Administratoram mobilajā izvēlnē tiek pievienota administrācijas saite. -->
                             @if(Auth::user()->is_admin)
                                 <a href="{{ url('/admin') }}" class="{{ request()->is('admin') || request()->is('admin/*') ? 'active' : '' }}">Administrācija</a>
                             @endif
                         </div>
 
+                        <!-- Izlogošanās poga mobilajā izvēlnē. -->
                         <div class="nav-mobile-actions">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -1197,6 +1419,7 @@
                         </div>
                     @endauth
 
+                    <!-- Viesiem mobilajā izvēlnē tiek rādītas autentifikācijas pogas. -->
                     @guest
                         <div class="nav-mobile-actions">
                             <a href="{{ route('login') }}" class="btn btn-secondary">Ielogoties</a>
@@ -1207,6 +1430,12 @@
             </div>
         @endunless
 
+        <!--
+            Galvenā satura sadaļa.
+
+            components.flash-messages attēlo sistēmas paziņojumus,
+            bet @yield('content') ievieto konkrētās lapas saturu.
+        -->
         <div class="main-content">
             @include('components.flash-messages')
             @yield('content')
@@ -1214,6 +1443,12 @@
     </div>
 </div>
 
+<!--
+    Globālais apstiprinājuma modālais logs.
+
+    Šis logs tiek izmantots bīstamām vai svarīgām darbībām,
+    piemēram, receptes, komentāra vai lietotāja dzēšanai.
+-->
 <div class="confirm-modal-backdrop" id="globalConfirmModal" aria-hidden="true">
     <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="globalConfirmTitle" aria-describedby="globalConfirmText">
         <div class="confirm-modal-icon">!</div>
@@ -1239,6 +1474,22 @@
 </div>
 
 <script>
+    /*
+        JavaScript sadaļa.
+
+        Šajā daļā tiek nodrošināta:
+        - mobilās izvēlnes atvēršana un aizvēršana;
+        - modālā apstiprinājuma loga darbība;
+        - parasto confirm() izsaukumu pārtveršana;
+        - formu apstiprināšana pirms dzēšanas darbībām.
+    */
+
+    /*
+        Atver vai aizver mobilo izvēlni.
+
+        Funkcija pievieno vai noņem body klasei menu-open.
+        Šī klase CSS pusē kontrolē izvēlnes redzamību un hamburger ikonas izskatu.
+    */
     function toggleMobileMenu() {
         const body = document.body;
         const menu = document.getElementById('mobileMenu');
@@ -1248,15 +1499,31 @@
 
         const isOpen = body.classList.contains('menu-open');
 
+        /*
+            aria-expanded palīdz pieejamības rīkiem saprast,
+            vai izvēlne pašlaik ir atvērta.
+        */
         if (toggle) {
             toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         }
 
+        /*
+            aria-hidden norāda, vai mobilais panelis ir paslēpts no palīgtehnoloģijām.
+        */
         if (menu) {
             menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
         }
     }
 
+    /*
+        Aizver mobilo izvēlni.
+
+        Šī funkcija tiek izsaukta:
+        - klikšķinot uz aizvēršanas pogas;
+        - klikšķinot ārpus izvēlnes;
+        - nospiežot Escape taustiņu;
+        - izvēloties navigācijas saiti.
+    */
     function closeMobileMenu() {
         const body = document.body;
         const menu = document.getElementById('mobileMenu');
@@ -1273,12 +1540,24 @@
         }
     }
 
+    /*
+        Ja logs tiek palielināts līdz darbvirsmas skatam,
+        mobilā izvēlne tiek automātiski aizvērta.
+    */
     window.addEventListener('resize', function () {
         if (window.innerWidth > 768) {
             closeMobileMenu();
         }
     });
 
+    /*
+        Klikšķu apstrāde mobilajai izvēlnei.
+
+        Šeit tiek pārbaudīts:
+        - vai lietotājs nospiež navigācijas saiti;
+        - vai lietotājs nospiež ārpus izvēlnes;
+        - vai izvēlne jāaizver.
+    */
     document.addEventListener('click', function (event) {
         if (window.innerWidth > 768) {
             return;
@@ -1303,8 +1582,22 @@
         }
     });
 
+    /*
+        Mainīgais saglabā funkciju, kas jāizpilda pēc apstiprināšanas.
+        Piemēram, pēc pogas "Apstiprināt" nospiešanas var tikt iesniegta forma.
+    */
     let globalConfirmCallback = null;
 
+    /*
+        Nosaka modālā loga virsrakstu pēc apstiprinājuma teksta.
+
+        Funkcija pārbauda ziņojuma saturu un izvēlas piemērotu virsrakstu:
+        - lietotāja dzēšana;
+        - receptes dzēšana;
+        - komentāra dzēšana;
+        - favorīta noņemšana;
+        - statusa maiņa.
+    */
     function getConfirmTitle(message) {
         const text = String(message || '').toLowerCase();
 
@@ -1335,6 +1628,10 @@
         return 'Apstiprināt darbību';
     }
 
+    /*
+        Nosaka apstiprinājuma pogas tekstu pēc darbības veida.
+        Tas padara modālo logu saprotamāku lietotājam.
+    */
     function getConfirmButtonText(message) {
         const text = String(message || '').toLowerCase();
 
@@ -1369,12 +1666,23 @@
         return 'Apstiprināt';
     }
 
+    /*
+        Atver globālo apstiprinājuma modālo logu.
+
+        Parametri:
+        - message: teksts, kas jāparāda lietotājam;
+        - callback: funkcija, kas jāizpilda, ja lietotājs apstiprina darbību.
+    */
     function openGlobalConfirmModal(message, callback) {
         const modal = document.getElementById('globalConfirmModal');
         const title = document.getElementById('globalConfirmTitle');
         const text = document.getElementById('globalConfirmText');
         const submit = document.getElementById('globalConfirmSubmit');
 
+        /*
+            Ja kāds no modālā loga elementiem nav atrasts,
+            darbība tiek izpildīta uzreiz, lai netiktu bloķēta funkcionalitāte.
+        */
         if (!modal || !title || !text || !submit) {
             if (typeof callback === 'function') {
                 callback();
@@ -1393,11 +1701,17 @@
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('confirm-modal-open');
 
+        /*
+            Neliela aizture nodrošina, ka poga tiek fokusēta pēc loga atvēršanas.
+        */
         setTimeout(function () {
             submit.focus();
         }, 50);
     }
 
+    /*
+        Aizver apstiprinājuma modālo logu un atiestata saglabāto callback funkciju.
+    */
     function closeGlobalConfirmModal() {
         const modal = document.getElementById('globalConfirmModal');
 
@@ -1411,6 +1725,9 @@
         globalConfirmCallback = null;
     }
 
+    /*
+        Escape taustiņš aizver gan mobilo izvēlni, gan apstiprinājuma modālo logu.
+    */
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             closeMobileMenu();
@@ -1418,6 +1735,12 @@
         }
     });
 
+    /*
+        Šī daļa pārtver elementus, kuri izmanto onclick="confirm(...)".
+
+        Standarta pārlūka confirm logs tiek aizstāts ar pielāgotu modālo logu.
+        Tas saglabā esošo formu un saišu loģiku, bet uzlabo vizuālo izskatu.
+    */
     document.addEventListener('click', function (event) {
         const confirmTrigger = event.target.closest('[onclick*="confirm"]');
 
@@ -1432,6 +1755,9 @@
             return;
         }
 
+        /*
+            Tiek apturēta noklusējuma darbība, lai vispirms parādītu modālo logu.
+        */
         event.preventDefault();
         event.stopImmediatePropagation();
 
@@ -1440,17 +1766,31 @@
         openGlobalConfirmModal(message, function () {
             const form = confirmTrigger.closest('form');
 
+            /*
+                Ja apstiprinājuma elements atrodas formā,
+                pēc apstiprināšanas forma tiek iesniegta.
+            */
             if (form) {
                 form.submit();
                 return;
             }
 
+            /*
+                Ja apstiprinājuma elements ir saite,
+                pēc apstiprināšanas lietotājs tiek pāradresēts.
+            */
             if (confirmTrigger.tagName === 'A' && confirmTrigger.href) {
                 window.location.href = confirmTrigger.href;
             }
         });
     }, true);
 
+    /*
+        Šī daļa apstrādā formas, kurām pievienots atribūts data-confirm-delete.
+
+        Tas ir noderīgi dzēšanas formām, kur pirms iesniegšanas
+        nepieciešams lietotāja apstiprinājums.
+    */
     document.addEventListener('submit', function (event) {
         const form = event.target;
 
@@ -1464,16 +1804,26 @@
             const message = form.dataset.confirmMessage || 'Vai tiešām vēlaties veikt šo darbību?';
 
             openGlobalConfirmModal(message, function () {
+                /*
+                    data-confirmHandled novērš atkārtotu apstiprinājuma loga parādīšanu,
+                    kad forma tiek iesniegta pēc lietotāja apstiprinājuma.
+                */
                 form.dataset.confirmHandled = 'true';
                 form.submit();
             });
         }
     }, true);
 
+    /*
+        Atcelšanas poga aizver modālo logu bez darbības izpildes.
+    */
     document.getElementById('globalConfirmCancel')?.addEventListener('click', function () {
         closeGlobalConfirmModal();
     });
 
+    /*
+        Apstiprināšanas poga aizver modālo logu un izpilda saglabāto callback funkciju.
+    */
     document.getElementById('globalConfirmSubmit')?.addEventListener('click', function () {
         const callback = globalConfirmCallback;
 
@@ -1484,6 +1834,10 @@
         }
     });
 
+    /*
+        Klikšķis uz modālā loga fona aizver logu.
+        Klikšķis pašā modālajā logā to neaizver.
+    */
     document.getElementById('globalConfirmModal')?.addEventListener('click', function (event) {
         if (event.target === this) {
             closeGlobalConfirmModal();

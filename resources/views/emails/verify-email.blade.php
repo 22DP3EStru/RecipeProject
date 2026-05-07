@@ -1,40 +1,74 @@
+{{--
+    E-pasta verifikācijas vēstules skats.
+
+    Šis Blade fails nodrošina e-pasta vēstules izkārtojumu, kas tiek nosūtīts
+    lietotājam pēc reģistrācijas tīmekļa vietnē “Vecmāmiņas Receptes”.
+    Vēstules mērķis ir informēt lietotāju par nepieciešamību apstiprināt
+    savu e-pasta adresi.
+
+    Failā ir iekļauts vietnes nosaukums, e-pasta apstiprināšanas virsraksts,
+    personalizēta uzruna ar lietotāja vārdu, paskaidrojums par reģistrācijas
+    pabeigšanu, verifikācijas saite un informatīvs teksts gadījumam, ja
+    lietotājs šo kontu nav izveidojis.
+
+    Skats izmanto tabulu struktūru un inline CSS, jo e-pasta klienti parasti
+    drošāk attēlo tabulās veidotus izkārtojumus un iekšēji norādītus stilus.
+--}}
+
 <!DOCTYPE html>
 <html lang="lv">
 <head>
+    {{-- Norāda dokumenta rakstzīmju kodējumu --}}
     <meta charset="UTF-8">
+
+    {{-- Nodrošina pareizu e-pasta attēlošanu mobilajās ierīcēs --}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{-- Norāda e-pasta dokumenta nosaukumu --}}
     <title>Apstiprini e-pastu</title>
 </head>
+
+{{-- E-pasta pamatstili tiek norādīti inline veidā, lai tie darbotos dažādos e-pasta klientos --}}
 <body style="margin:0; padding:0; background:#eee5da; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 
+{{-- Ārējā tabula veido e-pasta fonu un centrē galveno saturu --}}
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#eee5da; padding:40px 16px;">
     <tr>
+        {{-- Centrē iekšējo e-pasta kartīti --}}
         <td align="center">
+
+            {{-- Iekšējā tabula veido galveno e-pasta kartīti --}}
             <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#fffdf9; border:1px solid #ddcfc0; box-shadow:0 16px 40px rgba(79,59,42,0.07);">
+
+                {{-- Vietnes nosaukuma rinda --}}
                 <tr>
                     <td style="padding:32px 32px 16px 32px; text-align:center; font-family:Georgia, 'Times New Roman', serif; font-size:30px; color:#7a5a43;">
                         Vecmāmiņas Receptes
                     </td>
                 </tr>
 
+                {{-- Mazais vēstules tipa apzīmējums --}}
                 <tr>
                     <td style="padding:8px 32px 0 32px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:#7b6d61; font-weight:700;">
                         E-pasta apstiprināšana
                     </td>
                 </tr>
 
+                {{-- Galvenais e-pasta virsraksts --}}
                 <tr>
                     <td style="padding:14px 32px 0 32px; font-family:Georgia, 'Times New Roman', serif; font-size:34px; line-height:1.2; color:#7a5a43;">
                         Apstiprini savu e-pastu
                     </td>
                 </tr>
 
+                {{-- Personalizēta lietotāja uzruna --}}
                 <tr>
                     <td style="padding:20px 32px 0 32px; font-size:16px; line-height:1.8; color:#7b6d61;">
                         Sveiks, {{ $userName }}!
                     </td>
                 </tr>
 
+                {{-- Paskaidrojums par reģistrācijas pabeigšanu --}}
                 <tr>
                     <td style="padding:14px 32px 0 32px; font-size:16px; line-height:1.8; color:#7b6d61;">
                         Paldies par reģistrāciju vietnē <strong style="color:#2f241d;">Vecmāmiņas Receptes</strong>.
@@ -42,8 +76,11 @@
                     </td>
                 </tr>
 
+                {{-- Darbības poga ar e-pasta verifikācijas saiti --}}
                 <tr>
                     <td align="center" style="padding:30px 32px;">
+
+                        {{-- Verifikācijas saite tiek ģenerēta servera pusē un ievietota pogas href atribūtā --}}
                         <a href="{{ $verificationUrl }}"
                            style="display:inline-block; background:#7a5a43; color:#fffaf4; text-decoration:none; padding:14px 28px; font-size:15px; font-weight:700; border:1px solid #7a5a43;">
                             Apstiprināt e-pastu
@@ -51,12 +88,14 @@
                     </td>
                 </tr>
 
+                {{-- Drošības paskaidrojums gadījumam, ja lietotājs nav veidojis kontu --}}
                 <tr>
                     <td style="padding:0 32px; font-size:15px; line-height:1.8; color:#7b6d61;">
                         Ja neveidoji šo kontu, vari šo e-pastu droši ignorēt.
                     </td>
                 </tr>
 
+                {{-- Vēstules noslēguma teksts --}}
                 <tr>
                     <td style="padding:28px 32px 32px 32px; font-size:15px; line-height:1.8; color:#7b6d61;">
                         Ar cieņu,<br>

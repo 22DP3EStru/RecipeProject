@@ -1,15 +1,38 @@
+{{--
+    Reģistrācijas lapas skats.
+
+    Šis Blade fails nodrošina jauna lietotāja reģistrācijas lapu tīmekļa vietnē
+    “Vecmāmiņas Receptes”. Skats paredzēts lietotājiem, kuri vēl nav izveidojuši
+    kontu un vēlas piekļūt sistēmas pilnajai funkcionalitātei.
+
+    Failā ir iekļauta reģistrācijas forma ar vārda, e-pasta, paroles un paroles
+    apstiprināšanas ievades laukiem. Forma izmanto Laravel CSRF aizsardzību,
+    validācijas kļūdu attēlošanu un iepriekš ievadīto datu saglabāšanu, ja
+    reģistrācijas validācija neizdodas.
+
+    Skatā iekļautais CSS nosaka lapas vizuālo noformējumu, navigācijas joslu,
+    reģistrācijas formas paneli, informatīvo labo paneli, ievades laukus,
+    pogas, validācijas kļūdas, paroles paskaidrojumu un pielāgojumus
+    mobilajām ierīcēm.
+--}}
+
 @extends('layouts.app')
 
+{{-- Norāda lapas nosaukumu pārlūkprogrammas cilnē --}}
 @section('title', 'Reģistrēties - Vecmāmiņas Receptes')
+
+{{-- Norāda lapas meta aprakstu meklētājprogrammām un pārlūkam --}}
 @section('meta_description', 'Izveido kontu Vecmāmiņas Receptes, lai saglabātu favorītus, publicētu savas receptes un veidotu savu personīgo kulinārijas kolekciju.')
 
 @section('content')
 <style>
+    /* Ierobežo reģistrācijas lapas maksimālo platumu */
     .register-page {
         max-width: 1220px;
         margin: 0 auto;
     }
 
+    /* Noformē augšējo navigācijas joslu */
     .register-nav {
         background: rgba(255, 253, 249, 0.94);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -24,6 +47,7 @@
         margin-bottom: 30px;
     }
 
+    /* Noformē vietnes nosaukumu navigācijas joslā */
     .register-nav-brand {
         display: inline-flex;
         align-items: center;
@@ -36,12 +60,14 @@
         letter-spacing: 0.02em;
     }
 
+    /* Pievieno grāmatas ikonu pirms vietnes nosaukuma */
     .register-nav-brand::before {
         content: "📖";
         font-size: 1.1rem;
         line-height: 1;
     }
 
+    /* Sakārto navigācijas saites vienā rindā */
     .register-nav-links {
         display: flex;
         gap: 10px;
@@ -49,6 +75,7 @@
         flex-wrap: wrap;
     }
 
+    /* Noformē navigācijas saites */
     .register-nav-links a {
         color: var(--text);
         text-decoration: none;
@@ -60,6 +87,7 @@
         font-size: 14px;
     }
 
+    /* Pievieno hover efektu navigācijas saitēm */
     .register-nav-links a:hover {
         background: var(--surface-soft);
         border-color: var(--line);
@@ -67,6 +95,7 @@
         transform: translateY(-1px);
     }
 
+    /* Izveido divu kolonnu izkārtojumu reģistrācijas sadaļai */
     .register-hero {
         display: grid;
         grid-template-columns: 1.04fr 0.96fr;
@@ -74,6 +103,7 @@
         align-items: stretch;
     }
 
+    /* Nosaka kopīgo abu paneļu vizuālo noformējumu */
     .register-panel {
         border: 1px solid rgba(122, 90, 67, 0.14);
         border-radius: 28px;
@@ -82,11 +112,13 @@
         min-width: 0;
     }
 
+    /* Noformē kreiso paneli, kurā atrodas reģistrācijas forma */
     .register-hero-left {
         background: rgba(255, 253, 249, 0.97);
         padding: 40px;
     }
 
+    /* Noformē labo informatīvo paneli */
     .register-hero-right {
         background: linear-gradient(180deg, #fbf5ee 0%, #f3e8dc 100%);
         padding: 38px;
@@ -96,6 +128,7 @@
         position: relative;
     }
 
+    /* Pievieno dekoratīvu fonu labajam panelim */
     .register-hero-right::before {
         content: "";
         position: absolute;
@@ -106,11 +139,13 @@
         pointer-events: none;
     }
 
+    /* Nodrošina, ka labā paneļa saturs atrodas virs dekoratīvā fona */
     .register-hero-right > * {
         position: relative;
         z-index: 1;
     }
 
+    /* Noformē mazo ievadteksta birku virs virsraksta */
     .register-eyebrow {
         display: inline-flex;
         align-items: center;
@@ -127,6 +162,7 @@
         border: 1px solid rgba(122, 90, 67, 0.12);
     }
 
+    /* Noformē galveno reģistrācijas lapas virsrakstu */
     .register-title {
         font-family: Georgia, "Times New Roman", serif;
         font-size: 3rem;
@@ -136,6 +172,7 @@
         font-weight: 500;
     }
 
+    /* Noformē paskaidrojuma tekstu zem virsraksta */
     .register-text {
         color: var(--muted);
         font-size: 16px;
@@ -143,21 +180,25 @@
         max-width: 560px;
     }
 
+    /* Atdala reģistrācijas formu no ievadteksta */
     .form-area {
         margin-top: 30px;
         padding-top: 24px;
         border-top: 1px solid rgba(221, 207, 192, 0.9);
     }
 
+    /* Sakārto formas laukus vertikālā režģī */
     .form-grid {
         display: grid;
         gap: 20px;
     }
 
+    /* Noņem noklusēto formas grupas apakšējo atstarpi */
     .form-group {
         margin-bottom: 0;
     }
 
+    /* Noformē formas lauka nosaukumu */
     .form-label {
         display: block;
         margin-bottom: 9px;
@@ -166,6 +207,7 @@
         font-size: 14px;
     }
 
+    /* Noformē formas ievades laukus */
     .form-input {
         width: 100%;
         padding: 15px 16px;
@@ -178,10 +220,12 @@
         box-shadow: inset 0 1px 2px rgba(79, 59, 42, 0.02);
     }
 
+    /* Noformē ievades lauku placeholder tekstu */
     .form-input::placeholder {
         color: #9a8d82;
     }
 
+    /* Noformē ievades laukus fokusa stāvoklī */
     .form-input:focus {
         outline: none;
         border-color: #b79d84;
@@ -189,6 +233,7 @@
         box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
+    /* Noformē validācijas kļūdu tekstu */
     .field-error {
         color: var(--danger-text);
         font-size: 13px;
@@ -197,6 +242,7 @@
         font-weight: 600;
     }
 
+    /* Noformē paroles prasību paskaidrojumu */
     .password-help {
         display: block;
         margin-top: 7px;
@@ -205,6 +251,7 @@
         line-height: 1.55;
     }
 
+    /* Noformē reģistrācijas formas iesniegšanas pogu */
     .submit-btn {
         width: 100%;
         padding: 16px 18px;
@@ -212,12 +259,14 @@
         margin-top: 8px;
     }
 
+    /* Noformē sadaļu ar saiti uz ielogošanās lapu */
     .auth-links {
         padding-top: 24px;
         border-top: 1px solid rgba(221, 207, 192, 0.9);
         margin-top: 28px;
     }
 
+    /* Noformē sadaļas “Jau ir konts?” virsrakstu */
     .auth-links h4 {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
@@ -226,6 +275,7 @@
         font-weight: 500;
     }
 
+    /* Noformē paskaidrojuma tekstu autentifikācijas sadaļā */
     .auth-links p {
         color: var(--muted);
         line-height: 1.8;
@@ -233,6 +283,7 @@
         margin-bottom: 18px;
     }
 
+    /* Sakārto ielogošanās pogu autentifikācijas sadaļā */
     .login-actions {
         display: flex;
         gap: 12px;
@@ -240,6 +291,7 @@
         align-items: center;
     }
 
+    /* Noformē labā paneļa dekoratīvo ikonu */
     .feature-icon {
         width: 64px;
         height: 64px;
@@ -254,6 +306,7 @@
         box-shadow: 0 8px 18px rgba(79, 59, 42, 0.05);
     }
 
+    /* Noformē labā paneļa virsrakstu */
     .feature-title {
         font-family: Georgia, "Times New Roman", serif;
         color: var(--accent);
@@ -263,6 +316,7 @@
         line-height: 1.15;
     }
 
+    /* Noformē labā paneļa paskaidrojuma tekstu */
     .feature-text {
         color: var(--muted);
         line-height: 1.8;
@@ -270,11 +324,13 @@
         font-size: 15px;
     }
 
+    /* Sakārto sistēmas ieguvumu sarakstu */
     .feature-list {
         display: grid;
         gap: 14px;
     }
 
+    /* Noformē vienu ieguvuma kartīti */
     .feature-item {
         padding: 16px 16px;
         border: 1px solid rgba(122, 90, 67, 0.10);
@@ -283,6 +339,7 @@
         box-shadow: 0 8px 18px rgba(79, 59, 42, 0.03);
     }
 
+    /* Noformē ieguvuma kartītes virsrakstu */
     .feature-item h5 {
         color: var(--text);
         font-size: 1rem;
@@ -290,12 +347,14 @@
         font-weight: 800;
     }
 
+    /* Noformē ieguvuma kartītes paskaidrojuma tekstu */
     .feature-item p {
         color: var(--muted);
         font-size: 14px;
         line-height: 1.7;
     }
 
+    /* Nodrošina, ka reģistrācijas lapa nepārplūst ārpus ekrāna */
     .register-page {
         width: 100%;
         max-width: 1220px;
@@ -303,6 +362,7 @@
         overflow-x: hidden;
     }
 
+    /* Novērš elementu pārplūšanu šaurākos ekrānos */
     .register-nav,
     .register-hero,
     .register-panel,
@@ -317,6 +377,7 @@
         min-width: 0;
     }
 
+    /* Pielāgo lapas izkārtojumu planšetēm */
     @media (max-width: 980px) {
         .register-hero {
             grid-template-columns: 1fr;
@@ -336,6 +397,7 @@
         }
     }
 
+    /* Pielāgo lapu mazākiem ekrāniem */
     @media (max-width: 768px) {
         .register-page {
             max-width: 100%;
@@ -492,6 +554,7 @@
         }
     }
 
+    /* Pielāgo lapu ļoti maziem telefona ekrāniem */
     @media (max-width: 480px) {
         .register-nav {
             padding: 14px;
@@ -564,35 +627,67 @@
     }
 </style>
 
+{{-- Galvenais reģistrācijas lapas konteiners --}}
 <div class="register-page">
+
+    {{-- Augšējā navigācija ar vietnes nosaukumu un galvenajām saitēm --}}
     <nav class="register-nav">
+
+        {{-- Saite uz sākumlapu ar vietnes nosaukumu --}}
         <a href="/" class="register-nav-brand">Vecmāmiņas Receptes</a>
 
+        {{-- Navigācijas saites uz sākumlapu un ielogošanās lapu --}}
         <div class="register-nav-links">
             <a href="/">Sākums</a>
             <a href="{{ route('login') }}">Ielogoties</a>
         </div>
 
+        {{-- Papildu poga lietotāja atgriešanai uz sākumlapu --}}
         <div>
             <a href="/" class="btn btn-secondary">Atpakaļ uz sākumu</a>
         </div>
     </nav>
 
+    {{-- Divu paneļu reģistrācijas izkārtojums --}}
     <div class="register-hero">
+
+        {{-- Kreisais panelis satur reģistrācijas formu --}}
         <div class="register-panel register-hero-left">
+
+            {{-- Mazais ievadteksts virs galvenā virsraksta --}}
             <div class="register-eyebrow">Pievienojieties kopienai</div>
+
+            {{-- Galvenais reģistrācijas lapas virsraksts --}}
             <h1 class="register-title">Izveidojiet savu kontu</h1>
+
+            {{-- Īss paskaidrojums par konta izveides priekšrocībām --}}
             <p class="register-text">
                 Reģistrējieties, lai saglabātu favorītus, publicētu savas receptes un izveidotu savu personīgo kulinārijas kolekciju.
             </p>
 
+            {{-- Formas zona ar reģistrācijas ievades laukiem --}}
             <div class="form-area">
+
+                {{-- Forma nosūta reģistrācijas datus uz Laravel register maršrutu --}}
                 <form method="POST" action="{{ route('register') }}">
+
+                    {{-- CSRF aizsardzība pret neatļautiem pieprasījumiem --}}
                     @csrf
 
+                    {{-- Formas lauki tiek sakārtoti vertikālā režģī --}}
                     <div class="form-grid">
+
+                        {{-- Lietotāja vārda ievades grupa --}}
                         <div class="form-group">
+
+                            {{-- Vārda ievades lauka nosaukums --}}
                             <label class="form-label" for="name">Pilnais vārds</label>
+
+                            {{--
+                                Vārda ievades lauks.
+                                old('name') saglabā iepriekš ievadīto vērtību, ja validācija neizdodas.
+                                @error pievieno kļūdas klasi, ja lauks nav aizpildīts korekti.
+                            --}}
                             <input
                                 type="text"
                                 id="name"
@@ -603,13 +698,24 @@
                                 required
                                 autofocus
                                 autocomplete="name">
+
+                            {{-- Parāda vārda lauka validācijas kļūdu --}}
                             @error('name')
                                 <span class="field-error">{{ $message }}</span>
                             @enderror
                         </div>
 
+                        {{-- E-pasta adreses ievades grupa --}}
                         <div class="form-group">
+
+                            {{-- E-pasta ievades lauka nosaukums --}}
                             <label class="form-label" for="email">E-pasta adrese</label>
+
+                            {{--
+                                E-pasta ievades lauks.
+                                old('email') saglabā ievadīto e-pastu pēc neveiksmīgas validācijas.
+                                autocomplete="email" palīdz pārlūkam piedāvāt saglabātas e-pasta adreses.
+                            --}}
                             <input
                                 type="email"
                                 id="email"
@@ -619,13 +725,24 @@
                                 placeholder="Ievadiet savu e-pasta adresi"
                                 required
                                 autocomplete="email">
+
+                            {{-- Parāda e-pasta lauka validācijas kļūdu --}}
                             @error('email')
                                 <span class="field-error">{{ $message }}</span>
                             @enderror
                         </div>
 
+                        {{-- Paroles ievades grupa --}}
                         <div class="form-group">
+
+                            {{-- Paroles ievades lauka nosaukums --}}
                             <label class="form-label" for="password">Parole</label>
+
+                            {{--
+                                Paroles ievades lauks.
+                                autocomplete="new-password" norāda pārlūkam, ka tiek veidota jauna parole.
+                                Kļūdas klase tiek pievienota, ja parole neatbilst validācijas prasībām.
+                            --}}
                             <input
                                 type="password"
                                 id="password"
@@ -635,17 +752,28 @@
                                 required
                                 autocomplete="new-password">
 
+                            {{-- Paskaidro lietotājam minimālās paroles prasības --}}
                             <small class="password-help">
                                 Parolei jābūt vismaz 8 rakstzīmes garai, un tai jāsatur vismaz viens lielais burts, viens mazais burts un viens cipars.
                             </small>
 
+                            {{-- Parāda paroles lauka validācijas kļūdu --}}
                             @error('password')
                                 <span class="field-error">{{ $message }}</span>
                             @enderror
                         </div>
 
+                        {{-- Paroles apstiprināšanas ievades grupa --}}
                         <div class="form-group">
+
+                            {{-- Paroles apstiprināšanas lauka nosaukums --}}
                             <label class="form-label" for="password_confirmation">Apstiprināt paroli</label>
+
+                            {{--
+                                Paroles apstiprināšanas lauks.
+                                Šis lauks tiek salīdzināts ar galveno paroles lauku,
+                                lai pārliecinātos, ka lietotājs paroli ievadījis pareizi.
+                            --}}
                             <input
                                 type="password"
                                 id="password_confirmation"
@@ -657,18 +785,25 @@
                         </div>
                     </div>
 
+                    {{-- Poga nosūta reģistrācijas formu --}}
                     <button type="submit" class="btn btn-success submit-btn">
                         Izveidot kontu
                     </button>
                 </form>
             </div>
 
+            {{-- Sadaļa lietotājiem, kuriem konts jau ir izveidots --}}
             <div class="auth-links">
+
+                {{-- Ielogošanās sadaļas virsraksts --}}
                 <h4>Jau ir konts?</h4>
+
+                {{-- Paskaidro lietotājam iespēju ielogoties esošajā kontā --}}
                 <p>
                     Ielogojieties, lai piekļūtu savām receptēm un turpinātu savu kulinārijas ceļojumu.
                 </p>
 
+                {{-- Ielogošanās darbības poga --}}
                 <div class="login-actions">
                     <a href="{{ route('login') }}" class="btn btn-primary">
                         Ielogoties
@@ -677,24 +812,36 @@
             </div>
         </div>
 
+        {{-- Labais panelis ar reģistrācijas priekšrocību aprakstu --}}
         <div class="register-panel register-hero-right">
+
+            {{-- Dekoratīva ikona labajā panelī --}}
             <div class="feature-icon">🎉</div>
+
+            {{-- Labā paneļa virsraksts --}}
             <h2 class="feature-title">Ko iegūsiet pēc reģistrācijas</h2>
+
+            {{-- Labā paneļa paskaidrojuma teksts --}}
             <p class="feature-text">
                 Skaista, ērta un mājīga vieta, kur glabāt savas receptes, atrast iedvesmu un veidot savu personīgo recepšu pasauli.
             </p>
 
+            {{-- Saraksts ar galvenajām iespējām pēc reģistrācijas --}}
             <div class="feature-list">
+
+                {{-- Apraksta iespēju pievienot savas receptes --}}
                 <div class="feature-item">
                     <h5>Pievienot savas receptes</h5>
                     <p>Izveidojiet un publicējiet savus ēdienus vienotā, pārskatāmā un skaistā formātā.</p>
                 </div>
 
+                {{-- Apraksta iespēju saglabāt iecienītākās receptes --}}
                 <div class="feature-item">
                     <h5>Saglabāt iecienītākās receptes</h5>
                     <p>Veidojiet savu favorītu kolekciju, lai labākās receptes vienmēr būtu ātri atrodamas.</p>
                 </div>
 
+                {{-- Apraksta iespēju pārlūkot citu lietotāju receptes --}}
                 <div class="feature-item">
                     <h5>Atklāt jaunus ēdienus</h5>
                     <p>Pārlūkojiet citu lietotāju receptes un atrodiet idejas ikdienai, svētkiem un īpašām reizēm.</p>
