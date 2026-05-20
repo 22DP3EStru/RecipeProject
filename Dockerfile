@@ -32,4 +32,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan config:clear && php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan tinker --execute=\"App\\Models\\User::updateOrCreate(['email'=>'admin@example.com'], ['name'=>'Admin','password'=>Illuminate\\Support\\Facades\\Hash::make('Admin12345!'),'is_admin'=>1]);\" && php-fpm -D && nginx -g 'daemon off;'"]
