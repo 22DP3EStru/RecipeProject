@@ -1,7 +1,7 @@
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
-    nginx git curl unzip nodejs npm \
+    nginx git curl unzip nodejs npm default-mysql-client \
     libpng-dev libjpeg62-turbo-dev libfreetype6-dev libzip-dev libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip intl opcache \
@@ -26,11 +26,10 @@ RUN npm install && npm run build
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 
 COPY .docker/nginx/http.conf /etc/nginx/conf.d/default.conf
+COPY docker/recipeproject.sql /var/www/recipeproject.sql
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-COPY docker/recipeproject.sql /var/www/recipeproject.sql
-
-CMD ["sh", "-c", "php artisan config:clear && php artisan migrate --force && php -r \"$pdo=new PDO('mysql:host='.getenv('DB_HOST').';port='.getenv('DB_PORT').';dbname='.getenv('DB_DATABASE'),getenv('DB_USERNAME'),getenv('DB_PASSWORD')); $pdo->exec(file_get_contents('/var/www/recipeproject.sql'));\" && php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan migrate --force && mysql -h$DB_HOST -P$DB_PORT -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < /var/www/recipeproject.sql && php-fpm -D && nginx -g 'daemon off;'"]
