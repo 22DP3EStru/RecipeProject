@@ -32,4 +32,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan migrate --force && mysql --skip-ssl -h$DB_HOST -P$DB_PORT -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < /var/www/recipeproject.sql && php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan config:clear && mysql --skip-ssl -h$DB_HOST -P$DB_PORT -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < /var/www/recipeproject.sql && php-fpm -D && nginx -g 'daemon off;'"]
