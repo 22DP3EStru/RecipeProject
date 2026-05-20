@@ -31,4 +31,6 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan migrate --force && php-fpm -D && nginx -g 'daemon off;'"]
+COPY docker/recipeproject.sql /var/www/recipeproject.sql
+
+CMD ["sh", "-c", "php artisan config:clear && php artisan migrate --force && php -r \"$pdo=new PDO('mysql:host='.getenv('DB_HOST').';port='.getenv('DB_PORT').';dbname='.getenv('DB_DATABASE'),getenv('DB_USERNAME'),getenv('DB_PASSWORD')); $pdo->exec(file_get_contents('/var/www/recipeproject.sql'));\" && php-fpm -D && nginx -g 'daemon off;'"]
