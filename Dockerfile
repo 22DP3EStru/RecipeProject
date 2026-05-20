@@ -13,6 +13,13 @@ WORKDIR /var/www
 
 COPY . .
 
+RUN mkdir -p storage/framework/views \
+    storage/framework/cache \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
