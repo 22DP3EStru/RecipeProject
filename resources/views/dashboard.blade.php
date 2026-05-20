@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- 
+    Šis skats attēlo lietotāja vadības paneli.
+    Tajā lietotājs redz savu aktivitāti, ātrās darbības,
+    jaunākās kopienas receptes, savas pēdējās receptes un noderīgus ieteikumus.
+--}}
+
 @section('title', 'Vadības panelis - Vecmāmiņas Receptes')
 @section('meta_description', 'Jūsu kulinārais ceļojums turpinās — pārskatiet statistiku, jaunākās receptes un ātrās darbības vienuviet.')
 
@@ -8,16 +14,19 @@
 
 @section('content')
 <style>
+    /* Galvenais vadības paneļa ietvars. */
     .dashboard-page {
         color: var(--text);
     }
 
+    /* Vertikāli sakārto visas vadības paneļa sadaļas. */
     .dashboard-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Kopējais kartītes stils visām paneļa sadaļām. */
     .dashboard-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -26,11 +35,13 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Augšējā ievada kartīte. */
     .dashboard-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
+    /* Ievada sadaļā ikona un teksts tiek novietoti blakus. */
     .dashboard-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -38,6 +49,7 @@
         align-items: center;
     }
 
+    /* Apaļais ikonas bloks ievada sadaļā. */
     .dashboard-hero-icon-wrap {
         width: 108px;
         height: 108px;
@@ -52,6 +64,7 @@
         flex-shrink: 0;
     }
 
+    /* Mazā etiķete virs galvenā paneļa virsraksta. */
     .dashboard-badge {
         display: inline-flex;
         align-items: center;
@@ -84,6 +97,7 @@
         max-width: 820px;
     }
 
+    /* Sadaļu virsrakstu kopējais noformējums. */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -122,6 +136,7 @@
         max-width: 760px;
     }
 
+    /* Statistikas kartīšu režģis. */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -143,6 +158,7 @@
         box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
     }
 
+    /* Papildu fona varianti statistikas kartītēm. */
     .stat-box.soft-green {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
     }
@@ -172,6 +188,7 @@
         line-height: 1.6;
     }
 
+    /* Ātro darbību kartīšu režģis. */
     .actions-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -213,6 +230,7 @@
         line-height: 1.7;
     }
 
+    /* Recepšu kartīšu režģis jaunākajām un lietotāja receptēm. */
     .recipe-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -267,6 +285,7 @@
         line-height: 1.6;
     }
 
+    /* Lietotāja paša receptēm tiek izmantots nedaudz atšķirīgs fons. */
     .my-recipe-card {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
         border-color: #d8e1cf;
@@ -289,6 +308,7 @@
         flex: 1;
     }
 
+    /* Tukšais stāvoklis, ja lietotājs vēl nav izveidojis receptes. */
     .empty-box {
         text-align: center;
         padding: 56px 28px;
@@ -315,6 +335,7 @@
         line-height: 1.8;
     }
 
+    /* Padomu kartīšu režģis. */
     .tips-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -324,12 +345,12 @@
     .tip-card {
         height: 100%;
     }
-
 </style>
 
 <div class="dashboard-page">
     <div class="dashboard-stack">
 
+        {{-- Lapas ievads ar sveicienu un īsu paskaidrojumu par vadības paneli. --}}
         <div class="dashboard-section-card dashboard-hero-card">
             <div class="dashboard-hero-inner">
                 <div class="dashboard-hero-icon-wrap">👨‍🍳</div>
@@ -345,6 +366,7 @@
             </div>
         </div>
 
+        {{-- Administrācijas sadaļa tiek rādīta tikai lietotājam ar administratora tiesībām. --}}
         @if(Auth::user()->is_admin)
             <div class="dashboard-section-card">
                 <div class="section-head">
@@ -365,6 +387,7 @@
             </div>
         @endif
 
+        {{-- Statistikas sadaļa ar lietotāja un platformas kopējiem rādītājiem. --}}
         <div class="dashboard-section-card">
             <div class="section-head">
                 <div class="section-kicker">Statistika</div>
@@ -397,6 +420,7 @@
             </div>
         </div>
 
+        {{-- Ātrās darbības biežāk izmantotajām lapām. --}}
         <div class="dashboard-section-card">
             <div class="section-head">
                 <div class="section-kicker">Ātrās darbības</div>
@@ -440,9 +464,11 @@
         </div>
 
         @php
+            // Iegūst četras jaunākās kopienas receptes kopā ar to autoriem.
             $recentRecipes = \App\Models\Recipe::with('user')->latest()->limit(4)->get();
         @endphp
 
+        {{-- Ja sistēmā ir jaunākās receptes, tās tiek parādītas atsevišķā sadaļā. --}}
         @if($recentRecipes->count() > 0)
             <div class="dashboard-section-card">
                 <div class="section-head">
@@ -470,9 +496,11 @@
         @endif
 
         @php
+            // Iegūst trīs jaunākās receptes, kuras izveidojis pašreizējais lietotājs.
             $myRecentRecipes = \App\Models\Recipe::where('user_id', Auth::id())->latest()->limit(3)->get();
         @endphp
 
+        {{-- Lietotāja jaunākās receptes ar ātru apskati un rediģēšanu. --}}
         @if($myRecentRecipes->count() > 0)
             <div class="dashboard-section-card">
                 <div class="section-head">
@@ -500,6 +528,7 @@
                 </div>
             </div>
         @else
+            {{-- Tukšais stāvoklis, ja lietotājs vēl nav izveidojis nevienu recepti. --}}
             <div class="dashboard-section-card empty-box">
                 <div class="empty-icon">📝</div>
                 <h4>Jūs vēl neesat izveidojis nevienu recepti</h4>
@@ -510,6 +539,7 @@
             </div>
         @endif
 
+        {{-- Noderīgu padomu sadaļa platformas izmantošanai. --}}
         <div class="dashboard-section-card">
             <div class="section-head">
                 <div class="section-kicker">Padomi</div>

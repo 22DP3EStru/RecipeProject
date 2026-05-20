@@ -1,5 +1,16 @@
 @extends('layouts.app')
 
+{{--
+    Lietotāja recepšu pārvaldības skats.
+
+    Šis Blade fails attēlo visas receptes, kuras ir izveidojis pašreizējais lietotājs.
+    Skatā lietotājs var apskatīt savu recepšu kolekciju, atvērt receptes pilno skatu,
+    pāriet uz receptes rediģēšanu, dzēst recepti, kā arī izveidot jaunu recepti.
+
+    Skats izmanto no kontroliera padoto $recipes objektu, kurā ir lietotāja receptes
+    ar lapošanas atbalstu.
+--}}
+
 @section('title', 'Manas receptes - Vecmāmiņas Receptes')
 @section('meta_description', 'Pārvaldi visas savas izveidotās receptes, rediģē tās un pievieno jaunas Vecmāmiņas Receptes profilā.')
 
@@ -8,16 +19,37 @@
 
 @section('content')
 <style>
+    /*
+        Manas receptes lapas lokālie stili.
+
+        Šajā sadaļā tiek noformēta:
+        - lapas ievadsadaļa;
+        - recepšu statistika;
+        - darbību pogas;
+        - lietotāja recepšu kartītes;
+        - lapošana;
+        - tukša saraksta paziņojums;
+        - padomu sadaļa.
+    */
+
+    /* Galvenais lapas konteiners. */
     .my-recipes-page {
         color: var(--text);
     }
 
+    /* Vertikāls sadaļu izkārtojums visai lapai. */
     .my-recipes-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /*
+        Kopējā sadaļas kartīte.
+
+        Šo klasi izmanto vairākām lapas daļām,
+        lai saglabātu vienotu fonu, noapaļojumu un ēnojumu.
+    */
     .my-recipes-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -26,11 +58,18 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Lapas augšējā ievadsadaļa. */
     .my-recipes-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
+    /*
+        Ievadsadaļas iekšējais izkārtojums.
+
+        Kreisajā pusē tiek rādīta ikona,
+        bet labajā pusē - lietotāja vārds un paskaidrojums.
+    */
     .my-recipes-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -38,6 +77,7 @@
         align-items: center;
     }
 
+    /* Dekoratīva recepšu autora ikona. */
     .my-recipes-icon-wrap {
         width: 108px;
         height: 108px;
@@ -52,6 +92,7 @@
         flex-shrink: 0;
     }
 
+    /* Neliela sadaļas atzīme virs virsraksta. */
     .my-recipes-badge {
         display: inline-flex;
         align-items: center;
@@ -68,6 +109,7 @@
         margin-bottom: 14px;
     }
 
+    /* Galvenais lapas virsraksts. */
     .my-recipes-main-title {
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2.55rem;
@@ -77,6 +119,7 @@
         line-height: 1.08;
     }
 
+    /* Īss paskaidrojums par šīs sadaļas nozīmi. */
     .my-recipes-main-text {
         color: var(--muted);
         line-height: 1.85;
@@ -84,12 +127,19 @@
         max-width: 760px;
     }
 
+    /*
+        Recepšu statistikas sadaļa.
+
+        Tajā tiek parādīts kopējais recepšu skaits,
+        jaunāko recepšu skaits pašreizējā lapā un kategoriju skaits.
+    */
     .my-recipes-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
     }
 
+    /* Viena statistikas kartīte. */
     .stat-card {
         background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -105,6 +155,7 @@
         box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
     }
 
+    /* Statistikas kartīšu maigie krāsu varianti. */
     .stat-card.soft-green {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
     }
@@ -128,6 +179,7 @@
         font-weight: 700;
     }
 
+    /* Darbību sadaļa ar saitēm uz receptes izveidi un kopējo recepšu sarakstu. */
     .my-recipes-actions-card {
         text-align: center;
     }
@@ -139,6 +191,11 @@
         flex-wrap: wrap;
     }
 
+    /*
+        Lietotāja recepšu saraksta galvene.
+
+        Tā norāda, ka zemāk tiek attēlotas tieši pašreizējā lietotāja receptes.
+    */
     .recipes-head {
         margin-bottom: 22px;
     }
@@ -175,12 +232,18 @@
         max-width: 760px;
     }
 
+    /*
+        Recepšu kartīšu režģis.
+
+        Kartītes automātiski pārkārtojas pēc ekrāna platuma.
+    */
     .recipes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 22px;
     }
 
+    /* Vienas lietotāja receptes kartīte. */
     .recipe-card {
         background: #fffdf9;
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -195,6 +258,7 @@
         box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
     }
 
+    /* Kartītes augšdaļa ar receptes nosaukumu un īsu aprakstu. */
     .recipe-top {
         padding: 24px 24px 16px;
         border-bottom: 1px solid rgba(221, 207, 192, 0.9);
@@ -216,11 +280,17 @@
         font-size: 14px;
     }
 
+    /* Kartītes apakšdaļa ar metadatiem un pārvaldības pogām. */
     .recipe-body {
         padding: 20px 24px 24px;
         background: #fffdf9;
     }
 
+    /*
+        Receptes informācijas režģis.
+
+        Tajā tiek rādīta kategorija, sarežģītība, kopējais laiks un porciju skaits.
+    */
     .recipe-info-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -247,6 +317,7 @@
         flex-shrink: 0;
     }
 
+    /* Receptes izveidošanas datums. */
     .recipe-footer {
         border-top: 1px solid rgba(221, 207, 192, 0.9);
         padding-top: 14px;
@@ -257,6 +328,12 @@
         line-height: 1.6;
     }
 
+    /*
+        Receptes pārvaldības pogas.
+
+        Kartītē ir trīs darbības:
+        apskatīt, rediģēt un dzēst.
+    */
     .recipe-actions {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -272,6 +349,12 @@
         width: 100%;
     }
 
+    /*
+        Lapošanas bloks.
+
+        Laravel noklusējuma lapošanas HTML tiek pielāgots,
+        lai tas vizuāli iederētos lapas noformējumā.
+    */
     .pagination-wrap {
         margin-top: 28px;
         padding-top: 24px;
@@ -342,6 +425,11 @@
         color: var(--muted) !important;
     }
 
+    /*
+        Tukša saraksta paziņojums.
+
+        Šī sadaļa tiek parādīta, ja lietotājs vēl nav izveidojis nevienu recepti.
+    */
     .empty-state {
         text-align: center;
         padding: 60px 24px;
@@ -372,6 +460,11 @@
         margin-right: auto;
     }
 
+    /*
+        Padomu sadaļa.
+
+        Tā palīdz lietotājam saprast, kā veidot kvalitatīvākas receptes.
+    */
     .tips-box h3 {
         text-align: center;
         font-family: Georgia, "Times New Roman", serif;
@@ -419,6 +512,7 @@
 <div class="my-recipes-page">
     <div class="my-recipes-stack">
 
+        <!-- Lapas ievadsadaļa ar lietotāja vārdu un īsu paskaidrojumu. -->
         <div class="my-recipes-section-card my-recipes-hero-card">
             <div class="my-recipes-hero-inner">
                 <div class="my-recipes-icon-wrap">👨‍🍳</div>
@@ -434,6 +528,7 @@
             </div>
         </div>
 
+        <!-- Lietotāja recepšu statistikas sadaļa. -->
         <div class="my-recipes-stats">
             <div class="stat-card">
                 <div class="stat-number">{{ $recipes->total() }}</div>
@@ -455,6 +550,7 @@
             </div>
         </div>
 
+        <!-- Galvenās darbības: jaunas receptes izveide un visu recepšu pārlūkošana. -->
         <div class="my-recipes-section-card my-recipes-actions-card">
             <div class="my-recipes-actions-row">
                 <a href="{{ route('recipes.create') }}" class="btn btn-success">
@@ -466,6 +562,7 @@
             </div>
         </div>
 
+        <!-- Ja lietotājam ir izveidotas receptes, tiek parādīta recepšu kolekcija. -->
         @if($recipes->count() > 0)
             <div class="my-recipes-section-card">
                 <div class="recipes-head">
@@ -476,26 +573,32 @@
                     </p>
                 </div>
 
+                <!-- Lietotāja izveidoto recepšu kartītes. -->
                 <div class="recipes-grid">
                     @foreach($recipes as $recipe)
                         <div class="recipe-card">
                             <div class="recipe-top">
                                 <h3 class="recipe-title">{{ $recipe->title }}</h3>
+
+                                <!-- Apraksts tiek saīsināts, lai kartītes būtu kompaktas un viegli pārskatāmas. -->
                                 <p class="recipe-desc">{{ \Illuminate\Support\Str::limit($recipe->description, 100) }}</p>
                             </div>
 
                             <div class="recipe-body">
                                 <div class="recipe-info-grid">
+                                    <!-- Receptes kategorija. -->
                                     <div class="recipe-info-item">
                                         <span class="recipe-info-icon">📂</span>
                                         <span>{{ $recipe->category->name ?? $recipe->category ?? 'Nav kategorijas' }}</span>
                                     </div>
 
+                                    <!-- Receptes sarežģītības līmenis. -->
                                     <div class="recipe-info-item">
                                         <span class="recipe-info-icon">⭐</span>
                                         <span>{{ $recipe->difficulty ?? 'Nav norādīta' }}</span>
                                     </div>
 
+                                    <!-- Kopējais laiks tiek aprēķināts no sagatavošanas un gatavošanas laika. -->
                                     @if($recipe->prep_time || $recipe->cook_time)
                                         <div class="recipe-info-item">
                                             <span class="recipe-info-icon">⏱️</span>
@@ -503,6 +606,7 @@
                                         </div>
                                     @endif
 
+                                    <!-- Porciju skaits tiek rādīts tikai tad, ja tas receptei ir norādīts. -->
                                     @if($recipe->servings)
                                         <div class="recipe-info-item">
                                             <span class="recipe-info-icon">👥</span>
@@ -511,10 +615,12 @@
                                     @endif
                                 </div>
 
+                                <!-- Receptes izveidošanas datums. -->
                                 <div class="recipe-footer">
                                     Izveidots: {{ $recipe->created_at ? $recipe->created_at->format('d.m.Y H:i') : '-' }}
                                 </div>
 
+                                <!-- Receptes pārvaldības darbības. -->
                                 <div class="recipe-actions">
                                     <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
                                         Skatīt
@@ -524,6 +630,7 @@
                                         Rediģēt
                                     </a>
 
+                                    <!-- Dzēšanas forma izmanto DELETE metodi un apstiprinājuma paziņojumu. -->
                                     <form
                                         method="POST"
                                         action="{{ route('recipes.destroy', $recipe) }}"
@@ -542,6 +649,7 @@
                     @endforeach
                 </div>
 
+                <!-- Lapošana tiek rādīta tikai tad, ja recepšu saraksts sadalīts vairākās lapās. -->
                 @if($recipes->hasPages())
                     <div class="pagination-wrap">
                         <div class="pagination-summary">
@@ -553,6 +661,7 @@
                 @endif
             </div>
         @else
+            <!-- Tukšais stāvoklis, ja lietotājs vēl nav izveidojis nevienu recepti. -->
             <div class="my-recipes-section-card empty-state">
                 <div class="icon">📝</div>
                 <h3>Jūs vēl neesat izveidojis nevienu recepti</h3>
@@ -565,6 +674,7 @@
             </div>
         @endif
 
+        <!-- Padomu sadaļa tiek rādīta, ja lietotājam vēl ir salīdzinoši maz recepšu. -->
         @if($recipes->total() < 5)
             <div class="my-recipes-section-card tips-box">
                 <h3>Padomi recepšu izveidošanai</h3>

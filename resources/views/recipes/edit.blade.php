@@ -1,32 +1,91 @@
 @extends('layouts.app')
 
+{{--
+    Receptes rediģēšanas skats.
+
+    Šis Blade fails nodrošina esošas receptes informācijas atjaunināšanu.
+    Lietotājs šajā skatā var mainīt receptes nosaukumu, aprakstu, kategoriju,
+    grūtības līmeni, gatavošanas laikus, sastāvdaļas, instrukcijas, attēlu un video.
+
+    Skats izmanto no kontroliera padoto $recipe objektu.
+    Ja validācija neizdodas, forma saglabā iepriekš ievadītās old() vērtības,
+    lai lietotājam nebūtu atkārtoti jāievada visi dati.
+--}}
+
 @section('title', 'Rediģēt recepti - Vecmāmiņas Receptes')
 @section('hero_title', 'Rediģēt recepti')
 @section('hero_text', 'Atjauniniet recepti, uzlabojiet detaļas un papildiniet saturu')
 
 @section('content')
 @php
+    /*
+        Saglabā iepriekš ievadītās sastāvdaļu vērtības.
+
+        Šīs vērtības tiek izmantotas tad, ja forma pēc validācijas kļūdas
+        tiek parādīta atkārtoti.
+    */
     $oldNames = old('ingredient_name');
     $oldQtys  = old('ingredient_qty');
     $oldUnits = old('ingredient_unit');
+
+    /*
+        Nosaka, vai formai jāizmanto old() dati.
+
+        Ja lietotājs jau bija ievadījis sastāvdaļas un forma netika pieņemta,
+        tiek atjaunotas tieši lietotāja ievadītās vērtības.
+    */
     $useOld = is_array($oldNames) || is_array($oldQtys) || is_array($oldUnits);
 
+    /*
+        Iegūst receptes sastāvdaļas no relācijas.
+
+        Ja relācija nav ielādēta vai dati nav pieejami,
+        tiek izmantota tukša kolekcija.
+    */
     $ingredientsRel = $recipe->ingredientsItems ?? collect();
 
+    /*
+        Nosaka izvēlēto kategoriju.
+
+        Vispirms tiek izmantota old() vērtība, pēc tam kategorijas relācijas nosaukums,
+        un tikai tad kategorijas tekstuālā vērtība no pašas receptes.
+    */
     $selectedCategory = old('category', $recipe->category->name ?? $recipe->category ?? '');
 @endphp
 
 <style>
+    /*
+        Receptes rediģēšanas lapas lokālie CSS stili.
+
+        Šie stili nosaka:
+        - ievadsadaļas izskatu;
+        - formas kartīšu noformējumu;
+        - ievades laukus;
+        - sastāvdaļu rindas;
+        - esošā attēla un video priekšskatījumu;
+        - receptes metadatu bloku;
+        - dzēšanas sadaļu;
+        - padomu sadaļu.
+    */
+
+    /* Galvenais receptes rediģēšanas lapas konteiners. */
     .edit-recipe-page {
         color: var(--text);
     }
 
+    /* Vertikāls lapas sadaļu izkārtojums. */
     .edit-recipe-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /*
+        Kopējā sadaļas kartīte.
+
+        Šo klasi izmanto formas blokiem, metadatiem, dzēšanas sadaļai
+        un padomu blokam, lai lapā saglabātos vienots dizains.
+    */
     .edit-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -35,11 +94,18 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Augšējā ievadsadaļa. */
     .edit-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
+    /*
+        Ievadsadaļas iekšējais izkārtojums.
+
+        Kreisajā pusē atrodas ikona, bet labajā pusē - virsraksts
+        un paskaidrojums par receptes rediģēšanu.
+    */
     .edit-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -47,6 +113,7 @@
         align-items: center;
     }
 
+    /* Dekoratīva rediģēšanas ikona. */
     .edit-hero-icon-wrap {
         width: 108px;
         height: 108px;
@@ -61,6 +128,7 @@
         flex-shrink: 0;
     }
 
+    /* Neliela sadaļas atzīme virs galvenā virsraksta. */
     .edit-badge {
         display: inline-flex;
         align-items: center;
@@ -77,6 +145,7 @@
         margin-bottom: 14px;
     }
 
+    /* Galvenais rediģēšanas lapas virsraksts. */
     .edit-main-title {
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2.55rem;
@@ -86,6 +155,7 @@
         line-height: 1.08;
     }
 
+    /* Īss paskaidrojums par receptes atjaunināšanu. */
     .edit-main-text {
         color: var(--muted);
         line-height: 1.85;
@@ -93,6 +163,11 @@
         max-width: 760px;
     }
 
+    /*
+        Validācijas kļūdu kopsavilkums.
+
+        Ja forma satur kļūdas, tās tiek parādītas vienā blokā virs formas.
+    */
     .error-summary {
         padding: 20px 22px;
         border: 1px solid #e7cfc9;
@@ -112,6 +187,11 @@
         line-height: 1.7;
     }
 
+    /*
+        Formas sadaļas galvene.
+
+        Tā sadala rediģēšanas formu loģiskos posmos.
+    */
     .form-section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -150,10 +230,12 @@
         max-width: 760px;
     }
 
+    /* Viena formas lauka grupa. */
     .form-group {
         margin-bottom: 20px;
     }
 
+    /* Formas lauka nosaukums. */
     .form-label {
         display: block;
         margin-bottom: 8px;
@@ -162,6 +244,12 @@
         font-size: 14px;
     }
 
+    /*
+        Kopējais ievades lauku stils.
+
+        Vienāds noformējums tiek lietots teksta laukiem,
+        teksta zonām un izvēlnēm.
+    */
     .form-input,
     .form-textarea,
     .form-select {
@@ -186,17 +274,20 @@
         box-shadow: 0 0 0 4px rgba(122, 90, 67, 0.10);
     }
 
+    /* Garākam tekstam paredzēts lauks. */
     .form-textarea {
         min-height: 140px;
         resize: vertical;
     }
 
+    /* Divu kolonnu izkārtojums saistītiem laukiem. */
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
     }
 
+    /* Palīgteksts zem ievades laukiem. */
     .help-text {
         color: var(--muted);
         margin-top: 7px;
@@ -205,6 +296,7 @@
         line-height: 1.6;
     }
 
+    /* Atsevišķa lauka validācijas kļūdas teksts. */
     .field-error {
         margin-top: 7px;
         color: var(--danger-text);
@@ -213,6 +305,7 @@
         font-weight: 600;
     }
 
+    /* Kļūdaini aizpildīta lauka vizuālais stāvoklis. */
     .form-input.is-invalid,
     .form-textarea.is-invalid,
     .form-select.is-invalid {
@@ -220,11 +313,18 @@
         background: #fff7f6;
     }
 
+    /*
+        Sastāvdaļu saraksta ārējais bloks.
+
+        Tajā tiek attēlotas esošās, iepriekš ievadītās
+        vai no jauna pievienotās sastāvdaļas.
+    */
     .ingredients-wrap {
         display: grid;
         gap: 12px;
     }
 
+    /* Viena sastāvdaļas rinda. */
     .ingredient-item {
         background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
         border: 1px solid rgba(122, 90, 67, 0.10);
@@ -245,14 +345,17 @@
         background: transparent;
     }
 
+    /* Sastāvdaļas daudzuma lauks. */
     .ing-qty {
         width: 130px;
     }
 
+    /* Sastāvdaļas mērvienības lauks. */
     .ing-unit {
         width: 160px;
     }
 
+    /* Sastāvdaļas nosaukuma lauks. */
     .ing-name {
         flex: 1;
         min-width: 220px;
@@ -262,6 +365,12 @@
         margin-top: 8px;
     }
 
+    /*
+        Esošā attēla un video priekšskatījuma režģis.
+
+        Tas ļauj lietotājam redzēt, kāds multivides saturs
+        pašlaik ir piesaistīts receptei.
+    */
     .current-media-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -286,6 +395,7 @@
         font-size: 14px;
     }
 
+    /* Esošā attēla priekšskatījums. */
     .media-preview-img {
         width: 100%;
         max-height: 280px;
@@ -296,6 +406,7 @@
         border-radius: 14px;
     }
 
+    /* Esošā video priekšskatījums. */
     .media-preview-video {
         width: 100%;
         display: block;
@@ -305,6 +416,7 @@
         overflow: hidden;
     }
 
+    /* Neliela informatīva atzīme pie multivides failiem. */
     .pill {
         display: inline-flex;
         align-items: center;
@@ -318,6 +430,7 @@
         margin-top: 8px;
     }
 
+    /* Receptes izveides un pēdējo izmaiņu informācija. */
     .meta-row {
         display: flex;
         justify-content: space-between;
@@ -329,6 +442,7 @@
         line-height: 1.7;
     }
 
+    /* Saglabāšanas un atcelšanas pogu sadaļa. */
     .actions-card {
         text-align: center;
     }
@@ -341,6 +455,12 @@
         margin-top: 4px;
     }
 
+    /*
+        Receptes dzēšanas sadaļa.
+
+        Tā ir vizuāli atdalīta ar brīdinājuma fonu,
+        jo dzēšanas darbība nav atsaucama.
+    */
     .delete-card {
         background: linear-gradient(180deg, #fcf2ef 0%, #f8ebe7 100%);
         border-color: #e7d0ca;
@@ -372,6 +492,11 @@
         margin-top: 6px;
     }
 
+    /*
+        Padomu sadaļa.
+
+        Tā atgādina lietotājam, ko vēl var uzlabot receptes saturā.
+    */
     .tips-box h3 {
         text-align: center;
         font-family: Georgia, "Times New Roman", serif;
@@ -420,12 +545,12 @@
         font-size: 13px;
         line-height: 1.7;
     }
-
 </style>
 
 <div class="edit-recipe-page">
     <div class="edit-recipe-stack">
 
+        <!-- Lapas ievadsadaļa ar īsu skaidrojumu par receptes rediģēšanu. -->
         <div class="edit-section-card edit-hero-card">
             <div class="edit-hero-inner">
                 <div class="edit-hero-icon-wrap">✏️</div>
@@ -441,6 +566,7 @@
             </div>
         </div>
 
+        <!-- Validācijas kļūdu kopsavilkums. -->
         @if($errors->any())
             <div class="error-summary">
                 <h4>Lūdzu, izlabojiet šādas kļūdas:</h4>
@@ -452,10 +578,12 @@
             </div>
         @endif
 
+        <!-- Galvenā receptes rediģēšanas forma. -->
         <form method="POST" action="{{ route('recipes.update', $recipe) }}" enctype="multipart/form-data" novalidate>
             @csrf
             @method('PUT')
 
+            <!-- 1. sadaļa: receptes pamatinformācija. -->
             <div class="edit-section-card">
                 <div class="form-section-head">
                     <div class="section-kicker">1. Pamata informācija</div>
@@ -466,6 +594,7 @@
                     </p>
                 </div>
 
+                <!-- Receptes nosaukuma lauks. -->
                 <div class="form-group">
                     <label class="form-label" for="title">Receptes nosaukums</label>
                     <input
@@ -482,6 +611,7 @@
                     @enderror
                 </div>
 
+                <!-- Receptes īsais apraksts. -->
                 <div class="form-group">
                     <label class="form-label" for="description">Apraksts</label>
                     <textarea
@@ -496,6 +626,7 @@
                     @enderror
                 </div>
 
+                <!-- Kategorijas un grūtības līmeņa izvēles lauki. -->
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="category">Kategorija</label>
@@ -534,6 +665,7 @@
                 </div>
             </div>
 
+            <!-- 2. sadaļa: laiks un porciju skaits. -->
             <div class="edit-section-card">
                 <div class="form-section-head">
                     <div class="section-kicker">2. Laiks un porcijas</div>
@@ -544,6 +676,7 @@
                 </div>
 
                 <div class="form-row">
+                    <!-- Sagatavošanas laiks minūtēs. -->
                     <div class="form-group">
                         <label class="form-label" for="prep_time">Sagatavošanas laiks (minūtēs)</label>
                         <input
@@ -560,6 +693,7 @@
                         @enderror
                     </div>
 
+                    <!-- Gatavošanas laiks minūtēs. -->
                     <div class="form-group">
                         <label class="form-label" for="cook_time">Gatavošanas laiks (minūtēs)</label>
                         <input
@@ -577,6 +711,7 @@
                     </div>
                 </div>
 
+                <!-- Porciju skaita lauks. -->
                 <div class="form-group">
                     <label class="form-label" for="servings">Porciju skaits</label>
                     <input
@@ -594,6 +729,7 @@
                 </div>
             </div>
 
+            <!-- 3. sadaļa: receptes sastāvdaļas. -->
             <div class="edit-section-card">
                 <div class="form-section-head">
                     <div class="section-kicker">3. Sastāvdaļas</div>
@@ -609,9 +745,18 @@
                     <div id="ingredientsWrap" class="ingredients-wrap">
                         @if($useOld)
                             @php
+                                /*
+                                    Ja validācija neizdevās, tiek izmantotas lietotāja
+                                    iepriekš ievadītās sastāvdaļu vērtības.
+                                */
                                 $names = is_array($oldNames) ? $oldNames : [];
                                 $qtys  = is_array($oldQtys) ? $oldQtys : [];
                                 $units = is_array($oldUnits) ? $oldUnits : [];
+
+                                /*
+                                    Rindu skaits tiek ņemts pēc garākā masīva,
+                                    lai netiktu pazaudēta neviena ievadītā vērtība.
+                                */
                                 $rows = max(count($names), count($qtys), count($units));
                                 if($rows < 1) $rows = 1;
                             @endphp
@@ -628,6 +773,7 @@
                                         <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
                                     </div>
 
+                                    <!-- Kļūdas tiek parādītas pie konkrētās sastāvdaļas rindas. -->
                                     <div class="ing-errors">
                                         @error('ingredient_qty.' . $i)
                                             <div class="field-error">{{ $message }}</div>
@@ -643,6 +789,7 @@
                             @endfor
 
                         @elseif($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
+                            <!-- Ja validācijas kļūdu nav, tiek parādītas receptes esošās sastāvdaļas. -->
                             @foreach($ingredientsRel as $i => $ing)
                                 <div class="ingredient-item">
                                     <div class="ing-row {{ $errors->has('ingredient_name.' . $i) || $errors->has('ingredient_qty.' . $i) || $errors->has('ingredient_unit.' . $i) ? 'has-error' : '' }}">
@@ -670,6 +817,7 @@
                             @endforeach
 
                         @else
+                            <!-- Ja receptei vēl nav sastāvdaļu, tiek parādīta viena tukša rinda. -->
                             <div class="ingredient-item">
                                 <div class="ing-row {{ $errors->has('ingredient_name.0') || $errors->has('ingredient_qty.0') || $errors->has('ingredient_unit.0') ? 'has-error' : '' }}">
                                     <input class="form-input ing-qty @error('ingredient_qty.0') is-invalid @enderror" name="ingredient_qty[]" type="number" step="0.01" min="0"
@@ -700,12 +848,14 @@
                         <div class="field-error">{{ $message }}</div>
                     @enderror
 
+                    <!-- Poga pievieno vēl vienu sastāvdaļas rindu bez lapas pārlādes. -->
                     <button type="button" class="btn btn-success" onclick="addIngRow()" style="margin-top: 12px;">
                         Pievienot sastāvdaļu
                     </button>
                 </div>
             </div>
 
+            <!-- 4. sadaļa: pagatavošanas instrukcijas. -->
             <div class="edit-section-card">
                 <div class="form-section-head">
                     <div class="section-kicker">4. Pagatavošana</div>
@@ -734,6 +884,7 @@
                 </div>
             </div>
 
+            <!-- 5. sadaļa: esošais un jaunais multivides saturs. -->
             <div class="edit-section-card">
                 <div class="form-section-head">
                     <div class="section-kicker">5. Attēli un video</div>
@@ -743,6 +894,7 @@
                     </p>
                 </div>
 
+                <!-- Esošā attēla un video priekšskatījums. -->
                 <div class="current-media-grid">
                     <div class="current-media-box">
                         <div class="current-media-title">Esošais attēls</div>
@@ -767,6 +919,7 @@
                     </div>
                 </div>
 
+                <!-- Jaunu failu augšupielāde esošā attēla vai video aizvietošanai. -->
                 <div class="form-row">
                     <div class="media-box">
                         <div class="form-group" style="margin-bottom: 0;">
@@ -794,6 +947,7 @@
                 <span class="pill">Vari atstāt laukus tukšus, ja negribi mainīt attēlu vai video.</span>
             </div>
 
+            <!-- Receptes izveides un pēdējo izmaiņu informācija. -->
             <div class="edit-section-card meta-box">
                 <div class="meta-title">Receptes informācija</div>
                 <div class="meta-row">
@@ -802,6 +956,7 @@
                 </div>
             </div>
 
+            <!-- Saglabāšanas un atcelšanas pogas. -->
             <div class="edit-section-card actions-card">
                 <div class="actions-row">
                     <button type="submit" class="btn btn-success">
@@ -814,6 +969,7 @@
             </div>
         </form>
 
+        <!-- Atsevišķa sadaļa receptes dzēšanai. -->
         <div class="edit-section-card delete-card">
             <div class="delete-head">
                 <div class="section-kicker">Bīstamā zona</div>
@@ -835,6 +991,7 @@
             </div>
         </div>
 
+        <!-- Padomi receptes uzlabošanai. -->
         <div class="edit-section-card tips-box">
             <h3>Padomi recepšu uzlabošanai</h3>
             <p class="tips-subtitle">
@@ -866,30 +1023,46 @@
 </div>
 
 <script>
-function addIngRow() {
-    const wrap = document.getElementById('ingredientsWrap');
-    const rowIndex = wrap.querySelectorAll('.ingredient-item').length;
+    /*
+        Pievieno jaunu sastāvdaļas rindu.
 
-    const item = document.createElement('div');
-    item.className = 'ingredient-item';
-    item.innerHTML = `
-        <div class="ing-row">
-            <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0" value="" placeholder="Daudzums">
-            <input class="form-input ing-unit" name="ingredient_unit[]" type="text" value="" placeholder="Mērv. (g, ml, gab)">
-            <input class="form-input ing-name" name="ingredient_name[]" type="text" required value="" placeholder="Sastāvdaļa">
-            <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
-        </div>
-        <div class="ing-errors" data-index="${rowIndex}"></div>
-    `;
-    wrap.appendChild(item);
-}
+        Jaunā rinda tiek izveidota ar JavaScript, tāpēc lietotājam nav
+        jāpārlādē lapa, lai pievienotu papildu sastāvdaļas.
+    */
+    function addIngRow() {
+        const wrap = document.getElementById('ingredientsWrap');
+        const rowIndex = wrap.querySelectorAll('.ingredient-item').length;
 
-function removeIngRow(btn) {
-    const wrap = document.getElementById('ingredientsWrap');
-    const rows = wrap.querySelectorAll('.ingredient-item');
-    if (rows.length <= 1) return;
-    const row = btn.closest('.ingredient-item');
-    if (row) row.remove();
-}
+        const item = document.createElement('div');
+        item.className = 'ingredient-item';
+        item.innerHTML = `
+            <div class="ing-row">
+                <input class="form-input ing-qty" name="ingredient_qty[]" type="number" step="0.01" min="0" value="" placeholder="Daudzums">
+                <input class="form-input ing-unit" name="ingredient_unit[]" type="text" value="" placeholder="Mērv. (g, ml, gab)">
+                <input class="form-input ing-name" name="ingredient_name[]" type="text" required value="" placeholder="Sastāvdaļa">
+                <button type="button" class="btn btn-danger" onclick="removeIngRow(this)">✖</button>
+            </div>
+            <div class="ing-errors" data-index="${rowIndex}"></div>
+        `;
+
+        wrap.appendChild(item);
+    }
+
+    /*
+        Noņem sastāvdaļas rindu.
+
+        Vismaz viena sastāvdaļas rinda vienmēr tiek atstāta formā,
+        lai lietotājam būtu redzams, kur ievadīt sastāvdaļas.
+    */
+    function removeIngRow(btn) {
+        const wrap = document.getElementById('ingredientsWrap');
+        const rows = wrap.querySelectorAll('.ingredient-item');
+
+        if (rows.length <= 1) return;
+
+        const row = btn.closest('.ingredient-item');
+
+        if (row) row.remove();
+    }
 </script>
 @endsection

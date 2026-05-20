@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+{{--
+    Lietotāja favorītu skats.
+
+    Šis Blade fails attēlo visas receptes, kuras lietotājs ir pievienojis saviem favorītiem.
+    Skatā tiek parādīta favorītu kopsavilkuma sadaļa, statistika, saglabāto recepšu kartītes,
+    lapošana, kā arī informatīvi padomi gadījumā, ja favorītu vēl ir maz.
+
+    Skats izmanto no kontroliera padoto $recipes kolekciju ar lietotāja favorītu receptēm.
+--}}
+
 @section('title', 'Mani favorīti - Vecmāmiņas Receptes')
 @section('meta_description', 'Pārvaldi savas saglabātās receptes, ātri tās atver un noņem no favorītiem Vecmāmiņas Receptes profilā.')
 
@@ -8,16 +18,35 @@
 
 @section('content')
 <style>
+    /*
+        Favorītu lapas lokālie stili.
+
+        Šeit tiek definēts favorītu pārskata izskats:
+        - galvenā ievadsadaļa;
+        - statistikas kartītes;
+        - recepšu saraksts;
+        - tukša saraksta paziņojums;
+        - lapošanas noformējums;
+        - padomu sadaļa.
+    */
+
+    /* Galvenais favorītu lapas konteiners. */
     .favorites-page {
         color: var(--text);
     }
 
+    /* Vertikāls lapas sadaļu izkārtojums. */
     .favorites-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /*
+        Kopējā kartītes klase favorītu lapā.
+
+        To izmanto vairākām sadaļām, lai lapa saglabātu vienotu vizuālo stilu.
+    */
     .favorites-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -26,11 +55,17 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Augšējā favorītu ievadsadaļa. */
     .favorites-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
+    /*
+        Ievadsadaļas iekšējais izkārtojums.
+
+        Kreisajā pusē tiek rādīta ikona, bet labajā pusē - virsraksts un paskaidrojums.
+    */
     .favorites-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -38,6 +73,7 @@
         align-items: center;
     }
 
+    /* Dekoratīva favorītu ikona lapas sākumā. */
     .favorites-icon-wrap {
         width: 108px;
         height: 108px;
@@ -52,6 +88,7 @@
         flex-shrink: 0;
     }
 
+    /* Neliela sadaļas atzīme virs galvenā virsraksta. */
     .favorites-badge {
         display: inline-flex;
         align-items: center;
@@ -68,6 +105,7 @@
         margin-bottom: 14px;
     }
 
+    /* Favorītu lapas galvenais virsraksts. */
     .favorites-main-title {
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2.55rem;
@@ -77,6 +115,7 @@
         line-height: 1.08;
     }
 
+    /* Īss paskaidrojums par favorītu sadaļas lietošanu. */
     .favorites-main-text {
         color: var(--muted);
         line-height: 1.85;
@@ -84,12 +123,19 @@
         max-width: 760px;
     }
 
+    /*
+        Favorītu statistikas bloks.
+
+        Tajā tiek rādīts kopējais favorītu skaits, jaunākie favorīti
+        un kategoriju skaits pašreizējā lapā.
+    */
     .favorites-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
     }
 
+    /* Viena statistikas kartīte. */
     .stat-card {
         background: linear-gradient(180deg, #f8f2ea 0%, #f2e8dc 100%);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -105,6 +151,7 @@
         box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
     }
 
+    /* Papildu krāsu varianti statistikas kartītēm. */
     .stat-card.soft-green {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
     }
@@ -128,6 +175,7 @@
         font-weight: 700;
     }
 
+    /* Darbību sadaļa ar saitēm uz recepšu lapām. */
     .favorites-actions-card {
         text-align: center;
     }
@@ -139,6 +187,11 @@
         flex-wrap: wrap;
     }
 
+    /*
+        Saglabāto recepšu saraksta galvene.
+
+        Tā atdala favorītu sarakstu no lapas pārējām sadaļām.
+    */
     .recipes-head {
         margin-bottom: 22px;
     }
@@ -175,12 +228,18 @@
         max-width: 760px;
     }
 
+    /*
+        Recepšu kartīšu režģis.
+
+        auto-fill ļauj kartītēm automātiski pielāgoties pieejamajam ekrāna platumam.
+    */
     .recipes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 22px;
     }
 
+    /* Vienas favorītos saglabātas receptes kartīte. */
     .recipe-card {
         background: #fffdf9;
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -195,6 +254,7 @@
         box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
     }
 
+    /* Kartītes augšējā daļa ar receptes nosaukumu un aprakstu. */
     .recipe-top {
         padding: 24px 24px 16px;
         border-bottom: 1px solid rgba(221, 207, 192, 0.9);
@@ -216,11 +276,17 @@
         font-size: 14px;
     }
 
+    /* Kartītes apakšējā daļa ar receptes metadatiem un pogām. */
     .recipe-body {
         padding: 20px 24px 24px;
         background: #fffdf9;
     }
 
+    /*
+        Receptes īsās informācijas režģis.
+
+        Šeit tiek parādīts autors, kategorija, kopējais laiks un porciju skaits.
+    */
     .recipe-info-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -247,6 +313,7 @@
         flex-shrink: 0;
     }
 
+    /* Datums, kad recepte tika pievienota sistēmā. */
     .recipe-footer {
         border-top: 1px solid rgba(221, 207, 192, 0.9);
         padding-top: 14px;
@@ -257,6 +324,7 @@
         line-height: 1.6;
     }
 
+    /* Recepšu kartītes darbību pogas. */
     .recipe-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -272,6 +340,12 @@
         width: 100%;
     }
 
+    /*
+        Lapošanas bloks.
+
+        Laravel noklusējuma lapošanas elementi tiek pielāgoti,
+        lai tie vizuāli atbilstu pārējai lapai.
+    */
     .pagination-wrap {
         margin-top: 28px;
         padding-top: 24px;
@@ -342,6 +416,11 @@
         color: var(--muted) !important;
     }
 
+    /*
+        Tukša favorītu saraksta paziņojums.
+
+        Šī sadaļa tiek rādīta, ja lietotājam vēl nav nevienas favorītos saglabātas receptes.
+    */
     .empty-state {
         text-align: center;
         padding: 60px 24px;
@@ -372,6 +451,11 @@
         margin-right: auto;
     }
 
+    /*
+        Padomu sadaļa favorītu izmantošanai.
+
+        Tā tiek parādīta tikai tad, ja lietotājam vēl ir maz favorītu.
+    */
     .tips-box h3 {
         text-align: center;
         font-family: Georgia, "Times New Roman", serif;
@@ -419,6 +503,7 @@
 <div class="favorites-page">
     <div class="favorites-stack">
 
+        <!-- Favorītu lapas ievadsadaļa ar lietotāja vārdu un īsu paskaidrojumu. -->
         <div class="favorites-section-card favorites-hero-card">
             <div class="favorites-hero-inner">
                 <div class="favorites-icon-wrap">❤️</div>
@@ -434,6 +519,7 @@
             </div>
         </div>
 
+        <!-- Favorītu statistikas sadaļa. -->
         <div class="favorites-stats">
             <div class="stat-card">
                 <div class="stat-number">{{ $recipes->total() }}</div>
@@ -455,6 +541,7 @@
             </div>
         </div>
 
+        <!-- Ātrās saites uz visām receptēm un lietotāja izveidotajām receptēm. -->
         <div class="favorites-section-card favorites-actions-card">
             <div class="favorites-actions-row">
                 <a href="{{ route('recipes.index') }}" class="btn btn-primary">
@@ -466,6 +553,7 @@
             </div>
         </div>
 
+        <!-- Ja lietotājam ir favorīti, tiek rādīts recepšu saraksts. -->
         @if($recipes->count() > 0)
             <div class="favorites-section-card">
                 <div class="recipes-head">
@@ -476,26 +564,32 @@
                     </p>
                 </div>
 
+                <!-- Favorītos saglabāto recepšu kartītes. -->
                 <div class="recipes-grid">
                     @foreach($recipes as $recipe)
                         <div class="recipe-card">
                             <div class="recipe-top">
                                 <h3 class="recipe-title">{{ $recipe->title }}</h3>
+
+                                <!-- Apraksts tiek saīsināts, lai kartītes paliktu vienāda izmēra un pārskatāmas. -->
                                 <p class="recipe-desc">{{ \Illuminate\Support\Str::limit($recipe->description, 100) }}</p>
                             </div>
 
                             <div class="recipe-body">
                                 <div class="recipe-info-grid">
+                                    <!-- Receptes autors. -->
                                     <div class="recipe-info-item">
                                         <span class="recipe-info-icon">👤</span>
                                         <span>{{ $recipe->user->name ?? 'Nav norādīts' }}</span>
                                     </div>
 
+                                    <!-- Receptes kategorija. -->
                                     <div class="recipe-info-item">
                                         <span class="recipe-info-icon">📂</span>
                                         <span>{{ $recipe->category->name ?? $recipe->category ?? 'Nav kategorijas' }}</span>
                                     </div>
 
+                                    <!-- Kopējais gatavošanas laiks tiek rādīts tikai tad, ja ir norādīts sagatavošanas vai gatavošanas laiks. -->
                                     @if($recipe->prep_time || $recipe->cook_time)
                                         <div class="recipe-info-item">
                                             <span class="recipe-info-icon">⏱️</span>
@@ -503,6 +597,7 @@
                                         </div>
                                     @endif
 
+                                    <!-- Porciju skaits tiek rādīts tikai receptēm, kurām šī vērtība ir aizpildīta. -->
                                     @if($recipe->servings)
                                         <div class="recipe-info-item">
                                             <span class="recipe-info-icon">👥</span>
@@ -511,15 +606,18 @@
                                     @endif
                                 </div>
 
+                                <!-- Receptes pievienošanas datums. -->
                                 <div class="recipe-footer">
                                     Pievienota: {{ $recipe->created_at ? $recipe->created_at->format('d.m.Y H:i') : '-' }}
                                 </div>
 
+                                <!-- Darbības ar konkrēto recepti. -->
                                 <div class="recipe-actions">
                                     <a href="{{ route('recipes.show', $recipe) }}" class="btn btn-primary">
                                         Skatīt
                                     </a>
 
+                                    <!-- Forma noņem recepti no lietotāja favorītu saraksta. -->
                                     <form
                                         method="POST"
                                         action="{{ route('recipes.favorite.toggle', $recipe) }}"
@@ -537,6 +635,7 @@
                     @endforeach
                 </div>
 
+                <!-- Lapošana tiek rādīta tikai tad, ja favorītu sarakstam ir vairākas lapas. -->
                 @if($recipes->hasPages())
                     <div class="pagination-wrap">
                         <div class="pagination-summary">
@@ -548,6 +647,7 @@
                 @endif
             </div>
         @else
+            <!-- Tukšais stāvoklis, ja lietotājs vēl nav pievienojis nevienu recepti favorītiem. -->
             <div class="favorites-section-card empty-state">
                 <div class="icon">🤍</div>
                 <h3>Tev vēl nav saglabātu favorītu</h3>
@@ -560,6 +660,7 @@
             </div>
         @endif
 
+        <!-- Padomi tiek rādīti tikai tad, ja favorītu skaits vēl ir mazs. -->
         @if($recipes->total() < 5)
             <div class="favorites-section-card tips-box">
                 <h3>Idejas favorītu izmantošanai</h3>

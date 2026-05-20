@@ -1,5 +1,22 @@
 @extends('layouts.app')
 
+{{--
+    Recepšu pārlūkošanas skats.
+
+    Šis Blade fails attēlo kopējo recepšu sarakstu, kuru lietotājs var pārlūkot,
+    filtrēt un meklēt pēc nosaukuma, apraksta, sastāvdaļām, kategorijas vai grūtības līmeņa.
+
+    Skatā tiek parādīta:
+    - lapas ievadsadaļa;
+    - meklēšanas un filtrēšanas forma;
+    - atrasto rezultātu kopsavilkums;
+    - recepšu kartītes;
+    - lapošana;
+    - tukšais stāvoklis, ja receptes netiek atrastas.
+
+    Skats izmanto no kontroliera padotos $recipes un $categories datus.
+--}}
+
 @section('title', 'Pārlūkot receptes - Vecmāmiņas Receptes')
 @section('meta_description', 'Pārlūkojiet kopienas receptes, izmantojiet meklēšanu un filtrus, lai atrastu piemērotāko ēdienu jebkurai situācijai.')
 
@@ -8,16 +25,37 @@
 
 @section('content')
 <style>
+    /*
+        Recepšu pārlūkošanas lapas lokālie CSS stili.
+
+        Šie stili nosaka:
+        - lapas ievadsadaļu;
+        - filtru formu;
+        - rezultātu kopsavilkumu;
+        - recepšu kartītes;
+        - vērtējumu attēlojumu;
+        - lapošanu;
+        - tukša rezultātu saraksta paziņojumu.
+    */
+
+    /* Galvenais recepšu pārlūkošanas lapas konteiners. */
     .recipes-index-page {
         color: var(--text);
     }
 
+    /* Vertikāls lapas sadaļu izkārtojums. */
     .recipes-index-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /*
+        Kopējā sadaļas kartīte.
+
+        Šī klase tiek izmantota galvenajām lapas sadaļām,
+        lai uzturētu vienotu fonu, apmales, noapaļojumus un ēnojumu.
+    */
     .recipes-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -27,10 +65,16 @@
         overflow: hidden;
     }
 
+    /* Lapas augšējā ievadsadaļa. */
     .recipes-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
     }
 
+    /*
+        Ievadsadaļas iekšējais izkārtojums.
+
+        Kreisajā pusē ir ikona, bet labajā pusē - virsraksts un paskaidrojums.
+    */
     .recipes-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -38,6 +82,7 @@
         align-items: center;
     }
 
+    /* Dekoratīva meklēšanas ikona lapas sākumā. */
     .recipes-hero-icon-wrap {
         width: 108px;
         height: 108px;
@@ -52,6 +97,7 @@
         flex-shrink: 0;
     }
 
+    /* Neliela sadaļas atzīme virs galvenā virsraksta. */
     .recipes-badge {
         display: inline-flex;
         align-items: center;
@@ -68,6 +114,7 @@
         margin-bottom: 14px;
     }
 
+    /* Galvenais lapas virsraksts. */
     .recipes-main-title {
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2.55rem;
@@ -78,6 +125,7 @@
         word-break: break-word;
     }
 
+    /* Ievadsadaļas paskaidrojuma teksts. */
     .recipes-main-text {
         color: var(--muted);
         line-height: 1.85;
@@ -85,6 +133,12 @@
         max-width: 820px;
     }
 
+    /*
+        Sadaļas galvene.
+
+        Šo bloku izmanto filtriem un recepšu sarakstam,
+        lai vizuāli nodalītu sadaļas saturu.
+    */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -123,6 +177,12 @@
         max-width: 760px;
     }
 
+    /*
+        Meklēšanas un filtrēšanas formas izkārtojums.
+
+        Meklēšanas laukam ir vairāk vietas, bet kategorijas un grūtības filtri
+        ir kompaktāki.
+    */
     .filters-form-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr auto;
@@ -143,6 +203,7 @@
         font-size: 14px;
     }
 
+    /* Kopējais meklēšanas un izvēles lauku stils. */
     .form-input,
     .form-select {
         width: 100%;
@@ -169,6 +230,7 @@
         min-width: 140px;
     }
 
+    /* Papildu darbības, kas parādās tikai aktīvu filtru gadījumā. */
     .filters-extra-actions {
         margin-top: 16px;
         display: flex;
@@ -176,6 +238,7 @@
         flex-wrap: wrap;
     }
 
+    /* Rezultātu skaita kopsavilkuma kartīte. */
     .results-summary-card {
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
         text-align: center;
@@ -196,6 +259,7 @@
         font-size: 14px;
     }
 
+    /* Centrēta darbību sadaļa jaunas receptes pievienošanai. */
     .actions-center {
         text-align: center;
     }
@@ -204,12 +268,18 @@
         min-width: 240px;
     }
 
+    /*
+        Recepšu kartīšu režģis.
+
+        Kartītes automātiski pielāgojas ekrāna platumam.
+    */
     .recipe-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 22px;
     }
 
+    /* Vienas receptes kartīte. */
     .recipe-card {
         background: #fffdf9;
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -227,6 +297,7 @@
         box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
     }
 
+    /* Kartītes augšdaļa ar nosaukumu un īsu aprakstu. */
     .recipe-card-top {
         padding: 24px 24px 16px;
         border-bottom: 1px solid rgba(221, 207, 192, 0.9);
@@ -249,6 +320,7 @@
         font-size: 14px;
     }
 
+    /* Kartītes apakšdaļa ar metadatiem, vērtējumu un pogu. */
     .recipe-card-body {
         padding: 20px 24px 24px;
         display: flex;
@@ -256,6 +328,11 @@
         flex: 1;
     }
 
+    /*
+        Receptes metadatu režģis.
+
+        Tajā tiek rādīta kategorija, grūtības līmenis, kopējais laiks un porciju skaits.
+    */
     .recipe-meta-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -287,6 +364,11 @@
         flex-shrink: 0;
     }
 
+    /*
+        Receptes vērtējuma rinda.
+
+        Tajā tiek rādīta skaitliskā vērtība, vērtējumu skaits un zvaigznes.
+    */
     .rating-row {
         margin: 4px 0 16px;
         display: flex;
@@ -315,6 +397,7 @@
         letter-spacing: 1px;
     }
 
+    /* Receptes autora un publicēšanas laika rinda. */
     .author-row {
         border-top: 1px solid rgba(221, 207, 192, 0.9);
         padding-top: 15px;
@@ -332,6 +415,11 @@
         line-height: 1.6;
     }
 
+    /*
+        Lapošanas sadaļa.
+
+        Laravel noklusējuma lapošanas HTML tiek vizuāli pielāgots lapas dizainam.
+    */
     .pagination-box {
         text-align: center;
     }
@@ -399,6 +487,12 @@
         color: var(--muted) !important;
     }
 
+    /*
+        Tukša rezultātu saraksta paziņojums.
+
+        Šī sadaļa tiek parādīta, ja pēc meklēšanas vai filtrēšanas
+        nav atrasta neviena recepte.
+    */
     .empty-box {
         text-align: center;
         padding: 60px 24px;
@@ -435,10 +529,16 @@
         justify-content: center;
         flex-wrap: wrap;
     }
-
 </style>
 
 @php
+    /*
+        Aktīvo filtru vērtības.
+
+        Vispirms tiek izmantoti no kontroliera padotie mainīgie,
+        bet, ja tie nav pieejami, vērtības tiek paņemtas no pieprasījuma.
+        Tas ļauj formā saglabāt lietotāja izvēlētos filtrus.
+    */
     $activeSearch = $search ?? request('search');
     $activeCategory = $category ?? request('category');
     $activeDifficulty = $difficulty ?? request('difficulty');
@@ -447,6 +547,7 @@
 <div class="recipes-index-page">
     <div class="recipes-index-stack">
 
+        <!-- Lapas ievadsadaļa ar īsu paskaidrojumu par recepšu meklēšanu. -->
         <div class="recipes-section-card recipes-hero-card">
             <div class="recipes-hero-inner">
                 <div class="recipes-hero-icon-wrap">🔍</div>
@@ -462,6 +563,7 @@
             </div>
         </div>
 
+        <!-- Meklēšanas un filtrēšanas sadaļa. -->
         <div class="recipes-section-card">
             <div class="section-head">
                 <div class="section-kicker">Meklēšana un filtri</div>
@@ -472,8 +574,10 @@
                 </p>
             </div>
 
+            <!-- Filtru forma izmanto GET metodi, lai atlasītie kritēriji būtu redzami URL adresē. -->
             <form method="GET" action="{{ route('recipes.index') }}">
                 <div class="filters-form-grid">
+                    <!-- Teksta meklēšana pēc receptes nosaukuma, apraksta vai sastāvdaļām. -->
                     <div class="form-group">
                         <label class="form-label">Meklēt receptes</label>
                         <input
@@ -485,12 +589,17 @@
                         >
                     </div>
 
+                    <!-- Kategorijas filtrs tiek veidots no kontroliera padotā kategoriju saraksta. -->
                     <div class="form-group">
                         <label class="form-label">Kategorija</label>
                         <select name="category" class="form-select">
                             <option value="">Visas kategorijas</option>
                             @foreach($categories as $cat)
                                 @php
+                                    /*
+                                        Kategorija var būt objekts vai tekstuāla vērtība.
+                                        Tāpēc vispirms tiek pārbaudīts, kādā formātā tā ir padota.
+                                    */
                                     $catValue = is_object($cat) ? ($cat->name ?? '') : $cat;
                                 @endphp
                                 <option value="{{ $catValue }}" {{ $activeCategory == $catValue ? 'selected' : '' }}>
@@ -500,6 +609,7 @@
                         </select>
                     </div>
 
+                    <!-- Grūtības līmeņa filtrs. -->
                     <div class="form-group">
                         <label class="form-label">Grūtība</label>
                         <select name="difficulty" class="form-select">
@@ -513,6 +623,7 @@
                     <button type="submit" class="btn btn-primary filters-submit-btn">Meklēt</button>
                 </div>
 
+                <!-- Papildu darbības tiek rādītas tikai tad, ja ir aktīvs vismaz viens filtrs. -->
                 @if(request()->hasAny(['search', 'category', 'difficulty', 'max_time']))
                     <div class="filters-extra-actions">
                         <a href="{{ route('recipes.index') }}" class="btn btn-warning">
@@ -527,6 +638,7 @@
             </form>
         </div>
 
+        <!-- Rezultātu kopsavilkums. -->
         <div class="recipes-section-card results-summary-card">
             <h3 class="results-summary-title">Atrastas {{ $recipes->total() }} receptes</h3>
 
@@ -545,12 +657,14 @@
             @endif
         </div>
 
+        <!-- Saite jaunas receptes pievienošanai. -->
         <div class="recipes-section-card actions-center">
             <a href="{{ route('recipes.create') }}" class="btn btn-success">
                 Pievienot jaunu recepti
             </a>
         </div>
 
+        <!-- Ja receptes ir atrastas, tiek parādīts recepšu kartīšu saraksts. -->
         @if($recipes->count() > 0)
             <div class="recipes-section-card">
                 <div class="section-head">
@@ -564,6 +678,12 @@
                 <div class="recipe-grid">
                     @foreach($recipes as $recipe)
                         @php
+                            /*
+                                Sagatavo receptes kartītei nepieciešamos datus.
+
+                                Šādi kartītes HTML paliek pārskatāmāks,
+                                jo aprēķini un noklusējuma vērtības ir apkopotas vienā vietā.
+                            */
                             $recipeCategoryName = $recipe->category->name ?? $recipe->category ?? 'Nav kategorijas';
                             $recipeDifficultyName = $recipe->difficulty ?? 'Nav norādīta';
                             $totalTime = (int)($recipe->prep_time ?? 0) + (int)($recipe->cook_time ?? 0);
@@ -574,12 +694,14 @@
                             <div class="recipe-card-top">
                                 <h3 class="recipe-title">{{ $recipe->title }}</h3>
 
+                                <!-- Apraksts tiek saīsināts, lai kartītes būtu pārskatāmas. -->
                                 <p class="recipe-description">
                                     {{ \Illuminate\Support\Str::limit($recipe->description, 100) }}
                                 </p>
                             </div>
 
                             <div class="recipe-card-body">
+                                <!-- Receptes galvenie metadati. -->
                                 <div class="recipe-meta-grid">
                                     <div class="recipe-meta-item">
                                         <span class="recipe-meta-icon">📂</span>
@@ -606,6 +728,7 @@
                                     @endif
                                 </div>
 
+                                <!-- Receptes vidējais vērtējums un zvaigžņu attēlojums. -->
                                 <div class="rating-row">
                                     <span class="rating-value">
                                         {{ $recipe->reviews_avg_rating ? round($recipe->reviews_avg_rating, 1) : 'Nav vērtējumu' }} / 5
@@ -622,6 +745,7 @@
                                     </span>
                                 </div>
 
+                                <!-- Receptes autora un izveides laika informācija. -->
                                 <div class="author-row">
                                     <div class="author-meta">
                                         <span>Autors: {{ $recipe->user->name ?? 'Nezināms autors' }}</span>
@@ -638,6 +762,7 @@
                 </div>
             </div>
 
+            <!-- Lapošana tiek parādīta tikai tad, ja rezultāti sadalīti vairākās lapās. -->
             @if($recipes->hasPages())
                 <div class="recipes-section-card pagination-box">
                     <div class="pagination-summary">
@@ -648,6 +773,7 @@
                 </div>
             @endif
         @else
+            <!-- Tukšais stāvoklis, ja pēc filtriem vai meklēšanas nav atrasta neviena recepte. -->
             <div class="recipes-section-card empty-box">
                 <div class="empty-icon">🔎</div>
                 <h3>Nav atrasta neviena recepte</h3>

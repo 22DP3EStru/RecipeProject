@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- 
+    Šis skats attēlo recepšu kategoriju lapu.
+    Lapā tiek apkopotas visas kategorijas, to statistika,
+    jaunākās receptes un kopējais kategoriju pārskats.
+--}}
+
 @section('title', 'Kategorijas - Vecmāmiņas Receptes')
 @section('meta_description', 'Atklājiet daudzveidīgo recepšu pasauli un pārlūkojiet ēdienus pēc sev interesējošajām kategorijām.')
 
@@ -8,6 +14,7 @@
 
 @section('content')
 @php
+    // Iegūst visas unikālās kategorijas, kuras ir norādītas receptēs.
     $categories = \App\Models\Recipe::query()
         ->whereNotNull('category')
         ->where('category', '!=', '')
@@ -15,8 +22,10 @@
         ->orderBy('category')
         ->pluck('category');
 
+    // Saskaita kopējo recepšu skaitu platformā.
     $totalRecipes = \App\Models\Recipe::count();
 
+    // Iepriekš sagatavoti kategoriju apraksti, lai lapā katrai kategorijai būtu īss paskaidrojums.
     $descriptions = [
         'Brokastis' => 'Sāciet dienu ar garšīgām un barojošām brokastīm',
         'Pusdienas' => 'Sātīgi ēdieni dienas vidum un enerģijas uzpildīšanai',
@@ -30,16 +39,19 @@
 @endphp
 
 <style>
+    /* Galvenais kategoriju lapas ietvars. */
     .categories-page {
         color: var(--text);
     }
 
+    /* Vertikāli sakārto visas lapas sadaļas. */
     .categories-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Kopējais kartīšu stils visām kategoriju lapas sadaļām. */
     .categories-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -48,6 +60,7 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Augšējā ievada kartīte. */
     .categories-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
@@ -60,6 +73,7 @@
         align-items: center;
     }
 
+    /* Apaļā ikonas zona ievada sadaļā. */
     .categories-hero-icon-wrap {
         width: 108px;
         height: 108px;
@@ -106,6 +120,7 @@
         max-width: 820px;
     }
 
+    /* Navigācijas ceļš lapas augšdaļā. */
     .breadcrumbs-card {
         padding: 16px 20px;
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
@@ -121,6 +136,7 @@
         color: var(--muted);
     }
 
+    /* Kopsavilkuma bloks ar kategoriju un recepšu skaitu. */
     .summary-card {
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
         text-align: center;
@@ -141,6 +157,7 @@
         margin: 0 auto;
     }
 
+    /* Sadaļu virsrakstu kopējais noformējums. */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -179,6 +196,7 @@
         max-width: 760px;
     }
 
+    /* Kategoriju kartīšu režģis. */
     .categories-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -203,6 +221,7 @@
         box-shadow: 0 18px 34px rgba(79, 59, 42, 0.08);
     }
 
+    /* Krāsainā josla kategorijas kartītes augšdaļā. */
     .category-card::before {
         content: '';
         position: absolute;
@@ -242,6 +261,7 @@
         min-height: 72px;
     }
 
+    /* Statistika katrai atsevišķai kategorijai. */
     .category-stats {
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
         border: 1px solid rgba(122, 90, 67, 0.10);
@@ -284,6 +304,7 @@
         margin-bottom: 16px;
     }
 
+    /* Jaunāko recepšu kartīšu režģis. */
     .recipes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -360,6 +381,7 @@
         font-weight: 700;
     }
 
+    /* Apakšējā kopējās statistikas sadaļa. */
     .stats-box {
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
     }
@@ -416,6 +438,7 @@
         font-size: 13px;
     }
 
+    /* Tukšā stāvokļa bloks, ja nav nevienas kategorijas. */
     .empty-box {
         text-align: center;
         padding: 60px 28px;
@@ -448,12 +471,14 @@
 <div class="categories-page">
     <div class="categories-stack">
 
+        {{-- Navigācijas ceļš, lai lietotājs redzētu, kurā sadaļā atrodas. --}}
         <div class="categories-section-card breadcrumbs-card">
             <a href="/dashboard">Vadības panelis</a>
             <span> / </span>
             <span>Kategorijas</span>
         </div>
 
+        {{-- Lapas ievada sadaļa ar īsu paskaidrojumu par kategoriju pārskatu. --}}
         <div class="categories-section-card categories-hero-card">
             <div class="categories-hero-inner">
                 <div class="categories-hero-icon-wrap">📂</div>
@@ -469,6 +494,7 @@
             </div>
         </div>
 
+        {{-- Kopsavilkums par kopējo kategoriju un recepšu skaitu. --}}
         <div class="categories-section-card summary-card">
             <h2>{{ $categories->count() }} kategorijas pieejamas</h2>
             <p>
@@ -477,6 +503,7 @@
             </p>
         </div>
 
+        {{-- Ja kategorijas eksistē, tiek rādīts to saraksts ar statistiku. --}}
         @if($categories->count() > 0)
             <div class="categories-section-card">
                 <div class="section-head">
@@ -490,20 +517,25 @@
                 <div class="categories-grid">
                     @foreach($categories as $category)
                         @php
+                            // Saglabā kategorijas nosaukumu ērtākai izmantošanai tālāk kartītē.
                             $categoryName = $category;
 
+                            // Saskaita, cik receptes ir konkrētajā kategorijā.
                             $totalCategoryRecipes = \App\Models\Recipe::where('category', $categoryName)->count();
 
+                            // Saskaita pēdējo septiņu dienu laikā pievienotās receptes šajā kategorijā.
                             $recentRecipes = \App\Models\Recipe::where('category', $categoryName)
                                 ->where('created_at', '>=', now()->subDays(7))
                                 ->count();
 
+                            // Nosaka, cik dažādi autori ir pievienojuši receptes šajā kategorijā.
                             $popularAuthors = \App\Models\Recipe::where('category', $categoryName)
                                 ->with('user')
                                 ->get()
                                 ->groupBy('user_id')
                                 ->count();
 
+                            // Piešķir kategorijai atbilstošu CSS klasi, lai kartītei būtu sava krāsu josla.
                             $categoryClass = match(mb_strtolower($categoryName)) {
                                 'brokastis' => 'category-breakfast',
                                 'pusdienas' => 'category-lunch',
@@ -517,24 +549,25 @@
                             };
                         @endphp
 
-                <div class="category-card {{ $categoryClass }}">
-                    <div class="category-icon">
-                        @switch($categoryName)
-                            @case('Brokastis') 🍳 @break
-                            @case('Pusdienas') 🍛 @break
-                            @case('Vakariņas') 🌙 @break
-                            @case('Deserti') 🍰 @break
-                            @case('Dzērieni') 🧃 @break
-                            @case('Uzkodas') 🥨 @break
-                            @case('Salāti') 🥗 @break
-                            @case('Zupas') 🍲 @break
-                            @case('Veģetārās') 🥕 @break
-                            @case('Vegānās') 🌱 @break
-                            @case('Bezglutēna') 🌾🚫 @break
-                            @case('Ātras receptes') ⚡ @break
-                            @default 🍴
-                        @endswitch
-                    </div>
+                        <div class="category-card {{ $categoryClass }}">
+                            <div class="category-icon">
+                                {{-- Katrai biežāk lietotajai kategorijai tiek parādīta atbilstoša ikona. --}}
+                                @switch($categoryName)
+                                    @case('Brokastis') 🍳 @break
+                                    @case('Pusdienas') 🍛 @break
+                                    @case('Vakariņas') 🌙 @break
+                                    @case('Deserti') 🍰 @break
+                                    @case('Dzērieni') 🧃 @break
+                                    @case('Uzkodas') 🥨 @break
+                                    @case('Salāti') 🥗 @break
+                                    @case('Zupas') 🍲 @break
+                                    @case('Veģetārās') 🥕 @break
+                                    @case('Vegānās') 🌱 @break
+                                    @case('Bezglutēna') 🌾🚫 @break
+                                    @case('Ātras receptes') ⚡ @break
+                                    @default 🍴
+                                @endswitch
+                            </div>
 
                             <h3 class="category-title">{{ $categoryName }}</h3>
 
@@ -542,6 +575,7 @@
                                 {{ $descriptions[$categoryName] ?? "Atklājiet garšīgas {$categoryName} receptes šajā sadaļā" }}
                             </p>
 
+                            {{-- Kategorijas īsā statistika. --}}
                             <div class="category-stats">
                                 <div class="stats-row">
                                     <span class="stats-label">Kopā recepšu</span>
@@ -558,6 +592,7 @@
                                 <div class="stats-row">
                                     <span class="stats-label">Popularitāte</span>
                                     <span class="stats-value">
+                                        {{-- Popularitātes teksts tiek noteikts pēc recepšu skaita kategorijā. --}}
                                         @if($totalCategoryRecipes >= 20)
                                             Ļoti populāra
                                         @elseif($totalCategoryRecipes >= 10)
@@ -571,12 +606,14 @@
                                 </div>
                             </div>
 
+                            {{-- Saite uz konkrētās kategorijas PDF eksportu. --}}
                             <div class="pdf-actions">
                                 <a href="{{ route('pdf.category.recipes.byname', urlencode($categoryName)) }}" class="btn btn-secondary">
                                     Kategorijas PDF
                                 </a>
                             </div>
 
+                            {{-- Atver konkrētās kategorijas recepšu sarakstu. --}}
                             <a href="{{ route('categories.show', urlencode($categoryName)) }}" class="btn btn-primary" style="width: 100%;">
                                 Skatīt {{ $totalCategoryRecipes }} {{ $totalCategoryRecipes == 1 ? 'recepti' : 'receptes' }}
                             </a>
@@ -585,6 +622,7 @@
                 </div>
             </div>
         @else
+            {{-- Tukšais stāvoklis, ja sistēmā vēl nav nevienas kategorijas. --}}
             <div class="categories-section-card empty-box">
                 <div class="empty-icon">📂</div>
                 <h3>Nav kategoriju</h3>
@@ -599,6 +637,7 @@
             </div>
         @endif
 
+        {{-- Ja sistēmā ir receptes, tiek parādītas sešas jaunākās receptes. --}}
         @if($recipes->count() > 0)
             <div class="categories-section-card">
                 <div class="section-head">
@@ -638,6 +677,7 @@
                     @endforeach
                 </div>
 
+                {{-- Saite uz pilno recepšu sarakstu. --}}
                 <div style="text-align: center; margin-top: 28px;">
                     <a href="/recipes" class="btn btn-primary" style="min-width: 260px;">
                         Skatīt visas {{ $totalRecipes }} receptes
@@ -646,6 +686,7 @@
             </div>
         @endif
 
+        {{-- Kopējā kategoriju statistika lapas apakšdaļā. --}}
         <div class="categories-section-card stats-box">
             <h3>Kategoriju statistika</h3>
 
@@ -654,6 +695,7 @@
                     <div class="stat-icon">🏆</div>
                     <div class="stat-value">
                         @php
+                            // Atrod kategoriju, kurā ir visvairāk recepšu.
                             $topCategory = $categories->map(function($cat) {
                                 return [
                                     'name' => $cat,

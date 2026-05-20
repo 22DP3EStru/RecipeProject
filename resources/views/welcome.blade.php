@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- 
+    Šis skats attēlo sākumlapu.
+    Tajā lietotājs redz platformas ievadu, kopienas statistiku,
+    galvenās funkcijas, īsu aprakstu par projektu, kontaktus un reģistrācijas aicinājumu.
+--}}
+
 @section('title', 'Sveicināti - Vecmāmiņas Receptes')
 @section('meta_description', 'Atklāj, dalies un izveido brīnišķīgas receptes kopā ar citiem ēdiena mīļotājiem.')
 
@@ -8,16 +14,19 @@
 
 @section('content')
 <style>
+    /* Galvenais sākumlapas ietvars. */
     .welcome-page {
         color: var(--text);
     }
 
+    /* Vertikāli sakārto visas sākumlapas sadaļas. */
     .welcome-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Kopējais kartītes stils visām sākumlapas sadaļām. */
     .welcome-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -26,12 +35,14 @@
         box-shadow: 0 14px 34px rgba(79, 59, 42, 0.06);
     }
 
+    /* Lapas galvenā ievada kartīte. */
     .welcome-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
         text-align: center;
     }
 
+    /* Mazā etiķete virs sākumlapas virsraksta. */
     .welcome-badge {
         display: inline-flex;
         align-items: center;
@@ -65,6 +76,7 @@
         margin: 0 auto;
     }
 
+    /* Pogas ievada un reģistrācijas aicinājuma sadaļās. */
     .hero-actions,
     .cta-actions {
         display: flex;
@@ -74,6 +86,7 @@
         margin-top: 28px;
     }
 
+    /* Sadaļu virsrakstu kopējais noformējums. */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -116,6 +129,7 @@
         max-width: 760px;
     }
 
+    /* Statistikas kartīšu režģis. */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -137,6 +151,7 @@
         box-shadow: 0 14px 28px rgba(79, 59, 42, 0.08);
     }
 
+    /* Papildu fona varianti statistikas kartītēm. */
     .stat-box.soft-green {
         background: linear-gradient(180deg, #eef5ea 0%, #e5efdf 100%);
     }
@@ -166,6 +181,7 @@
         line-height: 1.6;
     }
 
+    /* Trīs kolonnu režģis funkcijām un kontaktiem. */
     .grid-3 {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -213,6 +229,7 @@
         line-height: 1.15;
     }
 
+    /* Par mums sadaļas teksta centrēšana. */
     .about-content {
         text-align: center;
         max-width: 900px;
@@ -236,6 +253,7 @@
         margin-top: 24px;
     }
 
+    /* Apakšējais aicinājums reģistrēties viesiem. */
     .cta-box {
         text-align: center;
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
@@ -246,12 +264,12 @@
         font-size: 2.2rem;
         line-height: 1.1;
     }
-
 </style>
 
 <div class="welcome-page">
     <div class="welcome-stack">
 
+        {{-- Galvenā sākumlapas sadaļa ar īsu platformas aprakstu un darbību pogām. --}}
         <div class="welcome-section-card welcome-hero-card">
             <div class="welcome-badge">Mājas garšas un iedvesma</div>
             <h2 class="welcome-main-title">Sveicināti kulinārijas pasaulē</h2>
@@ -260,12 +278,14 @@
                 Atklājiet jaunas garšas, apgūstiet gatavošanas paņēmienus un saglabājiet savus favorītus vienuviet.
             </p>
 
+            {{-- Pieslēgtam lietotājam tiek rādītas pogas uz paneli un receptes izveidi. --}}
             @auth
                 <div class="hero-actions">
                     <a href="{{ url('/dashboard') }}" class="btn btn-primary">Uz vadības paneli</a>
                     <a href="/recipes/create" class="btn btn-success">Izveidot recepti</a>
                 </div>
             @else
+                {{-- Viesim tiek piedāvāta reģistrācija vai pieslēgšanās. --}}
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-success">Sākt bez maksas</a>
                     <a href="{{ route('login') }}" class="btn btn-primary">Ielogoties</a>
@@ -273,6 +293,7 @@
             @endauth
         </div>
 
+        {{-- Kopienas statistikas sadaļa ar galvenajiem platformas rādītājiem. --}}
         <div class="welcome-section-card">
             <div class="section-head">
                 <div class="section-kicker">Kopienas pārskats</div>
@@ -305,6 +326,7 @@
             </div>
         </div>
 
+        {{-- Platformas galveno priekšrocību sadaļa. --}}
         <div id="features" class="welcome-section-card">
             <div class="section-head">
                 <div class="section-kicker">Priekšrocības</div>
@@ -341,6 +363,7 @@
             </div>
         </div>
 
+        {{-- Īss apraksts par pašu platformu un tās mērķi. --}}
         <div id="about" class="welcome-section-card">
             <div class="section-head">
                 <div class="section-kicker">Par mums</div>
@@ -358,6 +381,7 @@
             </div>
         </div>
 
+        {{-- Galvenās kontaktinformācijas sadaļa sākumlapā. --}}
         <div class="welcome-section-card">
             <div class="section-head">
                 <div class="section-kicker">Kontakti</div>
@@ -397,11 +421,13 @@
                 </div>
             </div>
 
+            {{-- Saite uz pilno kontaktu lapu. --}}
             <div class="contact-link-row">
                 <a href="{{ route('contact') }}" class="btn btn-primary">Atvērt kontaktu lapu</a>
             </div>
         </div>
 
+        {{-- Reģistrācijas aicinājums tiek rādīts tikai viesiem. --}}
         @guest
             <div class="welcome-section-card cta-box">
                 <h3>Gatavi sākt gatavot?</h3>

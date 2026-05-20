@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- 
+    Šis skats attēlo vienas receptes pilno lapu.
+    Tajā tiek parādīta receptes informācija, attēls vai video, sastāvdaļas,
+    pagatavošanas soļi, vērtējumi, komentāri, PDF lejupielādes un līdzīgās receptes.
+--}}
+
 @section('title', $recipe->title . ' - Vecmāmiņas Receptes')
 @section('meta_description', \Illuminate\Support\Str::limit(strip_tags($recipe->description ?? 'Apskatiet recepti Vecmāmiņas Receptes platformā.'), 160))
 
@@ -8,6 +14,7 @@
 
 @section('content')
 @php
+    // Pārbauda, vai pieslēgtais lietotājs jau ir pievienojis šo recepti favorītiem.
     $isFav = false;
     if (Auth::check()) {
         $isFav = Auth::user()
@@ -16,15 +23,19 @@
             ->exists();
     }
 
+    // Saglabā sākotnējo porciju skaitu, lai vēlāk varētu pārrēķināt sastāvdaļas.
     $origServings = (int)($recipe->servings ?? 1);
     if ($origServings <= 0) {
         $origServings = 1;
     }
 
+    // Sagatavo receptes laika vērtības: sagatavošana, gatavošana un kopējais laiks.
     $origPrep = (int)($recipe->prep_time ?? 0);
     $origCook = (int)($recipe->cook_time ?? 0);
     $origTotal = $origPrep + $origCook;
 
+    // Mēģina iegūt sastāvdaļas no jaunā strukturētā formāta.
+    // Ja dati nav pieejami, tiek izmantota tukša kolekcija.
     $ingredientsRel = collect();
     try {
         $ingredientsRel = $recipe->ingredientsItems;
@@ -32,13 +43,16 @@
         $ingredientsRel = collect();
     }
 
+    // Sagatavo kategorijas un grūtības tekstu, lai lapā nebūtu tukšas vērtības.
     $recipeCategory = $recipe->category->name ?? $recipe->category ?? 'Nav norādīta';
     $recipeDifficulty = $recipe->difficulty ?? 'Nav norādīta';
 
+    // Aprēķina vidējo vērtējumu un vērtējumu skaitu.
     $avg = $recipe->reviews->avg('rating');
     $avgRounded = $avg ? round($avg, 1) : null;
     $count = $recipe->reviews->count();
 
+    // Nosaka receptes attēla adresi, ja attēls ir saglabāts kā URL vai kā fails.
     $imageUrl = null;
     if (!empty($recipe->image_url)) {
         $imageUrl = $recipe->image_url;
@@ -46,6 +60,7 @@
         $imageUrl = asset('storage/' . $recipe->image_path);
     }
 
+    // Nosaka receptes video adresi, ja video ir saglabāts kā URL vai kā fails.
     $videoUrl = null;
     if (!empty($recipe->video_url)) {
         $videoUrl = $recipe->video_url;
@@ -55,16 +70,19 @@
 @endphp
 
 <style>
+    /* Galvenais receptes lapas ietvars. */
     .recipe-show-page {
         color: var(--text);
     }
 
+    /* Vertikāls izkārtojums visām lapas sadaļām. */
     .recipe-show-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Kopējais kartītes stils visām receptes sadaļām. */
     .recipe-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -74,6 +92,7 @@
         overflow: hidden;
     }
 
+    /* Augšējā receptes ievada kartīte. */
     .recipe-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
     }
@@ -92,6 +111,7 @@
         flex: 1 1 560px;
     }
 
+    /* Mazā etiķete virs receptes nosaukuma. */
     .recipe-badge {
         display: inline-flex;
         align-items: center;
@@ -129,6 +149,7 @@
         flex: 0 0 auto;
     }
 
+    /* Sirds poga favorītu pievienošanai vai noņemšanai. */
     .heart-btn {
         background: #fffdfa;
         border: 1px solid rgba(122, 90, 67, 0.12);
@@ -146,6 +167,7 @@
         background: var(--surface-soft);
     }
 
+    /* Īsie informācijas elementi zem receptes apraksta. */
     .recipe-top-meta {
         display: flex;
         gap: 12px;
@@ -166,6 +188,7 @@
         font-size: 13px;
     }
 
+    /* Porciju maiņas bloks un PDF pogas. */
     .servings-card {
         margin-top: 22px;
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
@@ -220,6 +243,7 @@
         justify-content: center;
     }
 
+    /* Attēla un video izkārtojums. */
     .media-wrap {
         margin-top: 24px;
         display: grid;
@@ -248,6 +272,7 @@
         object-fit: cover;
     }
 
+    /* Sadaļu virsrakstu kopējais noformējums. */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -286,6 +311,7 @@
         max-width: 760px;
     }
 
+    /* Receptes pamatinformācijas režģis. */
     .meta-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -326,6 +352,7 @@
         word-break: break-word;
     }
 
+    /* Iekšējais gaišais bloks sastāvdaļām un soļiem. */
     .content-inner {
         background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
         border: 1px solid rgba(122, 90, 67, 0.10);
@@ -415,6 +442,7 @@
         word-break: break-word;
     }
 
+    /* Autora informācijas bloki. */
     .author-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -453,6 +481,7 @@
         padding: 18px 20px;
     }
 
+    /* Vērtējumu un komentāru sadaļu noformējums. */
     .review-summary,
     .comment-summary {
         text-align: center;
@@ -519,6 +548,7 @@
         word-break: break-word;
     }
 
+    /* Interaktīvās zvaigznes lietotāja vērtējuma ievadei. */
     .stars {
         display: inline-flex;
         flex-direction: row-reverse;
@@ -560,6 +590,7 @@
         color: rgba(185, 135, 47, 0.3);
     }
 
+    /* Komentāru un atbilžu ievades lauki. */
     .comment-form-textarea,
     .reply-form-textarea {
         width: 100%;
@@ -603,6 +634,7 @@
         justify-content: center;
     }
 
+    /* Līdzīgo recepšu kartītes. */
     .related-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -734,6 +766,7 @@
         background: #fffdfa;
     }
 
+    /* Komentāru lapošanas noformējums. */
     .comments-pagination-wrap {
         margin-top: 24px;
         padding-top: 20px;
@@ -815,12 +848,14 @@
 <div class="recipe-show-page">
     <div class="recipe-show-stack">
 
+        {{-- Receptes ievads: nosaukums, apraksts, favorīti, metadati, porcijas un mediji. --}}
         <div class="recipe-section-card recipe-hero-card">
             <div class="recipe-hero-head">
                 <div class="recipe-hero-left">
                     <div class="recipe-badge">Recepte</div>
                     <h2 class="recipe-main-title">{{ $recipe->title }}</h2>
 
+                    {{-- Apraksts tiek rādīts tikai tad, ja receptei tas ir aizpildīts. --}}
                     @if(!empty($recipe->description))
                         <p class="recipe-description">
                             {{ $recipe->description }}
@@ -829,6 +864,7 @@
                 </div>
 
                 <div class="recipe-fav-wrap">
+                    {{-- Pieslēdzies lietotājs var pievienot vai noņemt recepti no favorītiem. --}}
                     @auth
                         <form method="POST" action="{{ route('recipes.favorite.toggle', $recipe) }}" style="margin:0;">
                             @csrf
@@ -838,18 +874,21 @@
                         </form>
                     @endauth
 
+                    {{-- Viesim tiek parādīta neaktīva sirds ikona. --}}
                     @guest
                         <span title="Pieslēdzies, lai pievienotu favorītiem" style="font-size:28px; opacity:.6;">🤍</span>
                     @endguest
                 </div>
             </div>
 
+            {{-- Īsa informācija par skatījumiem, publicēšanas datumu un autoru. --}}
             <div class="recipe-top-meta">
                 <span class="recipe-top-badge">👁️ Skatījumi: {{ number_format((int)($recipe->views ?? 0), 0, ',', ' ') }}</span>
                 <span class="recipe-top-badge">📅 Publicēta: {{ $recipe->created_at->format('d.m.Y') }}</span>
                 <span class="recipe-top-badge">👨‍🍳 Autors: {{ $recipe->user->name }}</span>
             </div>
 
+            {{-- Porciju ievade ļauj pārrēķināt sastāvdaļas un laikus tieši lapā. --}}
             <div class="servings-card">
                 <div class="servings-control">
                     <span class="servings-label">Porcijas:</span>
@@ -864,6 +903,7 @@
                     <span class="servings-hint">(oriģināli: {{ $origServings }})</span>
                 </div>
 
+                {{-- PDF saites izmanto izvēlēto porciju skaitu, ko vēlāk pievieno JavaScript. --}}
                 <div class="pdf-actions">
                     <a href="{{ route('pdf.recipe.full', $recipe->id) }}" class="btn btn-secondary pdf-link" data-type="full">PDF pilns</a>
                     <a href="{{ route('pdf.recipe.ingredients', $recipe->id) }}" class="btn btn-secondary pdf-link" data-type="ingredients">Sastāvdaļas</a>
@@ -871,6 +911,7 @@
                 </div>
             </div>
 
+            {{-- Ja receptei ir pievienots attēls vai video, tie tiek parādīti zem galvenās informācijas. --}}
             @if($imageUrl || $videoUrl)
                 <div class="media-wrap">
                     @if($imageUrl)
@@ -891,6 +932,7 @@
             @endif
         </div>
 
+        {{-- Receptes pamatinformācijas sadaļa. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Pamatinformācija</div>
@@ -951,6 +993,7 @@
             </div>
         </div>
 
+        {{-- Sastāvdaļu sadaļa. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Sastāvdaļas</div>
@@ -961,6 +1004,7 @@
             </div>
 
             <div class="content-inner">
+                {{-- Ja pieejamas jaunā formāta sastāvdaļas, tās tiek rādītas ar daudzumu, mērvienību un nosaukumu. --}}
                 @if($ingredientsRel instanceof \Illuminate\Support\Collection && $ingredientsRel->count() > 0)
                     <ul class="ingredient-list">
                         @foreach($ingredientsRel as $ing)
@@ -969,6 +1013,7 @@
                                     <span class="ingredient-check">✓</span>
 
                                     @php
+                                        // Daudzums tiek saglabāts data-original atribūtā, lai JavaScript to varētu pārrēķināt.
                                         $q = $ing->quantity ?? null;
                                     @endphp
 
@@ -991,6 +1036,7 @@
                     </ul>
                 @else
                     @php
+                        // Vecajā formātā sastāvdaļas ir viens teksta lauks, tāpēc tas tiek sadalīts pa rindām.
                         $ingredients = explode("\n", (string)$recipe->ingredients);
                     @endphp
 
@@ -1014,6 +1060,7 @@
             </div>
         </div>
 
+        {{-- Pagatavošanas soļu sadaļa. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Pagatavošana</div>
@@ -1025,6 +1072,7 @@
 
             <div class="content-inner">
                 @php
+                    // Instrukcijas tiek sadalītas pa rindām, un katrai netukšai rindai tiek piešķirts soļa numurs.
                     $instructions = explode("\n", (string)$recipe->instructions);
                     $stepNumber = 1;
                 @endphp
@@ -1044,6 +1092,7 @@
             </div>
         </div>
 
+        {{-- Informācija par receptes autoru un ieraksta datumiem. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Autors</div>
@@ -1076,6 +1125,7 @@
             </div>
         </div>
 
+        {{-- Receptes vērtējumu sadaļa. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Vērtējumi</div>
@@ -1091,6 +1141,7 @@
                 </span>
             </div>
 
+            {{-- Pieslēdzies lietotājs var pievienot, rediģēt vai dzēst savu vērtējumu. --}}
             @auth
                 <div class="review-card" style="margin-bottom: 18px;">
                     @if(!$myReview)
@@ -1162,6 +1213,7 @@
                             </div>
                         </div>
 
+                        {{-- Slēptā forma tiek parādīta tikai tad, kad lietotājs nospiež pogu "Rediģēt". --}}
                         <form
                             id="edit-review-form"
                             method="POST"
@@ -1189,6 +1241,7 @@
                 </div>
             @endauth
 
+            {{-- Visu lietotāju vērtējumu saraksts. --}}
             @forelse($recipe->reviews as $review)
                 <div class="review-card">
                     <div class="review-top">
@@ -1218,6 +1271,7 @@
             @endforelse
         </div>
 
+        {{-- Komentāru un atbilžu sadaļa. --}}
         <div class="recipe-section-card">
             <div class="section-head">
                 <div class="section-kicker">Komentāri</div>
@@ -1233,6 +1287,7 @@
                 </span>
             </div>
 
+            {{-- Galvenā komentāra pievienošana. --}}
             @auth
                 <div class="comment-form-box">
                     <div class="comment-form-title">Pievienot komentāru</div>
@@ -1272,6 +1327,7 @@
                 </div>
             @endauth
 
+            {{-- Komentāru saraksts ar iespēju atbildēt uz katru komentāru. --}}
             @forelse($comments as $comment)
                 <div class="comment-card">
                     <div class="comment-top">
@@ -1293,6 +1349,7 @@
                             </button>
                         </div>
 
+                        {{-- Atbildes forma sākumā ir paslēpta un tiek atvērta ar JavaScript. --}}
                         <div id="reply-form-{{ $comment->id }}" class="reply-form-wrap" style="display:none;">
                             <form method="POST" action="{{ route('comments.store') }}">
                                 @csrf
@@ -1313,6 +1370,7 @@
                         </div>
                     @endauth
 
+                    {{-- Ja komentāram ir atbildes, tās tiek attēlotas zem galvenā komentāra. --}}
                     @if($comment->replies->count() > 0)
                         <div class="replies-wrap">
                             @foreach($comment->replies as $reply)
@@ -1336,6 +1394,7 @@
                 </div>
             @endforelse
 
+            {{-- Lapošana tiek rādīta tikai tad, ja komentāru ir vairāk par vienu lapu. --}}
             @if($comments->hasPages())
                 <div class="comments-pagination-wrap">
                     <div class="pagination-summary">
@@ -1347,6 +1406,7 @@
             @endif
         </div>
 
+        {{-- Lapas apakšējās darbības: rediģēšana, dzēšana un pāreja uz citām receptēm. --}}
         <div class="recipe-section-card">
             <div class="page-actions">
                 @if(Auth::id() === $recipe->user_id)
@@ -1378,6 +1438,7 @@
             </div>
         </div>
 
+        {{-- Līdzīgās receptes tiek rādītas tikai tad, ja kontrolieris tās ir nodevis skatam. --}}
         @if(isset($relatedRecipes) && $relatedRecipes->count() > 0)
             <div class="recipe-section-card">
                 <div class="section-head">
@@ -1391,6 +1452,7 @@
                 <div class="related-grid">
                     @foreach($relatedRecipes as $relatedRecipe)
                         @php
+                            // Līdzīgajai receptei kategorija var būt objekts vai teksts, tāpēc tiek pārbaudīti abi varianti.
                             $relatedCategory = $relatedRecipe->category->name ?? $relatedRecipe->category ?? '';
                         @endphp
 
@@ -1418,22 +1480,27 @@
 
 <script>
 (() => {
+    // Paņem porciju ievades lauku. Ja tas nav atrasts, skripts tālāk netiek izpildīts.
     const input = document.getElementById('servingsInput');
     if (!input) return;
 
+    // Elementi, kuru vērtības mainās pēc porciju skaita maiņas.
     const servingsDisplay = document.getElementById('servingsDisplay');
     const prepEl = document.getElementById('prepTime');
     const cookEl = document.getElementById('cookTime');
     const totalEl = document.getElementById('totalTime');
     const pdfLinks = document.querySelectorAll('.pdf-link');
 
+    // Sākotnējais porciju skaits tiek izmantots kā pārrēķina pamats.
     const originalServings = Number(input.value) || 1;
 
+    // Palīgfunkcija pārvērš vērtību par skaitli un pasargā no nederīgām vērtībām.
     function num(v) {
         const n = Number(v);
         return Number.isFinite(n) ? n : 0;
     }
 
+    // Formatē sastāvdaļu daudzumu, noņemot liekas nulles aiz komata.
     function formatQty(n) {
         const rounded = Math.round(n * 100) / 100;
         return String(rounded)
@@ -1441,6 +1508,7 @@
             .replace(/(\.\d*[1-9])0+$/, '$1');
     }
 
+    // Pārrēķina porcijas, laikus un sastāvdaļu daudzumus pēc ievadītā porciju skaita.
     function recalc() {
         const newServings = Math.max(1, num(input.value) || 1);
         const k = newServings / originalServings;
@@ -1472,6 +1540,7 @@
         });
     }
 
+    // PDF saitēm pievieno izvēlēto porciju skaitu, lai arī PDF tiktu sagatavots ar pareizajiem daudzumiem.
     pdfLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1485,10 +1554,12 @@
         });
     });
 
+    // Katru reizi, kad lietotājs maina porciju skaitu, dati tiek pārrēķināti.
     input.addEventListener('input', recalc);
     recalc();
 })();
 
+// Atver vai aizver konkrēta komentāra atbildes formu.
 function toggleReplyForm(id) {
     const form = document.getElementById('reply-form-' + id);
     if (!form) return;

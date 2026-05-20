@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- 
+    Šis skats attēlo kontaktu lapu.
+    Lapā lietotājam tiek parādīti galvenie saziņas veidi,
+    tehniskā atbalsta informācija un ieteikumi, kā ātrāk saņemt atbildi.
+--}}
+
 @section('title', 'Kontakti - Vecmāmiņas Receptes')
 @section('meta_description', 'Vecmāmiņas Receptes — sazinies ar mums, ja ir jautājumi, ieteikumi vai nepieciešama palīdzība.')
 
@@ -8,16 +14,19 @@
 
 @section('content')
 <style>
+    /* Galvenais kontaktu lapas ietvars. */
     .contact-page {
         color: var(--text);
     }
 
+    /* Vertikāli sakārto visas kontaktu lapas sadaļas. */
     .contact-stack {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* Kopējais kartītes stils lapas sadaļām. */
     .contact-section-card {
         background: rgba(255, 253, 249, 0.96);
         border: 1px solid rgba(122, 90, 67, 0.14);
@@ -28,11 +37,13 @@
         overflow: hidden;
     }
 
+    /* Augšējā ievada kartīte. */
     .contact-hero-card {
         background: linear-gradient(180deg, #fffdf9 0%, #fbf5ee 100%);
         overflow: hidden;
     }
 
+    /* Ievada sadaļā ikona un teksts tiek novietoti blakus. */
     .contact-hero-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -40,6 +51,7 @@
         align-items: center;
     }
 
+    /* Apaļais ikonas bloks ievada sadaļā. */
     .contact-hero-icon-wrap {
         width: 108px;
         height: 108px;
@@ -54,6 +66,7 @@
         flex-shrink: 0;
     }
 
+    /* Mazā etiķete virs galvenā virsraksta. */
     .contact-badge {
         display: inline-flex;
         align-items: center;
@@ -90,6 +103,7 @@
         word-break: break-word;
     }
 
+    /* Sadaļu virsrakstu kopējais noformējums. */
     .section-head {
         margin-bottom: 24px;
         padding-bottom: 14px;
@@ -132,12 +146,14 @@
         word-break: break-word;
     }
 
+    /* Kontaktinformācijas kartīšu režģis. */
     .contact-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 20px;
     }
 
+    /* Viena kontaktinformācijas kartīte. */
     .contact-card {
         background: linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
         border: 1px solid rgba(122, 90, 67, 0.12);
@@ -198,6 +214,7 @@
         word-break: break-word;
     }
 
+    /* Padomu sadaļa ar īsu skaidrojumu par ātrāku saziņu. */
     .tip-box {
         background: linear-gradient(180deg, #faf4ed 0%, #f4eadf 100%);
     }
@@ -218,6 +235,7 @@
         word-break: break-word;
     }
 
+    /* Īso palīdzības ieteikumu režģis. */
     .quick-help-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -245,12 +263,12 @@
         font-size: 13px;
         line-height: 1.7;
     }
-
 </style>
 
 <div class="contact-page">
     <div class="contact-stack">
 
+        {{-- Lapas ievads ar īsu paskaidrojumu par saziņas iespējām. --}}
         <div class="contact-section-card contact-hero-card">
             <div class="contact-hero-inner">
                 <div class="contact-hero-icon-wrap">📞</div>
@@ -266,6 +284,7 @@
             </div>
         </div>
 
+        {{-- Kontaktinformācijas sadaļa ar galvenajiem saziņas veidiem. --}}
         <div class="contact-section-card">
             <div class="section-head">
                 <div class="section-kicker">Kontaktinformācija</div>
@@ -276,6 +295,7 @@
             </div>
 
             <div class="contact-grid">
+                {{-- Galvenais kontakts vispārīgiem jautājumiem. --}}
                 <div class="contact-card">
                     <div class="contact-icon">👤</div>
                     <h3>Galvenais kontakts</h3>
@@ -295,6 +315,7 @@
                     </div>
                 </div>
 
+                {{-- Tehniskā atbalsta kontaktinformācija problēmu gadījumiem. --}}
                 <div class="contact-card">
                     <div class="contact-icon">🛠️</div>
                     <h3>Tehniskais atbalsts</h3>
@@ -314,6 +335,7 @@
                     </div>
                 </div>
 
+                {{-- Saziņa par idejām, saturu vai sadarbības iespējām. --}}
                 <div class="contact-card">
                     <div class="contact-icon">💬</div>
                     <h3>Ieteikumi / sadarbība</h3>
@@ -330,6 +352,7 @@
             </div>
         </div>
 
+        {{-- Ieteikumi, kā lietotājam sagatavot ziņu, lai atbildi varētu sniegt ātrāk. --}}
         <div class="contact-section-card tip-box">
             <h3>Ātrāks ceļš uz atbildi</h3>
             <p>
