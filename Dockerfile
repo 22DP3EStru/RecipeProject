@@ -23,13 +23,12 @@ RUN mkdir -p storage/framework/views \
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-RUN mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 
 COPY .docker/nginx/http.conf /etc/nginx/conf.d/default.conf
 
-RUN sed -i 's/fastcgi_pass app:9000;/fastcgi_pass 127.0.0.1:9000;/g' /etc/nginx/conf.d/default.conf
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD php-fpm -D && nginx -g "daemon off;"
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
