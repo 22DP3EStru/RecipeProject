@@ -16,7 +16,7 @@
 <html lang="lv">
 <head>
     <!-- Dokumenta kodējums latviešu simbolu pareizai attēlošanai. -->
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <!-- PDF dokumenta virsraksts ar receptes nosaukumu. -->
     <title>Sastāvdaļas - {{ $recipe->title }}</title>

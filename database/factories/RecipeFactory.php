@@ -41,7 +41,7 @@ class RecipeFactory extends Factory
             /**
              * Tiek norādīts noklusējuma receptes attēla ceļš.
              */
-            'image' => 'recipes/default.jpg',
+            'image_path' => 'recipes/default.jpg',
 
             /**
              * Receptes ierakstam tiek piešķirts

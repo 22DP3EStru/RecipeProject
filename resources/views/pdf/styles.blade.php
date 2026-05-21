@@ -4,66 +4,84 @@
     Šis Blade fails satur vienotus CSS stilus visiem PDF dokumentiem,
     kas tiek ģenerēti sistēmā.
 
-    Stili tiek atkārtoti izmantoti:
+    Stili tiek izmantoti:
     - pilnas receptes PDF;
     - sastāvdaļu PDF;
     - pagatavošanas soļu PDF;
     - statistikas PDF;
     - kategoriju PDF;
-    - filtrēto recepšu PDF;
-    - populārāko recepšu PDF.
-
-    Šāda pieeja samazina koda dublēšanos
-    un nodrošina vienotu PDF dokumentu dizainu.
+    - populārāko recepšu PDF;
+    - profila PDF.
 -->
 
 <style>
-    /*
-        Galvenie PDF dokumenta stili.
 
-        DejaVu Sans fonts tiek izmantots,
-        jo tas korekti attēlo latviešu valodas simbolus PDF dokumentos.
+    /*
+        Universālie stili visiem HTML elementiem.
+
+        DejaVu Sans tiek izmantots globāli,
+        lai novērstu UTF-8 simbolu problēmas PDF dokumentos.
+
+        box-sizing nodrošina korektus izmēru aprēķinus.
+    */
+    * {
+        font-family: DejaVu Sans, sans-serif;
+        box-sizing: border-box;
+    }
+
+    /*
+        Galvenie dokumenta stili.
+
+        Tiek definēts:
+        - teksta izmērs;
+        - krāsa;
+        - rindstarpa;
+        - dokumenta malas.
     */
     body {
-        font-family: DejaVu Sans, sans-serif;
         font-size: 12px;
         color: #1f1f1f;
-        line-height: 1.68;
-        background: #f7f7f7;
+        line-height: 1.6;
+        background: #ffffff;
         margin: 28px;
     }
 
     /*
         Virsrakstu kopējie stili.
 
-        h1, h2 un h3 tiek izmantoti dažādām sadaļām PDF dokumentos.
+        Tos izmanto dažādām PDF sadaļām.
     */
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         margin: 0 0 10px 0;
         font-weight: bold;
         color: #111111;
     }
 
     /*
-        Galvenā dokumenta virsraksta stils.
+        Galvenā dokumenta virsraksts.
 
-        To izmanto PDF dokumenta nosaukumam.
+        Parasti tiek izmantots:
+        - PDF nosaukumam;
+        - receptes nosaukumam;
+        - statistikas nosaukumam.
     */
     h1 {
         font-size: 26px;
         padding-bottom: 10px;
         margin-bottom: 18px;
         border-bottom: 2px solid #d6d6d6;
-        letter-spacing: 0.3px;
     }
 
     /*
-        Otrā līmeņa virsraksti sadaļām.
+        Otrā līmeņa virsraksti.
 
-        Piemēram:
-        - sastāvdaļu sadaļai;
-        - pagatavošanas soļiem;
-        - statistikas blokiem.
+        Tos izmanto sadaļām:
+        - sastāvdaļas;
+        - statistika;
+        - pagatavošanas soļi;
+        - populārākās receptes.
     */
     h2 {
         font-size: 18px;
@@ -75,7 +93,7 @@
     /*
         Trešā līmeņa virsraksti.
 
-        Parasti tiek izmantoti mazākām sadaļām vai apakšvirsrakstiem.
+        Tos izmanto mazākām sadaļām vai apakšvirsrakstiem.
     */
     h3 {
         font-size: 14px;
@@ -84,44 +102,61 @@
     }
 
     /*
+        Parasta teksta rindkopas.
+
+        margin nodrošina atstarpi starp rindkopām.
+    */
+    p {
+        margin: 6px 0;
+    }
+
+    /*
         Dokumenta galvenes bloks.
 
-        Tajā tiek ievietota galvenā PDF informācija.
+        Tajā parasti tiek ievietots:
+        - dokumenta nosaukums;
+        - ģenerēšanas datums;
+        - papildinformācija.
     */
     .header {
         background: #f0f0f0;
         border: 1px solid #dddddd;
         padding: 18px 20px;
         margin-bottom: 22px;
-        border-radius: 14px;
+        border-radius: 10px;
     }
 
     /*
         Metadatu bloks.
 
-        Tajā tiek attēlota papildinformācija:
-        - kategorija;
-        - porciju skaits;
-        - laiks;
-        - statistika.
+        To izmanto:
+        - kategorijām;
+        - porciju skaitam;
+        - pagatavošanas laikam;
+        - statistikas datiem.
     */
     .meta {
         background: #fcfcfc;
         border: 1px solid #e3e3e3;
         padding: 14px 16px;
         margin-bottom: 18px;
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
-    /* Atstarpes starp meta informācijas rindām. */
+    /*
+        Meta bloka rindkopu atstarpes.
+    */
     .meta p {
         margin: 5px 0;
     }
 
     /*
-        Izcelta teksta klase.
+        Izcelts teksts.
 
-        To izmanto svarīgiem nosaukumiem vai etiķetēm.
+        To izmanto:
+        - etiķetēm;
+        - nosaukumiem;
+        - svarīgai informācijai.
     */
     .label {
         font-weight: bold;
@@ -129,7 +164,7 @@
     }
 
     /*
-        Universāls informācijas bloks.
+        Universāls satura bloks.
 
         To iespējams izmantot dažādām PDF sadaļām.
     */
@@ -138,7 +173,7 @@
         border: 1px solid #e3e3e3;
         padding: 16px 18px;
         margin-bottom: 18px;
-        border-radius: 14px;
+        border-radius: 10px;
     }
 
     /*
@@ -154,11 +189,13 @@
         padding: 5px;
         background: #ffffff;
         margin-top: 12px;
-        border-radius: 10px;
+        border-radius: 8px;
     }
 
     /*
-        Attēla konteiners centrētai attēlošanai.
+        Attēla konteiners.
+
+        text-align: center centrē attēlu PDF dokumentā.
     */
     .image-wrap {
         text-align: center;
@@ -169,25 +206,23 @@
     /*
         Tabulu kopējie stili.
 
-        Šie stili tiek izmantoti:
+        Tiek izmantoti:
         - statistikas tabulām;
         - recepšu tabulām;
-        - sastāvdaļu tabulām;
-        - pagatavošanas soļu tabulām.
+        - sastāvdaļu tabulām.
     */
     table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 12px;
         background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
     }
 
     /*
-        Tabulas šūnu stili.
+        Tabulu šūnu stili.
     */
-    th, td {
+    th,
+    td {
         border: 1px solid #e1e1e1;
         padding: 10px 11px;
         vertical-align: top;
@@ -204,8 +239,9 @@
     }
 
     /*
-        Katras otrās rindas fona tonējums,
-        lai uzlabotu tabulas lasāmību.
+        Katras otrās rindas iekrāsošana.
+
+        Tas uzlabo tabulas lasāmību.
     */
     tr:nth-child(even) td {
         background: #fafafa;
@@ -227,9 +263,9 @@
     }
 
     /*
-        Pagatavošanas soļa bloks.
+        Pagatavošanas soļa kartīte.
 
-        Katrs solis tiek vizuāli atdalīts atsevišķā kartītē.
+        Katrs solis tiek attēlots atsevišķi.
     */
     .step-block {
         margin-bottom: 14px;
@@ -238,7 +274,7 @@
         border: 1px solid #e2e2e2;
         border-left: 4px solid #9c9c9c;
         padding: 12px 14px;
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
     /*
@@ -251,12 +287,12 @@
     }
 
     /*
-        Mazas informatīvas etiķetes jeb badges.
+        Mazas informatīvas etiķetes.
 
         Tās iespējams izmantot:
         - kategorijām;
         - sarežģītības līmenim;
-        - papildinformācijai.
+        - statusiem.
     */
     .badge {
         display: inline-block;
@@ -272,7 +308,12 @@
     }
 
     /*
-        PDF dokumenta apakšējās piezīmes stils.
+        PDF dokumenta apakšējā piezīme.
+
+        To izmanto:
+        - autortiesībām;
+        - ģenerēšanas informācijai;
+        - sistēmas nosaukumam.
     */
     .footer-note {
         margin-top: 24px;
@@ -286,13 +327,16 @@
     /*
         Sarakstu kopējie stili.
     */
-    ul, ol {
+    ul,
+    ol {
         margin-top: 8px;
         margin-bottom: 8px;
         padding-left: 18px;
     }
 
-    /* Atstarpes starp saraksta elementiem. */
+    /*
+        Atstarpes starp sarakstu elementiem.
+    */
     li {
         margin-bottom: 4px;
     }
@@ -300,22 +344,26 @@
     /*
         Izceltais informācijas bloks.
 
-        To iespējams izmantot svarīgu paziņojumu vai statistikas attēlošanai.
+        To iespējams izmantot:
+        - svarīgiem paziņojumiem;
+        - statistikai;
+        - rekomendācijām.
     */
     .highlight-box {
         background: #f4f4f4;
         border: 1px solid #dfdfdf;
         padding: 12px 14px;
         margin: 14px 0;
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
     /*
-        Horizontālā atdalīšanas līnija starp sadaļām.
+        Horizontālā sadalījuma līnija starp sadaļām.
     */
     .divider {
         height: 1px;
         background: #e2e2e2;
         margin: 18px 0;
     }
+
 </style>

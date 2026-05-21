@@ -422,6 +422,7 @@
     */
     .pagination-box {
         text-align: center;
+        margin-top: 10px;
     }
 
     .pagination-summary {
@@ -431,62 +432,73 @@
         line-height: 1.6;
     }
 
-    .pagination-box nav {
+    .custom-pagination {
         display: flex;
         justify-content: center;
-    }
-
-    .pagination-box nav > div:first-child {
-        display: none;
-    }
-
-    .pagination-box svg {
-        width: 18px;
-        height: 18px;
-    }
-
-    .pagination-box .relative.z-0.inline-flex.shadow-sm.rounded-md,
-    .pagination-box .inline-flex.-space-x-px.rounded-md.shadow-sm {
-        display: flex;
+        align-items: center;
+        gap: 10px;
         flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        box-shadow: none !important;
     }
 
-    .pagination-box .relative.inline-flex.items-center,
-    .pagination-box .inline-flex.items-center {
-        padding: 10px 14px;
-        text-decoration: none;
+    .pagination-bubble {
+        min-width: 44px;
+        height: 44px;
+        padding: 0 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         border: 1px solid var(--line);
-        border-radius: 12px;
+        border-radius: 14px;
         background: #fff;
         color: var(--text);
         font-weight: 700;
-        transition: 0.2s ease;
-        min-width: 44px;
-        justify-content: center;
+        text-decoration: none;
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+        box-sizing: border-box;
+        box-shadow: none;
     }
 
-    .pagination-box a.relative.inline-flex.items-center:hover,
-    .pagination-box a.inline-flex.items-center:hover {
+    .pagination-bubble:hover {
         background: var(--surface-soft);
         color: var(--accent);
+        border-color: rgba(122, 90, 67, 0.28);
         transform: translateY(-1px);
     }
 
-    .pagination-box span[aria-current="page"] > span,
-    .pagination-box .text-white {
-        background: var(--accent) !important;
-        border-color: var(--accent) !important;
-        color: #fffaf4 !important;
+    .pagination-bubble.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fffaf4;
     }
 
-    .pagination-box .text-gray-500,
-    .pagination-box .text-gray-400 {
-        color: var(--muted) !important;
+    .pagination-bubble.disabled {
+        opacity: 0.45;
+        pointer-events: none;
+        cursor: default;
     }
 
+    /* Mobile */
+    @media (max-width: 640px) {
+        .custom-pagination {
+            gap: 8px;
+        }
+
+        .pagination-bubble {
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .pagination-summary {
+            font-size: 13px;
+        }
+    }
     /*
         Tukša rezultātu saraksta paziņojums.
 
@@ -763,15 +775,33 @@
             </div>
 
             <!-- Lapošana tiek parādīta tikai tad, ja rezultāti sadalīti vairākās lapās. -->
-            @if($recipes->hasPages())
-                <div class="recipes-section-card pagination-box">
-                    <div class="pagination-summary">
-                        Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
-                    </div>
-
-                    {{ $recipes->links() }}
+            <div class="pagination-box">
+                <div class="pagination-summary">
+                    Rāda {{ $recipes->firstItem() }}–{{ $recipes->lastItem() }} no {{ $recipes->total() }} receptēm
                 </div>
-            @endif
+
+                <div class="custom-pagination">
+                    @if ($recipes->onFirstPage())
+                        <span class="pagination-bubble disabled">‹</span>
+                    @else
+                        <a href="{{ $recipes->previousPageUrl() }}" class="pagination-bubble">‹</a>
+                    @endif
+
+                    @for ($i = 1; $i <= $recipes->lastPage(); $i++)
+                        @if ($i == $recipes->currentPage())
+                            <span class="pagination-bubble active">{{ $i }}</span>
+                        @else
+                            <a href="{{ $recipes->url($i) }}" class="pagination-bubble">{{ $i }}</a>
+                        @endif
+                    @endfor
+
+                    @if ($recipes->hasMorePages())
+                        <a href="{{ $recipes->nextPageUrl() }}" class="pagination-bubble">›</a>
+                    @else
+                        <span class="pagination-bubble disabled">›</span>
+                    @endif
+                </div>
+            </div>
         @else
             <!-- Tukšais stāvoklis, ja pēc filtriem vai meklēšanas nav atrasta neviena recepte. -->
             <div class="recipes-section-card empty-box">
