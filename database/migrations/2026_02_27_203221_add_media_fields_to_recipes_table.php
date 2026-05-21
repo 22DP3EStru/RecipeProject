@@ -35,36 +35,42 @@ return new class extends Migration
              *
              * Kolonna tiek pievienota aiz description lauka.
              */
-            $table->string('image_path')
-                ->nullable()
-                ->after('description');
-
+            if (!Schema::hasColumn('recipes', 'image_path')) {
+                $table->string('image_path')
+                    ->nullable()
+                    ->after('description');
+            }
             /**
              * Lauks receptes attēla URL adreses glabāšanai.
              *
              * Kolonna tiek pievienota aiz image_path lauka.
              */
-            $table->string('image_url')
-                ->nullable()
-                ->after('image_path');
-
+            if (!Schema::hasColumn('recipes', 'image_url')) {
+                $table->string('image_url')
+                    ->nullable()
+                    ->after('image_path');
+            }
             /**
              * Lauks receptes video faila ceļa glabāšanai.
              *
              * Kolonna tiek pievienota aiz image_url lauka.
              */
-            $table->string('video_path')
-                ->nullable()
-                ->after('image_url');
-
+            if (!Schema::hasColumn('recipes', 'video_path')) {
+                $table->string('video_path')
+                    ->nullable()
+                    ->after('image_url');
+            }
+                
             /**
              * Lauks receptes video URL adreses glabāšanai.
              *
              * Kolonna tiek pievienota aiz video_path lauka.
              */
-            $table->string('video_url')
-                ->nullable()
-                ->after('video_path');
+            if (!Schema::hasColumn('recipes', 'video_url')) {
+                $table->string('video_url')
+                    ->nullable()
+                    ->after('video_path');
+            }
         });
     }
 
