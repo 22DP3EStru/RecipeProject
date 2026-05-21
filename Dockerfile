@@ -21,15 +21,17 @@ RUN mkdir -p storage/framework/views \
     && chown -R www-data:www-data storage bootstrap/cache
 
 RUN composer install --no-dev --optimize-autoloader
+
 RUN npm install && npm run build
 
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 
 COPY .docker/nginx/http.conf /etc/nginx/conf.d/default.conf
+
 COPY docker/recipeproject.sql /var/www/recipeproject.sql
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan view:clear && php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan migrate --force && php-fpm -D && nginx -g 'daemon off;'"]
